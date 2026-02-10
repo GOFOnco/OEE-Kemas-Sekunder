@@ -1,0 +1,2065 @@
+<!doctype html>
+<html lang="id">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OEE MONITORING SYSTEM</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      text-transform: uppercase;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #f3f4f6;
+      color: #1f2937;
+      box-sizing: border-box;
+    }
+
+    .header {
+      background: linear-gradient(135deg, #f472b6 0%, #fbcfe8 100%);
+      color: #be185d;
+      padding: 2rem;
+      text-align: center;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .header h1 {
+      font-size: 2rem;
+      font-weight: bold;
+      margin-bottom: 0.5rem;
+    }
+
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 2rem 1rem;
+    }
+
+    .tabs {
+      display: flex;
+      gap: 0.5rem;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+      border-bottom: 2px solid #e5e7eb;
+    }
+
+    .tab-btn {
+      padding: 0.75rem 1.5rem;
+      border: none;
+      background: transparent;
+      color: #6b7280;
+      font-weight: 600;
+      cursor: pointer;
+      border-bottom: 3px solid transparent;
+      transition: all 0.3s;
+    }
+
+    .tab-btn.active {
+      color: #ec4899;
+      border-bottom-color: #ec4899;
+    }
+
+    .tab-btn:hover {
+      color: #ec4899;
+    }
+
+    .tab-content {
+      display: none;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    .section-title {
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: #ec4899;
+      margin: 2rem 0 1rem 0;
+      border-left: 4px solid #ec4899;
+      padding-left: 1rem;
+    }
+
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 600;
+      color: #374151;
+      font-size: 0.875rem;
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      width: 100%;
+      padding: 0.75rem;
+      border: 1px solid #d1d5db;
+      border-radius: 0.5rem;
+      font-size: 0.875rem;
+      transition: all 0.3s;
+      text-transform: uppercase;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+      outline: none;
+      border-color: #ec4899;
+      box-shadow: 0 0 0 3px rgba(236, 72, 153, 0.1);
+    }
+
+    .input-field {
+      width: 100%;
+      padding: 0.5rem;
+      border: 1px solid #d1d5db;
+      border-radius: 0.375rem;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+    }
+
+    .input-field:focus {
+      outline: none;
+      border-color: #ec4899;
+    }
+
+    .btn {
+      padding: 0.75rem 1.5rem;
+      border: none;
+      border-radius: 0.5rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
+      font-size: 0.875rem;
+      text-transform: uppercase;
+    }
+
+    .btn-primary {
+      background: #ec4899;
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background: #db2777;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(236, 72, 153, 0.3);
+    }
+
+    .btn-primary:disabled {
+      background: #d1d5db;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .btn-secondary {
+      background: #f3f4f6;
+      color: #374151;
+      border: 1px solid #d1d5db;
+    }
+
+    .btn-secondary:hover {
+      background: #e5e7eb;
+    }
+
+    .btn-danger {
+      background: #ef4444;
+      color: white;
+    }
+
+    .btn-danger:hover {
+      background: #dc2626;
+    }
+
+    .btn-edit {
+      background: #3b82f6;
+      color: white;
+      padding: 0.375rem 0.75rem;
+      border: none;
+      border-radius: 0.375rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+    }
+
+    .btn-edit:hover {
+      background: #1d4ed8;
+      transform: translateY(-1px);
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .card {
+      background: white;
+      padding: 1.5rem;
+      border-radius: 0.75rem;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+      border: 1px solid #e5e7eb;
+    }
+
+    .card-title {
+      font-size: 0.875rem;
+      color: #6b7280;
+      margin-bottom: 0.5rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .card-value {
+      font-size: 2rem;
+      font-weight: bold;
+      color: #1f2937;
+      text-transform: uppercase;
+    }
+
+    .score-card {
+      background: linear-gradient(135deg, #ec4899 0%, #f43f5e 100%);
+      color: white;
+    }
+
+    .table-wrapper {
+      overflow-x: auto;
+      background: white;
+      border-radius: 0.75rem;
+      border: 1px solid #e5e7eb;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    thead {
+      background: #f9fafb;
+      border-bottom: 2px solid #e5e7eb;
+    }
+
+    th {
+      padding: 1rem;
+      text-align: left;
+      font-weight: 600;
+      color: #374151;
+      font-size: 0.875rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    td {
+      padding: 0.75rem 1rem;
+      border-bottom: 1px solid #e5e7eb;
+      font-size: 0.875rem;
+      text-transform: uppercase;
+    }
+
+    tbody tr:hover {
+      background: #f9fafb;
+    }
+
+    .text-center {
+      text-align: center;
+    }
+
+    .text-gray-400 {
+      color: #9ca3af;
+    }
+
+    .py-8 {
+      padding-top: 2rem;
+      padding-bottom: 2rem;
+    }
+
+    .text-xs {
+      font-size: 0.75rem;
+    }
+
+    .mr-2 {
+      margin-right: 0.5rem;
+    }
+
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+    }
+
+    .modal-content {
+      background: white;
+      padding: 2rem;
+      border-radius: 0.75rem;
+      max-width: 600px;
+      width: 95%;
+      max-height: 80vh;
+      overflow-y: auto;
+      box-shadow: 0 20px 25px rgba(0, 0, 0, 0.15);
+    }
+
+    .toast-container {
+      position: fixed;
+      top: 1rem;
+      right: 1rem;
+      z-index: 2000;
+    }
+
+    .toast {
+      padding: 1rem 1.5rem;
+      border-radius: 0.5rem;
+      margin-bottom: 0.5rem;
+      color: white;
+      font-weight: 600;
+      animation: slideIn 0.3s ease;
+      text-transform: uppercase;
+    }
+
+    @keyframes slideIn {
+      from {
+        transform: translateX(400px);
+        opacity: 0;
+      }
+      to {
+        transform: translateX(0);
+        opacity: 1;
+      }
+    }
+
+    .toast.success {
+      background: #10b981;
+    }
+
+    .toast.error {
+      background: #ef4444;
+    }
+
+    .toast.warning {
+      background: #f59e0b;
+    }
+
+    .chart-container {
+      position: relative;
+      height: 400px;
+      margin: 2rem 0;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    .filter-section {
+      background: white;
+      padding: 1.5rem;
+      border-radius: 0.75rem;
+      margin-bottom: 2rem;
+      border: 1px solid #e5e7eb;
+    }
+
+    .filter-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .packer-meter-card {
+      border: 2px solid #10b981;
+      background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+      padding: 1.25rem;
+      border-radius: 0.75rem;
+      margin-bottom: 1rem;
+    }
+
+    @media (max-width: 768px) {
+      .tab-btn {
+        padding: 0.5rem 1rem;
+        font-size: 0.875rem;
+      }
+
+      .grid-2,
+      .grid-3 {
+        grid-template-columns: 1fr;
+      }
+
+      .modal-content {
+        width: 95%;
+        padding: 1.5rem;
+      }
+
+      .chart-container {
+        height: 300px;
+      }
+    }
+  </style>
+  <style>@view-transition { navigation: auto; }</style>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+  <script src="/_sdk/element_sdk.js" type="text/javascript"></script>
+  <script src="https://cdn.tailwindcss.com" type="text/javascript"></script>
+ </head>
+ <body>
+  <div class="header">
+   <h1>📊 OEE MONITORING SYSTEM</h1>
+   <p>OVERALL EQUIPMENT EFFECTIVENESS DASHBOARD</p>
+  </div>
+  <div class="container">
+   <div class="tabs" id="tabs-container"><button class="tab-btn active" onclick="handleTabSwitch(event, 'dashboard')">📈 DASHBOARD</button> <button class="tab-btn" onclick="handleTabSwitch(event, 'input-oee')">📝 INPUT OEE</button> <button class="tab-btn" onclick="handleTabSwitch(event, 'management')">⚙️ MANAGEMENT</button> <button class="tab-btn" onclick="handleTabSwitch(event, 'audit')">📋 AUDIT LOG</button>
+   </div><!-- DASHBOARD TAB -->
+   <div id="dashboard" class="tab-content active">
+    <div class="filter-section">
+     <h3 style="margin-bottom: 1rem; font-weight: bold; text-transform: uppercase;">FILTER DATA</h3>
+     <div class="filter-row">
+      <div class="form-group"><label>DARI TANGGAL</label> <input type="date" id="filter-date-from" onchange="updateDateRangeDisplay(); applyDashboardFilter()">
+      </div>
+      <div class="form-group"><label>HINGGA TANGGAL</label> <input type="date" id="filter-date-to" onchange="updateDateRangeDisplay(); applyDashboardFilter()">
+      </div>
+      <div class="form-group"><label>PACKER</label> <select id="filter-packer" onchange="applyDashboardFilter()"> <option value="">SEMUA PACKER</option> </select>
+      </div>
+      <div class="form-group"><label>SHIFT</label> <select id="filter-shift" onchange="applyDashboardFilter()"> <option value="">SEMUA SHIFT</option> <option value="Shift 1">Shift 1</option> <option value="Shift 2">Shift 2</option> <option value="Shift 3">Shift 3</option> <option value="Longshift Pagi">Longshift Pagi</option> <option value="Longshift Malam">Longshift Malam</option> </select>
+      </div>
+     </div>
+     <div style="display: flex; gap: 1rem;"><button class="btn btn-primary" onclick="applyDashboardFilter()">🔍 TERAPKAN</button> <button class="btn btn-secondary" onclick="resetDashboardFilter()">�� RESET</button>
+     </div>
+     <div style="margin-top: 1rem; color: #6b7280; font-size: 0.875rem; text-transform: uppercase;">
+      PERIODE: <span id="date-range-display">-</span>
+     </div>
+    </div>
+    <div class="grid-3">
+     <div class="card score-card" id="score-card-oee-actual">
+      <div class="card-title">
+       OEE ACTUAL
+      </div>
+      <div class="card-value" id="score-oee-actual">
+       0%
+      </div>
+     </div>
+     <div class="card score-card" style="background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);">
+      <div class="card-title">
+       OEE 365
+      </div>
+      <div class="card-value" id="score-oee-365">
+       0%
+      </div>
+     </div>
+     <div class="card score-card" style="background: linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%);">
+      <div class="card-title">
+       TOTAL OUTPUT
+      </div>
+      <div class="card-value" id="score-total-output">
+       0
+      </div>
+     </div>
+    </div>
+    <h2 class="section-title">GRAFIK OEE TREND (7 HARI TERAKHIR)</h2>
+    <div class="card">
+     <div class="chart-container">
+      <canvas id="chart-oee-trend"></canvas>
+     </div>
+    </div>
+    <h2 class="section-title">ANALISA PERFORMA</h2>
+    <div class="grid-2">
+     <div class="card">
+      <div class="chart-container">
+       <canvas id="chart-oee-machine"></canvas>
+      </div>
+     </div>
+     <div class="card">
+      <div class="chart-container">
+       <canvas id="chart-apqa-breakdown"></canvas>
+      </div>
+     </div>
+    </div>
+    <h2 class="section-title">TOP 10 DOWNTIME</h2>
+    <div class="grid-2">
+     <div class="card">
+      <h3 style="margin-bottom: 1rem; font-weight: bold; text-transform: uppercase; color: #ec4899;">TOP ODT</h3>
+      <div class="chart-container">
+       <canvas id="chart-top-odt"></canvas>
+      </div>
+     </div>
+     <div class="card">
+      <h3 style="margin-bottom: 1rem; font-weight: bold; text-transform: uppercase; color: #ec4899;">TOP LINE STOP MESIN</h3>
+      <div class="chart-container">
+       <canvas id="chart-top-line-mesin"></canvas>
+      </div>
+     </div>
+    </div>
+    <h2 class="section-title">PERFORMA PACKER</h2>
+    <div class="table-wrapper">
+     <table>
+      <thead>
+       <tr>
+        <th>NO</th>
+        <th>NAMA PACKER</th>
+        <th>AVG OEE</th>
+        <th>TOTAL OUTPUT</th>
+        <th>RECORDS</th>
+       </tr>
+      </thead>
+      <tbody id="table-packer-performance">
+       <tr>
+        <td colspan="5" class="text-center text-gray-400 py-8">BELUM ADA DATA</td>
+       </tr>
+      </tbody>
+     </table>
+    </div>
+    <h2 class="section-title">RIWAYAT OEE</h2>
+    <div class="table-wrapper">
+     <table>
+      <thead>
+       <tr>
+        <th>TANGGAL</th>
+        <th>SHIFT</th>
+        <th>PRODUK</th>
+        <th>PACKER</th>
+        <th>OUTPUT</th>
+        <th>AVAIL %</th>
+        <th>PERF %</th>
+        <th>QUALITY %</th>
+        <th>OEE ACTUAL %</th>
+        <th>OEE 365 %</th>
+       </tr>
+      </thead>
+      <tbody id="table-oee-history">
+       <tr>
+        <td colspan="10" class="text-center text-gray-400 py-8">BELUM ADA DATA</td>
+       </tr>
+      </tbody>
+     </table>
+    </div>
+   </div><!-- INPUT OEE TAB -->
+   <div id="input-oee" class="tab-content">
+    <form id="form-oee" onsubmit="submitOEE(event)">
+     <h2 class="section-title">INFORMASI SHIFT</h2>
+     <div class="grid-2">
+      <div class="form-group"><label>TANGGAL *</label> <input type="date" id="oee-date" required>
+      </div>
+      <div class="form-group"><label>SHIFT *</label> <select id="oee-shift" required onchange="calculateShiftDuration(); renderPackerMeterList()"> <option value="">PILIH SHIFT</option> <option value="Shift 1">SHIFT 1</option> <option value="Shift 2">SHIFT 2</option> <option value="Shift 3">SHIFT 3</option> <option value="Longshift Pagi">LONGSHIFT PAGI</option> <option value="Longshift Malam">LONGSHIFT MALAM</option> </select>
+      </div>
+     </div>
+     <h2 class="section-title">PACKER METER</h2>
+     <div id="packer-meter-list" class="space-y-4"></div><button type="button" class="btn btn-primary" onclick="addPackerMeter()" style="width: 100%; margin-top: 1rem;">+ TAMBAH PACKER METER (BATCH BARU)</button>
+     <h2 class="section-title">DOWNTIME (ODT)</h2>
+     <div id="odt-list" class="space-y-3"></div>
+     <h2 class="section-title">LINE STOP MESIN</h2>
+     <div id="line-stop-mesin-list" class="space-y-3"></div>
+     <h2 class="section-title">LINE STOP NON MESIN</h2>
+     <div id="line-stop-non-mesin-list" class="space-y-3"></div>
+     <h2 class="section-title">PERHITUNGAN OEE</h2>
+     <div class="card">
+      <div class="grid-2">
+       <div style="padding: 1.25rem; background: #eff6ff; border-radius: 0.5rem; border: 2px solid #3b82f6;">
+        <p class="text-xs text-gray-600 font-semibold mb-1" style="text-transform: uppercase;">AVAILABILITY ACTUAL</p>
+        <p class="text-2xl font-bold text-blue-600" id="calc-availability-actual">0%</p>
+       </div>
+       <div style="padding: 1.25rem; background: #e0e7ff; border-radius: 0.5rem; border: 2px solid #6366f1;">
+        <p class="text-xs text-gray-600 font-semibold mb-1" style="text-transform: uppercase;">AVAILABILITY 365</p>
+        <p class="text-2xl font-bold text-indigo-600" id="calc-availability-365">0%</p>
+       </div>
+       <div style="padding: 1.25rem; background: #faf5ff; border-radius: 0.5rem; border: 2px solid #a855f7;">
+        <p class="text-xs text-gray-600 font-semibold mb-1" style="text-transform: uppercase;">PERFORMANCE</p>
+        <p class="text-2xl font-bold text-purple-600" id="calc-performance">0%</p>
+       </div>
+       <div style="padding: 1.25rem; background: #f0fdf4; border-radius: 0.5rem; border: 2px solid #22c55e;">
+        <p class="text-xs text-gray-600 font-semibold mb-1" style="text-transform: uppercase;">QUALITY RATE</p>
+        <p class="text-2xl font-bold text-green-600" id="calc-quality">0%</p>
+       </div>
+       <div style="padding: 1.25rem; background: #fdf2f8; border-radius: 0.5rem; border: 2px solid #ec4899;">
+        <p class="text-xs text-gray-600 font-semibold mb-1" style="text-transform: uppercase;">OEE ACTUAL</p>
+        <p class="text-2xl font-bold text-pink-600" id="calc-oee-actual">0%</p>
+       </div>
+       <div style="padding: 1.25rem; background: #fdf2f8; border-radius: 0.5rem; border: 2px solid #ec4899;">
+        <p class="text-xs text-gray-600 font-semibold mb-1" style="text-transform: uppercase;">OEE 365</p>
+        <p class="text-2xl font-bold text-pink-600" id="calc-oee-365">0%</p>
+       </div>
+      </div>
+     </div>
+     <div style="margin-top: 2rem; display: flex; gap: 1rem;"><button type="submit" class="btn btn-primary" style="flex: 1;">✓ SUBMIT OEE</button> <button type="reset" class="btn btn-secondary" style="flex: 1;" onclick="resetOEEForm()">↻ RESET FORM</button>
+     </div>
+    </form>
+   </div><!-- MANAGEMENT TAB -->
+   <div id="management" class="tab-content">
+    <div style="display: flex; gap: 1rem; margin-bottom: 2rem; flex-wrap: wrap;"><button class="btn btn-primary" onclick="handleManagementSwitch('packer')">���� PACKER</button> <button class="btn btn-primary" onclick="handleManagementSwitch('produk')">📦 PRODUK</button> <button class="btn btn-primary" onclick="handleManagementSwitch('downtime')">⏸️ DOWNTIME</button> <button class="btn btn-primary" onclick="handleManagementSwitch('line-stop-mesin')">🔧 LINE STOP MESIN</button> <button class="btn btn-primary" onclick="handleManagementSwitch('line-stop-non-mesin')">🛑 LINE STOP NON MESIN</button>
+    </div><!-- PACKER MANAGEMENT -->
+    <div id="mgmt-packer" class="mgmt-section">
+     <h2 class="section-title">MANAJEMEN PACKER</h2>
+     <div class="card">
+      <div style="margin-bottom: 1rem;"><button class="btn btn-primary" onclick="openAddModal('packer')">+ TAMBAH PACKER</button>
+      </div>
+      <div class="table-wrapper">
+       <table>
+        <thead>
+         <tr>
+          <th>NO</th>
+          <th>NAMA</th>
+          <th>AKSI</th>
+         </tr>
+        </thead>
+        <tbody id="table-packer">
+         <tr>
+          <td colspan="3" class="text-center text-gray-400 py-8">BELUM ADA DATA</td>
+         </tr>
+        </tbody>
+       </table>
+      </div>
+     </div>
+    </div><!-- PRODUK MANAGEMENT -->
+    <div id="mgmt-produk" class="mgmt-section hidden">
+     <h2 class="section-title">MANAJEMEN PRODUK</h2>
+     <div class="card">
+      <div style="margin-bottom: 1rem;"><button class="btn btn-primary" onclick="openAddModal('produk')">+ TAMBAH PRODUK</button>
+      </div>
+      <div class="table-wrapper">
+       <table>
+        <thead>
+         <tr>
+          <th>NO</th>
+          <th>NAMA</th>
+          <th>TARGET (DUS/MIN)</th>
+          <th>AKSI</th>
+         </tr>
+        </thead>
+        <tbody id="table-produk">
+         <tr>
+          <td colspan="4" class="text-center text-gray-400 py-8">BELUM ADA DATA</td>
+         </tr>
+        </tbody>
+       </table>
+      </div>
+     </div>
+    </div><!-- DOWNTIME MANAGEMENT -->
+    <div id="mgmt-downtime" class="mgmt-section hidden">
+     <h2 class="section-title">MANAJEMEN DOWNTIME (ODT)</h2>
+     <div class="card">
+      <div style="margin-bottom: 1rem;"><button class="btn btn-primary" onclick="openAddModal('downtime')">+ TAMBAH DOWNTIME</button>
+      </div>
+      <div class="table-wrapper">
+       <table>
+        <thead>
+         <tr>
+          <th>NO</th>
+          <th>NAMA</th>
+          <th>WAKTU STANDARD (MIN)</th>
+          <th>AKSI</th>
+         </tr>
+        </thead>
+        <tbody id="table-downtime">
+         <tr>
+          <td colspan="4" class="text-center text-gray-400 py-8">BELUM ADA DATA</td>
+         </tr>
+        </tbody>
+       </table>
+      </div>
+     </div>
+    </div><!-- LINE STOP MESIN MANAGEMENT -->
+    <div id="mgmt-line-stop-mesin" class="mgmt-section hidden">
+     <h2 class="section-title">MANAJEMEN LINE STOP MESIN</h2>
+     <div class="card">
+      <div style="margin-bottom: 1rem;"><button class="btn btn-primary" onclick="openAddModal('line-stop-mesin')">+ TAMBAH LINE STOP MESIN</button>
+      </div>
+      <div class="table-wrapper">
+       <table>
+        <thead>
+         <tr>
+          <th>NO</th>
+          <th>NAMA</th>
+          <th>AKSI</th>
+         </tr>
+        </thead>
+        <tbody id="table-line-stop-mesin">
+         <tr>
+          <td colspan="3" class="text-center text-gray-400 py-8">BELUM ADA DATA</td>
+         </tr>
+        </tbody>
+       </table>
+      </div>
+     </div>
+    </div><!-- LINE STOP NON MESIN MANAGEMENT -->
+    <div id="mgmt-line-stop-non-mesin" class="mgmt-section hidden">
+     <h2 class="section-title">MANAJEMEN LINE STOP NON MESIN</h2>
+     <div class="card">
+      <div style="margin-bottom: 1rem;"><button class="btn btn-primary" onclick="openAddModal('line-stop-non-mesin')">+ TAMBAH LINE STOP NON MESIN</button>
+      </div>
+      <div class="table-wrapper">
+       <table>
+        <thead>
+         <tr>
+          <th>NO</th>
+          <th>NAMA</th>
+          <th>AKSI</th>
+         </tr>
+        </thead>
+        <tbody id="table-line-stop-non-mesin">
+         <tr>
+          <td colspan="3" class="text-center text-gray-400 py-8">BELUM ADA DATA</td>
+         </tr>
+        </tbody>
+       </table>
+      </div>
+     </div>
+    </div>
+   </div><!-- AUDIT LOG TAB -->
+   <div id="audit" class="tab-content">
+    <h2 class="section-title">AUDIT LOG</h2>
+    <div class="table-wrapper">
+     <table>
+      <thead>
+       <tr>
+        <th>WAKTU</th>
+        <th>AKTIVITAS</th>
+        <th>DETAIL</th>
+       </tr>
+      </thead>
+      <tbody id="table-audit">
+       <tr>
+        <td colspan="3" class="text-center text-gray-400 py-8">BELUM ADA LOG</td>
+       </tr>
+      </tbody>
+     </table>
+    </div>
+   </div>
+  </div>
+  <div id="modal-container"></div>
+  <div id="toast-container" class="toast-container"></div>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2">
+
+    // MODAL FUNCTIONS
+    function hideModal() {
+      document.getElementById('modal-container').innerHTML = '';
+    }
+
+    function closeModal(event) {
+      if (event.target.className.includes('modal-overlay')) {
+        hideModal();
+      }
+    }
+
+    function openAddModal(type) {
+      const titles = {
+        packer: 'TAMBAH PACKER',
+        produk: 'TAMBAH PRODUK',
+        downtime: 'TAMBAH DOWNTIME',
+        'line-stop-mesin': 'TAMBAH LINE STOP MESIN',
+        'line-stop-non-mesin': 'TAMBAH LINE STOP NON MESIN'
+      };
+
+      let formHTML = `
+        <div class="modal-overlay" onclick="closeModal(event)">
+          <div class="modal-content" onclick="event.stopPropagation()">
+            <h3 class="text-lg font-bold text-pink-600 mb-6" style="text-transform: uppercase;">${titles[type]}</h3>
+            <form onsubmit="saveData('${type}', event)">
+      `;
+
+      if (type === 'packer') {
+        formHTML += `
+          <div class="form-group">
+            <label>NAMA PACKER</label>
+            <input type="text" id="input-nama" placeholder="Masukkan nama" required>
+          </div>
+        `;
+      } else if (type === 'produk') {
+        formHTML += `
+          <div class="form-group">
+            <label>NAMA PRODUK</label>
+            <input type="text" id="input-nama" placeholder="Masukkan nama produk" required>
+          </div>
+          <div class="form-group">
+            <label>TARGET (DUS/MENIT)</label>
+            <input type="number" id="input-target" placeholder="0" min="0" step="0.1" required>
+          </div>
+        `;
+      } else if (type === 'downtime') {
+        formHTML += `
+          <div class="form-group">
+            <label>NAMA DOWNTIME</label>
+            <input type="text" id="input-nama" placeholder="Masukkan nama" required>
+          </div>
+          <div class="form-group">
+            <label>WAKTU STANDARD (MENIT)</label>
+            <input type="number" id="input-waktu-standard" placeholder="0" min="0" step="0.1" required>
+          </div>
+        `;
+      } else {
+        formHTML += `
+          <div class="form-group">
+            <label>NAMA</label>
+            <input type="text" id="input-nama" placeholder="Masukkan nama" required>
+          </div>
+        `;
+      }
+
+      formHTML += `
+            <div style="display: flex; gap: 1rem; margin-top: 2rem;">
+              <button type="submit" class="btn btn-primary" style="flex: 1;">✓ SIMPAN</button>
+              <button type="button" class="btn btn-secondary" style="flex: 1;" onclick="hideModal()">BATAL</button>
+            </div>
+          </form>
+          </div>
+        </div>
+      `;
+
+      document.getElementById('modal-container').innerHTML = formHTML;
+    }
+
+    function openEditModal(type, id) {
+      const arrayName = type === 'line-stop-mesin' ? 'line_stop_mesin' : type === 'line-stop-non-mesin' ? 'line_stop_non_mesin' : type;
+      const item = localData[arrayName].find(x => x.id === id);
+      if (!item) return;
+
+      const titles = {
+        packer: 'EDIT PACKER',
+        produk: 'EDIT PRODUK',
+        downtime: 'EDIT DOWNTIME',
+        'line-stop-mesin': 'EDIT LINE STOP MESIN',
+        'line-stop-non-mesin': 'EDIT LINE STOP NON MESIN'
+      };
+
+      let formHTML = `
+        <div class="modal-overlay" onclick="closeModal(event)">
+          <div class="modal-content" onclick="event.stopPropagation()">
+            <h3 class="text-lg font-bold text-pink-600 mb-6" style="text-transform: uppercase;">${titles[type]}</h3>
+            <form onsubmit="updateData('${type}', '${id}', event)">
+      `;
+
+      if (type === 'packer') {
+        formHTML += `
+          <div class="form-group">
+            <label>NAMA PACKER</label>
+            <input type="text" id="input-nama" value="${item.nama}" required>
+          </div>
+        `;
+      } else if (type === 'produk') {
+        formHTML += `
+          <div class="form-group">
+            <label>NAMA PRODUK</label>
+            <input type="text" id="input-nama" value="${item.nama}" required>
+          </div>
+          <div class="form-group">
+            <label>TARGET (DUS/MENIT)</label>
+            <input type="number" id="input-target" value="${item.target}" min="0" step="0.1" required>
+          </div>
+        `;
+      } else if (type === 'downtime') {
+        formHTML += `
+          <div class="form-group">
+            <label>NAMA DOWNTIME</label>
+            <input type="text" id="input-nama" value="${item.nama}" required>
+          </div>
+          <div class="form-group">
+            <label>WAKTU STANDARD (MENIT)</label>
+            <input type="number" id="input-waktu-standard" value="${item.waktu_standard}" min="0" step="0.1" required>
+          </div>
+        `;
+      } else {
+        formHTML += `
+          <div class="form-group">
+            <label>NAMA</label>
+            <input type="text" id="input-nama" value="${item.nama}" required>
+          </div>
+        `;
+      }
+
+      formHTML += `
+            <div style="display: flex; gap: 1rem; margin-top: 2rem;">
+              <button type="submit" class="btn btn-primary" style="flex: 1;">✓ UPDATE</button>
+              <button type="button" class="btn btn-secondary" style="flex: 1;" onclick="hideModal()">BATAL</button>
+            </div>
+          </form>
+          </div>
+        </div>
+      `;
+
+      document.getElementById('modal-container').innerHTML = formHTML;
+    }
+
+    function saveData(type, event) {
+      event.preventDefault();
+      const id = 'id_' + Date.now();
+
+      if (type === 'packer') {
+        localData.packer.push({ id, nama: document.getElementById('input-nama').value });
+        renderPackerTable();
+        addAuditLog('TAMBAH PACKER', document.getElementById('input-nama').value);
+      } else if (type === 'produk') {
+        localData.produk.push({
+          id,
+          nama: document.getElementById('input-nama').value,
+          target: parseFloat(document.getElementById('input-target').value)
+        });
+        renderProdukTable();
+        addAuditLog('TAMBAH PRODUK', document.getElementById('input-nama').value);
+      } else if (type === 'downtime') {
+        localData.downtime.push({
+          id,
+          nama: document.getElementById('input-nama').value,
+          waktu_standard: parseFloat(document.getElementById('input-waktu-standard').value)
+        });
+        renderDowntimeTable();
+        addAuditLog('TAMBAH DOWNTIME', document.getElementById('input-nama').value);
+      } else if (type === 'line-stop-mesin') {
+        localData.line_stop_mesin.push({ id, nama: document.getElementById('input-nama').value });
+        renderLineStopMesinTable();
+        addAuditLog('TAMBAH LINE STOP MESIN', document.getElementById('input-nama').value);
+      } else if (type === 'line-stop-non-mesin') {
+        localData.line_stop_non_mesin.push({ id, nama: document.getElementById('input-nama').value });
+        renderLineStopNonMesinTable();
+        addAuditLog('TAMBAH LINE STOP NON MESIN', document.getElementById('input-nama').value);
+      }
+
+      saveLocalData();
+      hideModal();
+      showToast('DATA BERHASIL DISIMPAN', 'success');
+      loadOEEFormData();
+    }
+
+    function updateData(type, id, event) {
+      event.preventDefault();
+      const arrayName = type === 'line-stop-mesin' ? 'line_stop_mesin' : type === 'line-stop-non-mesin' ? 'line_stop_non_mesin' : type;
+      const item = localData[arrayName].find(x => x.id === id);
+
+      if (item) {
+        if (type === 'packer' || type === 'line-stop-mesin' || type === 'line-stop-non-mesin') {
+          item.nama = document.getElementById('input-nama').value;
+        } else if (type === 'produk') {
+          item.nama = document.getElementById('input-nama').value;
+          item.target = parseFloat(document.getElementById('input-target').value);
+        } else if (type === 'downtime') {
+          item.nama = document.getElementById('input-nama').value;
+          item.waktu_standard = parseFloat(document.getElementById('input-waktu-standard').value);
+        }
+
+        const tableFuncs = {
+          packer: renderPackerTable,
+          produk: renderProdukTable,
+          downtime: renderDowntimeTable,
+          'line-stop-mesin': renderLineStopMesinTable,
+          'line-stop-non-mesin': renderLineStopNonMesinTable
+        };
+
+        tableFuncs[type]?.();
+        saveLocalData();
+        hideModal();
+        showToast('DATA BERHASIL DIUPDATE', 'success');
+        loadOEEFormData();
+      }
+    }
+
+    function deleteData(type, id) {
+      if (!confirm('YAKIN INGIN MENGHAPUS?')) return;
+
+      const arrayName = type === 'line-stop-mesin' ? 'line_stop_mesin' : type === 'line-stop-non-mesin' ? 'line_stop_non_mesin' : type;
+      const item = localData[arrayName].find(x => x.id === id);
+      if (item) {
+        localData[arrayName] = localData[arrayName].filter(x => x.id !== id);
+        const tableFuncs = {
+          packer: renderPackerTable,
+          produk: renderProdukTable,
+          downtime: renderDowntimeTable,
+          'line-stop-mesin': renderLineStopMesinTable,
+          'line-stop-non-mesin': renderLineStopNonMesinTable
+        };
+        tableFuncs[type]?.();
+        saveLocalData();
+        addAuditLog('HAPUS ' + type.toUpperCase(), item.nama);
+        showToast('DATA BERHASIL DIHAPUS', 'success');
+        loadOEEFormData();
+      }
+    }
+
+    // TABLE RENDER FUNCTIONS
+    function renderPackerTable() {
+      const tbody = document.getElementById('table-packer');
+      if (localData.packer.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="3" class="text-center text-gray-400 py-8">BELUM ADA DATA</td></tr>';
+        return;
+      }
+      tbody.innerHTML = localData.packer.map((item, idx) => `
+        <tr>
+          <td>${idx + 1}</td>
+          <td>${item.nama}</td>
+          <td>
+            <button class="btn-edit text-xs mr-2" onclick="openEditModal('packer', '${item.id}')">EDIT</button>
+            <button class="btn-danger text-xs" onclick="deleteData('packer', '${item.id}')">HAPUS</button>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    function renderProdukTable() {
+      const tbody = document.getElementById('table-produk');
+      if (localData.produk.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="4" class="text-center text-gray-400 py-8">BELUM ADA DATA</td></tr>';
+        return;
+      }
+      tbody.innerHTML = localData.produk.map((item, idx) => `
+        <tr>
+          <td>${idx + 1}</td>
+          <td>${item.nama}</td>
+          <td>${item.target} DUS/MENIT</td>
+          <td>
+            <button class="btn-edit text-xs mr-2" onclick="openEditModal('produk', '${item.id}')">EDIT</button>
+            <button class="btn-danger text-xs" onclick="deleteData('produk', '${item.id}')">HAPUS</button>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    function renderDowntimeTable() {
+      const tbody = document.getElementById('table-downtime');
+      if (localData.downtime.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="4" class="text-center text-gray-400 py-8">BELUM ADA DATA</td></tr>';
+        return;
+      }
+      tbody.innerHTML = localData.downtime.map((item, idx) => `
+        <tr>
+          <td>${idx + 1}</td>
+          <td>${item.nama}</td>
+          <td>${item.waktu_standard} MENIT</td>
+          <td>
+            <button class="btn-edit text-xs mr-2" onclick="openEditModal('downtime', '${item.id}')">EDIT</button>
+            <button class="btn-danger text-xs" onclick="deleteData('downtime', '${item.id}')">HAPUS</button>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    function renderLineStopMesinTable() {
+      const tbody = document.getElementById('table-line-stop-mesin');
+      if (localData.line_stop_mesin.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="3" class="text-center text-gray-400 py-8">BELUM ADA DATA</td></tr>';
+        return;
+      }
+      tbody.innerHTML = localData.line_stop_mesin.map((item, idx) => `
+        <tr>
+          <td>${idx + 1}</td>
+          <td>${item.nama}</td>
+          <td>
+            <button class="btn-edit text-xs mr-2" onclick="openEditModal('line-stop-mesin', '${item.id}')">EDIT</button>
+            <button class="btn-danger text-xs" onclick="deleteData('line-stop-mesin', '${item.id}')">HAPUS</button>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    function renderLineStopNonMesinTable() {
+      const tbody = document.getElementById('table-line-stop-non-mesin');
+      if (localData.line_stop_non_mesin.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="3" class="text-center text-gray-400 py-8">BELUM ADA DATA</td></tr>';
+        return;
+      }
+      tbody.innerHTML = localData.line_stop_non_mesin.map((item, idx) => `
+        <tr>
+          <td>${idx + 1}</td>
+          <td>${item.nama}</td>
+          <td>
+            <button class="btn-edit text-xs mr-2" onclick="openEditModal('line-stop-non-mesin', '${item.id}')">EDIT</button>
+            <button class="btn-danger text-xs" onclick="deleteData('line-stop-non-mesin', '${item.id}')">HAPUS</button>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    function renderAuditTable() {
+      const tbody = document.getElementById('table-audit');
+      if (!tbody) return;
+      if (localData.audit_trail.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="3" class="text-center text-gray-400 py-8">BELUM ADA LOG</td></tr>';
+        return;
+      }
+      tbody.innerHTML = localData.audit_trail.map(item => `
+        <tr>
+          <td class="text-xs">${new Date(item.timestamp).toLocaleString('id-ID')}</td>
+          <td><span class="px-2 py-1 rounded-full text-xs bg-pink-100 text-pink-600" style="text-transform: uppercase;">${item.activity}</span></td>
+          <td>${item.detail}</td>
+        </tr>
+      `).join('');
+    }
+
+    // OEE FORM STATE
+    let oeeFormState = {
+      shiftMinutes: 0,
+      packerMeters: [],
+      downtime: [],
+      lineStopMesin: [],
+      lineStopNonMesin: [],
+      results: {}
+    };
+
+    function getShiftDuration(shift) {
+      const durations = {
+        'Shift 1': 8 * 60 + 30,
+        'Shift 2': 7 * 60 + 30,
+        'Shift 3': 8 * 60 + 30,
+        'Longshift Pagi': 12 * 60,
+        'Longshift Malam': 12 * 60
+      };
+      return durations[shift] || 0;
+    }
+
+    function calculateShiftDuration() {
+      const shift = document.getElementById('oee-shift').value;
+      oeeFormState.shiftMinutes = getShiftDuration(shift);
+      renderPackerMeterList();
+      renderODTList();
+      renderLineStopMesinList();
+      renderLineStopNonMesinList();
+      calculateOEE();
+    }
+
+    function renderPackerMeterList() {
+      const listDiv = document.getElementById('packer-meter-list');
+      const shift = document.getElementById('oee-shift').value;
+
+      if (!shift) {
+        listDiv.innerHTML = '<p class="text-xs text-gray-400" style="text-transform: uppercase;">PILIH SHIFT DULU</p>';
+        return;
+      }
+
+      const packerOptions = localData.packer.map(p => `<option value="${p.id}|${p.nama}">${p.nama}</option>`).join('');
+      const productOptions = localData.produk.map(p => `<option value="${p.id}">${p.nama} (${p.target} DUS/MIN)</option>`).join('');
+
+      let html = '';
+      oeeFormState.packerMeters.forEach((meter, meterIdx) => {
+        const product = localData.produk.find(p => p.id === meter.productId);
+        const productName = product?.nama || 'PILIH PRODUK';
+
+        html += `
+          <div class="card" style="border: 3px solid #10b981; background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+              <div>
+                <h4 class="text-sm font-bold text-green-700" style="text-transform: uppercase; margin: 0;">📊 PACKER METER #${meterIdx + 1}</h4>
+                <p class="text-xs text-green-600" style="text-transform: uppercase; margin: 0.25rem 0 0 0;">BATCH: <strong>${meter.batchNumber || '-'}</strong> | PRODUK: <strong>${productName}</strong></p>
+              </div>
+              <button type="button" class="btn btn-danger text-xs" onclick="removePackerMeter('${meter.id}')">HAPUS METER</button>
+            </div>
+
+            <!-- PRODUK & BATCH SECTION -->
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 1.5rem; padding: 1rem; background: white; border-radius: 0.5rem; border: 2px solid #dcfce7;">
+              <div class="form-group mb-0">
+                <label class="text-xs font-semibold" style="text-transform: uppercase; color: #059669;">PRODUK *</label>
+                <select class="input-field text-xs meter-product" required data-meter-id="${meter.id}" onchange="updatePackerMeter('${meter.id}', 'product')">
+                  <option value="">PILIH PRODUK</option>
+                  ${productOptions}
+                </select>
+              </div>
+              <div class="form-group mb-0">
+                <label class="text-xs font-semibold" style="text-transform: uppercase; color: #059669;">NO. BATCH *</label>
+                <input type="text" class="input-field text-xs meter-batch" placeholder="Cth: B001" required data-meter-id="${meter.id}" onchange="updatePackerMeter('${meter.id}', 'batch')">
+              </div>
+            </div>
+
+            <!-- PACKER LIST SECTION -->
+            <div style="margin-bottom: 1.5rem; padding: 1rem; background: #eff6ff; border-radius: 0.5rem; border: 2px solid #bfdbfe;">
+              <h5 class="text-xs font-bold text-blue-700" style="text-transform: uppercase; margin: 0 0 1rem 0;">🚀 PACKER YANG BERJALAN</h5>
+              <div id="packer-list-${meter.id}" class="space-y-2" style="margin-bottom: 1rem;"></div>
+              <button type="button" class="btn btn-primary text-xs" onclick="addPackerToMeter('${meter.id}')" style="width: 100%;">+ TAMBAH PACKER</button>
+            </div>
+          </div>
+        `;
+      });
+
+      if (html === '') {
+        html = '<p class="text-xs text-gray-400" style="text-transform: uppercase;">BELUM ADA PACKER METER</p>';
+      }
+
+      listDiv.innerHTML = html;
+
+      // Populate values
+      oeeFormState.packerMeters.forEach(meter => {
+        const meterDiv = document.querySelector(`[data-meter-id="${meter.id}"]`);
+        if (meterDiv) {
+          const productSelect = meterDiv.closest('.card')?.querySelector('.meter-product');
+          const batchInput = meterDiv.closest('.card')?.querySelector('.meter-batch');
+          if (productSelect) productSelect.value = meter.productId || '';
+          if (batchInput) batchInput.value = meter.batchNumber || '';
+        }
+      });
+
+      // Render packer list for each meter
+      oeeFormState.packerMeters.forEach((meter) => {
+        const packerListDiv = document.getElementById(`packer-list-${meter.id}`);
+        if (!packerListDiv) return;
+
+        let packerHTML = '';
+        meter.packers.forEach((packer) => {
+          const product = localData.produk.find(p => p.id === meter.productId);
+          const targetPerMin = product?.target || 0;
+          const targetOutput = packer.duration * targetPerMin;
+          const achievement = targetOutput > 0 ? ((packer.output / targetOutput) * 100).toFixed(1) : 0;
+
+          packerHTML += `
+            <div id="packer-${packer.id}" style="display: flex; flex-direction: column; gap: 0.75rem; padding: 1rem; background: white; border-radius: 0.375rem; border: 1px solid #bfdbfe;">
+              <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 0.75rem;">
+                <div>
+                  <label class="text-xs font-semibold text-gray-600" style="text-transform: uppercase; display: block; margin-bottom: 0.25rem;">👤 NAMA PACKER</label>
+                  <select class="input-field text-xs packer-name" data-packer-id="${packer.id}" data-meter-id="${meter.id}" onchange="updatePacker('${packer.id}', '${meter.id}')">
+                    <option value="">PILIH PACKER</option>
+                    ${packerOptions}
+                  </select>
+                </div>
+                <div>
+                  <label class="text-xs font-semibold text-gray-600" style="text-transform: uppercase; display: block; margin-bottom: 0.25rem;">⏰ JAM MULAI</label>
+                  <input type="time" class="input-field text-xs packer-start-time" data-packer-id="${packer.id}" data-meter-id="${meter.id}" onchange="updatePacker('${packer.id}', '${meter.id}')">
+                </div>
+                <div>
+                  <label class="text-xs font-semibold text-gray-600" style="text-transform: uppercase; display: block; margin-bottom: 0.25rem;">⏰ JAM SELESAI</label>
+                  <input type="time" class="input-field text-xs packer-end-time" data-packer-id="${packer.id}" data-meter-id="${meter.id}" onchange="updatePacker('${packer.id}', '${meter.id}')">
+                </div>
+                <div>
+                  <label class="text-xs font-semibold text-gray-600" style="text-transform: uppercase; display: block; margin-bottom: 0.25rem;">⏱️ DURASI (MIN)</label>
+                  <input type="number" class="input-field text-xs packer-duration" min="0" readonly style="background: #f0fdf4; color: #059669; font-weight: bold;" value="${packer.duration}">
+                </div>
+                <div>
+                  <label class="text-xs font-semibold text-gray-600" style="text-transform: uppercase; display: block; margin-bottom: 0.25rem;">📦 OUTPUT (DUS)</label>
+                  <input type="number" class="input-field text-xs packer-output" min="0" step="0.5" placeholder="0" data-packer-id="${packer.id}" data-meter-id="${meter.id}" onchange="updatePacker('${packer.id}', '${meter.id}')" value="${packer.output}">
+                </div>
+              </div>
+              <button type="button" class="btn btn-danger text-xs" onclick="removePacker('${packer.id}', '${meter.id}')" style="width: 100%;">🗑️ HAPUS PACKER INI</button>
+            </div>
+          `;
+        });
+
+        if (packerHTML === '') {
+          packerHTML = '<p class="text-xs text-gray-500" style="text-transform: uppercase; margin: 0;">BELUM ADA PACKER</p>';
+        }
+
+        packerListDiv.innerHTML = packerHTML;
+
+        // Populate packer values
+        meter.packers.forEach(packer => {
+          const packerDiv = document.getElementById(`packer-${packer.id}`);
+          if (packerDiv) {
+            packerDiv.querySelector('.packer-name').value = packer.packerName ? `${packer.packerId}|${packer.packerName}` : '';
+            packerDiv.querySelector('.packer-start-time').value = packer.startTime;
+            packerDiv.querySelector('.packer-end-time').value = packer.endTime;
+            packerDiv.querySelector('.packer-duration').value = packer.duration;
+            packerDiv.querySelector('.packer-output').value = packer.output;
+          }
+        });
+      });
+    }
+
+    function addPackerMeter() {
+      const shift = document.getElementById('oee-shift').value;
+      if (!shift) {
+        showToast('PILIH SHIFT DULU', 'error');
+        return;
+      }
+
+      oeeFormState.packerMeters.push({
+        id: 'meter_' + Date.now(),
+        productId: '',
+        batchNumber: '',
+        packers: []
+      });
+
+      renderPackerMeterList();
+    }
+
+    function removePackerMeter(meterId) {
+      oeeFormState.packerMeters = oeeFormState.packerMeters.filter(m => m.id !== meterId);
+      renderPackerMeterList();
+      calculateOEE();
+    }
+
+    function addPackerToMeter(meterId) {
+      const meter = oeeFormState.packerMeters.find(m => m.id === meterId);
+      if (!meter) return;
+
+      const shift = document.getElementById('oee-shift').value;
+      const shiftSchedule = {
+        'Shift 1': { start: '07:00', end: '15:30' },
+        'Shift 2': { start: '16:00', end: '23:30' },
+        'Shift 3': { start: '00:00', end: '07:00' },
+        'Longshift Pagi': { start: '07:00', end: '19:00' },
+        'Longshift Malam': { start: '19:00', end: '07:00' }
+      };
+      const schedule = shiftSchedule[shift] || { start: '07:00', end: '15:30' };
+
+      meter.packers.push({
+        id: 'packer_' + Date.now(),
+        packerId: '',
+        packerName: '',
+        startTime: schedule.start,
+        endTime: schedule.end,
+        duration: 0,
+        output: 0
+      });
+
+      renderPackerMeterList();
+    }
+
+    function updatePackerMeter(meterId, field) {
+      const meter = oeeFormState.packerMeters.find(m => m.id === meterId);
+      if (!meter) return;
+
+      const meterDiv = document.querySelector(`[data-meter-id="${meterId}"]`).closest('.card');
+      if (!meterDiv) return;
+
+      if (field === 'product') {
+        meter.productId = meterDiv.querySelector('.meter-product').value;
+      } else if (field === 'batch') {
+        meter.batchNumber = meterDiv.querySelector('.meter-batch').value;
+      }
+
+      calculateOEE();
+    }
+
+    function updatePacker(packerId, meterId) {
+      const meter = oeeFormState.packerMeters.find(m => m.id === meterId);
+      if (!meter) return;
+
+      const packer = meter.packers.find(p => p.id === packerId);
+      if (!packer) return;
+
+      const packerDiv = document.getElementById(`packer-${packerId}`);
+      if (!packerDiv) return;
+
+      const nameSelect = packerDiv.querySelector('.packer-name');
+      const startTimeInput = packerDiv.querySelector('.packer-start-time');
+      const endTimeInput = packerDiv.querySelector('.packer-end-time');
+      const durationInput = packerDiv.querySelector('.packer-duration');
+      const outputInput = packerDiv.querySelector('.packer-output');
+
+      const [packerId_, packerName] = nameSelect.value.split('|') || ['', ''];
+      packer.packerId = packerId_;
+      packer.packerName = packerName;
+      packer.startTime = startTimeInput.value;
+      packer.endTime = endTimeInput.value;
+      packer.output = parseFloat(outputInput.value) || 0;
+
+      if (packer.startTime && packer.endTime) {
+        const [startHour, startMin] = packer.startTime.split(':').map(Number);
+        const [endHour, endMin] = packer.endTime.split(':').map(Number);
+
+        let startTotalMin = startHour * 60 + startMin;
+        let endTotalMin = endHour * 60 + endMin;
+
+        if (endTotalMin < startTotalMin) {
+          endTotalMin += 24 * 60;
+        }
+
+        packer.duration = Math.max(0, endTotalMin - startTotalMin);
+        durationInput.value = packer.duration;
+      }
+
+      renderPackerMeterList();
+      calculateOEE();
+    }
+
+    function removePacker(packerId, meterId) {
+      const meter = oeeFormState.packerMeters.find(m => m.id === meterId);
+      if (meter) {
+        meter.packers = meter.packers.filter(p => p.id !== packerId);
+      }
+      renderPackerMeterList();
+      calculateOEE();
+    }
+
+    function renderODTList() {
+      const listDiv = document.getElementById('odt-list');
+      if (localData.downtime.length === 0) {
+        listDiv.innerHTML = '<p class="text-xs text-gray-400" style="text-transform: uppercase;">BELUM ADA DATA ODT</p>';
+        return;
+      }
+
+      if (oeeFormState.downtime.length === 0) {
+        oeeFormState.downtime = localData.downtime.map(d => ({ 
+          id: d.id, 
+          nama: d.nama, 
+          waktu_standard: d.waktu_standard, 
+          durasi: 0 
+        }));
+      }
+
+      listDiv.innerHTML = oeeFormState.downtime.map(odt => `
+        <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 1rem; padding: 0.75rem; background: #eff6ff; border-radius: 0.5rem; align-items: center;">
+          <div>
+            <p class="text-xs text-gray-600 font-semibold" style="text-transform: uppercase; margin: 0;">${odt.nama}</p>
+            <p class="text-xs text-gray-500" style="text-transform: uppercase; margin: 0;">STD: ${odt.waktu_standard}'</p>
+          </div>
+          <input type="number" class="input-field text-xs" value="${odt.durasi}" min="0" placeholder="ACTUAL (MIN)" onchange="updateODT('${odt.id}', this.value)">
+        </div>
+      `).join('');
+    }
+
+    function updateODT(id, durasi) {
+      const odt = oeeFormState.downtime.find(o => o.id === id);
+      if (odt) {
+        odt.durasi = parseFloat(durasi) || 0;
+      }
+      calculateOEE();
+    }
+
+    function renderLineStopMesinList() {
+      const listDiv = document.getElementById('line-stop-mesin-list');
+      if (localData.line_stop_mesin.length === 0 && oeeFormState.lineStopMesin.length === 0) {
+        listDiv.innerHTML = '<p class="text-xs text-gray-400" style="text-transform: uppercase;">BELUM ADA DATA</p>';
+        return;
+      }
+
+      if (oeeFormState.lineStopMesin.length === 0) {
+        oeeFormState.lineStopMesin = localData.line_stop_mesin.map(m => ({ id: m.id, nama: m.nama, durasi: 0, action: '', wr: '', isCustom: false }));
+      }
+
+      listDiv.innerHTML = oeeFormState.lineStopMesin.map(lsm => {
+        const durasi = parseFloat(lsm.durasi) || 0;
+        const wrRequired = durasi >= 180;
+        return `
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 0.75rem; padding: 0.75rem; background: #faf5ff; border-radius: 0.5rem; align-items: center;">
+            <div>
+              <p class="text-xs text-gray-600 font-semibold" style="text-transform: uppercase; margin: 0;">${lsm.nama}</p>
+            </div>
+            <input type="number" class="input-field text-xs" value="${lsm.durasi}" min="0" placeholder="DUR (MIN)" onchange="updateLineStopMesin('${lsm.id}', 'durasi', this.value)">
+            <input type="text" class="input-field text-xs" value="${lsm.action}" placeholder="ACTION" onchange="updateLineStopMesin('${lsm.id}', 'action', this.value)">
+            <input type="text" class="input-field text-xs ${wrRequired ? 'border-red-400' : ''}" value="${lsm.wr}" placeholder="NO WR${wrRequired ? ' *' : ''}" onchange="updateLineStopMesin('${lsm.id}', 'wr', this.value)" ${wrRequired ? 'required' : ''}>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function updateLineStopMesin(id, field, value) {
+      const lsm = oeeFormState.lineStopMesin.find(l => l.id === id);
+      if (lsm) lsm[field] = value;
+      calculateOEE();
+    }
+
+    function renderLineStopNonMesinList() {
+      const listDiv = document.getElementById('line-stop-non-mesin-list');
+      if (localData.line_stop_non_mesin.length === 0 && oeeFormState.lineStopNonMesin.length === 0) {
+        listDiv.innerHTML = '<p class="text-xs text-gray-400" style="text-transform: uppercase;">BELUM ADA DATA</p>';
+        return;
+      }
+
+      if (oeeFormState.lineStopNonMesin.length === 0) {
+        oeeFormState.lineStopNonMesin = localData.line_stop_non_mesin.map(m => ({ id: m.id, nama: m.nama, durasi: 0, action: '', checked: false, isCustom: false }));
+      }
+
+      listDiv.innerHTML = oeeFormState.lineStopNonMesin.map(lsnm => `
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 0.75rem; padding: 0.75rem; background: #f0fdf4; border-radius: 0.5rem; align-items: center;">
+          <div class="flex items-center" style="display: flex; align-items: center; gap: 0.5rem;">
+            <input type="checkbox" id="lsnm-${lsnm.id}" ${lsnm.checked ? 'checked' : ''} onchange="updateLineStopNonMesin('${lsnm.id}', 'checked', this.checked); renderLineStopNonMesinList();">
+            <label for="lsnm-${lsnm.id}" class="text-xs font-semibold text-gray-600 cursor-pointer" style="text-transform: uppercase; margin: 0;">
+              ${lsnm.nama}
+            </label>
+          </div>
+          <input type="number" class="input-field text-xs" value="${lsnm.durasi}" min="0" placeholder="DUR (MIN)" ${!lsnm.checked ? 'disabled' : ''} onchange="updateLineStopNonMesin('${lsnm.id}', 'durasi', this.value)">
+          <input type="text" class="input-field text-xs" value="${lsnm.action}" placeholder="ACTION" ${!lsnm.checked ? 'disabled' : ''} onchange="updateLineStopNonMesin('${lsnm.id}', 'action', this.value)">
+        </div>
+      `).join('');
+    }
+
+    function updateLineStopNonMesin(id, field, value) {
+      const lsnm = oeeFormState.lineStopNonMesin.find(l => l.id === id);
+      if (lsnm) {
+        if (field === 'checked') {
+          lsnm.checked = value;
+          if (!value) {
+            lsnm.durasi = 0;
+            lsnm.action = '';
+          }
+        } else {
+          lsnm[field] = value;
+        }
+      }
+      calculateOEE();
+    }
+
+    function calculateOEE() {
+      let totalOutputActual = 0;
+      let totalShiftMinutes = oeeFormState.shiftMinutes;
+
+      oeeFormState.packerMeters.forEach(meter => {
+        meter.packers.forEach(packer => {
+          totalOutputActual += packer.output;
+        });
+      });
+
+      // AUTO-MOVE EXCESS ODT TO LINE STOP NON MESIN
+      // Hitung excess untuk setiap ODT individual
+      oeeFormState.downtime.forEach(odt => {
+        const excessForThisODT = Math.max(0, parseFloat(odt.durasi || 0) - parseFloat(odt.waktu_standard || 0));
+        
+        if (excessForThisODT > 0) {
+          const excessODTName = `EXCESS ODT ${odt.nama}`;
+          let excessItem = oeeFormState.lineStopNonMesin.find(l => l.nama === excessODTName);
+          
+          if (!excessItem) {
+            excessItem = {
+              id: 'excess_odt_' + odt.id + '_' + Date.now(),
+              nama: excessODTName,
+              durasi: excessForThisODT,
+              action: 'AUTO',
+              checked: true,
+              isCustom: true,
+              linkedODTId: odt.id
+            };
+            oeeFormState.lineStopNonMesin.push(excessItem);
+          } else {
+            excessItem.durasi = excessForThisODT;
+            excessItem.checked = true;
+          }
+        } else {
+          // Jika tidak ada excess untuk ODT ini, hapus dari line stop non mesin
+          oeeFormState.lineStopNonMesin = oeeFormState.lineStopNonMesin.filter(
+            l => !(l.nama === `EXCESS ODT ${odt.nama}` && l.isCustom)
+          );
+        }
+      });
+      
+      // Re-render line stop non mesin untuk update display
+      renderLineStopNonMesinList();
+      
+      const totalLineStopMesin = oeeFormState.lineStopMesin.reduce((sum, l) => sum + (parseFloat(l.durasi) || 0), 0);
+      const totalLineStopNonMesin = oeeFormState.lineStopNonMesin.filter(l => l.checked).reduce((sum, l) => sum + (parseFloat(l.durasi) || 0), 0);
+      
+      // Gunakan ODT standard sebagai pembanding, bukan actual
+      const totalODT = oeeFormState.downtime.reduce((sum, odt) => sum + (parseFloat(odt.waktu_standard) || 0), 0);
+
+      // AVAILABILITY ACTUAL: (Jam kerja - total downtime - total line stop mesin - total line stop non mesin) / (jam kerja - total ODT)
+      const numerator = totalShiftMinutes - totalODT - totalLineStopMesin - totalLineStopNonMesin;
+      const denominator = totalShiftMinutes - totalODT;
+      const availabilityActual = denominator > 0 ? (numerator / denominator) * 100 : 0;
+
+      // AVAILABILITY 365: (Jam kerja - total downtime - total line stop mesin - total line stop non mesin) / jam kerja
+      const availability365 = totalShiftMinutes > 0 ? ((totalShiftMinutes - totalODT - totalLineStopMesin - totalLineStopNonMesin) / totalShiftMinutes) * 100 : 0;
+
+      // PERFORMANCE: Output Actual / ((Durasi Netto Per Batch) × Target Output Per Batch) - UNTUK MULTI-BATCH
+      // Calculate target output per batch based on actual packer duration per batch
+      let totalTargetOutputAllBatches = 0;
+      
+      oeeFormState.packerMeters.forEach(meter => {
+        const product = localData.produk.find(p => p.id === meter.productId);
+        if (!product) return;
+        
+        // Calculate total duration for this batch across all packers
+        let batchTotalDuration = 0;
+        meter.packers.forEach(packer => {
+          batchTotalDuration += packer.duration || 0;
+        });
+        
+        // Average packer duration for this batch
+        const avgPackerDurationPerBatch = meter.packers.length > 0 ? batchTotalDuration / meter.packers.length : 0;
+        
+        // Target output for this batch = avg duration × target per minute × number of packers
+        const batchTargetOutput = avgPackerDurationPerBatch * product.target * meter.packers.length;
+        totalTargetOutputAllBatches += batchTargetOutput;
+      });
+
+      const performance = totalTargetOutputAllBatches > 0 ? (totalOutputActual / totalTargetOutputAllBatches) * 100 : 0;
+      const reject = 0;
+      const qualityRate = totalOutputActual > 0 ? ((totalOutputActual - reject) / totalOutputActual) * 100 : 0;
+
+      const oeeActual = (availabilityActual / 100) * (performance / 100) * (qualityRate / 100) * 100;
+      const oee365 = (availability365 / 100) * (performance / 100) * (qualityRate / 100) * 100;
+
+      document.getElementById('calc-availability-actual').textContent = `${availabilityActual.toFixed(1)}%`;
+      document.getElementById('calc-availability-365').textContent = `${availability365.toFixed(1)}%`;
+      document.getElementById('calc-performance').textContent = `${performance.toFixed(1)}%`;
+      document.getElementById('calc-quality').textContent = `${qualityRate.toFixed(1)}%`;
+      document.getElementById('calc-oee-actual').textContent = `${oeeActual.toFixed(1)}%`;
+      document.getElementById('calc-oee-365').textContent = `${oee365.toFixed(1)}%`;
+      document.getElementById('calc-total-output').textContent = `${totalOutputActual.toFixed(1)} DUS`;
+
+      oeeFormState.results = {
+        availabilityActual: availabilityActual.toFixed(1),
+        availability365: availability365.toFixed(1),
+        performance: performance.toFixed(1),
+        qualityRate: qualityRate.toFixed(1),
+        oeeActual: oeeActual.toFixed(1),
+        oee365: oee365.toFixed(1),
+        totalOutput: totalOutputActual
+      };
+    }
+
+    function loadOEEFormData() {
+      document.getElementById('oee-date').value = new Date().toISOString().split('T')[0];
+    }
+
+    function submitOEE(event) {
+      event.preventDefault();
+      
+      const date = document.getElementById('oee-date').value;
+      const shift = document.getElementById('oee-shift').value;
+
+      if (!date || !shift || oeeFormState.packerMeters.length === 0) {
+        showToast('TANGGAL, SHIFT & PACKER METER WAJIB DIISI', 'error');
+        return;
+      }
+
+      const invalidMeter = oeeFormState.packerMeters.find(m => !m.productId || !m.batchNumber || m.packers.length === 0);
+      if (invalidMeter) {
+        showToast('PRODUK, BATCH & MINIMAL 1 PACKER WAJIB DIISI DI SETIAP METER', 'error');
+        return;
+      }
+
+      const invalidPacker = oeeFormState.packerMeters.flatMap((m, mIdx) => 
+        m.packers.filter(p => !p.packerName).map(() => mIdx)
+      );
+      if (invalidPacker.length > 0) {
+        showToast('SEMUA PACKER HARUS DIPILIH', 'error');
+        return;
+      }
+
+      const invalidWR = oeeFormState.lineStopMesin.find(lsm => parseFloat(lsm.durasi) >= 180 && !lsm.wr?.trim());
+      if (invalidWR) {
+        showToast(`NO WR WAJIB UNTUK: ${invalidWR.nama}`, 'error');
+        return;
+      }
+
+      const allPackerNames = oeeFormState.packerMeters.flatMap(m => m.packers.map(p => p.packerName)).join(', ');
+      const produkBatch = oeeFormState.packerMeters.map(m => {
+        const prod = localData.produk.find(p => p.id === m.productId);
+        return `${prod?.nama}(${m.batchNumber})`;
+      }).join(' | ');
+
+      const record = {
+        id: 'id_' + Date.now(),
+        date,
+        shift,
+        product: produkBatch,
+        packers: allPackerNames,
+        output_actual: oeeFormState.results.totalOutput,
+        availability_actual: parseFloat(oeeFormState.results.availabilityActual),
+        performance: parseFloat(oeeFormState.results.performance),
+        quality_rate: parseFloat(oeeFormState.results.qualityRate),
+        oee_actual: parseFloat(oeeFormState.results.oeeActual),
+        oee_365: parseFloat(oeeFormState.results.oee365),
+        created_at: new Date().toISOString()
+      };
+
+      localData.oee_records.unshift(record);
+      saveLocalData();
+      addAuditLog('INPUT OEE', `${produkBatch} - PACKER: ${allPackerNames}`);
+      showToast('DATA OEE BERHASIL DISIMPAN', 'success');
+      resetOEEForm();
+      updateDashboard();
+    }
+
+    function resetOEEForm() {
+      document.getElementById('form-oee').reset();
+      document.getElementById('oee-date').value = new Date().toISOString().split('T')[0];
+      oeeFormState = {
+        shiftMinutes: 0,
+        packerMeters: [],
+        downtime: [],
+        lineStopMesin: [],
+        lineStopNonMesin: [],
+        results: {}
+      };
+      document.getElementById('packer-meter-list').innerHTML = '';
+      document.getElementById('odt-list').innerHTML = '';
+      document.getElementById('line-stop-mesin-list').innerHTML = '';
+      document.getElementById('line-stop-non-mesin-list').innerHTML = '';
+      document.getElementById('calc-availability-actual').textContent = '0%';
+      document.getElementById('calc-performance').textContent = '0%';
+      document.getElementById('calc-quality').textContent = '0%';
+      document.getElementById('calc-oee-actual').textContent = '0%';
+      document.getElementById('calc-oee-365').textContent = '0%';
+      document.getElementById('calc-total-output').textContent = '0 DUS';
+    }
+
+    let dashboardCharts = {};
+    let filteredRecords = [];
+
+    function initDashboardFilters() {
+      const filterPacker = document.getElementById('filter-packer');
+      filterPacker.innerHTML = '<option value="">SEMUA PACKER</option>' +
+        localData.packer.map(p => `<option value="${p.nama}">${p.nama}</option>`).join('');
+      
+      const today = new Date();
+      const firstDay = new Date(today.getFullYear(), today.getMonth(), 1);
+      const lastDay = new Date(today.getFullYear(), today.getMonth() + 1, 0);
+      
+      document.getElementById('filter-date-from').value = firstDay.toISOString().split('T')[0];
+      document.getElementById('filter-date-to').value = lastDay.toISOString().split('T')[0];
+      updateDateRangeDisplay();
+    }
+
+    function applyDashboardFilter() {
+      const dateFrom = document.getElementById('filter-date-from').value;
+      const dateTo = document.getElementById('filter-date-to').value;
+      const packer = document.getElementById('filter-packer').value;
+      const shift = document.getElementById('filter-shift').value;
+
+      filteredRecords = localData.oee_records.filter(r => {
+        const rDate = r.date;
+        const dateMatch = rDate >= dateFrom && rDate <= dateTo;
+        const packerMatch = !packer || r.packers.includes(packer);
+        const shiftMatch = !shift || r.shift === shift;
+        return dateMatch && packerMatch && shiftMatch;
+      });
+
+      updateDashboardData();
+      renderCharts();
+      renderPackerPerformance();
+      renderOEEHistory();
+    }
+
+    function updateDateRangeDisplay() {
+      const dateFrom = document.getElementById('filter-date-from').value;
+      const dateTo = document.getElementById('filter-date-to').value;
+      const displayEl = document.getElementById('date-range-display');
+      
+      if (dateFrom && dateTo) {
+        const fromDate = new Date(dateFrom + 'T00:00:00');
+        const toDate = new Date(dateTo + 'T00:00:00');
+        const fromFormatted = fromDate.toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric' });
+        const toFormatted = toDate.toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric' });
+        displayEl.textContent = `${fromFormatted} - ${toFormatted}`;
+      }
+    }
+
+    function resetDashboardFilter() {
+      const today = new Date();
+      const firstDay = new Date(today.getFullYear(), today.getMonth(), 1);
+      const lastDay = new Date(today.getFullYear(), today.getMonth() + 1, 0);
+      
+      document.getElementById('filter-date-from').value = firstDay.toISOString().split('T')[0];
+      document.getElementById('filter-date-to').value = lastDay.toISOString().split('T')[0];
+      document.getElementById('filter-packer').value = '';
+      document.getElementById('filter-shift').value = '';
+      updateDateRangeDisplay();
+      applyDashboardFilter();
+    }
+
+    function updateDashboard() {
+      initDashboardFilters();
+      applyDashboardFilter();
+    }
+
+    function updateDashboardData() {
+      if (filteredRecords.length === 0) {
+        document.getElementById('score-oee-actual').textContent = '0%';
+        document.getElementById('score-oee-365').textContent = '0%';
+        document.getElementById('score-total-output').textContent = '0';
+        return;
+      }
+
+      let sumOeeActual = 0, countOee = 0;
+      let sumOee365 = 0;
+      let totalOutput = 0;
+
+      filteredRecords.forEach(r => {
+        const oeeActual = parseFloat(r.oee_actual) || 0;
+        const oee365 = parseFloat(r.oee_365) || 0;
+        const output = parseFloat(r.output_actual) || 0;
+
+        if (oeeActual > 0) { sumOeeActual += oeeActual; countOee++; }
+        if (oee365 > 0) { sumOee365 += oee365; countOee++; }
+        totalOutput += output;
+      });
+
+      const avgOeeActual = countOee > 0 ? sumOeeActual / countOee : 0;
+      const avgOee365 = countOee > 0 ? sumOee365 / countOee : 0;
+
+      document.getElementById('score-oee-actual').textContent = `${avgOeeActual.toFixed(1)}%`;
+      document.getElementById('score-oee-365').textContent = `${avgOee365.toFixed(1)}%`;
+      document.getElementById('score-total-output').textContent = totalOutput.toLocaleString('id-ID');
+
+      const cardOEE = document.getElementById('score-card-oee-actual');
+      cardOEE.style.background = avgOeeActual < 88 ? 'linear-gradient(135deg, #ef4444 0%, #f87171 100%)' : 'linear-gradient(135deg, #10b981 0%, #34d399 100%)';
+    }
+
+    function renderCharts() {
+      renderOEETrendChart();
+      renderOEEMachineChart();
+      renderAPQABreakdownChart();
+      renderTopODTChart();
+      renderTopLineMesinChart();
+    }
+
+    function renderOEETrendChart() {
+      const last7Days = [];
+      for (let i = 6; i >= 0; i--) {
+        const d = new Date();
+        d.setDate(d.getDate() - i);
+        last7Days.push(d.toISOString().split('T')[0]);
+      }
+
+      const trendData = last7Days.map(date => {
+        const dayRecords = filteredRecords.filter(r => r.date === date);
+        if (dayRecords.length === 0) return 0;
+        const sum = dayRecords.reduce((a, r) => a + (parseFloat(r.oee_actual) || 0), 0);
+        return dayRecords.length > 0 ? sum / dayRecords.length : 0;
+      });
+
+      const ctx = document.getElementById('chart-oee-trend').getContext('2d');
+      if (dashboardCharts.oeeTrend) dashboardCharts.oeeTrend.destroy();
+      
+      dashboardCharts.oeeTrend = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: last7Days.map(d => new Date(d).toLocaleDateString('id-ID', { day: '2-digit', month: 'short' })),
+          datasets: [{
+            label: 'OEE TREND',
+            data: trendData,
+            borderColor: '#ec4899',
+            backgroundColor: 'rgba(236, 72, 153, 0.1)',
+            borderWidth: 3,
+            tension: 0.4,
+            fill: true,
+            pointRadius: 5,
+            pointBackgroundColor: '#ec4899'
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: { legend: { display: false } },
+          scales: { y: { beginAtZero: true, max: 100, ticks: { callback: v => v + '%' } } }
+        }
+      });
+    }
+
+    function renderOEEMachineChart() {
+      const productOEE = {};
+      filteredRecords.forEach(r => {
+        const prod = r.product || 'UNKNOWN';
+        if (!productOEE[prod]) productOEE[prod] = [];
+        const val = parseFloat(r.oee_actual) || 0;
+        if (val > 0) productOEE[prod].push(val);
+      });
+
+      const labels = Object.keys(productOEE);
+      const data = Object.values(productOEE).map(arr => arr.length > 0 ? arr.reduce((a, b) => a + b, 0) / arr.length : 0);
+
+      const ctx = document.getElementById('chart-oee-machine').getContext('2d');
+      if (dashboardCharts.oeeMachine) dashboardCharts.oeeMachine.destroy();
+      
+      dashboardCharts.oeeMachine = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: labels.length > 0 ? labels : ['NO DATA'],
+          datasets: [{
+            label: 'OEE ACTUAL %',
+            data: data,
+            backgroundColor: ['#ec4899', '#a855f7', '#8b5cf6'],
+            borderRadius: 8
+          }]
+        },
+        options: {
+          indexAxis: 'y',
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: { legend: { display: false } },
+          scales: { x: { beginAtZero: true, max: 100, ticks: { callback: v => v + '%' } } }
+        }
+      });
+    }
+
+    function renderAPQABreakdownChart() {
+      if (filteredRecords.length === 0) return;
+
+      let sumA = 0, countA = 0, sumP = 0, countP = 0, sumQ = 0, countQ = 0;
+
+      filteredRecords.forEach(r => {
+        const a = parseFloat(r.availability_actual) || 0;
+        const p = parseFloat(r.performance) || 0;
+        const q = parseFloat(r.quality_rate) || 0;
+
+        if (a > 0) { sumA += a; countA++; }
+        if (p > 0) { sumP += p; countP++; }
+        if (q > 0) { sumQ += q; countQ++; }
+      });
+
+      const ctx = document.getElementById('chart-apqa-breakdown').getContext('2d');
+      if (dashboardCharts.apqa) dashboardCharts.apqa.destroy();
+      
+      dashboardCharts.apqa = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: ['AVAILABILITY', 'PERFORMANCE', 'QUALITY'],
+          datasets: [{
+            label: '%',
+            data: [countA > 0 ? sumA / countA : 0, countP > 0 ? sumP / countP : 0, countQ > 0 ? sumQ / countQ : 0],
+            backgroundColor: ['#3b82f6', '#8b5cf6', '#10b981'],
+            borderRadius: 8
+          }]
+        },
+        options: {
+          indexAxis: 'y',
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: { legend: { display: false } },
+          scales: { x: { beginAtZero: true, max: 100, ticks: { callback: v => v + '%' } } }
+        }
+      });
+    }
+
+    function renderTopODTChart() {
+      const odtMap = {};
+
+      const sorted = Object.entries(odtMap).sort((a, b) => b[1] - a[1]).slice(0, 10);
+      const labels = sorted.length > 0 ? sorted.map(item => item[0]) : ['NO DATA'];
+      const data = sorted.length > 0 ? sorted.map(item => item[1]) : [0];
+
+      const ctx = document.getElementById('chart-top-odt').getContext('2d');
+      if (dashboardCharts.topODT) dashboardCharts.topODT.destroy();
+      
+      dashboardCharts.topODT = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: labels,
+          datasets: [{
+            label: 'MENIT',
+            data: data,
+            backgroundColor: '#f59e0b',
+            borderRadius: 8
+          }]
+        },
+        options: {
+          indexAxis: 'y',
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: { legend: { display: false } },
+          scales: { x: { beginAtZero: true } }
+        }
+      });
+    }
+
+    function renderTopLineMesinChart() {
+      const mesinMap = {};
+      const ctx = document.getElementById('chart-top-line-mesin').getContext('2d');
+      if (dashboardCharts.topLineMesin) dashboardCharts.topLineMesin.destroy();
+      
+      dashboardCharts.topLineMesin = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: ['NO DATA'],
+          datasets: [{
+            label: 'MENIT',
+            data: [0],
+            backgroundColor: '#8b5cf6',
+            borderRadius: 8
+          }]
+        },
+        options: {
+          indexAxis: 'y',
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: { legend: { display: false } },
+          scales: { x: { beginAtZero: true } }
+        }
+      });
+    }
+
+    function renderPackerPerformance() {
+      const packerMap = {};
+      
+      filteredRecords.forEach(r => {
+        const packers = r.packers?.split(', ') || [];
+        packers.forEach(packer => {
+          if (!packer) return;
+          if (!packerMap[packer]) {
+            packerMap[packer] = { nama: packer, oeeValues: [], totalOutput: 0, records: 0 };
+          }
+          
+          const oeeVal = parseFloat(r.oee_actual) || 0;
+          if (oeeVal > 0) packerMap[packer].oeeValues.push(oeeVal);
+          
+          packerMap[packer].totalOutput += parseFloat(r.output_actual) || 0;
+          packerMap[packer].records += 1;
+        });
+      });
+
+      const performanceData = Object.values(packerMap).sort((a, b) => {
+        const avgA = a.oeeValues.length > 0 ? a.oeeValues.reduce((x, y) => x + y, 0) / a.oeeValues.length : 0;
+        const avgB = b.oeeValues.length > 0 ? b.oeeValues.reduce((x, y) => x + y, 0) / b.oeeValues.length : 0;
+        return avgB - avgA;
+      });
+      
+      const tbody = document.getElementById('table-packer-performance');
+      if (performanceData.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="5" class="text-center text-gray-400 py-8">BELUM ADA DATA</td></tr>';
+        return;
+      }
+
+      tbody.innerHTML = performanceData.map((p, idx) => {
+        const avgOEE = p.oeeValues.length > 0 ? p.oeeValues.reduce((a, b) => a + b, 0) / p.oeeValues.length : 0;
+        return `
+          <tr>
+            <td>${idx + 1}</td>
+            <td>${p.nama}</td>
+            <td>${avgOEE.toFixed(1)}%</td>
+            <td>${p.totalOutput.toLocaleString('id-ID', { maximumFractionDigits: 1 })}</td>
+            <td>${p.records}</td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    function renderOEEHistory() {
+      const tbody = document.getElementById('table-oee-history');
+      if (filteredRecords.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="10" class="text-center text-gray-400 py-8">BELUM ADA DATA</td></tr>';
+        return;
+      }
+
+      tbody.innerHTML = filteredRecords.map(r => `
+        <tr>
+          <td>${r.date}</td>
+          <td>${r.shift}</td>
+          <td>${r.product || '-'}</td>
+          <td>${r.packers || '-'}</td>
+          <td>${parseFloat(r.output_actual).toFixed(1)}</td>
+          <td>${parseFloat(r.availability_actual).toFixed(1)}%</td>
+          <td>${parseFloat(r.performance).toFixed(1)}%</td>
+          <td>${parseFloat(r.quality_rate).toFixed(1)}%</td>
+          <td><strong>${parseFloat(r.oee_actual).toFixed(1)}%</strong></td>
+          <td>${parseFloat(r.oee_365).toFixed(1)}%</td>
+        </tr>
+      `).join('');
+    }
+
+    function addAuditLog(activity, detail) {
+      const log = {
+        id: 'log_' + Date.now(),
+        timestamp: new Date().toISOString(),
+        activity: activity,
+        detail: detail
+      };
+      localData.audit_trail.unshift(log);
+      saveLocalData();
+      renderAuditTable();
+    }
+
+    function showToast(message, type) {
+      const toast = document.createElement('div');
+      toast.className = `toast ${type}`;
+      toast.textContent = message;
+      document.getElementById('toast-container').appendChild(toast);
+      
+      setTimeout(() => toast.remove(), 3000);
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initApp);
+    } else {
+      initApp();
+    }
+  </script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9cb79d770308fd1c',t:'MTc3MDY4NDY1NS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
