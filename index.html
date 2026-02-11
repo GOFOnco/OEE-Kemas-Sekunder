@@ -1192,53 +1192,9 @@
         localData.minor_stop = msRes.data || [];
         localData.oee_records = oeeRes.data || [];
         localData.audit_trail = auditRes.data || [];
-
-        // If no data exists, seed with defaults
-        if (localData.produk.length === 0) {
-          await seedDefaultData();
-        }
       } catch (error) {
         console.error('Error loading data:', error);
         showToast('Error loading data from Supabase', 'error');
-      }
-    }
-
-    async function seedDefaultData() {
-      try {
-        const defaultProduk = [
-          { nama: 'Produk A', target: 50 },
-          { nama: 'Produk B', target: 45 }
-        ];
-        const defaultPacker = [
-          { nama: 'Packer 1' },
-          { nama: 'Packer 2' }
-        ];
-        const defaultDowntime = [
-          { nama: 'Setup', waktu_standard: 15 },
-          { nama: 'Maintenance', waktu_standard: 20 }
-        ];
-        const defaultLineStopMesin = [
-          { nama: 'Breakdown' }
-        ];
-        const defaultLineStopNonMesin = [
-          { nama: 'Lack of Material' }
-        ];
-        const defaultMinorStop = [
-          { nama: 'Equipment Adjustment' }
-        ];
-
-        await Promise.all([
-          supabaseClient.from('produk').insert(defaultProduk),
-          supabaseClient.from('packer').insert(defaultPacker),
-          supabaseClient.from('downtime').insert(defaultDowntime),
-          supabaseClient.from('line_stop_mesin').insert(defaultLineStopMesin),
-          supabaseClient.from('line_stop_non_mesin').insert(defaultLineStopNonMesin),
-          supabaseClient.from('minor_stop').insert(defaultMinorStop)
-        ]);
-
-        await loadDataFromSupabase();
-      } catch (error) {
-        console.error('Error seeding data:', error);
       }
     }
 
@@ -3267,5 +3223,5 @@
     updateClock();
     setInterval(updateClock, 1000);
   </script>
- <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9cc2700f01a1f8d4',t:'MTc3MDc5ODEzOS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9cc288a771ac9b07',t:'MTc3MDc5OTE0Ni4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
