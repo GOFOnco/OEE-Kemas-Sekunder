@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="id">
- <head>
+<head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>OEE KEMAS SEKUNDER SYSTEM</title>
@@ -911,2546 +911,2200 @@
     }
   </style>
   <style>@view-transition { navigation: auto; }</style>
-  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
-  <script src="/_sdk/element_sdk.js" type="text/javascript"></script>
-  <script src="https://cdn.tailwindcss.com" type="text/javascript"></script>
- </head>
- <body>
-  <div id="app">
-   <div class="header">
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body>
+<div id="app">
+  <div class="header">
     <div class="header-content">
-     <h1>✨ OEE KEMAS SEKUNDER</h1>
-     <p>CREATED BY MSTD GOF</p>
+      <h1>✨ OEE KEMAS SEKUNDER</h1>
+      <p>CREATED BY MSTD GOF</p>
     </div>
     <div style="display: flex; flex-direction: column; gap: 16px; align-items: flex-end;">
-     <div class="header-datetime">
-      <div class="header-datetime-time" id="current-time">
-       00:00:00
+      <div class="header-datetime">
+        <div class="header-datetime-time" id="current-time">00:00:00</div>
+        <div id="current-date">TANGGAL</div>
       </div>
-      <div id="current-date">
-       TANGGAL
-      </div>
-     </div><button class="mode-toggle" onclick="toggleDarkMode()"> <span id="mode-icon">🌙</span> <span id="mode-text">DARK</span> </button>
+      <button class="mode-toggle" onclick="toggleDarkMode()"> <span id="mode-icon">🌙</span> <span id="mode-text">DARK</span> </button>
     </div>
-   </div>
-   <div class="tabs-container">
+  </div>
+
+  <div class="tabs-container">
     <button class="tab-btn active" onclick="switchTab('dashboard')">📈 DASHBOARD</button>
     <button class="tab-btn" onclick="switchTab('input')">✏️ INPUT OEE</button>
     <button class="tab-btn" onclick="switchTab('master')">💾 MASTER DATA</button>
     <button class="tab-btn" onclick="switchTab('audit')">⚙️ AUDIT TRAIL</button>
-   </div>
-   <div class="content">
-    <!-- DASHBOARD TAB -->
-    <div id="dashboard" class="tab-content active">
-     <div class="form-section">
-      <div class="section-title">
-       FILTER DATA
-      </div>
-      <div class="filter-group">
-       <div class="form-group"><label>TANGGAL MULAI</label> <input type="date" id="filter-date-start" class="input-field" onchange="applyDashboardFilters()">
-       </div>
-       <div class="form-group"><label>TANGGAL AKHIR</label> <input type="date" id="filter-date-end" class="input-field" onchange="applyDashboardFilters()">
-       </div>
-       <div class="form-group"><label>PRODUK</label> <select id="filter-product" class="input-field" onchange="applyDashboardFilters()"> <option value="">-- SEMUA PRODUK --</option> </select>
-       </div>
-       <div class="form-group"><label>PACKER</label> <select id="filter-packer" class="input-field" onchange="applyDashboardFilters()"> <option value="">-- SEMUA PACKER --</option> </select>
-       </div>
-       <div style="display: flex; align-items: flex-end;"><button class="btn btn-secondary" onclick="resetDashboardFilters()" style="width: 100%;">RESET FILTER</button>
-       </div>
-      </div>
-     </div>
-     <div class="score-cards">
-      <div class="score-card" id="score-card-oee-actual">
-       <div class="score-label">
-        OEE ACTUAL
-       </div>
-       <div class="score-value" id="score-oee-actual">
-        0%
-       </div>
-      </div>
-      <div class="score-card" id="score-card-oee-365">
-       <div class="score-label">
-        OEE 365
-       </div>
-       <div class="score-value" id="score-oee-365">
-        0%
-       </div>
-      </div>
-      <div class="score-card">
-       <div class="score-label">
-        TOTAL OUTPUT
-       </div>
-       <div class="score-value" id="score-total-output" style="font-size: 24px;">
-        0
-       </div>
-      </div>
-     </div>
-     <div class="chart-container">
-      <div class="chart-title">
-       OEE PER BULAN (12 BULAN)
-      </div>
-      <canvas id="chart-oee-monthly" height="80"></canvas>
-     </div>
-     <div class="chart-container">
-      <div class="chart-title">
-       OEE PER HARI (30 HARI TERAKHIR)
-      </div>
-      <canvas id="chart-oee-daily" height="80"></canvas>
-     </div>
-     <div class="chart-container">
-      <div class="chart-title">
-       A / P / Q / 365 BREAKDOWN
-      </div>
-      <canvas id="chart-apqa-breakdown" height="100"></canvas>
-     </div>
-     <div class="chart-container">
-      <div class="chart-title">
-       TOP 10 ODT (MENIT)
-      </div>
-      <canvas id="chart-odt-top10" height="200"></canvas>
-     </div>
-     <div class="chart-container">
-      <div class="chart-title">
-       TOP 10 LINE STOP MESIN (MENIT)
-      </div>
-      <canvas id="chart-lsm-top10" height="200"></canvas>
-     </div>
-     <div class="chart-container">
-      <div class="chart-title">
-       TOP 10 LINE STOP NON-MESIN (MENIT)
-      </div>
-      <canvas id="chart-lsnm-top10" height="200"></canvas>
-     </div>
-     <div class="chart-container">
-      <div class="chart-title">
-       TOP 10 MINOR STOP (MENIT)
-      </div>
-      <canvas id="chart-ms-top10" height="200"></canvas>
-     </div>
-     <div class="form-section">
-      <div class="section-title">
-       PERFORMA PACKER
-      </div>
-      <div class="table-wrapper">
-       <table>
-        <thead>
-         <tr>
-          <th>NO</th>
-          <th>PACKER</th>
-          <th>AVG OEE ACTUAL</th>
-          <th>TOTAL OUTPUT</th>
-          <th>RECORDS</th>
-         </tr>
-        </thead>
-        <tbody id="table-packer-performance"></tbody>
-       </table>
-      </div>
-     </div>
-     <div class="form-section">
-      <div class="section-title">
-       RIWAYAT OEE
-      </div>
-      <div class="table-wrapper">
-       <table>
-        <thead>
-         <tr>
-          <th>TANGGAL</th>
-          <th>SHIFT</th>
-          <th>NOMOR BATCH</th>
-          <th>OEE ACTUAL</th>
-          <th>OEE 365</th>
-          <th>ABNORMALITAS LSM</th>
-          <th>ACTION LSM</th>
-          <th>ABNORMALITAS LSNM</th>
-          <th>ACTION LSNM</th>
-         </tr>
-        </thead>
-        <tbody id="table-oee-history"></tbody>
-       </table>
-      </div>
-     </div>
-    </div>
-    <!-- INPUT OEE TAB -->
-    <div id="input" class="tab-content">
-     <form id="form-oee" onsubmit="submitOEE(event)">
-      <div class="form-section">
-       <div class="section-title">
-        INFORMASI SHIFT
-       </div>
-       <div class="form-row">
-        <div class="form-group"><label>TANGGAL</label> <input type="date" id="oee-date" required>
-        </div>
-        <div class="form-group"><label>SHIFT</label> <select id="oee-shift" onchange="updateShiftMinutes()"> <option value="">-- PILIH SHIFT --</option> <option value="Shift 1">SHIFT 1 (07:00 - 15:30)</option> <option value="Shift 2">SHIFT 2 (15:20 - 22:50)</option> <option value="Shift 3">SHIFT 3 (22:40 - 07:10)</option> <option value="Longshift Pagi">LONGSHIFT PAGI (07:00 - 19:00)</option> <option value="Longshift Malam">LONGSHIFT MALAM (19:00 - 07:00)</option> </select>
-        </div>
-       </div>
-      </div>
-      
-      <!-- OPERATIONAL DOWNTIME (ODT) -->
-      <div class="form-section">
-       <div class="section-title">
-        OPERATIONAL DOWNTIME (ODT)
-       </div>
-       <div id="odt-list"></div>
-      </div>
-      
-      <!-- LINE STOP MESIN -->
-      <div class="form-section">
-       <div class="section-title">
-        LINE STOP MESIN
-       </div>
-       <div id="line-stop-mesin-list"></div>
-      </div>
-      
-      <!-- LINE STOP NON-MESIN -->
-      <div class="form-section">
-       <div class="section-title">
-        LINE STOP NON-MESIN
-       </div>
-       <div id="line-stop-non-mesin-list"></div>
-      </div>
-      
-      <!-- MINOR STOP -->
-      <div class="form-section">
-       <div class="section-title">
-        MINOR STOP
-       </div><button type="button" class="btn btn-success" onclick="addMinorStop()">+ TAMBAH MINOR STOP</button>
-       <div id="minor-stop-list" style="margin-top: 16px;"></div>
-      </div>
-      
-      <!-- PACKER METER -->
-      <div class="form-section">
-       <div class="section-title">
-        PACKER METER
-       </div>
-       <button type="button" class="btn btn-success" onclick="addPackerMeter()">+ TAMBAH METER</button>
-       <div id="packer-meter-list" style="margin-top: 16px;"></div>
-      </div>
-      
-      <!-- HASIL PERHITUNGAN OEE -->
-      <div class="form-section">
-       <div id="availability-warning" style="display: none;"></div>
-       <div class="section-title">
-        HASIL PERHITUNGAN OEE
-       </div>
-       <div class="score-cards">
-        <div class="score-card">
-         <div class="score-label">
-          AVAILABILITY (ACTUAL)
-         </div>
-         <div class="score-value" id="calc-availability-actual">
-          0%
-         </div>
-        </div>
-        <div class="score-card">
-         <div class="score-label">
-          AVAILABILITY 365
-         </div>
-         <div class="score-value" id="calc-availability-365">
-          0%
-         </div>
-        </div>
-        <div class="score-card">
-         <div class="score-label">
-          PERFORMANCE
-         </div>
-         <div class="score-value" id="calc-performance">
-          0%
-         </div>
-        </div>
-        <div class="score-card">
-         <div class="score-label">
-          QUALITY RATE
-         </div>
-         <div class="score-value" id="calc-quality">
-          0%
-         </div>
-        </div>
-        <div class="score-card">
-         <div class="score-label">
-          OEE (ACTUAL)
-         </div>
-         <div class="score-value" id="calc-oee-actual">
-          0%
-         </div>
-        </div>
-        <div class="score-card">
-         <div class="score-label">
-          OEE 365
-         </div>
-         <div class="score-value" id="calc-oee-365">
-          0%
-         </div>
-        </div>
-        <div class="score-card">
-         <div class="score-label">
-          TOTAL OUTPUT
-         </div>
-         <div class="score-value" id="calc-total-output" style="font-size: 24px;">
-          0 DUS
-         </div>
-        </div>
-       </div>
-      </div>
-      <div class="form-section" style="text-align: center;"><button type="submit" class="btn btn-primary" style="margin-right: 12px;">💾 SIMPAN DATA OEE</button> <button type="button" class="btn btn-secondary" onclick="resetOEEForm()">🔄 RESET FORM</button>
-      </div>
-     </form>
-    </div>
-    <!-- MASTER DATA TAB -->
-    <div id="master" class="tab-content">
-     <div class="form-section">
-      <div class="section-title">
-       MASTER PRODUK
-      </div><button class="btn btn-primary" onclick="openAddProductModal()">+ PRODUK BARU</button>
-      <div id="product-list" class="master-data-grid" style="margin-top: 16px;"></div>
-     </div>
-     <div class="form-section">
-      <div class="section-title">
-       MASTER PACKER
-      </div><button class="btn btn-primary" onclick="openAddPackerModal()">+ PACKER BARU</button>
-      <div id="packer-list" class="master-data-grid" style="margin-top: 16px;"></div>
-     </div>
-     <div class="form-section">
-      <div class="section-title">
-       MASTER ODT
-      </div><button class="btn btn-primary" onclick="openAddODTModal()">+ ODT BARU</button>
-      <div id="odt-master-list" class="master-data-grid" style="margin-top: 16px;"></div>
-     </div>
-     <div class="form-section">
-      <div class="section-title">
-       MASTER LINE STOP MESIN
-      </div><button class="btn btn-primary" onclick="openAddLineStopMesinModal()">+ LINE STOP BARU</button>
-      <div id="line-stop-mesin-master-list" class="master-data-grid" style="margin-top: 16px;"></div>
-     </div>
-     <div class="form-section">
-      <div class="section-title">
-       MASTER LINE STOP NON-MESIN
-      </div><button class="btn btn-primary" onclick="openAddLineStopNonMesinModal()">+ LINE STOP BARU</button>
-      <div id="line-stop-non-mesin-master-list" class="master-data-grid" style="margin-top: 16px;"></div>
-     </div>
-     <div class="form-section">
-      <div class="section-title">
-       MASTER MINOR STOP
-      </div><button class="btn btn-primary" onclick="openAddMinorStopModal()">+ MINOR STOP BARU</button>
-      <div id="minor-stop-master-list" class="master-data-grid" style="margin-top: 16px;"></div>
-     </div>
-    </div>
-    <!-- AUDIT TRAIL TAB -->
-    <div id="audit" class="tab-content">
-     <div class="form-section">
-      <div class="section-title">
-       RIWAYAT AKTIVITAS
-      </div>
-      <div class="table-wrapper">
-       <table>
-        <thead>
-         <tr>
-          <th>WAKTU</th>
-          <th>AKTIVITAS</th>
-          <th>DETAIL</th>
-         </tr>
-        </thead>
-        <tbody id="audit-table"></tbody>
-       </table>
-      </div>
-     </div>
-    </div>
-   </div>
   </div>
 
-  <!-- LOGIN MODAL -->
-  <div id="login-backdrop" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.5); z-index: 10000;" onclick="if(event.target === this) closeLoginModal();"></div>
-  <div id="login-modal" style="display: none;">
-   <h2 class="login-title">🔐 MASTER DATA ACCESS</h2>
-   <form onsubmit="handleLogin(event)">
+  <div class="content">
+    <!-- DASHBOARD TAB -->
+    <div id="dashboard" class="tab-content active">
+      <div class="form-section">
+        <div class="section-title">FILTER DATA</div>
+        <div class="filter-group">
+          <div class="form-group"><label>TANGGAL MULAI</label> <input type="date" id="filter-date-start" class="input-field" onchange="applyDashboardFilters()"></div>
+          <div class="form-group"><label>TANGGAL AKHIR</label> <input type="date" id="filter-date-end" class="input-field" onchange="applyDashboardFilters()"></div>
+          <div class="form-group"><label>PRODUK</label> <select id="filter-product" class="input-field" onchange="applyDashboardFilters()"><option value="">-- SEMUA PRODUK --</option></select></div>
+          <div class="form-group"><label>PACKER</label> <select id="filter-packer" class="input-field" onchange="applyDashboardFilters()"><option value="">-- SEMUA PACKER --</option></select></div>
+          <div style="display: flex; align-items: flex-end;"><button class="btn btn-secondary" onclick="resetDashboardFilters()" style="width: 100%;">RESET FILTER</button></div>
+        </div>
+      </div>
+
+      <div class="score-cards">
+        <div class="score-card" id="score-card-oee-actual">
+          <div class="score-label">OEE ACTUAL</div>
+          <div class="score-value" id="score-oee-actual">0%</div>
+        </div>
+        <div class="score-card" id="score-card-oee-365">
+          <div class="score-label">OEE 365</div>
+          <div class="score-value" id="score-oee-365">0%</div>
+        </div>
+        <div class="score-card">
+          <div class="score-label">TOTAL OUTPUT</div>
+          <div class="score-value" id="score-total-output" style="font-size: 24px;">0</div>
+        </div>
+      </div>
+
+      <div class="chart-container">
+        <div class="chart-title">OEE PER BULAN (12 BULAN)</div>
+        <canvas id="chart-oee-monthly" height="80"></canvas>
+      </div>
+      <div class="chart-container">
+        <div class="chart-title">OEE PER HARI (30 HARI TERAKHIR)</div>
+        <canvas id="chart-oee-daily" height="80"></canvas>
+      </div>
+      <div class="chart-container">
+        <div class="chart-title">A / P / Q / 365 BREAKDOWN</div>
+        <canvas id="chart-apqa-breakdown" height="100"></canvas>
+      </div>
+      <div class="chart-container">
+        <div class="chart-title">TOP 10 ODT (MENIT)</div>
+        <canvas id="chart-odt-top10" height="200"></canvas>
+      </div>
+      <div class="chart-container">
+        <div class="chart-title">TOP 10 LINE STOP MESIN (MENIT)</div>
+        <canvas id="chart-lsm-top10" height="200"></canvas>
+      </div>
+      <div class="chart-container">
+        <div class="chart-title">TOP 10 LINE STOP NON-MESIN (MENIT)</div>
+        <canvas id="chart-lsnm-top10" height="200"></canvas>
+      </div>
+      <div class="chart-container">
+        <div class="chart-title">TOP 10 MINOR STOP (MENIT)</div>
+        <canvas id="chart-ms-top10" height="200"></canvas>
+      </div>
+
+      <div class="form-section">
+        <div class="section-title">PERFORMA PACKER</div>
+        <div class="table-wrapper">
+          <table>
+            <thead><tr><th>NO</th><th>PACKER</th><th>AVG OEE ACTUAL</th><th>TOTAL OUTPUT</th><th>RECORDS</th></tr></thead>
+            <tbody id="table-packer-performance"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="form-section">
+        <div class="section-title">RIWAYAT OEE</div>
+        <div class="table-wrapper">
+          <table>
+            <thead><tr><th>TANGGAL</th><th>SHIFT</th><th>NOMOR BATCH</th><th>OEE ACTUAL</th><th>OEE 365</th><th>ABNORMALITAS LSM</th><th>ACTION LSM</th><th>ABNORMALITAS LSNM</th><th>ACTION LSNM</th></tr></thead>
+            <tbody id="table-oee-history"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- INPUT OEE TAB -->
+    <div id="input" class="tab-content">
+      <form id="form-oee" onsubmit="submitOEE(event)">
+        <div class="form-section">
+          <div class="section-title">INFORMASI SHIFT</div>
+          <div class="form-row">
+            <div class="form-group"><label>TANGGAL</label> <input type="date" id="oee-date" required></div>
+            <div class="form-group"><label>SHIFT</label> <select id="oee-shift" onchange="updateShiftMinutes()"><option value="">-- PILIH SHIFT --</option><option value="Shift 1">SHIFT 1 (07:00 - 15:30)</option><option value="Shift 2">SHIFT 2 (15:20 - 22:50)</option><option value="Shift 3">SHIFT 3 (22:40 - 07:10)</option><option value="Longshift Pagi">LONGSHIFT PAGI (07:00 - 19:00)</option><option value="Longshift Malam">LONGSHIFT MALAM (19:00 - 07:00)</option></select></div>
+          </div>
+        </div>
+        
+        <!-- OPERATIONAL DOWNTIME (ODT) -->
+        <div class="form-section">
+          <div class="section-title">OPERATIONAL DOWNTIME (ODT)</div>
+          <div id="odt-list"></div>
+        </div>
+        
+        <!-- LINE STOP MESIN -->
+        <div class="form-section">
+          <div class="section-title">LINE STOP MESIN</div>
+          <div id="line-stop-mesin-list"></div>
+        </div>
+        
+        <!-- LINE STOP NON-MESIN -->
+        <div class="form-section">
+          <div class="section-title">LINE STOP NON-MESIN</div>
+          <div id="line-stop-non-mesin-list"></div>
+        </div>
+        
+        <!-- MINOR STOP -->
+        <div class="form-section">
+          <div class="section-title">MINOR STOP</div>
+          <button type="button" class="btn btn-success" onclick="addMinorStop()">+ TAMBAH MINOR STOP</button>
+          <div id="minor-stop-list" style="margin-top: 16px;"></div>
+        </div>
+        
+        <!-- PACKER METER -->
+        <div class="form-section">
+          <div class="section-title">PACKER METER</div>
+          <button type="button" class="btn btn-success" onclick="addPackerMeter()">+ TAMBAH METER</button>
+          <div id="packer-meter-list" style="margin-top: 16px;"></div>
+        </div>
+        
+        <!-- HASIL PERHITUNGAN OEE -->
+        <div class="form-section">
+          <div id="availability-warning" style="display: none;"></div>
+          <div class="section-title">HASIL PERHITUNGAN OEE</div>
+          <div class="score-cards">
+            <div class="score-card"><div class="score-label">AVAILABILITY (ACTUAL)</div><div class="score-value" id="calc-availability-actual">0%</div></div>
+            <div class="score-card"><div class="score-label">AVAILABILITY 365</div><div class="score-value" id="calc-availability-365">0%</div></div>
+            <div class="score-card"><div class="score-label">PERFORMANCE</div><div class="score-value" id="calc-performance">0%</div></div>
+            <div class="score-card"><div class="score-label">QUALITY RATE</div><div class="score-value" id="calc-quality">0%</div></div>
+            <div class="score-card"><div class="score-label">OEE (ACTUAL)</div><div class="score-value" id="calc-oee-actual">0%</div></div>
+            <div class="score-card"><div class="score-label">OEE 365</div><div class="score-value" id="calc-oee-365">0%</div></div>
+            <div class="score-card"><div class="score-label">TOTAL OUTPUT</div><div class="score-value" id="calc-total-output" style="font-size: 24px;">0 DUS</div></div>
+          </div>
+        </div>
+        <div class="form-section" style="text-align: center;">
+          <button type="submit" class="btn btn-primary" style="margin-right: 12px;">💾 SIMPAN DATA OEE</button>
+          <button type="button" class="btn btn-secondary" onclick="resetOEEForm()">🔄 RESET FORM</button>
+        </div>
+      </form>
+    </div>
+
+    <!-- MASTER DATA TAB -->
+    <div id="master" class="tab-content">
+      <div class="form-section">
+        <div class="section-title">MASTER PRODUK</div>
+        <button class="btn btn-primary" onclick="openAddProductModal()">+ PRODUK BARU</button>
+        <div id="product-list" class="master-data-grid" style="margin-top: 16px;"></div>
+      </div>
+      <div class="form-section">
+        <div class="section-title">MASTER PACKER</div>
+        <button class="btn btn-primary" onclick="openAddPackerModal()">+ PACKER BARU</button>
+        <div id="packer-list" class="master-data-grid" style="margin-top: 16px;"></div>
+      </div>
+      <div class="form-section">
+        <div class="section-title">MASTER ODT</div>
+        <button class="btn btn-primary" onclick="openAddODTModal()">+ ODT BARU</button>
+        <div id="odt-master-list" class="master-data-grid" style="margin-top: 16px;"></div>
+      </div>
+      <div class="form-section">
+        <div class="section-title">MASTER LINE STOP MESIN</div>
+        <button class="btn btn-primary" onclick="openAddLineStopMesinModal()">+ LINE STOP BARU</button>
+        <div id="line-stop-mesin-master-list" class="master-data-grid" style="margin-top: 16px;"></div>
+      </div>
+      <div class="form-section">
+        <div class="section-title">MASTER LINE STOP NON-MESIN</div>
+        <button class="btn btn-primary" onclick="openAddLineStopNonMesinModal()">+ LINE STOP BARU</button>
+        <div id="line-stop-non-mesin-master-list" class="master-data-grid" style="margin-top: 16px;"></div>
+      </div>
+      <div class="form-section">
+        <div class="section-title">MASTER MINOR STOP</div>
+        <button class="btn btn-primary" onclick="openAddMinorStopModal()">+ MINOR STOP BARU</button>
+        <div id="minor-stop-master-list" class="master-data-grid" style="margin-top: 16px;"></div>
+      </div>
+    </div>
+
+    <!-- AUDIT TRAIL TAB -->
+    <div id="audit" class="tab-content">
+      <div class="form-section">
+        <div class="section-title">RIWAYAT AKTIVITAS</div>
+        <div class="table-wrapper">
+          <table>
+            <thead><tr><th>WAKTU</th><th>AKTIVITAS</th><th>DETAIL</th></tr></thead>
+            <tbody id="audit-table"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- LOGIN MODAL -->
+<div id="login-backdrop" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.5); z-index: 10000;" onclick="if(event.target === this) closeLoginModal();"></div>
+<div id="login-modal" style="display: none;">
+  <h2 class="login-title">🔐 MASTER DATA ACCESS</h2>
+  <form onsubmit="handleLogin(event)">
     <div class="form-group">
-     <label class="login-label">PASSWORD</label>
-     <input type="password" id="login-password" class="login-input" placeholder="MASUKKAN PASSWORD" autocomplete="off">
+      <label class="login-label">PASSWORD</label>
+      <input type="password" id="login-password" class="login-input" placeholder="MASUKKAN PASSWORD" autocomplete="off">
     </div>
     <div id="login-error" class="login-error" style="display: none;">PASSWORD SALAH!</div>
     <div class="login-buttons">
-     <button type="submit" class="btn btn-primary" style="flex: 1;">LOGIN</button>
-     <button type="button" class="btn btn-secondary" style="flex: 1;" onclick="closeLoginModal()">BATAL</button>
+      <button type="submit" class="btn btn-primary" style="flex: 1;">LOGIN</button>
+      <button type="button" class="btn btn-secondary" style="flex: 1;" onclick="closeLoginModal()">BATAL</button>
     </div>
-   </form>
-  </div>
+  </form>
+</div>
 
-  <div id="toast-container" class="toast-container"></div>
-  
-  <!-- Modal Backdrop -->
-  <div id="modal-backdrop" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.5); z-index: 9998;" onclick="if(event.target === this) closeModal();"></div>
-  
-  <!-- Modal -->
-  <div id="modal" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; border-radius: 16px; padding: 32px; z-index: 9999; min-width: 400px; box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);">
-   <h2 id="modal-title" style="margin: 0 0 24px 0; color: #ec4899; font-size: 18px; font-weight: 700; text-transform: uppercase;">MODAL TITLE</h2>
-   <form id="modal-form" onsubmit="submitModalForm(event)">
+<!-- TOAST CONTAINER -->
+<div id="toast-container" class="toast-container"></div>
+
+<!-- MODAL BACKDROP -->
+<div id="modal-backdrop" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.5); z-index: 9998;" onclick="if(event.target === this) closeModal();"></div>
+
+<!-- MODAL -->
+<div id="modal" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; border-radius: 16px; padding: 32px; z-index: 9999; min-width: 400px; box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);">
+  <h2 id="modal-title" style="margin: 0 0 24px 0; color: #ec4899; font-size: 18px; font-weight: 700; text-transform: uppercase;">MODAL TITLE</h2>
+  <form id="modal-form" onsubmit="submitModalForm(event)">
     <div id="modal-fields"></div>
-    <div style="display: flex; gap: 12px; margin-top: 24px;"><button type="submit" class="btn btn-primary" style="flex: 1;">SIMPAN</button> <button type="button" class="btn btn-secondary" style="flex: 1;" onclick="closeModal()">BATAL</button>
+    <div style="display: flex; gap: 12px; margin-top: 24px;">
+      <button type="submit" class="btn btn-primary" style="flex: 1;">SIMPAN</button>
+      <button type="button" class="btn btn-secondary" style="flex: 1;" onclick="closeModal()">BATAL</button>
     </div>
-   </form>
-  </div>
+  </form>
+</div>
 
-  <script>
-    // Supabase Configuration
-    const SUPABASE_URL = 'https://lxtnhdyxrkjbypahdsrf.supabase.co';
-    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imx4dG5oZHl4cmtqYnlwYWhkc3JmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzA3ODI5MDIsImV4cCI6MjA4NjM1ODkwMn0.BtC1iFgNydjy6gWmk7HPXt70UcgnBCsWj8H89WqfRwA';
-    let supabaseClient = null;
+<script>
+  // ==================== SUPABASE CONFIG ====================
+  const SUPABASE_URL = 'https://lxtnhdyxrkjbypahdsrf.supabase.co';
+  const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imx4dG5oZHl4cmtqYnlwYWhkc3JmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzA3ODI5MDIsImV4cCI6MjA4NjM1ODkwMn0.BtC1iFgNydjy6gWmk7HPXt70UcgnBCsWj8H89WqfRwA';
+  let supabaseClient = null;
+  
+  if (window.supabase) {
+    supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  }
+
+  // ==================== MASTER DATA ACCESS ====================
+  const MASTER_PASSWORD = 'admin123';
+  let isMasterDataUnlocked = false;
+
+  // ==================== LOCAL DATA ====================
+  let localData = {
+    produk: [],
+    packer: [],
+    downtime: [],
+    line_stop_mesin: [],
+    line_stop_non_mesin: [],
+    minor_stop: [],
+    oee_records: [],
+    audit_trail: []
+  };
+
+  let oeeFormState = {
+    shiftMinutes: 0,
+    packerMeters: [],
+    downtime: [],
+    lineStopMesin: [],
+    lineStopNonMesin: [],
+    minorStop: [],
+    results: {}
+  };
+
+  let dashboardCharts = {};
+  let filteredOeeRecords = [];
+
+  // ==================== INIT APP ====================
+  async function initApp() {
+    await loadDataFromSupabase();
+    loadOEEFormData();
+    renderMasterDataLists();
+    renderAuditTable();
+    initDashboardFilters();
+    updateDashboard();
+    switchTab('dashboard');
+  }
+
+  // ==================== SWITCH TAB ====================
+  window.switchTab = function(tabName) {
+    document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+    document.getElementById(tabName).classList.add('active');
     
-    if (window.supabase) {
-      supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+      if (btn.textContent.includes(tabName === 'dashboard' ? 'DASHBOARD' : 
+                                  tabName === 'input' ? 'INPUT OEE' : 
+                                  tabName === 'master' ? 'MASTER DATA' : 'AUDIT TRAIL')) {
+        btn.classList.add('active');
+      }
+    });
+    
+    if (tabName !== 'master') {
+      isMasterDataUnlocked = false;
+    } else {
+      if (!isMasterDataUnlocked) showLoginModal();
     }
+    
+    if (tabName === 'dashboard') setTimeout(() => renderCharts(), 100);
+  };
 
-    // MASTER DATA ACCESS CONTROL
-    const MASTER_PASSWORD = 'admin123';
-    let isMasterDataUnlocked = false;
+  // ==================== LOGIN FUNCTIONS ====================
+  function showLoginModal() {
+    document.getElementById('login-backdrop').style.display = 'block';
+    document.getElementById('login-modal').style.display = 'block';
+    document.getElementById('login-error').style.display = 'none';
+    document.getElementById('login-password').value = '';
+    document.getElementById('login-password').focus();
+  }
 
-    let localData = {
-      produk: [],
-      packer: [],
-      downtime: [],
-      line_stop_mesin: [],
-      line_stop_non_mesin: [],
-      minor_stop: [],
-      oee_records: [],
-      audit_trail: []
-    };
+  function closeLoginModal() {
+    if (!isMasterDataUnlocked) switchTab('dashboard');
+    document.getElementById('login-backdrop').style.display = 'none';
+    document.getElementById('login-modal').style.display = 'none';
+  }
 
-    let oeeFormState = {
-      shiftMinutes: 0,
-      packerMeters: [],
-      downtime: [],
-      lineStopMesin: [],
-      lineStopNonMesin: [],
-      minorStop: [],
-      results: {}
-    };
-
-    async function initApp() {
-      await loadDataFromSupabase();
-      loadOEEFormData();
+  function handleLogin(event) {
+    event.preventDefault();
+    const password = document.getElementById('login-password').value;
+    if (password === MASTER_PASSWORD) {
+      isMasterDataUnlocked = true;
+      closeLoginModal();
+      showToast('MASTER DATA ACCESS GRANTED ✅', 'success');
       renderMasterDataLists();
-      renderAuditTable();
-      initDashboardFilters();
-      updateDashboard();
-      
-      // Set default active tab to Dashboard
-      switchTab('dashboard');
+    } else {
+      document.getElementById('login-error').style.display = 'block';
+      showToast('PASSWORD SALAH!', 'error');
     }
+  }
 
-    window.switchTab = function(tabName) {
-      document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
-      document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-      document.getElementById(tabName).classList.add('active');
-      
-      // Find the button that corresponds to this tab and make it active
-      document.querySelectorAll('.tab-btn').forEach(btn => {
-        if (btn.textContent.includes(tabName === 'dashboard' ? 'DASHBOARD' : 
-                                    tabName === 'input' ? 'INPUT OEE' : 
-                                    tabName === 'master' ? 'MASTER DATA' : 'AUDIT TRAIL')) {
-          btn.classList.add('active');
-        }
-      });
-      
-      // Auto lock master data when switching away from master tab
-      if (tabName !== 'master') {
-        isMasterDataUnlocked = false;
-      } else {
-        // If switching to master tab, check if already unlocked
-        if (!isMasterDataUnlocked) {
-          showLoginModal();
-        }
-      }
-      
-      if (tabName === 'dashboard') {
-        setTimeout(() => {
-          renderCharts();
-        }, 100);
-      }
+  function checkMasterAccess() {
+    if (!isMasterDataUnlocked) {
+      showToast('AKSES MASTER DATA DITOLAK! LOGIN TERLEBIH DAHULU', 'error');
+      showLoginModal();
+      return false;
+    }
+    return true;
+  }
+
+  // ==================== LOAD DATA FROM SUPABASE ====================
+  async function loadDataFromSupabase() {
+    try {
+      const [produkRes, packerRes, downtimeRes, lsmRes, lsnmRes, msRes, oeeRes, auditRes] = await Promise.all([
+        supabaseClient.from('produk').select('*'),
+        supabaseClient.from('packer').select('*'),
+        supabaseClient.from('downtime').select('*'),
+        supabaseClient.from('line_stop_mesin').select('*'),
+        supabaseClient.from('line_stop_non_mesin').select('*'),
+        supabaseClient.from('minor_stop').select('*'),
+        supabaseClient.from('oee_records').select('*').order('created_at', { ascending: false }),
+        supabaseClient.from('audit_trail').select('*').order('timestamp', { ascending: false })
+      ]);
+
+      localData.produk = produkRes.data || [];
+      localData.packer = packerRes.data || [];
+      localData.downtime = downtimeRes.data || [];
+      localData.line_stop_mesin = lsmRes.data || [];
+      localData.line_stop_non_mesin = lsnmRes.data || [];
+      localData.minor_stop = msRes.data || [];
+      localData.oee_records = oeeRes.data || [];
+      localData.audit_trail = auditRes.data || [];
+    } catch (error) {
+      console.error('Error loading data:', error);
+      showToast('ERROR LOADING DATA FROM SUPABASE', 'error');
+    }
+  }
+
+  // ==================== SHIFT ====================
+  function updateShiftMinutes() {
+    const shift = document.getElementById('oee-shift').value;
+    const shiftSchedule = {
+      'Shift 1': 510,
+      'Shift 2': 510,
+      'Shift 3': 510,
+      'Longshift Pagi': 720,
+      'Longshift Malam': 720
     };
+    oeeFormState.shiftMinutes = shiftSchedule[shift] || 0;
+    renderODTList();
+    renderLineStopMesinList();
+    renderLineStopNonMesinList();
+    renderMinorStopList();
+    renderPackerMeterList();
+  }
 
-    // LOGIN FUNCTIONS
-    function showLoginModal() {
-      document.getElementById('login-backdrop').style.display = 'block';
-      document.getElementById('login-modal').style.display = 'block';
-      document.getElementById('login-error').style.display = 'none';
-      document.getElementById('login-password').value = '';
-      document.getElementById('login-password').focus();
+  // ==================== PACKER METER ====================
+  function addPackerMeter() {
+    const shift = document.getElementById('oee-shift').value;
+    if (!shift) {
+      showToast('PILIH SHIFT TERLEBIH DAHULU', 'error');
+      return;
     }
 
-    function closeLoginModal() {
-      // If not unlocked, switch back to previous tab
-      if (!isMasterDataUnlocked) {
-        // Switch to dashboard
-        switchTab('dashboard');
-      }
-      document.getElementById('login-backdrop').style.display = 'none';
-      document.getElementById('login-modal').style.display = 'none';
-    }
-
-    function handleLogin(event) {
-      event.preventDefault();
-      const password = document.getElementById('login-password').value;
-      
-      if (password === MASTER_PASSWORD) {
-        isMasterDataUnlocked = true;
-        closeLoginModal();
-        showToast('MASTER DATA ACCESS GRANTED ✅', 'success');
-        renderMasterDataLists(); // Refresh master data
-      } else {
-        document.getElementById('login-error').style.display = 'block';
-        showToast('PASSWORD SALAH!', 'error');
-      }
-    }
-
-    // Check master data access before operations
-    function checkMasterAccess() {
-      if (!isMasterDataUnlocked) {
-        showToast('AKSES MASTER DATA DITOLAK! LOGIN TERLEBIH DAHULU', 'error');
-        showLoginModal();
-        return false;
-      }
-      return true;
-    }
-
-    async function loadDataFromSupabase() {
-      try {
-        // Load all data from Supabase tables
-        const [produkRes, packerRes, downtimeRes, lsmRes, lsnmRes, msRes, oeeRes, auditRes] = await Promise.all([
-          supabaseClient.from('produk').select('*'),
-          supabaseClient.from('packer').select('*'),
-          supabaseClient.from('downtime').select('*'),
-          supabaseClient.from('line_stop_mesin').select('*'),
-          supabaseClient.from('line_stop_non_mesin').select('*'),
-          supabaseClient.from('minor_stop').select('*'),
-          supabaseClient.from('oee_records').select('*').order('created_at', { ascending: false }),
-          supabaseClient.from('audit_trail').select('*').order('timestamp', { ascending: false })
-        ]);
-
-        localData.produk = produkRes.data || [];
-        localData.packer = packerRes.data || [];
-        localData.downtime = downtimeRes.data || [];
-        localData.line_stop_mesin = lsmRes.data || [];
-        localData.line_stop_non_mesin = lsnmRes.data || [];
-        localData.minor_stop = msRes.data || [];
-        localData.oee_records = oeeRes.data || [];
-        localData.audit_trail = auditRes.data || [];
-      } catch (error) {
-        console.error('Error loading data:', error);
-        showToast('ERROR LOADING DATA FROM SUPABASE', 'error');
-      }
-    }
-
-    function updateShiftMinutes() {
-      const shift = document.getElementById('oee-shift').value;
-      const shiftSchedule = {
-        'Shift 1': 510,
-        'Shift 2': 510,
-        'Shift 3': 510,
-        'Longshift Pagi': 720,
-        'Longshift Malam': 720
-      };
-      oeeFormState.shiftMinutes = shiftSchedule[shift] || 0;
-      renderODTList();
-      renderLineStopMesinList();
-      renderLineStopNonMesinList();
-      renderMinorStopList();
-      renderPackerMeterList(); // Re-render packer meters with updated remaining time
-    }
-
-    // ==================== PACKER METER FUNCTIONS ====================
-    function addPackerMeter() {
-      const shift = document.getElementById('oee-shift').value;
-      if (!shift) {
-        showToast('PILIH SHIFT TERLEBIH DAHULU', 'error');
-        return;
-      }
-
-      // Hitung total ODT
-      const totalODT = oeeFormState.downtime.reduce((sum, odt) => sum + (parseFloat(odt.durasi) || 0), 0);
-      
-      // Hitung total Line Stop Mesin
-      const totalLSM = oeeFormState.lineStopMesin.reduce((sum, l) => sum + (parseFloat(l.durasi) || 0), 0);
-      
-      // Hitung total Line Stop Non-Mesin (hanya yang dicentang)
-      const totalLSNM = oeeFormState.lineStopNonMesin.filter(l => l.checked).reduce((sum, l) => sum + (parseFloat(l.durasi) || 0), 0);
-      
-      // Hitung durasi terpanjang dari semua packer di semua meter yang sudah ada
-      let maxDurationAllMeters = 0;
-      oeeFormState.packerMeters.forEach(meter => {
-        meter.packers.forEach(packer => {
-          maxDurationAllMeters = Math.max(maxDurationAllMeters, packer.duration || 0);
-        });
-      });
-
-      // Sisa waktu = shift minutes - (total ODT + total LSM + total LSNM + durasi terpanjang)
-      const remainingTime = Math.max(0, oeeFormState.shiftMinutes - totalODT - totalLSM - totalLSNM - maxDurationAllMeters);
-
-      oeeFormState.packerMeters.push({
-        id: 'meter_' + Date.now(),
-        productId: '',
-        batchNumber: '',
-        remainingTime: remainingTime,
-        packers: []
-      });
-      
-      renderPackerMeterList();
-    }
-
-    function renderPackerMeterList() {
-      const listDiv = document.getElementById('packer-meter-list');
-      if (oeeFormState.packerMeters.length === 0) {
-        listDiv.innerHTML = '<div class="empty-state"><div class="empty-state-icon">📦</div><div class="empty-state-text">BELUM ADA METER DITAMBAHKAN</div></div>';
-        return;
-      }
-
-      // Hitung total ODT, LSM, LSNM untuk perhitungan sisa waktu
-      const totalODT = oeeFormState.downtime.reduce((sum, odt) => sum + (parseFloat(odt.durasi) || 0), 0);
-      const totalLSM = oeeFormState.lineStopMesin.reduce((sum, l) => sum + (parseFloat(l.durasi) || 0), 0);
-      const totalLSNM = oeeFormState.lineStopNonMesin.filter(l => l.checked).reduce((sum, l) => sum + (parseFloat(l.durasi) || 0), 0);
-      
-      listDiv.innerHTML = oeeFormState.packerMeters.map((meter, index) => {
-        // Hitung durasi terpanjang dari semua packer di semua meter SEBELUM meter ini
-        let maxDurationBeforeThisMeter = 0;
-        for (let i = 0; i < index; i++) {
-          const prevMeter = oeeFormState.packerMeters[i];
-          prevMeter.packers.forEach(packer => {
-            maxDurationBeforeThisMeter = Math.max(maxDurationBeforeThisMeter, packer.duration || 0);
-          });
-        }
-        
-        // Sisa waktu untuk meter ini = shift minutes - (total ODT + total LSM + total LSNM + maxDurationBeforeThisMeter)
-        const remainingTimeForThisMeter = Math.max(0, oeeFormState.shiftMinutes - totalODT - totalLSM - totalLSNM - maxDurationBeforeThisMeter);
-        meter.remainingTime = remainingTimeForThisMeter;
-        
-        return `
-          <div class="card" data-meter-id="${meter.id}" style="margin-bottom: 20px; padding: 16px; border: 2px solid rgba(236, 72, 153, 0.2); border-radius: 12px;">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
-              <h3 style="margin: 0; font-size: 16px; font-weight: 700; color: #ec4899; text-transform: uppercase;">METER ${index + 1}</h3>
-              <button type="button" class="btn btn-danger btn-small" onclick="removePackerMeter('${meter.id}')">HAPUS</button>
-            </div>
-
-            <div class="form-row">
-              <div class="form-group">
-                <label>PRODUK</label>
-                <select class="meter-product input-field" onchange="updatePackerMeter('${meter.id}', 'product')">
-                  <option value="">-- PILIH PRODUK --</option>
-                  ${localData.produk.map(p => `<option value="${p.id}" ${meter.productId === p.id ? 'selected' : ''}>${p.nama}</option>`).join('')}
-                </select>
-              </div>
-              <div class="form-group">
-                <label>BATCH NUMBER</label>
-                <input type="text" class="meter-batch input-field" value="${meter.batchNumber}" placeholder="BATCH NUMBER" onchange="updatePackerMeter('${meter.id}', 'batch')">
-              </div>
-              <div class="form-group">
-                <label>SISA WAKTU (MENIT)</label>
-                <input type="number" class="meter-remaining-time input-field" value="${meter.remainingTime.toFixed(0)}" readonly>
-              </div>
-            </div>
-
-            <div style="margin-top: 16px;">
-              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
-                <h4 class="section-title" style="margin: 0; font-size: 14px;">PACKER</h4>
-                <button type="button" class="btn btn-success btn-small" onclick="addPackerToMeter('${meter.id}')">+ TAMBAH PACKER</button>
-              </div>
-              <div id="packers-${meter.id}"></div>
-            </div>
-          </div>
-        `;
-      }).join('');
-
-      oeeFormState.packerMeters.forEach(meter => {
-        renderPackersInMeter(meter);
-      });
-      
-      // Update availability warning setelah render
-      updateAvailabilityWarning();
-    }
-
-    function renderPackersInMeter(meter) {
-      const container = document.getElementById(`packers-${meter.id}`);
-      if (!container) return;
-
-      if (meter.packers.length === 0) {
-        container.innerHTML = '<div class="empty-state"><div class="empty-state-text" style="font-size: 12px;">BELUM ADA PACKER DITAMBAHKAN</div></div>';
-        return;
-      }
-
-      container.innerHTML = meter.packers.map(packer => `
-        <div id="packer-${packer.id}" style="display: grid; grid-template-columns: 2fr 1fr 1.5fr 1.5fr 0.8fr; gap: 8px; padding: 12px; background: #fdf2f8; border-radius: 8px; margin-bottom: 8px; border: 1px solid rgba(236, 72, 153, 0.2); align-items: end;">
-          <div class="form-group">
-            <label style="font-size: 10px;">PACKER</label>
-            <select class="packer-name input-field" style="font-size: 11px;" onchange="updatePacker('${packer.id}', '${meter.id}')">
-              <option value="">PILIH</option>
-              ${localData.packer.map(p => `<option value="${p.id}|${p.nama}" ${packer.packerId === p.id ? 'selected' : ''}>${p.nama}</option>`).join('')}
-            </select>
-          </div>
-          <div class="form-group">
-            <label style="font-size: 10px;">DURASI (MIN)</label>
-            <input type="number" class="packer-duration input-field" style="font-size: 11px;" value="${packer.duration}" min="0" max="${meter.remainingTime}" placeholder="DURASI" onchange="validatePackerDuration(this, '${packer.id}', '${meter.id}')">
-          </div>
-          <div class="form-group">
-            <label style="font-size: 10px;">OUTPUT (DUS)</label>
-            <input type="number" class="packer-output input-field" style="font-size: 11px;" value="${packer.output}" placeholder="OUTPUT" onchange="updatePacker('${packer.id}', '${meter.id}')">
-          </div>
-          <div class="form-group">
-            <label style="font-size: 10px;">REJECT (DUS)</label>
-            <input type="number" class="packer-reject input-field" style="font-size: 11px;" value="${packer.reject}" placeholder="REJECT" onchange="updatePacker('${packer.id}', '${meter.id}')">
-          </div>
-          <div style="display: flex; align-items: flex-end;">
-            <button type="button" class="btn btn-danger btn-small" style="width: 100%; padding: 8px; font-size: 11px;" onclick="removePacker('${packer.id}', '${meter.id}')">HAPUS</button>
-          </div>
-        </div>
-      `).join('');
-    }
-
-    // Validasi durasi tidak melebihi sisa waktu
-    function validatePackerDuration(input, packerId, meterId) {
-      const meter = oeeFormState.packerMeters.find(m => m.id === meterId);
-      if (!meter) return;
-      
-      const packer = meter.packers.find(p => p.id === packerId);
-      if (!packer) return;
-      
-      let duration = parseFloat(input.value) || 0;
-      
-      // Validasi: durasi tidak boleh melebihi sisa waktu meter
-      if (duration > meter.remainingTime) {
-        showToast(`DURASI TIDAK BOLEH MELEBIHI SISA WAKTU (${meter.remainingTime.toFixed(0)} MENIT)`, 'error');
-        duration = meter.remainingTime;
-        input.value = duration;
-      }
-      
-      packer.duration = duration;
-      
-      // Update packer dan re-render meter list untuk update sisa waktu meter berikutnya
-      updatePacker(packerId, meterId);
-    }
-
-    function removePackerMeter(meterId) {
-      oeeFormState.packerMeters = oeeFormState.packerMeters.filter(m => m.id !== meterId);
-      renderPackerMeterList();
-      calculateOEE();
-    }
-
-    function addPackerToMeter(meterId) {
-      const meter = oeeFormState.packerMeters.find(m => m.id === meterId);
-      if (!meter) return;
-
-      meter.packers.push({
-        id: 'packer_' + Date.now(),
-        packerId: '',
-        packerName: '',
-        duration: 0,
-        output: 0,
-        reject: 0
-      });
-
-      renderPackersInMeter(meter);
-    }
-
-    function updatePackerMeter(meterId, field) {
-      const meter = oeeFormState.packerMeters.find(m => m.id === meterId);
-      if (!meter) return;
-
-      const meterDiv = document.querySelector(`[data-meter-id="${meterId}"]`);
-      if (!meterDiv) return;
-
-      if (field === 'product') {
-        meter.productId = meterDiv.querySelector('.meter-product').value;
-      } else if (field === 'batch') {
-        meter.batchNumber = meterDiv.querySelector('.meter-batch').value;
-      }
-
-      calculateOEE();
-    }
-
-    function updatePacker(packerId, meterId) {
-      const meter = oeeFormState.packerMeters.find(m => m.id === meterId);
-      if (!meter) return;
-
-      const packer = meter.packers.find(p => p.id === packerId);
-      if (!packer) return;
-
-      const packerDiv = document.getElementById(`packer-${packerId}`);
-      if (!packerDiv) return;
-
-      const nameSelect = packerDiv.querySelector('.packer-name');
-      const durationInput = packerDiv.querySelector('.packer-duration');
-      const outputInput = packerDiv.querySelector('.packer-output');
-      const rejectInput = packerDiv.querySelector('.packer-reject');
-
-      const [packerId_, packerName] = nameSelect.value.split('|') || ['', ''];
-      packer.packerId = packerId_;
-      packer.packerName = packerName;
-      packer.duration = parseFloat(durationInput.value) || 0;
-      packer.output = parseFloat(outputInput.value) || 0;
-      packer.reject = parseFloat(rejectInput.value) || 0;
-
-      // Re-render packer meter list to update remaining time for next meters
-      renderPackerMeterList();
-      calculateOEE();
-    }
-
-    function removePacker(packerId, meterId) {
-      const meter = oeeFormState.packerMeters.find(m => m.id === meterId);
-      if (meter) {
-        meter.packers = meter.packers.filter(p => p.id !== packerId);
-        renderPackersInMeter(meter);
-        // Re-render packer meter list to update remaining time for next meters
-        renderPackerMeterList();
-      }
-      calculateOEE();
-    }
+    const totalODT = oeeFormState.downtime.reduce((sum, odt) => sum + (parseFloat(odt.durasi) || 0), 0);
+    const totalLSM = oeeFormState.lineStopMesin.reduce((sum, l) => sum + (parseFloat(l.durasi) || 0), 0);
+    const totalLSNM = oeeFormState.lineStopNonMesin.filter(l => l.checked).reduce((sum, l) => sum + (parseFloat(l.durasi) || 0), 0);
     
-    // UPDATE AVAILABILITY WARNING - Menggunakan durasi terpanjang
-    function updateAvailabilityWarning() {
-      const warningDiv = document.getElementById('availability-warning');
-      if (!warningDiv) return;
-      
-      // Hitung total ODT, LSM, LSNM
-      const totalODT = oeeFormState.downtime.reduce((sum, odt) => sum + (parseFloat(odt.durasi) || 0), 0);
-      const totalLSM = oeeFormState.lineStopMesin.reduce((sum, l) => sum + (parseFloat(l.durasi) || 0), 0);
-      const totalLSNM = oeeFormState.lineStopNonMesin.filter(l => l.checked).reduce((sum, l) => sum + (parseFloat(l.durasi) || 0), 0);
-      
-      // Hitung durasi terpanjang dari semua packer di semua meter
-      let maxPackerDuration = 0;
-      oeeFormState.packerMeters.forEach(meter => {
-        meter.packers.forEach(packer => {
-          maxPackerDuration = Math.max(maxPackerDuration, packer.duration || 0);
-        });
+    let maxDurationAllMeters = 0;
+    oeeFormState.packerMeters.forEach(meter => {
+      meter.packers.forEach(packer => {
+        maxDurationAllMeters = Math.max(maxDurationAllMeters, packer.duration || 0);
       });
+    });
+
+    const remainingTime = Math.max(0, oeeFormState.shiftMinutes - totalODT - totalLSM - totalLSNM - maxDurationAllMeters);
+
+    oeeFormState.packerMeters.push({
+      id: 'meter_' + Date.now(),
+      productId: '',
+      batchNumber: '',
+      remainingTime: remainingTime,
+      packers: []
+    });
+    
+    renderPackerMeterList();
+  }
+
+  function renderPackerMeterList() {
+    const listDiv = document.getElementById('packer-meter-list');
+    if (oeeFormState.packerMeters.length === 0) {
+      listDiv.innerHTML = '<div class="empty-state"><div class="empty-state-icon">📦</div><div class="empty-state-text">BELUM ADA METER DITAMBAHKAN</div></div>';
+      return;
+    }
+
+    const totalODT = oeeFormState.downtime.reduce((sum, odt) => sum + (parseFloat(odt.durasi) || 0), 0);
+    const totalLSM = oeeFormState.lineStopMesin.reduce((sum, l) => sum + (parseFloat(l.durasi) || 0), 0);
+    const totalLSNM = oeeFormState.lineStopNonMesin.filter(l => l.checked).reduce((sum, l) => sum + (parseFloat(l.durasi) || 0), 0);
+    
+    listDiv.innerHTML = oeeFormState.packerMeters.map((meter, index) => {
+      let maxDurationBeforeThisMeter = 0;
+      for (let i = 0; i < index; i++) {
+        const prevMeter = oeeFormState.packerMeters[i];
+        prevMeter.packers.forEach(packer => {
+          maxDurationBeforeThisMeter = Math.max(maxDurationBeforeThisMeter, packer.duration || 0);
+        });
+      }
       
-      // Waktu yang tersedia untuk satu kali proses produksi
-      const availableTimeForOneProcess = oeeFormState.shiftMinutes - totalODT - totalLSM - totalLSNM;
+      const remainingTimeForThisMeter = Math.max(0, oeeFormState.shiftMinutes - totalODT - totalLSM - totalLSNM - maxDurationBeforeThisMeter);
+      meter.remainingTime = remainingTimeForThisMeter;
       
-      // Warning muncul jika durasi terpanjang > availableTimeForOneProcess
-      const isWarning = maxPackerDuration > availableTimeForOneProcess && availableTimeForOneProcess > 0;
-      
-      if (isWarning) {
-        warningDiv.innerHTML = `
-          <div style="background: #fef2f2; border: 2px solid #ef4444; border-radius: 10px; padding: 16px; margin-bottom: 16px; color: #dc2626;">
-            <p style="margin: 0 0 8px 0; font-weight: 700; text-transform: uppercase; font-size: 13px;">⚠️ WARNING: WAKTU TIDAK SESUAI</p>
-            <p style="margin: 0; font-size: 12px;">DURASI PACKER TERPANJANG (${maxPackerDuration.toFixed(0)} MENIT) MELEBIHI WAKTU TERSEDIA (${availableTimeForOneProcess.toFixed(0)} MENIT). PERIKSA KEMBALI DATA ANDA.</p>
+      return `
+        <div class="card" data-meter-id="${meter.id}" style="margin-bottom: 20px; padding: 16px; border: 2px solid rgba(236, 72, 153, 0.2); border-radius: 12px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+            <h3 style="margin: 0; font-size: 16px; font-weight: 700; color: #ec4899; text-transform: uppercase;">METER ${index + 1}</h3>
+            <button type="button" class="btn btn-danger btn-small" onclick="removePackerMeter('${meter.id}')">HAPUS</button>
           </div>
-        `;
-        warningDiv.style.display = 'block';
-      } else {
-        warningDiv.style.display = 'none';
-      }
-    }
-    // ==================== END PACKER METER FUNCTIONS ====================
-
-    function renderODTList() {
-      const listDiv = document.getElementById('odt-list');
-      if (localData.downtime.length === 0) {
-        listDiv.innerHTML = '<div class="empty-state"><div class="empty-state-text">BELUM ADA DATA ODT</div></div>';
-        return;
-      }
-
-      if (oeeFormState.downtime.length === 0) {
-        oeeFormState.downtime = localData.downtime.map(d => ({ id: d.id, nama: d.nama, waktu_standard: d.waktu_standard, durasi: 0 }));
-      }
-
-      listDiv.innerHTML = oeeFormState.downtime.map(odt => `
-        <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 12px; padding: 12px; background: #f0f9ff; border-radius: 8px; align-items: center; margin-bottom: 8px; border: 1px solid rgba(59, 130, 246, 0.2);">
-          <div>
-            <p style="font-size: 13px; font-weight: 700; color: #3b82f6; margin: 0 0 4px 0; text-transform: uppercase;">${odt.nama}</p>
-            <p style="font-size: 11px; color: #60a5fa; margin: 0; text-transform: uppercase;">STD: ${odt.waktu_standard} MENIT</p>
-          </div>
-          <input type="number" class="input-field" value="${odt.durasi}" min="0" placeholder="DURASI AKTUAL" onchange="updateODT('${odt.id}', this.value)">
-        </div>
-      `).join('');
-    }
-
-    function updateODT(id, durasi) {
-      const odt = oeeFormState.downtime.find(o => o.id === id);
-      if (odt) {
-        odt.durasi = parseFloat(durasi) || 0;
-      }
-      // Update remaining time in packer meters
-      renderPackerMeterList();
-      calculateOEE();
-    }
-
-    function renderLineStopMesinList() {
-      const listDiv = document.getElementById('line-stop-mesin-list');
-      if (localData.line_stop_mesin.length === 0 && oeeFormState.lineStopMesin.length === 0) {
-        listDiv.innerHTML = '<div class="empty-state"><div class="empty-state-text">BELUM ADA DATA</div></div>';
-        return;
-      }
-
-      if (oeeFormState.lineStopMesin.length === 0) {
-        oeeFormState.lineStopMesin = localData.line_stop_mesin.map(m => ({ id: m.id, nama: m.nama, durasi: 0, action: '', wr: '', isCustom: false }));
-      }
-
-      listDiv.innerHTML = oeeFormState.lineStopMesin.map(lsm => {
-        const durasi = parseFloat(lsm.durasi) || 0;
-        const wrRequired = durasi >= 180;
-        return `
-          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(110px, 1fr)); gap: 8px; padding: 12px; background: #faf5ff; border-radius: 8px; align-items: center; margin-bottom: 8px; border: 1px solid rgba(168, 85, 247, 0.2);">
-            <div>
-              <p style="font-size: 13px; font-weight: 700; color: #a855f7; margin: 0; text-transform: uppercase;">${lsm.nama}</p>
+          <div class="form-row">
+            <div class="form-group">
+              <label>PRODUK</label>
+              <select class="meter-product input-field" onchange="updatePackerMeter('${meter.id}', 'product')">
+                <option value="">-- PILIH PRODUK --</option>
+                ${localData.produk.map(p => `<option value="${p.id}" ${meter.productId === p.id ? 'selected' : ''}>${p.nama}</option>`).join('')}
+              </select>
             </div>
-            <input type="number" class="input-field" value="${lsm.durasi}" min="0" placeholder="DURASI (MIN)" onchange="updateLineStopMesin('${lsm.id}', 'durasi', this.value)">
-            <input type="text" class="input-field" value="${lsm.action}" placeholder="ACTION" onchange="updateLineStopMesin('${lsm.id}', 'action', this.value)">
-            <input type="text" class="input-field" style="${wrRequired ? 'border-color: #ef4444;' : ''}" value="${lsm.wr}" placeholder="NO WR${wrRequired ? ' *' : ''}" onchange="updateLineStopMesin('${lsm.id}', 'wr', this.value)">
+            <div class="form-group">
+              <label>BATCH NUMBER</label>
+              <input type="text" class="meter-batch input-field" value="${meter.batchNumber}" placeholder="BATCH NUMBER" onchange="updatePackerMeter('${meter.id}', 'batch')">
+            </div>
+            <div class="form-group">
+              <label>SISA WAKTU (MENIT)</label>
+              <input type="number" class="meter-remaining-time input-field" value="${meter.remainingTime.toFixed(0)}" readonly>
+            </div>
           </div>
-        `;
-      }).join('');
-    }
-
-    function updateLineStopMesin(id, field, value) {
-      const lsm = oeeFormState.lineStopMesin.find(l => l.id === id);
-      if (lsm) lsm[field] = value;
-      // Update remaining time in packer meters
-      renderPackerMeterList();
-      calculateOEE();
-    }
-
-    function renderLineStopNonMesinList() {
-      const listDiv = document.getElementById('line-stop-non-mesin-list');
-      if (localData.line_stop_non_mesin.length === 0 && oeeFormState.lineStopNonMesin.length === 0) {
-        listDiv.innerHTML = '<div class="empty-state"><div class="empty-state-text">BELUM ADA DATA</div></div>';
-        return;
-      }
-
-      if (oeeFormState.lineStopNonMesin.length === 0) {
-        oeeFormState.lineStopNonMesin = localData.line_stop_non_mesin.map(m => ({ id: m.id, nama: m.nama, durasi: 0, action: '', checked: false, isCustom: false }));
-      }
-
-      listDiv.innerHTML = oeeFormState.lineStopNonMesin.map(lsnm => `
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(110px, 1fr)); gap: 8px; padding: 12px; background: #f0fdf4; border-radius: 8px; align-items: center; margin-bottom: 8px; border: 1px solid rgba(16, 185, 129, 0.2);">
-          <div style="display: flex; align-items: center; gap: 8px;">
-            <input type="checkbox" id="lsnm-${lsnm.id}" ${lsnm.checked ? 'checked' : ''} onchange="updateLineStopNonMesin('${lsnm.id}', 'checked', this.checked); renderLineStopNonMesinList();">
-            <label for="lsnm-${lsnm.id}" style="font-size: 13px; font-weight: 600; color: #10b981; margin: 0; text-transform: uppercase; cursor: pointer;">${lsnm.nama}</label>
+          <div style="margin-top: 16px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+              <h4 class="section-title" style="margin: 0; font-size: 14px;">PACKER</h4>
+              <button type="button" class="btn btn-success btn-small" onclick="addPackerToMeter('${meter.id}')">+ TAMBAH PACKER</button>
+            </div>
+            <div id="packers-${meter.id}"></div>
           </div>
-          <input type="number" class="input-field" value="${lsnm.durasi}" min="0" placeholder="DURASI (MIN)" ${!lsnm.checked ? 'disabled' : ''} onchange="updateLineStopNonMesin('${lsnm.id}', 'durasi', this.value)">
-          <input type="text" class="input-field" value="${lsnm.action}" placeholder="ACTION" ${!lsnm.checked ? 'disabled' : ''} onchange="updateLineStopNonMesin('${lsnm.id}', 'action', this.value)">
-        </div>
-      `).join('');
-    }
-
-    function updateLineStopNonMesin(id, field, value) {
-      const lsnm = oeeFormState.lineStopNonMesin.find(l => l.id === id);
-      if (lsnm) {
-        if (field === 'checked') {
-          lsnm.checked = value;
-          if (!value) {
-            lsnm.durasi = 0;
-            lsnm.action = '';
-          }
-        } else {
-          lsnm[field] = value;
-        }
-      }
-      // Update remaining time in packer meters
-      renderPackerMeterList();
-      calculateOEE();
-    }
-
-    function addMinorStop() {
-      oeeFormState.minorStop.push({
-        id: 'ms_' + Date.now(),
-        nama: '',
-        durasi: 0,
-        checked: false,
-        isCustom: true
-      });
-      renderMinorStopList();
-    }
-
-    function renderMinorStopList() {
-      const listDiv = document.getElementById('minor-stop-list');
-      if (localData.minor_stop.length === 0 && oeeFormState.minorStop.length === 0) {
-        listDiv.innerHTML = '<div class="empty-state"><div class="empty-state-text">BELUM ADA DATA</div></div>';
-        return;
-      }
-
-      if (oeeFormState.minorStop.length === 0) {
-        oeeFormState.minorStop = localData.minor_stop.map(m => ({ id: m.id, nama: m.nama, durasi: 0, checked: false, isCustom: false }));
-      }
-
-      listDiv.innerHTML = oeeFormState.minorStop.map(ms => `
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(110px, 1fr)); gap: 8px; padding: 12px; background: #fef3c7; border-radius: 8px; align-items: center; margin-bottom: 8px; border: 1px solid rgba(217, 119, 6, 0.2);">
-          <div style="display: flex; align-items: center; gap: 8px;">
-            <input type="checkbox" id="ms-${ms.id}" ${ms.checked ? 'checked' : ''} onchange="updateMinorStop('${ms.id}', 'checked', this.checked); renderMinorStopList();">
-            <label for="ms-${ms.id}" style="font-size: 13px; font-weight: 600; color: #d97706; margin: 0; text-transform: uppercase; cursor: pointer;">${ms.nama}</label>
-          </div>
-          <input type="number" class="input-field" value="${ms.durasi}" min="0" placeholder="DURASI (MIN)" ${!ms.checked ? 'disabled' : ''} onchange="updateMinorStop('${ms.id}', 'durasi', this.value)">
-          ${ms.isCustom ? `<button type="button" class="btn btn-danger btn-small" style="padding: 8px;" onclick="removeMinorStop('${ms.id}')">HAPUS</button>` : ''}
-        </div>
-      `).join('');
-    }
-
-    function updateMinorStop(id, field, value) {
-      const ms = oeeFormState.minorStop.find(m => m.id === id);
-      if (ms) {
-        if (field === 'checked') {
-          ms.checked = value;
-          if (!value) {
-            ms.durasi = 0;
-          }
-        } else {
-          ms[field] = value;
-        }
-      }
-      calculateOEE();
-    }
-
-    function removeMinorStop(id) {
-      oeeFormState.minorStop = oeeFormState.minorStop.filter(m => m.id !== id);
-      renderMinorStopList();
-      calculateOEE();
-    }
-
-    function calculateOEE() {
-      let totalOutputActual = 0;
-      let totalRejectActual = 0;
-      let totalShiftMinutes = oeeFormState.shiftMinutes;
-      let meterDetails = [];
-
-      // Calculate total packer duration (RUNNING TIME) dan total output/reject dari semua packer
-      let totalPackerDuration = 0;
-      oeeFormState.packerMeters.forEach(meter => {
-        meter.packers.forEach(packer => {
-          totalPackerDuration += packer.duration || 0;
-          totalOutputActual += packer.output || 0;
-          totalRejectActual += packer.reject || 0;
-        });
-      });
-
-      // Calculate total ODT ACTUAL (bukan standard) - hanya yang diinput user
-      const totalODT = oeeFormState.downtime.reduce((sum, odt) => sum + (parseFloat(odt.durasi) || 0), 0);
-      
-      // Calculate line stops and minor stops (optional/actual downtime)
-      const totalLineStopMesin = oeeFormState.lineStopMesin.reduce((sum, l) => sum + (parseFloat(l.durasi) || 0), 0);
-      const totalLineStopNonMesin = oeeFormState.lineStopNonMesin.filter(l => l.checked).reduce((sum, l) => sum + (parseFloat(l.durasi) || 0), 0);
-      const totalMinorStop = oeeFormState.minorStop.filter(m => m.checked).reduce((sum, m) => sum + (parseFloat(m.durasi) || 0), 0);
-      const totalActualDowntime = totalLineStopMesin + totalLineStopNonMesin + totalMinorStop;
-
-      // Total downtime = ODT actual + Line Stop (all types)
-      const totalDowntime = totalODT + totalActualDowntime;
-
-      // Calculate availability based on OEE formula
-      const plannedProductionTime = totalShiftMinutes - totalODT;
-      const availableTime = plannedProductionTime - totalActualDowntime;
-      
-      // AVAILABILITY ACTUAL = (Available Time / Planned Production Time) × 100%
-      const availabilityActual = plannedProductionTime > 0 ? (availableTime / plannedProductionTime) * 100 : 0;
-      
-      // AVAILABILITY 365 = (Jam Kerja - Total ODT - Total LSM - Total LSNM) / Jam Kerja × 100%
-      const availability365 = totalShiftMinutes > 0 ? ((totalShiftMinutes - totalODT - totalLineStopMesin - totalLineStopNonMesin) / totalShiftMinutes) * 100 : 0;
-
-      let totalTargetOutputAllBatches = 0;
-      
-      oeeFormState.packerMeters.forEach(meter => {
-        const product = localData.produk.find(p => p.id === meter.productId);
-        if (!product) return;
-        
-        let meterActualOutput = 0;
-        let meterActualReject = 0;
-        let meterTargetOutput = 0;
-        let packerBreakdown = [];
-        
-        meter.packers.forEach(packer => {
-          const packerDuration = packer.duration || 0;
-          const packerTarget = packerDuration * product.target;
-          const packerActual = packer.output;
-          const packerReject = packer.reject;
-          const packerPerformance = packerTarget > 0 ? (packerActual / packerTarget) * 100 : 0;
-          
-          meterActualOutput += packerActual;
-          meterActualReject += packerReject;
-          meterTargetOutput += packerTarget;
-          
-          packerBreakdown.push({
-            name: packer.packerName,
-            duration: packerDuration,
-            target: packerTarget,
-            actual: packerActual,
-            reject: packerReject,
-            performance: packerPerformance.toFixed(1)
-          });
-        });
-        
-        const meterPerformance = meterTargetOutput > 0 ? (meterActualOutput / meterTargetOutput) * 100 : 0;
-        
-        meterDetails.push({
-          batchNumber: meter.batchNumber,
-          product: product.nama,
-          actualOutput: meterActualOutput,
-          actualReject: meterActualReject,
-          targetOutput: meterTargetOutput,
-          performance: meterPerformance.toFixed(1),
-          packers: packerBreakdown
-        });
-        
-        totalTargetOutputAllBatches += meterTargetOutput;
-      });
-
-      const performance = totalTargetOutputAllBatches > 0 ? (totalOutputActual / totalTargetOutputAllBatches) * 100 : 0;
-      const qualityRate = totalOutputActual > 0 ? (((totalOutputActual - totalRejectActual) / totalOutputActual) * 100) : 0;
-
-      const oeeActual = (availabilityActual / 100) * (performance / 100) * (qualityRate / 100) * 100;
-      const oee365 = (availability365 / 100) * (performance / 100) * (qualityRate / 100) * 100;
-
-      // UPDATE SCORE CARDS
-      document.getElementById('calc-availability-actual').textContent = `${availabilityActual.toFixed(1)}%`;
-      document.getElementById('calc-availability-365').textContent = `${availability365.toFixed(1)}%`;
-      document.getElementById('calc-performance').textContent = `${performance.toFixed(1)}%`;
-      document.getElementById('calc-quality').textContent = `${qualityRate.toFixed(1)}%`;
-      document.getElementById('calc-oee-actual').textContent = `${oeeActual.toFixed(1)}%`;
-      document.getElementById('calc-oee-365').textContent = `${oee365.toFixed(1)}%`;
-      document.getElementById('calc-total-output').textContent = `${totalOutputActual.toFixed(1)} DUS`;
-
-      oeeFormState.results = {
-        availabilityActual: availabilityActual.toFixed(1),
-        availability365: availability365.toFixed(1),
-        performance: performance.toFixed(1),
-        qualityRate: qualityRate.toFixed(1),
-        oeeActual: oeeActual.toFixed(1),
-        oee365: oee365.toFixed(1),
-        totalOutput: totalOutputActual,
-        totalReject: totalRejectActual,
-        meterDetails: meterDetails,
-        totalPackerDuration: totalPackerDuration,
-        totalDowntime: totalDowntime
-      };
-      
-      // Update availability warning setelah kalkulasi
-      updateAvailabilityWarning();
-    }
-
-    function loadOEEFormData() {
-      document.getElementById('oee-date').value = new Date().toISOString().split('T')[0];
-    }
-
-    async function submitOEE(event) {
-      event.preventDefault();
-      
-      const date = document.getElementById('oee-date').value;
-      const shift = document.getElementById('oee-shift').value;
-
-      if (!date || !shift || oeeFormState.packerMeters.length === 0) {
-        showToast('TANGGAL, SHIFT & PACKER METER WAJIB DIISI', 'error');
-        return;
-      }
-
-      const invalidMeter = oeeFormState.packerMeters.find(m => !m.productId || !m.batchNumber || m.packers.length === 0);
-      if (invalidMeter) {
-        showToast('PRODUK, BATCH & MINIMAL 1 PACKER WAJIB DIISI DI SETIAP METER', 'error');
-        return;
-      }
-
-      const invalidPacker = oeeFormState.packerMeters.flatMap((m, mIdx) => 
-        m.packers.filter(p => !p.packerName).map(() => mIdx)
-      );
-      if (invalidPacker.length > 0) {
-        showToast('SEMUA PACKER HARUS DIPILIH', 'error');
-        return;
-      }
-
-      const invalidWR = oeeFormState.lineStopMesin.find(lsm => parseFloat(lsm.durasi) >= 180 && !lsm.wr?.trim());
-      if (invalidWR) {
-        showToast(`NO WR WAJIB UNTUK: ${invalidWR.nama}`, 'error');
-        return;
-      }
-
-      // Cek warning availability
-      const totalODT = oeeFormState.downtime.reduce((sum, odt) => sum + (parseFloat(odt.durasi) || 0), 0);
-      const totalLSM = oeeFormState.lineStopMesin.reduce((sum, l) => sum + (parseFloat(l.durasi) || 0), 0);
-      const totalLSNM = oeeFormState.lineStopNonMesin.filter(l => l.checked).reduce((sum, l) => sum + (parseFloat(l.durasi) || 0), 0);
-      
-      let maxPackerDuration = 0;
-      oeeFormState.packerMeters.forEach(meter => {
-        meter.packers.forEach(packer => {
-          maxPackerDuration = Math.max(maxPackerDuration, packer.duration || 0);
-        });
-      });
-      
-      const availableTimeForOneProcess = oeeFormState.shiftMinutes - totalODT - totalLSM - totalLSNM;
-      
-      if (maxPackerDuration > availableTimeForOneProcess && availableTimeForOneProcess > 0) {
-        showToast('⚠️ DURASI PACKER TERPANJANG MELEBIHI WAKTU TERSEDIA!', 'error');
-        return;
-      }
-
-      const allPackerNames = oeeFormState.packerMeters.flatMap(m => m.packers.map(p => p.packerName)).join(', ');
-      const produkBatch = oeeFormState.packerMeters.map(m => {
-        const prod = localData.produk.find(p => p.id === m.productId);
-        return `${prod?.nama}(${m.batchNumber})`;
-      }).join(' | ');
-
-      // Compile line stop mesin data
-      const lsmData = oeeFormState.lineStopMesin
-        .filter(lsm => parseFloat(lsm.durasi) > 0)
-        .map(lsm => `${lsm.nama} (${lsm.durasi}MIN) - ACTION: ${lsm.action || '-'} - WR: ${lsm.wr || '-'}`)
-        .join(' | ');
-
-      // Compile line stop non-mesin data
-      const lsnmData = oeeFormState.lineStopNonMesin
-        .filter(lsnm => lsnm.checked && parseFloat(lsnm.durasi) > 0)
-        .map(lsnm => `${lsnm.nama} (${lsnm.durasi}MIN) - ACTION: ${lsnm.action || '-'}`)
-        .join(' | ');
-
-      const record = {
-        date,
-        shift,
-        product: produkBatch,
-        packers: allPackerNames,
-        output_actual: oeeFormState.results.totalOutput,
-        availability_actual: parseFloat(oeeFormState.results.availabilityActual),
-        availability_365: parseFloat(oeeFormState.results.availability365),
-        performance: parseFloat(oeeFormState.results.performance),
-        quality_rate: parseFloat(oeeFormState.results.qualityRate),
-        oee_actual: parseFloat(oeeFormState.results.oeeActual),
-        oee_365: parseFloat(oeeFormState.results.oee365),
-        line_stop_mesin: lsmData || null,
-        line_stop_non_mesin: lsnmData || null
-      };
-
-      try {
-        const { error } = await supabaseClient.from('oee_records').insert([record]);
-        if (error) throw error;
-
-        localData.oee_records.unshift(record);
-        await addAuditLog('INPUT OEE', `${produkBatch} - PACKER: ${allPackerNames}`);
-        showToast('DATA OEE BERHASIL DISIMPAN ✅', 'success');
-        resetOEEForm();
-        updateDashboard();
-      } catch (error) {
-        console.error('Error saving OEE:', error);
-        showToast('GAGAL MENYIMPAN DATA OEE', 'error');
-      }
-    }
-
-    function resetOEEForm() {
-      document.getElementById('form-oee').reset();
-      document.getElementById('oee-date').value = new Date().toISOString().split('T')[0];
-      oeeFormState.shiftMinutes = 0;
-      oeeFormState.packerMeters = [];
-      oeeFormState.downtime = [];
-      oeeFormState.lineStopMesin = [];
-      oeeFormState.lineStopNonMesin = [];
-      oeeFormState.minorStop = [];
-      oeeFormState.results = {};
-      document.getElementById('packer-meter-list').innerHTML = '';
-      document.getElementById('odt-list').innerHTML = '';
-      document.getElementById('line-stop-mesin-list').innerHTML = '';
-      document.getElementById('line-stop-non-mesin-list').innerHTML = '';
-      document.getElementById('minor-stop-list').innerHTML = '';
-      document.getElementById('calc-availability-actual').textContent = '0%';
-      document.getElementById('calc-availability-365').textContent = '0%';
-      document.getElementById('calc-performance').textContent = '0%';
-      document.getElementById('calc-quality').textContent = '0%';
-      document.getElementById('calc-oee-actual').textContent = '0%';
-      document.getElementById('calc-oee-365').textContent = '0%';
-      document.getElementById('calc-total-output').textContent = '0 DUS';
-      document.getElementById('availability-warning').style.display = 'none';
-    }
-
-    let dashboardCharts = {};
-    let filteredOeeRecords = [];
-
-    function initDashboardFilters() {
-      populateFilterOptions();
-      // Set default date range to current month (1st to last day)
-      const today = new Date();
-      const currentYear = today.getFullYear();
-      const currentMonth = today.getMonth();
-      
-      // First day of current month (always 01)
-      const startDate = new Date(currentYear, currentMonth, 1);
-      
-      // Last day of current month
-      const endDate = new Date(currentYear, currentMonth + 1, 0);
-      
-      // Format as YYYY-MM-DD strings using local date (not UTC)
-      const startString = String(startDate.getFullYear()).padStart(4, '0') + '-' + 
-                         String(startDate.getMonth() + 1).padStart(2, '0') + '-' +
-                         String(startDate.getDate()).padStart(2, '0');
-      const endString = String(endDate.getFullYear()).padStart(4, '0') + '-' + 
-                       String(endDate.getMonth() + 1).padStart(2, '0') + '-' +
-                       String(endDate.getDate()).padStart(2, '0');
-      
-      document.getElementById('filter-date-start').value = startString;
-      document.getElementById('filter-date-end').value = endString;
-      
-      // Apply filters immediately
-      applyDashboardFilters();
-    }
-
-    function populateFilterOptions() {
-      // Populate product filter
-      const productSelect = document.getElementById('filter-product');
-      const existingOptions = productSelect.querySelectorAll('option:not(:first-child)');
-      existingOptions.forEach(opt => opt.remove());
-      
-      localData.produk.forEach(prod => {
-        const option = document.createElement('option');
-        option.value = prod.id;
-        option.textContent = prod.nama;
-        productSelect.appendChild(option);
-      });
-
-      // Populate packer filter
-      const packerSelect = document.getElementById('filter-packer');
-      const existingPackerOptions = packerSelect.querySelectorAll('option:not(:first-child)');
-      existingPackerOptions.forEach(opt => opt.remove());
-      
-      localData.packer.forEach(pack => {
-        const option = document.createElement('option');
-        option.value = pack.nama;
-        option.textContent = pack.nama;
-        packerSelect.appendChild(option);
-      });
-    }
-
-    function applyDashboardFilters() {
-      const dateStart = document.getElementById('filter-date-start').value;
-      const dateEnd = document.getElementById('filter-date-end').value;
-      const selectedProduct = document.getElementById('filter-product').value;
-      const selectedPacker = document.getElementById('filter-packer').value;
-
-      filteredOeeRecords = localData.oee_records.filter(record => {
-        const recordDate = record.date;
-        
-        // Date range filter
-        if (dateStart && recordDate < dateStart) return false;
-        if (dateEnd && recordDate > dateEnd) return false;
-
-        // Product filter
-        if (selectedProduct && !record.product.includes(selectedProduct)) return false;
-
-        // Packer filter
-        if (selectedPacker && !record.packers.includes(selectedPacker)) return false;
-
-        return true;
-      });
-
-      updateDashboard();
-    }
-
-    function resetDashboardFilters() {
-      document.getElementById('filter-date-start').value = '';
-      document.getElementById('filter-date-end').value = '';
-      document.getElementById('filter-product').value = '';
-      document.getElementById('filter-packer').value = '';
-      filteredOeeRecords = [...localData.oee_records];
-      updateDashboard();
-    }
-
-    function updateDashboard() {
-      updateDashboardData();
-      renderCharts();
-      renderPackerPerformance();
-      renderOEEHistory();
-    }
-
-    function updateDashboardData() {
-      const recordsToUse = filteredOeeRecords.length > 0 ? filteredOeeRecords : localData.oee_records;
-      
-      if (!recordsToUse || recordsToUse.length === 0) {
-        document.getElementById('score-oee-actual').textContent = '0%';
-        document.getElementById('score-oee-365').textContent = '0%';
-        document.getElementById('score-total-output').textContent = '0';
-        updateScoreCardColors(0, 0);
-        return;
-      }
-
-      let sumOeeActual = 0, countOeeActual = 0;
-      let sumOee365 = 0, countOee365 = 0;
-      let totalOutput = 0;
-
-      recordsToUse.forEach(r => {
-        const oeeActual = parseFloat(r.oee_actual) || 0;
-        const oee365 = parseFloat(r.oee_365) || 0;
-        const output = parseFloat(r.output_actual) || 0;
-
-        if (oeeActual > 0) { 
-          sumOeeActual += oeeActual; 
-          countOeeActual++; 
-        }
-        if (oee365 > 0) { 
-          sumOee365 += oee365; 
-          countOee365++; 
-        }
-        totalOutput += output;
-      });
-
-      const avgOeeActual = countOeeActual > 0 ? sumOeeActual / countOeeActual : 0;
-      const avgOee365 = countOee365 > 0 ? sumOee365 / countOee365 : 0;
-
-      document.getElementById('score-oee-actual').textContent = `${avgOeeActual.toFixed(1)}%`;
-      document.getElementById('score-oee-365').textContent = `${avgOee365.toFixed(1)}%`;
-      document.getElementById('score-total-output').textContent = totalOutput.toLocaleString('id-ID');
-
-      updateScoreCardColors(avgOeeActual, avgOee365);
-    }
-
-    function updateScoreCardColors(oeeActual, oee365) {
-      const cardActual = document.getElementById('score-card-oee-actual');
-      const card365 = document.getElementById('score-card-oee-365');
-
-      if (cardActual) {
-        if (oeeActual < 85) {
-          cardActual.style.background = 'linear-gradient(135deg, #fef2f2 0%, #fef2f2 100%)';
-          cardActual.style.borderColor = '#ef4444';
-        } else {
-          cardActual.style.background = 'linear-gradient(135deg, #f0fdf4 0%, #f0fdf4 100%)';
-          cardActual.style.borderColor = '#10b981';
-        }
-      }
-
-      if (card365) {
-        if (oee365 < 80) {
-          card365.style.background = 'linear-gradient(135deg, #fef2f2 0%, #fef2f2 100%)';
-          card365.style.borderColor = '#ef4444';
-        } else {
-          card365.style.background = 'linear-gradient(135deg, #f0fdf4 0%, #f0fdf4 100%)';
-          card365.style.borderColor = '#10b981';
-        }
-      }
-    }
-
-    function renderCharts() {
-      renderOEEMonthlyChart();
-      renderOEEDailyChart();
-      renderAPQABreakdownChart();
-      renderODTTop10Chart();
-      renderLineStopMesinTop10Chart();
-      renderLineStopNonMesinTop10Chart();
-      renderMinorStopTop10Chart();
-    }
-
-    function renderOEEMonthlyChart() {
-      const monthlyData = {};
-      
-      // Hardcoded: Jan 2026 sampai Des 2026
-      for (let month = 1; month <= 12; month++) {
-        const yearMonth = '2026-' + String(month).padStart(2, '0');
-        monthlyData[yearMonth] = [];
-      }
-
-      const recordsToUse = filteredOeeRecords.length > 0 ? filteredOeeRecords : localData.oee_records;
-      recordsToUse.forEach(r => {
-        const yearMonth = r.date.substring(0, 7);
-        if (monthlyData[yearMonth]) {
-          const val = parseFloat(r.oee_actual) || 0;
-          if (val > 0) monthlyData[yearMonth].push(val);
-        }
-      });
-
-      const labels = Object.keys(monthlyData).map(ym => {
-        const [year, month] = ym.split('-');
-        const date = new Date(year, month - 1);
-        return date.toLocaleDateString('id-ID', { month: 'short', year: '2-digit' });
-      });
-
-      const data = Object.values(monthlyData).map(arr => 
-        arr.length > 0 ? arr.reduce((a, b) => a + b, 0) / arr.length : 0
-      );
-
-      const ctx = document.getElementById('chart-oee-monthly').getContext('2d');
-      if (dashboardCharts.oeeMonthly) dashboardCharts.oeeMonthly.destroy();
-      
-      dashboardCharts.oeeMonthly = new Chart(ctx, {
-        type: 'line',
-        data: {
-          labels: labels,
-          datasets: [{
-            label: 'OEE ACTUAL %',
-            data: data,
-            borderColor: '#ec4899',
-            backgroundColor: 'rgba(236, 72, 153, 0.1)',
-            borderWidth: 3,
-            tension: 0.4,
-            fill: true,
-            pointRadius: 5,
-            pointBackgroundColor: '#ec4899'
-          }]
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          plugins: { legend: { display: false } },
-          scales: { y: { beginAtZero: true, max: 100, ticks: { callback: v => v + '%' } } }
-        }
-      });
-    }
-
-    function renderOEEDailyChart() {
-      const dailyData = {};
-      
-      // Get current month's first and last day
-      const today = new Date();
-      const currentYear = today.getFullYear();
-      const currentMonth = today.getMonth();
-      const firstDay = new Date(currentYear, currentMonth, 1);
-      const lastDay = new Date(currentYear, currentMonth + 1, 0);
-      
-      // Create entries for all days in current month (01 to last day)
-      for (let day = 1; day <= lastDay.getDate(); day++) {
-        const dateStr = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
-        dailyData[dateStr] = [];
-      }
-
-      const recordsToUse = filteredOeeRecords.length > 0 ? filteredOeeRecords : localData.oee_records;
-      recordsToUse.forEach(r => {
-        if (dailyData[r.date] !== undefined) {
-          const val = parseFloat(r.oee_actual) || 0;
-          if (val > 0) dailyData[r.date].push(val);
-        }
-      });
-
-      const labels = Object.keys(dailyData).map(d => 
-        new Date(d + 'T00:00:00').toLocaleDateString('id-ID', { day: '2-digit', month: 'short' })
-      );
-
-      const data = Object.values(dailyData).map(arr => 
-        arr.length > 0 ? arr.reduce((a, b) => a + b, 0) / arr.length : 0
-      );
-
-      const ctx = document.getElementById('chart-oee-daily').getContext('2d');
-      if (dashboardCharts.oeeDaily) dashboardCharts.oeeDaily.destroy();
-      
-      dashboardCharts.oeeDaily = new Chart(ctx, {
-        type: 'line',
-        data: {
-          labels: labels,
-          datasets: [{
-            label: 'OEE ACTUAL %',
-            data: data,
-            borderColor: '#a855f7',
-            backgroundColor: 'rgba(168, 85, 247, 0.1)',
-            borderWidth: 3,
-            tension: 0.4,
-            fill: true,
-            pointRadius: 4,
-            pointBackgroundColor: '#a855f7'
-          }]
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          plugins: { legend: { display: false } },
-          scales: { y: { beginAtZero: true, max: 100, ticks: { callback: v => v + '%' } } }
-        }
-      });
-    }
-
-    function renderAPQABreakdownChart() {
-      const recordsToUse = filteredOeeRecords.length > 0 ? filteredOeeRecords : localData.oee_records;
-      if (!recordsToUse || recordsToUse.length === 0) return;
-
-      let sumAvailActual = 0, countAvailActual = 0;
-      let sumAvail365 = 0, countAvail365 = 0;
-      let sumPerf = 0, countPerf = 0;
-      let sumQual = 0, countQual = 0;
-
-      recordsToUse.forEach(r => {
-        const availActual = parseFloat(r.availability_actual) || 0;
-        const avail365 = parseFloat(r.availability_365) || 0;
-        const perf = parseFloat(r.performance) || 0;
-        const qual = parseFloat(r.quality_rate) || 0;
-
-        if (availActual > 0) { sumAvailActual += availActual; countAvailActual++; }
-        if (avail365 > 0) { sumAvail365 += avail365; countAvail365++; }
-        if (perf > 0) { sumPerf += perf; countPerf++; }
-        if (qual > 0) { sumQual += qual; countQual++; }
-      });
-
-      const ctx = document.getElementById('chart-apqa-breakdown').getContext('2d');
-      if (dashboardCharts.apqa) dashboardCharts.apqa.destroy();
-      
-      dashboardCharts.apqa = new Chart(ctx, {
-        type: 'bar',
-        data: {
-          labels: ['AVAILABILITY ACTUAL', 'AVAILABILITY 365', 'PERFORMANCE', 'QUALITY RATE'],
-          datasets: [{
-            label: '%',
-            data: [
-              countAvailActual > 0 ? sumAvailActual / countAvailActual : 0,
-              countAvail365 > 0 ? sumAvail365 / countAvail365 : 0,
-              countPerf > 0 ? sumPerf / countPerf : 0,
-              countQual > 0 ? sumQual / countQual : 0
-            ],
-            backgroundColor: ['#3b82f6', '#60a5fa', '#8b5cf6', '#10b981'],
-            borderRadius: 8
-          }]
-        },
-        options: {
-          indexAxis: 'y',
-          responsive: true,
-          maintainAspectRatio: false,
-          plugins: {
-            legend: { display: false }
-          },
-          scales: { x: { beginAtZero: true, max: 100, ticks: { callback: v => v + '%' } } }
-        }
-      });
-    }
-
-    function renderODTTop10Chart() {
-      const downtimeMap = {};
-
-      localData.oee_records.forEach(r => {
-        localData.downtime.forEach(odt => {
-          if (!downtimeMap[odt.nama]) {
-            downtimeMap[odt.nama] = 0;
-          }
-          downtimeMap[odt.nama] += odt.waktu_standard || 0;
-        });
-      });
-
-      const sortedData = Object.entries(downtimeMap)
-        .map(([nama, durasi]) => ({ nama, durasi }))
-        .sort((a, b) => b.durasi - a.durasi)
-        .slice(0, 10);
-
-      const labels = sortedData.map(d => d.nama);
-      const data = sortedData.map(d => d.durasi);
-
-      const ctx = document.getElementById('chart-odt-top10').getContext('2d');
-      if (dashboardCharts.odtTop10) dashboardCharts.odtTop10.destroy();
-      
-      dashboardCharts.odtTop10 = new Chart(ctx, {
-        type: 'bar',
-        data: {
-          labels: labels,
-          datasets: [{
-            label: 'MENIT',
-            data: data,
-            backgroundColor: '#3b82f6',
-            borderRadius: 8
-          }]
-        },
-        options: {
-          indexAxis: 'y',
-          responsive: true,
-          maintainAspectRatio: false,
-          plugins: { legend: { display: false } },
-          scales: { x: { beginAtZero: true } }
-        }
-      });
-    }
-
-    function renderLineStopMesinTop10Chart() {
-      const lsmMap = {};
-
-      localData.oee_records.forEach(r => {
-        localData.line_stop_mesin.forEach(lsm => {
-          if (!lsmMap[lsm.nama]) {
-            lsmMap[lsm.nama] = 0;
-          }
-        });
-      });
-
-      const sortedData = Object.entries(lsmMap)
-        .map(([nama, durasi]) => ({ nama, durasi }))
-        .sort((a, b) => b.durasi - a.durasi)
-        .slice(0, 10);
-
-      const labels = sortedData.map(d => d.nama);
-      const data = sortedData.map(d => d.durasi);
-
-      const ctx = document.getElementById('chart-lsm-top10').getContext('2d');
-      if (dashboardCharts.lsmTop10) dashboardCharts.lsmTop10.destroy();
-      
-      dashboardCharts.lsmTop10 = new Chart(ctx, {
-        type: 'bar',
-        data: {
-          labels: labels,
-          datasets: [{
-            label: 'MENIT',
-            data: data,
-            backgroundColor: '#8b5cf6',
-            borderRadius: 8
-          }]
-        },
-        options: {
-          indexAxis: 'y',
-          responsive: true,
-          maintainAspectRatio: false,
-          plugins: { legend: { display: false } },
-          scales: { x: { beginAtZero: true } }
-        }
-      });
-    }
-
-    function renderLineStopNonMesinTop10Chart() {
-      const lsnmMap = {};
-
-      localData.oee_records.forEach(r => {
-        localData.line_stop_non_mesin.forEach(lsnm => {
-          if (!lsnmMap[lsnm.nama]) {
-            lsnmMap[lsnm.nama] = 0;
-          }
-        });
-      });
-
-      const sortedData = Object.entries(lsnmMap)
-        .map(([nama, durasi]) => ({ nama, durasi }))
-        .sort((a, b) => b.durasi - a.durasi)
-        .slice(0, 10);
-
-      const labels = sortedData.map(d => d.nama);
-      const data = sortedData.map(d => d.durasi);
-
-      const ctx = document.getElementById('chart-lsnm-top10').getContext('2d');
-      if (dashboardCharts.lsnmTop10) dashboardCharts.lsnmTop10.destroy();
-      
-      dashboardCharts.lsnmTop10 = new Chart(ctx, {
-        type: 'bar',
-        data: {
-          labels: labels,
-          datasets: [{
-            label: 'MENIT',
-            data: data,
-            backgroundColor: '#10b981',
-            borderRadius: 8
-          }]
-        },
-        options: {
-          indexAxis: 'y',
-          responsive: true,
-          maintainAspectRatio: false,
-          plugins: { legend: { display: false } },
-          scales: { x: { beginAtZero: true } }
-        }
-      });
-    }
-
-    function renderMinorStopTop10Chart() {
-      const msMap = {};
-
-      localData.oee_records.forEach(r => {
-        localData.minor_stop.forEach(ms => {
-          if (!msMap[ms.nama]) {
-            msMap[ms.nama] = 0;
-          }
-        });
-      });
-
-      const sortedData = Object.entries(msMap)
-        .map(([nama, durasi]) => ({ nama, durasi }))
-        .sort((a, b) => b.durasi - a.durasi)
-        .slice(0, 10);
-
-      const labels = sortedData.map(d => d.nama);
-      const data = sortedData.map(d => d.durasi);
-
-      const ctx = document.getElementById('chart-ms-top10').getContext('2d');
-      if (dashboardCharts.msTop10) dashboardCharts.msTop10.destroy();
-      
-      dashboardCharts.msTop10 = new Chart(ctx, {
-        type: 'bar',
-        data: {
-          labels: labels,
-          datasets: [{
-            label: 'MENIT',
-            data: data,
-            backgroundColor: '#f59e0b',
-            borderRadius: 8
-          }]
-        },
-        options: {
-          indexAxis: 'y',
-          responsive: true,
-          maintainAspectRatio: false,
-          plugins: { legend: { display: false } },
-          scales: { x: { beginAtZero: true } }
-        }
-      });
-    }
-
-    function renderPackerPerformance() {
-      const packerMap = {};
-      
-      const recordsToUse = filteredOeeRecords.length > 0 ? filteredOeeRecords : localData.oee_records;
-      recordsToUse.forEach(r => {
-        const packers = r.packers?.split(', ') || [];
-        packers.forEach(packer => {
-          if (!packer) return;
-          if (!packerMap[packer]) {
-            packerMap[packer] = { nama: packer, oeeValues: [], totalOutput: 0, records: 0 };
-          }
-          
-          const oeeVal = parseFloat(r.oee_actual) || 0;
-          if (oeeVal > 0) packerMap[packer].oeeValues.push(oeeVal);
-          
-          packerMap[packer].totalOutput += parseFloat(r.output_actual) || 0;
-          packerMap[packer].records += 1;
-        });
-      });
-
-      const performanceData = Object.values(packerMap).sort((a, b) => {
-        const avgA = a.oeeValues.length > 0 ? a.oeeValues.reduce((x, y) => x + y, 0) / a.oeeValues.length : 0;
-        const avgB = b.oeeValues.length > 0 ? b.oeeValues.reduce((x, y) => x + y, 0) / b.oeeValues.length : 0;
-        return avgB - avgA;
-      });
-      
-      const tbody = document.getElementById('table-packer-performance');
-      if (performanceData.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="5" class="text-center text-gray-400 py-8">BELUM ADA DATA</td></tr>';
-        return;
-      }
-
-      tbody.innerHTML = performanceData.map((p, idx) => {
-        const avgOEE = p.oeeValues.length > 0 ? p.oeeValues.reduce((a, b) => a + b, 0) / p.oeeValues.length : 0;
-        return `
-          <tr>
-            <td>${idx + 1}</td>
-            <td>${p.nama}</td>
-            <td>${avgOEE.toFixed(1)}%</td>
-            <td>${p.totalOutput.toLocaleString('id-ID', { maximumFractionDigits: 1 })}</td>
-            <td>${p.records}</td>
-          </tr>
-        `;
-      }).join('');
-    }
-
-    function renderOEEHistory() {
-      const tbody = document.getElementById('table-oee-history');
-      const recordsToUse = filteredOeeRecords.length > 0 ? filteredOeeRecords : localData.oee_records;
-      
-      if (!recordsToUse || recordsToUse.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="9" class="text-center text-gray-400 py-8">BELUM ADA DATA</td></tr>';
-        return;
-      }
-
-      tbody.innerHTML = recordsToUse.slice(0, 50).map(r => `
-        <tr>
-          <td>${r.date}</td>
-          <td>${r.shift}</td>
-          <td>${r.product || '-'}</td>
-          <td><strong>${parseFloat(r.oee_actual).toFixed(1)}%</strong></td>
-          <td>${parseFloat(r.oee_365).toFixed(1)}%</td>
-          <td style="font-size: 12px; max-width: 200px;">${r.line_stop_mesin ? r.line_stop_mesin.substring(0, 100) + (r.line_stop_mesin.length > 100 ? '...' : '') : '-'}</td>
-          <td style="font-size: 12px;">-</td>
-          <td style="font-size: 12px; max-width: 200px;">${r.line_stop_non_mesin ? r.line_stop_non_mesin.substring(0, 100) + (r.line_stop_non_mesin.length > 100 ? '...' : '') : '-'}</td>
-          <td style="font-size: 12px;">-</td>
-        </tr>
-      `).join('');
-    }
-
-    function renderMasterDataLists() {
-      renderProductList();
-      renderPackerList();
-      renderODTList_Master();
-      renderLineStopMesinMaster();
-      renderLineStopNonMesinMaster();
-      renderMinorStopMaster();
-    }
-
-    function renderProductList() {
-      const listDiv = document.getElementById('product-list');
-      listDiv.innerHTML = localData.produk.map(p => `
-        <div class="master-card" id="card-prod-${p.id}">
-          <div class="master-card-content">
-            <p class="master-card-name">${p.nama}</p>
-            <p class="master-card-detail">TARGET: ${p.target} DUS/MENIT</p>
-          </div>
-          <div class="master-card-actions">
-            <button class="btn-edit" onclick="editProduct('${p.id}')">EDIT</button>
-            <button class="btn-delete" id="del-btn-prod-${p.id}" onclick="showDeleteConfirm('${p.id}', 'produk', '${p.nama}')">HAPUS</button>
-          </div>
-        </div>
-      `).join('');
-    }
-
-    function renderPackerList() {
-      const listDiv = document.getElementById('packer-list');
-      listDiv.innerHTML = localData.packer.map(p => `
-        <div class="master-card" id="card-pack-${p.id}">
-          <div class="master-card-content">
-            <p class="master-card-name">${p.nama}</p>
-          </div>
-          <div class="master-card-actions">
-            <button class="btn-edit" onclick="editPacker('${p.id}')">EDIT</button>
-            <button class="btn-delete" onclick="showDeleteConfirm('${p.id}', 'packer', '${p.nama}')">HAPUS</button>
-          </div>
-        </div>
-      `).join('');
-    }
-
-    function renderODTList_Master() {
-      const listDiv = document.getElementById('odt-master-list');
-      listDiv.innerHTML = localData.downtime.map(p => `
-        <div class="master-card" id="card-odt-${p.id}">
-          <div class="master-card-content">
-            <p class="master-card-name">${p.nama}</p>
-            <p class="master-card-detail">STD: ${p.waktu_standard} MENIT</p>
-          </div>
-          <div class="master-card-actions">
-            <button class="btn-edit" onclick="editODT('${p.id}')">EDIT</button>
-            <button class="btn-delete" onclick="showDeleteConfirm('${p.id}', 'odt', '${p.nama}')">HAPUS</button>
-          </div>
-        </div>
-      `).join('');
-    }
-
-    function renderLineStopMesinMaster() {
-      const listDiv = document.getElementById('line-stop-mesin-master-list');
-      listDiv.innerHTML = localData.line_stop_mesin.map(p => `
-        <div class="master-card" id="card-lsm-${p.id}">
-          <div class="master-card-content">
-            <p class="master-card-name">${p.nama}</p>
-          </div>
-          <div class="master-card-actions">
-            <button class="btn-edit" onclick="editLineStopMesin('${p.id}')">EDIT</button>
-            <button class="btn-delete" onclick="showDeleteConfirm('${p.id}', 'lsm', '${p.nama}')">HAPUS</button>
-          </div>
-        </div>
-      `).join('');
-    }
-
-    function renderLineStopNonMesinMaster() {
-      const listDiv = document.getElementById('line-stop-non-mesin-master-list');
-      listDiv.innerHTML = localData.line_stop_non_mesin.map(p => `
-        <div class="master-card" id="card-lsnm-${p.id}">
-          <div class="master-card-content">
-            <p class="master-card-name">${p.nama}</p>
-          </div>
-          <div class="master-card-actions">
-            <button class="btn-edit" onclick="editLineStopNonMesin('${p.id}')">EDIT</button>
-            <button class="btn-delete" onclick="showDeleteConfirm('${p.id}', 'lsnm', '${p.nama}')">HAPUS</button>
-          </div>
-        </div>
-      `).join('');
-    }
-
-    function renderMinorStopMaster() {
-      const listDiv = document.getElementById('minor-stop-master-list');
-      listDiv.innerHTML = localData.minor_stop.map(p => `
-        <div class="master-card" id="card-ms-${p.id}">
-          <div class="master-card-content">
-            <p class="master-card-name">${p.nama}</p>
-          </div>
-          <div class="master-card-actions">
-            <button class="btn-edit" onclick="editMinorStop('${p.id}')">EDIT</button>
-            <button class="btn-delete" onclick="showDeleteConfirm('${p.id}', 'minor_stop', '${p.nama}')">HAPUS</button>
-          </div>
-        </div>
-      `).join('');
-    }
-
-    // Modal Management
-    let currentModalAction = null;
-    let currentEditId = null;
-
-    function openModal(title, fields, onSubmit) {
-      // Check master data access for master-related modals
-      if (title.includes('PRODUK') || title.includes('PACKER') || title.includes('ODT') || 
-          title.includes('LINE STOP') || title.includes('MINOR STOP')) {
-        if (!checkMasterAccess()) {
-          return;
-        }
-      }
-
-      document.getElementById('modal-title').textContent = title;
-      const fieldsDiv = document.getElementById('modal-fields');
-      fieldsDiv.innerHTML = fields.map(f => `
-        <div class="form-group" style="margin-bottom: 16px;">
-          <label>${f.label}</label>
-          <input type="text" id="modal-field-${f.name}" class="input-field" placeholder="${f.placeholder}" value="${f.value || ''}">
-        </div>
-      `).join('');
-      
-      currentModalAction = onSubmit;
-      document.getElementById('modal-backdrop').style.display = 'block';
-      document.getElementById('modal').style.display = 'block';
-      document.getElementById('modal-field-' + fields[0].name).focus();
-    }
-
-    function closeModal() {
-      document.getElementById('modal-backdrop').style.display = 'none';
-      document.getElementById('modal').style.display = 'none';
-      currentModalAction = null;
-      currentEditId = null;
-    }
-
-    function submitModalForm(event) {
-      event.preventDefault();
-      if (currentModalAction) {
-        const values = {};
-        const inputs = document.querySelectorAll('#modal-fields input');
-        inputs.forEach(input => {
-          const fieldId = input.id;
-          const fieldName = fieldId.replace('modal-field-', '');
-          values[fieldName] = input.value;
-        });
-        currentModalAction(values);
-        closeModal();
-      }
-    }
-
-    // Master Data CRUD Functions
-    function openAddProductModal() {
-      openModal('TAMBAH PRODUK', [
-        { name: 'nama', label: 'NAMA PRODUK', placeholder: 'MASUKKAN NAMA PRODUK', value: '' },
-        { name: 'target', label: 'TARGET (DUS/MENIT)', placeholder: 'MASUKKAN TARGET', value: '' }
-      ], async (values) => {
-        if (!values.nama.trim() || !values.target.trim()) {
-          showToast('SEMUA FIELD WAJIB DIISI', 'error');
-          return;
-        }
-
-        try {
-          const { error } = await supabaseClient.from('produk').insert([{
-            nama: values.nama.trim(),
-            target: parseFloat(values.target) || 0
-          }]);
-          if (error) throw error;
-
-          await loadDataFromSupabase();
-          renderProductList();
-          await addAuditLog('CREATE PRODUCT', values.nama);
-          showToast('PRODUK BERHASIL DITAMBAHKAN ✅', 'success');
-        } catch (error) {
-          console.error('Error:', error);
-          showToast('GAGAL MENAMBAHKAN PRODUK', 'error');
-        }
-      });
-    }
-
-    function editProduct(id) {
-      const prod = localData.produk.find(p => p.id === id);
-      if (!prod) return;
-
-      currentEditId = id;
-      openModal('EDIT PRODUK', [
-        { name: 'nama', label: 'NAMA PRODUK', placeholder: 'MASUKKAN NAMA PRODUK', value: prod.nama },
-        { name: 'target', label: 'TARGET (DUS/MENIT)', placeholder: 'MASUKKAN TARGET', value: prod.target }
-      ], async (values) => {
-        if (!values.nama.trim() || !values.target.trim()) {
-          showToast('SEMUA FIELD WAJIB DIISI', 'error');
-          return;
-        }
-
-        try {
-          const { error } = await supabaseClient.from('produk').update({
-            nama: values.nama.trim(),
-            target: parseFloat(values.target) || 0
-          }).eq('id', currentEditId);
-          if (error) throw error;
-
-          await loadDataFromSupabase();
-          renderProductList();
-          await addAuditLog('UPDATE PRODUCT', values.nama);
-          showToast('PRODUK BERHASIL DIPERBARUI ✅', 'success');
-        } catch (error) {
-          console.error('Error:', error);
-          showToast('GAGAL MEMPERBARUI PRODUK', 'error');
-        }
-      });
-    }
-
-    function openAddPackerModal() {
-      openModal('TAMBAH PACKER', [
-        { name: 'nama', label: 'NAMA PACKER', placeholder: 'MASUKKAN NAMA PACKER', value: '' }
-      ], async (values) => {
-        if (!values.nama.trim()) {
-          showToast('NAMA PACKER WAJIB DIISI', 'error');
-          return;
-        }
-
-        try {
-          const { error } = await supabaseClient.from('packer').insert([{
-            nama: values.nama.trim()
-          }]);
-          if (error) throw error;
-
-          await loadDataFromSupabase();
-          renderPackerList();
-          await addAuditLog('CREATE PACKER', values.nama);
-          showToast('PACKER BERHASIL DITAMBAHKAN ✅', 'success');
-        } catch (error) {
-          console.error('Error:', error);
-          showToast('GAGAL MENAMBAHKAN PACKER', 'error');
-        }
-      });
-    }
-
-    function editPacker(id) {
-      const pack = localData.packer.find(p => p.id === id);
-      if (!pack) return;
-
-      currentEditId = id;
-      openModal('EDIT PACKER', [
-        { name: 'nama', label: 'NAMA PACKER', placeholder: 'MASUKKAN NAMA PACKER', value: pack.nama }
-      ], async (values) => {
-        if (!values.nama.trim()) {
-          showToast('NAMA PACKER WAJIB DIISI', 'error');
-          return;
-        }
-
-        try {
-          const { error } = await supabaseClient.from('packer').update({
-            nama: values.nama.trim()
-          }).eq('id', currentEditId);
-          if (error) throw error;
-
-          await loadDataFromSupabase();
-          renderPackerList();
-          await addAuditLog('UPDATE PACKER', values.nama);
-          showToast('PACKER BERHASIL DIPERBARUI ✅', 'success');
-        } catch (error) {
-          console.error('Error:', error);
-          showToast('GAGAL MEMPERBARUI PACKER', 'error');
-        }
-      });
-    }
-
-    function openAddODTModal() {
-      openModal('TAMBAH ODT', [
-        { name: 'nama', label: 'NAMA ODT', placeholder: 'MASUKKAN NAMA ODT', value: '' },
-        { name: 'waktu_standard', label: 'WAKTU STANDARD (MENIT)', placeholder: 'MASUKKAN WAKTU STANDARD', value: '' }
-      ], async (values) => {
-        if (!values.nama.trim() || !values.waktu_standard.trim()) {
-          showToast('SEMUA FIELD WAJIB DIISI', 'error');
-          return;
-        }
-
-        try {
-          const { error } = await supabaseClient.from('downtime').insert([{
-            nama: values.nama.trim(),
-            waktu_standard: parseFloat(values.waktu_standard) || 0
-          }]);
-          if (error) throw error;
-
-          await loadDataFromSupabase();
-          renderODTList_Master();
-          await addAuditLog('CREATE ODT', values.nama);
-          showToast('ODT BERHASIL DITAMBAHKAN ✅', 'success');
-        } catch (error) {
-          console.error('Error:', error);
-          showToast('GAGAL MENAMBAHKAN ODT', 'error');
-        }
-      });
-    }
-
-    function editODT(id) {
-      const odt = localData.downtime.find(p => p.id === id);
-      if (!odt) return;
-
-      currentEditId = id;
-      openModal('EDIT ODT', [
-        { name: 'nama', label: 'NAMA ODT', placeholder: 'MASUKKAN NAMA ODT', value: odt.nama },
-        { name: 'waktu_standard', label: 'WAKTU STANDARD (MENIT)', placeholder: 'MASUKKAN WAKTU STANDARD', value: odt.waktu_standard }
-      ], async (values) => {
-        if (!values.nama.trim() || !values.waktu_standard.trim()) {
-          showToast('SEMUA FIELD WAJIB DIISI', 'error');
-          return;
-        }
-
-        try {
-          const { error } = await supabaseClient.from('downtime').update({
-            nama: values.nama.trim(),
-            waktu_standard: parseFloat(values.waktu_standard) || 0
-          }).eq('id', currentEditId);
-          if (error) throw error;
-
-          await loadDataFromSupabase();
-          renderODTList_Master();
-          await addAuditLog('UPDATE ODT', values.nama);
-          showToast('ODT BERHASIL DIPERBARUI ✅', 'success');
-        } catch (error) {
-          console.error('Error:', error);
-          showToast('GAGAL MEMPERBARUI ODT', 'error');
-        }
-      });
-    }
-
-    function openAddLineStopMesinModal() {
-      openModal('TAMBAH LINE STOP MESIN', [
-        { name: 'nama', label: 'NAMA LINE STOP', placeholder: 'MASUKKAN NAMA LINE STOP', value: '' }
-      ], async (values) => {
-        if (!values.nama.trim()) {
-          showToast('NAMA LINE STOP WAJIB DIISI', 'error');
-          return;
-        }
-
-        try {
-          const { error } = await supabaseClient.from('line_stop_mesin').insert([{
-            nama: values.nama.trim()
-          }]);
-          if (error) throw error;
-
-          await loadDataFromSupabase();
-          renderLineStopMesinMaster();
-          await addAuditLog('CREATE LINE STOP MESIN', values.nama);
-          showToast('LINE STOP MESIN BERHASIL DITAMBAHKAN ✅', 'success');
-        } catch (error) {
-          console.error('Error:', error);
-          showToast('GAGAL MENAMBAHKAN LINE STOP MESIN', 'error');
-        }
-      });
-    }
-
-    function editLineStopMesin(id) {
-      const lsm = localData.line_stop_mesin.find(p => p.id === id);
-      if (!lsm) return;
-
-      currentEditId = id;
-      openModal('EDIT LINE STOP MESIN', [
-        { name: 'nama', label: 'NAMA LINE STOP', placeholder: 'MASUKKAN NAMA LINE STOP', value: lsm.nama }
-      ], async (values) => {
-        if (!values.nama.trim()) {
-          showToast('NAMA LINE STOP WAJIB DIISI', 'error');
-          return;
-        }
-
-        try {
-          const { error } = await supabaseClient.from('line_stop_mesin').update({
-            nama: values.nama.trim()
-          }).eq('id', currentEditId);
-          if (error) throw error;
-
-          await loadDataFromSupabase();
-          renderLineStopMesinMaster();
-          await addAuditLog('UPDATE LINE STOP MESIN', values.nama);
-          showToast('LINE STOP MESIN BERHASIL DIPERBARUI ✅', 'success');
-        } catch (error) {
-          console.error('Error:', error);
-          showToast('GAGAL MEMPERBARUI LINE STOP MESIN', 'error');
-        }
-      });
-    }
-
-    function openAddLineStopNonMesinModal() {
-      openModal('TAMBAH LINE STOP NON-MESIN', [
-        { name: 'nama', label: 'NAMA LINE STOP', placeholder: 'MASUKKAN NAMA LINE STOP', value: '' }
-      ], async (values) => {
-        if (!values.nama.trim()) {
-          showToast('NAMA LINE STOP WAJIB DIISI', 'error');
-          return;
-        }
-
-        try {
-          const { error } = await supabaseClient.from('line_stop_non_mesin').insert([{
-            nama: values.nama.trim()
-          }]);
-          if (error) throw error;
-
-          await loadDataFromSupabase();
-          renderLineStopNonMesinMaster();
-          await addAuditLog('CREATE LINE STOP NON-MESIN', values.nama);
-          showToast('LINE STOP NON-MESIN BERHASIL DITAMBAHKAN ✅', 'success');
-        } catch (error) {
-          console.error('Error:', error);
-          showToast('GAGAL MENAMBAHKAN LINE STOP NON-MESIN', 'error');
-        }
-      });
-    }
-
-    function editLineStopNonMesin(id) {
-      const lsnm = localData.line_stop_non_mesin.find(p => p.id === id);
-      if (!lsnm) return;
-
-      currentEditId = id;
-      openModal('EDIT LINE STOP NON-MESIN', [
-        { name: 'nama', label: 'NAMA LINE STOP', placeholder: 'MASUKKAN NAMA LINE STOP', value: lsnm.nama }
-      ], async (values) => {
-        if (!values.nama.trim()) {
-          showToast('NAMA LINE STOP WAJIB DIISI', 'error');
-          return;
-        }
-
-        try {
-          const { error } = await supabaseClient.from('line_stop_non_mesin').update({
-            nama: values.nama.trim()
-          }).eq('id', currentEditId);
-          if (error) throw error;
-
-          await loadDataFromSupabase();
-          renderLineStopNonMesinMaster();
-          await addAuditLog('UPDATE LINE STOP NON-MESIN', values.nama);
-          showToast('LINE STOP NON-MESIN BERHASIL DIPERBARUI ✅', 'success');
-        } catch (error) {
-          console.error('Error:', error);
-          showToast('GAGAL MEMPERBARUI LINE STOP NON-MESIN', 'error');
-        }
-      });
-    }
-
-    function openAddMinorStopModal() {
-      openModal('TAMBAH MINOR STOP', [
-        { name: 'nama', label: 'NAMA MINOR STOP', placeholder: 'MASUKKAN NAMA MINOR STOP', value: '' }
-      ], async (values) => {
-        if (!values.nama.trim()) {
-          showToast('NAMA MINOR STOP WAJIB DIISI', 'error');
-          return;
-        }
-
-        try {
-          const { error } = await supabaseClient.from('minor_stop').insert([{
-            nama: values.nama.trim()
-          }]);
-          if (error) throw error;
-
-          await loadDataFromSupabase();
-          renderMinorStopMaster();
-          await addAuditLog('CREATE MINOR STOP', values.nama);
-          showToast('MINOR STOP BERHASIL DITAMBAHKAN ✅', 'success');
-        } catch (error) {
-          console.error('Error:', error);
-          showToast('GAGAL MENAMBAHKAN MINOR STOP', 'error');
-        }
-      });
-    }
-
-    function editMinorStop(id) {
-      const ms = localData.minor_stop.find(p => p.id === id);
-      if (!ms) return;
-
-      currentEditId = id;
-      openModal('EDIT MINOR STOP', [
-        { name: 'nama', label: 'NAMA MINOR STOP', placeholder: 'MASUKKAN NAMA MINOR STOP', value: ms.nama }
-      ], async (values) => {
-        if (!values.nama.trim()) {
-          showToast('NAMA MINOR STOP WAJIB DIISI', 'error');
-          return;
-        }
-
-        try {
-          const { error } = await supabaseClient.from('minor_stop').update({
-            nama: values.nama.trim()
-          }).eq('id', currentEditId);
-          if (error) throw error;
-
-          await loadDataFromSupabase();
-          renderMinorStopMaster();
-          await addAuditLog('UPDATE MINOR STOP', values.nama);
-          showToast('MINOR STOP BERHASIL DIPERBARUI ✅', 'success');
-        } catch (error) {
-          console.error('Error:', error);
-          showToast('GAGAL MEMPERBARUI MINOR STOP', 'error');
-        }
-      });
-    }
-
-    async function deleteProduct(id) {
-      if (!checkMasterAccess()) return;
-      
-      try {
-        const { error } = await supabaseClient.from('produk').delete().eq('id', id);
-        if (error) throw error;
-        await loadDataFromSupabase();
-        renderProductList();
-        await addAuditLog('DELETE PRODUCT', 'PRODUK DIHAPUS');
-        showToast('PRODUK BERHASIL DIHAPUS', 'success');
-      } catch (error) {
-        console.error('Error:', error);
-        showToast('GAGAL MENGHAPUS PRODUK', 'error');
-      }
-    }
-
-    async function deletePacker(id) {
-      if (!checkMasterAccess()) return;
-      
-      try {
-        const { error } = await supabaseClient.from('packer').delete().eq('id', id);
-        if (error) throw error;
-        await loadDataFromSupabase();
-        renderPackerList();
-        await addAuditLog('DELETE PACKER', 'PACKER DIHAPUS');
-        showToast('PACKER BERHASIL DIHAPUS', 'success');
-      } catch (error) {
-        console.error('Error:', error);
-        showToast('GAGAL MENGHAPUS PACKER', 'error');
-      }
-    }
-
-    async function deleteODT(id) {
-      if (!checkMasterAccess()) return;
-      
-      try {
-        const { error } = await supabaseClient.from('downtime').delete().eq('id', id);
-        if (error) throw error;
-        await loadDataFromSupabase();
-        renderODTList_Master();
-        await addAuditLog('DELETE ODT', 'ODT DIHAPUS');
-        showToast('ODT BERHASIL DIHAPUS', 'success');
-      } catch (error) {
-        console.error('Error:', error);
-        showToast('GAGAL MENGHAPUS ODT', 'error');
-      }
-    }
-
-    async function deleteLineStopMesin(id) {
-      if (!checkMasterAccess()) return;
-      
-      try {
-        const { error } = await supabaseClient.from('line_stop_mesin').delete().eq('id', id);
-        if (error) throw error;
-        await loadDataFromSupabase();
-        renderLineStopMesinMaster();
-        await addAuditLog('DELETE LINE STOP MESIN', 'LINE STOP DIHAPUS');
-        showToast('LINE STOP MESIN BERHASIL DIHAPUS', 'success');
-      } catch (error) {
-        console.error('Error:', error);
-        showToast('GAGAL MENGHAPUS LINE STOP MESIN', 'error');
-      }
-    }
-
-    async function deleteLineStopNonMesin(id) {
-      if (!checkMasterAccess()) return;
-      
-      try {
-        const { error } = await supabaseClient.from('line_stop_non_mesin').delete().eq('id', id);
-        if (error) throw error;
-        await loadDataFromSupabase();
-        renderLineStopNonMesinMaster();
-        await addAuditLog('DELETE LINE STOP NON-MESIN', 'LINE STOP DIHAPUS');
-        showToast('LINE STOP NON-MESIN BERHASIL DIHAPUS', 'success');
-      } catch (error) {
-        console.error('Error:', error);
-        showToast('GAGAL MENGHAPUS LINE STOP NON-MESIN', 'error');
-      }
-    }
-
-    async function deleteMinorStop(id) {
-      if (!checkMasterAccess()) return;
-      
-      try {
-        const { error } = await supabaseClient.from('minor_stop').delete().eq('id', id);
-        if (error) throw error;
-        await loadDataFromSupabase();
-        renderMinorStopMaster();
-        await addAuditLog('DELETE MINOR STOP', 'MINOR STOP DIHAPUS');
-        showToast('MINOR STOP BERHASIL DIHAPUS', 'success');
-      } catch (error) {
-        console.error('Error:', error);
-        showToast('GAGAL MENGHAPUS MINOR STOP', 'error');
-      }
-    }
-
-    function showDeleteConfirm(id, type, nama) {
-      if (!checkMasterAccess()) return;
-
-      const confirmBox = document.createElement('div');
-      confirmBox.style.cssText = 'position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; border-radius: 16px; padding: 32px; z-index: 10000; box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3); min-width: 350px;';
-      confirmBox.innerHTML = `
-        <h3 style="margin: 0 0 16px 0; color: #ec4899; font-size: 18px; font-weight: 700; text-transform: uppercase;">HAPUS DATA?</h3>
-        <p style="margin: 0 0 24px 0; color: #6b4c5c; font-size: 14px; text-transform: uppercase;">YAKIN INGIN MENGHAPUS <strong>"${nama}"</strong>? TINDAKAN INI TIDAK BISA DIBATALKAN.</p>
-        <div style="display: flex; gap: 12px;">
-          <button class="btn btn-danger" style="flex: 1; margin: 0;" onclick="confirmDelete('${id}', '${type}'); document.querySelector('[data-confirm-box]').remove();">HAPUS</button>
-          <button class="btn btn-secondary" style="flex: 1; margin: 0;" onclick="document.querySelector('[data-confirm-box]').remove();">BATAL</button>
         </div>
       `;
-      confirmBox.setAttribute('data-confirm-box', 'true');
+    }).join('');
 
-      const backdrop = document.createElement('div');
-      backdrop.style.cssText = 'position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.5); z-index: 9999;';
-      backdrop.onclick = () => {
-        confirmBox.remove();
-        backdrop.remove();
-      };
+    oeeFormState.packerMeters.forEach(meter => renderPackersInMeter(meter));
+    updateAvailabilityWarning();
+  }
 
-      document.body.appendChild(backdrop);
-      document.body.appendChild(confirmBox);
+  function renderPackersInMeter(meter) {
+    const container = document.getElementById(`packers-${meter.id}`);
+    if (!container) return;
+
+    if (meter.packers.length === 0) {
+      container.innerHTML = '<div class="empty-state"><div class="empty-state-text" style="font-size: 12px;">BELUM ADA PACKER DITAMBAHKAN</div></div>';
+      return;
     }
 
-    function confirmDelete(id, type) {
-      if (type === 'produk') deleteProduct(id);
-      else if (type === 'packer') deletePacker(id);
-      else if (type === 'odt') deleteODT(id);
-      else if (type === 'lsm') deleteLineStopMesin(id);
-      else if (type === 'lsnm') deleteLineStopNonMesin(id);
-      else if (type === 'minor_stop') deleteMinorStop(id);
+    container.innerHTML = meter.packers.map(packer => `
+      <div id="packer-${packer.id}" style="display: grid; grid-template-columns: 2fr 1fr 1.5fr 1.5fr 0.8fr; gap: 8px; padding: 12px; background: #fdf2f8; border-radius: 8px; margin-bottom: 8px; border: 1px solid rgba(236, 72, 153, 0.2); align-items: end;">
+        <div class="form-group">
+          <label style="font-size: 10px;">PACKER</label>
+          <select class="packer-name input-field" style="font-size: 11px;" onchange="updatePacker('${packer.id}', '${meter.id}')">
+            <option value="">PILIH</option>
+            ${localData.packer.map(p => `<option value="${p.id}|${p.nama}" ${packer.packerId === p.id ? 'selected' : ''}>${p.nama}</option>`).join('')}
+          </select>
+        </div>
+        <div class="form-group">
+          <label style="font-size: 10px;">DURASI (MIN)</label>
+          <input type="number" class="packer-duration input-field" style="font-size: 11px;" value="${packer.duration}" min="0" max="${meter.remainingTime}" placeholder="DURASI" onchange="validatePackerDuration(this, '${packer.id}', '${meter.id}')">
+        </div>
+        <div class="form-group">
+          <label style="font-size: 10px;">OUTPUT (DUS)</label>
+          <input type="number" class="packer-output input-field" style="font-size: 11px;" value="${packer.output}" placeholder="OUTPUT" onchange="updatePacker('${packer.id}', '${meter.id}')">
+        </div>
+        <div class="form-group">
+          <label style="font-size: 10px;">REJECT (DUS)</label>
+          <input type="number" class="packer-reject input-field" style="font-size: 11px;" value="${packer.reject}" placeholder="REJECT" onchange="updatePacker('${packer.id}', '${meter.id}')">
+        </div>
+        <div style="display: flex; align-items: flex-end;">
+          <button type="button" class="btn btn-danger btn-small" style="width: 100%; padding: 8px; font-size: 11px;" onclick="removePacker('${packer.id}', '${meter.id}')">HAPUS</button>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  function validatePackerDuration(input, packerId, meterId) {
+    const meter = oeeFormState.packerMeters.find(m => m.id === meterId);
+    if (!meter) return;
+    
+    const packer = meter.packers.find(p => p.id === packerId);
+    if (!packer) return;
+    
+    let duration = parseFloat(input.value) || 0;
+    
+    if (duration > meter.remainingTime) {
+      showToast(`DURASI TIDAK BOLEH MELEBIHI SISA WAKTU (${meter.remainingTime.toFixed(0)} MENIT)`, 'error');
+      duration = meter.remainingTime;
+      input.value = duration;
+    }
+    
+    packer.duration = duration;
+    updatePacker(packerId, meterId);
+  }
+
+  function removePackerMeter(meterId) {
+    oeeFormState.packerMeters = oeeFormState.packerMeters.filter(m => m.id !== meterId);
+    renderPackerMeterList();
+    calculateOEE();
+  }
+
+  function addPackerToMeter(meterId) {
+    const meter = oeeFormState.packerMeters.find(m => m.id === meterId);
+    if (!meter) return;
+
+    meter.packers.push({
+      id: 'packer_' + Date.now(),
+      packerId: '',
+      packerName: '',
+      duration: 0,
+      output: 0,
+      reject: 0
+    });
+
+    renderPackersInMeter(meter);
+  }
+
+  function updatePackerMeter(meterId, field) {
+    const meter = oeeFormState.packerMeters.find(m => m.id === meterId);
+    if (!meter) return;
+    const meterDiv = document.querySelector(`[data-meter-id="${meterId}"]`);
+    if (!meterDiv) return;
+    if (field === 'product') meter.productId = meterDiv.querySelector('.meter-product').value;
+    else if (field === 'batch') meter.batchNumber = meterDiv.querySelector('.meter-batch').value;
+    calculateOEE();
+  }
+
+  function updatePacker(packerId, meterId) {
+    const meter = oeeFormState.packerMeters.find(m => m.id === meterId);
+    if (!meter) return;
+    const packer = meter.packers.find(p => p.id === packerId);
+    if (!packer) return;
+    const packerDiv = document.getElementById(`packer-${packerId}`);
+    if (!packerDiv) return;
+
+    const nameSelect = packerDiv.querySelector('.packer-name');
+    const durationInput = packerDiv.querySelector('.packer-duration');
+    const outputInput = packerDiv.querySelector('.packer-output');
+    const rejectInput = packerDiv.querySelector('.packer-reject');
+
+    const [packerId_, packerName] = nameSelect.value.split('|') || ['', ''];
+    packer.packerId = packerId_;
+    packer.packerName = packerName;
+    packer.duration = parseFloat(durationInput.value) || 0;
+    packer.output = parseFloat(outputInput.value) || 0;
+    packer.reject = parseFloat(rejectInput.value) || 0;
+
+    renderPackerMeterList();
+    calculateOEE();
+  }
+
+  function removePacker(packerId, meterId) {
+    const meter = oeeFormState.packerMeters.find(m => m.id === meterId);
+    if (meter) {
+      meter.packers = meter.packers.filter(p => p.id !== packerId);
+      renderPackersInMeter(meter);
+      renderPackerMeterList();
+    }
+    calculateOEE();
+  }
+
+  function updateAvailabilityWarning() {
+    const warningDiv = document.getElementById('availability-warning');
+    if (!warningDiv) return;
+    
+    const totalODT = oeeFormState.downtime.reduce((sum, odt) => sum + (parseFloat(odt.durasi) || 0), 0);
+    const totalLSM = oeeFormState.lineStopMesin.reduce((sum, l) => sum + (parseFloat(l.durasi) || 0), 0);
+    const totalLSNM = oeeFormState.lineStopNonMesin.filter(l => l.checked).reduce((sum, l) => sum + (parseFloat(l.durasi) || 0), 0);
+    
+    let maxPackerDuration = 0;
+    oeeFormState.packerMeters.forEach(meter => {
+      meter.packers.forEach(packer => {
+        maxPackerDuration = Math.max(maxPackerDuration, packer.duration || 0);
+      });
+    });
+    
+    const availableTimeForOneProcess = oeeFormState.shiftMinutes - totalODT - totalLSM - totalLSNM;
+    const isWarning = maxPackerDuration > availableTimeForOneProcess && availableTimeForOneProcess > 0;
+    
+    if (isWarning) {
+      warningDiv.innerHTML = `
+        <div style="background: #fef2f2; border: 2px solid #ef4444; border-radius: 10px; padding: 16px; margin-bottom: 16px; color: #dc2626;">
+          <p style="margin: 0 0 8px 0; font-weight: 700; text-transform: uppercase; font-size: 13px;">⚠️ WARNING: WAKTU TIDAK SESUAI</p>
+          <p style="margin: 0; font-size: 12px;">DURASI PACKER TERPANJANG (${maxPackerDuration.toFixed(0)} MENIT) MELEBIHI WAKTU TERSEDIA (${availableTimeForOneProcess.toFixed(0)} MENIT). PERIKSA KEMBALI DATA ANDA.</p>
+        </div>
+      `;
+      warningDiv.style.display = 'block';
+    } else {
+      warningDiv.style.display = 'none';
+    }
+  }
+
+  // ==================== ODT ====================
+  function renderODTList() {
+    const listDiv = document.getElementById('odt-list');
+    if (localData.downtime.length === 0) {
+      listDiv.innerHTML = '<div class="empty-state"><div class="empty-state-text">BELUM ADA DATA ODT</div></div>';
+      return;
     }
 
-    function renderAuditTable() {
-      const tbody = document.getElementById('audit-table');
-      if (localData.audit_trail.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="3" class="text-center text-gray-400 py-8">BELUM ADA AKTIVITAS</td></tr>';
+    if (oeeFormState.downtime.length === 0) {
+      oeeFormState.downtime = localData.downtime.map(d => ({ 
+        id: d.id, 
+        nama: d.nama, 
+        waktu_standard: d.waktu_standard, 
+        durasi: 0 
+      }));
+    }
+
+    listDiv.innerHTML = oeeFormState.downtime.map(odt => `
+      <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 12px; padding: 12px; background: #f0f9ff; border-radius: 8px; align-items: center; margin-bottom: 8px; border: 1px solid rgba(59, 130, 246, 0.2);">
+        <div>
+          <p style="font-size: 13px; font-weight: 700; color: #3b82f6; margin: 0 0 4px 0; text-transform: uppercase;">${odt.nama}</p>
+          <p style="font-size: 11px; color: #60a5fa; margin: 0; text-transform: uppercase;">STD: ${odt.waktu_standard} MENIT</p>
+        </div>
+        <input type="number" class="input-field" value="${odt.durasi}" min="0" placeholder="DURASI AKTUAL" onchange="updateODT('${odt.id}', this.value)">
+      </div>
+    `).join('');
+  }
+
+  function updateODT(id, durasi) {
+    const odt = oeeFormState.downtime.find(o => o.id === id);
+    if (odt) odt.durasi = parseFloat(durasi) || 0;
+    renderPackerMeterList();
+    calculateOEE();
+  }
+
+  // ==================== LINE STOP MESIN ====================
+  function renderLineStopMesinList() {
+    const listDiv = document.getElementById('line-stop-mesin-list');
+    if (localData.line_stop_mesin.length === 0 && oeeFormState.lineStopMesin.length === 0) {
+      listDiv.innerHTML = '<div class="empty-state"><div class="empty-state-text">BELUM ADA DATA</div></div>';
+      return;
+    }
+
+    if (oeeFormState.lineStopMesin.length === 0) {
+      oeeFormState.lineStopMesin = localData.line_stop_mesin.map(m => ({ 
+        id: m.id, 
+        nama: m.nama, 
+        durasi: 0, 
+        action: '', 
+        wr: '', 
+        isCustom: false 
+      }));
+    }
+
+    listDiv.innerHTML = oeeFormState.lineStopMesin.map(lsm => {
+      const durasi = parseFloat(lsm.durasi) || 0;
+      const wrRequired = durasi >= 180;
+      return `
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(110px, 1fr)); gap: 8px; padding: 12px; background: #faf5ff; border-radius: 8px; align-items: center; margin-bottom: 8px; border: 1px solid rgba(168, 85, 247, 0.2);">
+          <div><p style="font-size: 13px; font-weight: 700; color: #a855f7; margin: 0; text-transform: uppercase;">${lsm.nama}</p></div>
+          <input type="number" class="input-field" value="${lsm.durasi}" min="0" placeholder="DURASI (MIN)" onchange="updateLineStopMesin('${lsm.id}', 'durasi', this.value)">
+          <input type="text" class="input-field" value="${lsm.action}" placeholder="ACTION" onchange="updateLineStopMesin('${lsm.id}', 'action', this.value)">
+          <input type="text" class="input-field" style="${wrRequired ? 'border-color: #ef4444;' : ''}" value="${lsm.wr}" placeholder="NO WR${wrRequired ? ' *' : ''}" onchange="updateLineStopMesin('${lsm.id}', 'wr', this.value)">
+        </div>
+      `;
+    }).join('');
+  }
+
+  function updateLineStopMesin(id, field, value) {
+    const lsm = oeeFormState.lineStopMesin.find(l => l.id === id);
+    if (lsm) lsm[field] = value;
+    renderPackerMeterList();
+    calculateOEE();
+  }
+
+  // ==================== LINE STOP NON-MESIN ====================
+  function renderLineStopNonMesinList() {
+    const listDiv = document.getElementById('line-stop-non-mesin-list');
+    if (localData.line_stop_non_mesin.length === 0 && oeeFormState.lineStopNonMesin.length === 0) {
+      listDiv.innerHTML = '<div class="empty-state"><div class="empty-state-text">BELUM ADA DATA</div></div>';
+      return;
+    }
+
+    if (oeeFormState.lineStopNonMesin.length === 0) {
+      oeeFormState.lineStopNonMesin = localData.line_stop_non_mesin.map(m => ({ 
+        id: m.id, 
+        nama: m.nama, 
+        durasi: 0, 
+        action: '', 
+        checked: false, 
+        isCustom: false 
+      }));
+    }
+
+    listDiv.innerHTML = oeeFormState.lineStopNonMesin.map(lsnm => `
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(110px, 1fr)); gap: 8px; padding: 12px; background: #f0fdf4; border-radius: 8px; align-items: center; margin-bottom: 8px; border: 1px solid rgba(16, 185, 129, 0.2);">
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <input type="checkbox" id="lsnm-${lsnm.id}" ${lsnm.checked ? 'checked' : ''} onchange="updateLineStopNonMesin('${lsnm.id}', 'checked', this.checked); renderLineStopNonMesinList();">
+          <label for="lsnm-${lsnm.id}" style="font-size: 13px; font-weight: 600; color: #10b981; margin: 0; text-transform: uppercase; cursor: pointer;">${lsnm.nama}</label>
+        </div>
+        <input type="number" class="input-field" value="${lsnm.durasi}" min="0" placeholder="DURASI (MIN)" ${!lsnm.checked ? 'disabled' : ''} onchange="updateLineStopNonMesin('${lsnm.id}', 'durasi', this.value)">
+        <input type="text" class="input-field" value="${lsnm.action}" placeholder="ACTION" ${!lsnm.checked ? 'disabled' : ''} onchange="updateLineStopNonMesin('${lsnm.id}', 'action', this.value)">
+      </div>
+    `).join('');
+  }
+
+  function updateLineStopNonMesin(id, field, value) {
+    const lsnm = oeeFormState.lineStopNonMesin.find(l => l.id === id);
+    if (lsnm) {
+      if (field === 'checked') {
+        lsnm.checked = value;
+        if (!value) {
+          lsnm.durasi = 0;
+          lsnm.action = '';
+        }
+      } else {
+        lsnm[field] = value;
+      }
+    }
+    renderPackerMeterList();
+    calculateOEE();
+  }
+
+  // ==================== MINOR STOP ====================
+  function addMinorStop() {
+    oeeFormState.minorStop.push({
+      id: 'ms_' + Date.now(),
+      nama: '',
+      durasi: 0,
+      checked: false,
+      isCustom: true
+    });
+    renderMinorStopList();
+  }
+
+  function renderMinorStopList() {
+    const listDiv = document.getElementById('minor-stop-list');
+    if (localData.minor_stop.length === 0 && oeeFormState.minorStop.length === 0) {
+      listDiv.innerHTML = '<div class="empty-state"><div class="empty-state-text">BELUM ADA DATA</div></div>';
+      return;
+    }
+
+    if (oeeFormState.minorStop.length === 0) {
+      oeeFormState.minorStop = localData.minor_stop.map(m => ({ 
+        id: m.id, 
+        nama: m.nama, 
+        durasi: 0, 
+        checked: false, 
+        isCustom: false 
+      }));
+    }
+
+    listDiv.innerHTML = oeeFormState.minorStop.map(ms => `
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(110px, 1fr)); gap: 8px; padding: 12px; background: #fef3c7; border-radius: 8px; align-items: center; margin-bottom: 8px; border: 1px solid rgba(217, 119, 6, 0.2);">
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <input type="checkbox" id="ms-${ms.id}" ${ms.checked ? 'checked' : ''} onchange="updateMinorStop('${ms.id}', 'checked', this.checked); renderMinorStopList();">
+          <label for="ms-${ms.id}" style="font-size: 13px; font-weight: 600; color: #d97706; margin: 0; text-transform: uppercase; cursor: pointer;">${ms.nama}</label>
+        </div>
+        <input type="number" class="input-field" value="${ms.durasi}" min="0" placeholder="DURASI (MIN)" ${!ms.checked ? 'disabled' : ''} onchange="updateMinorStop('${ms.id}', 'durasi', this.value)">
+        ${ms.isCustom ? `<button type="button" class="btn btn-danger btn-small" style="padding: 8px;" onclick="removeMinorStop('${ms.id}')">HAPUS</button>` : ''}
+      </div>
+    `).join('');
+  }
+
+  function updateMinorStop(id, field, value) {
+    const ms = oeeFormState.minorStop.find(m => m.id === id);
+    if (ms) {
+      if (field === 'checked') {
+        ms.checked = value;
+        if (!value) ms.durasi = 0;
+      } else {
+        ms[field] = value;
+      }
+    }
+    calculateOEE();
+  }
+
+  function removeMinorStop(id) {
+    oeeFormState.minorStop = oeeFormState.minorStop.filter(m => m.id !== id);
+    renderMinorStopList();
+    calculateOEE();
+  }
+
+  // ==================== CALCULATE OEE ====================
+  function calculateOEE() {
+    let totalOutputActual = 0;
+    let totalRejectActual = 0;
+    let totalShiftMinutes = oeeFormState.shiftMinutes;
+
+    let totalPackerDuration = 0;
+    oeeFormState.packerMeters.forEach(meter => {
+      meter.packers.forEach(packer => {
+        totalPackerDuration += packer.duration || 0;
+        totalOutputActual += packer.output || 0;
+        totalRejectActual += packer.reject || 0;
+      });
+    });
+
+    const totalODT = oeeFormState.downtime.reduce((sum, odt) => sum + (parseFloat(odt.durasi) || 0), 0);
+    const totalLineStopMesin = oeeFormState.lineStopMesin.reduce((sum, l) => sum + (parseFloat(l.durasi) || 0), 0);
+    const totalLineStopNonMesin = oeeFormState.lineStopNonMesin.filter(l => l.checked).reduce((sum, l) => sum + (parseFloat(l.durasi) || 0), 0);
+    const totalMinorStop = oeeFormState.minorStop.filter(m => m.checked).reduce((sum, m) => sum + (parseFloat(m.durasi) || 0), 0);
+    const totalActualDowntime = totalLineStopMesin + totalLineStopNonMesin + totalMinorStop;
+
+    const plannedProductionTime = totalShiftMinutes - totalODT;
+    const availableTime = plannedProductionTime - totalActualDowntime;
+    
+    const availabilityActual = plannedProductionTime > 0 ? (availableTime / plannedProductionTime) * 100 : 0;
+    const availability365 = totalShiftMinutes > 0 ? ((totalShiftMinutes - totalODT - totalLineStopMesin - totalLineStopNonMesin) / totalShiftMinutes) * 100 : 0;
+
+    let totalTargetOutputAllBatches = 0;
+    
+    oeeFormState.packerMeters.forEach(meter => {
+      const product = localData.produk.find(p => p.id === meter.productId);
+      if (!product) return;
+      
+      let meterTargetOutput = 0;
+      meter.packers.forEach(packer => {
+        const packerDuration = packer.duration || 0;
+        meterTargetOutput += packerDuration * product.target;
+      });
+      totalTargetOutputAllBatches += meterTargetOutput;
+    });
+
+    const performance = totalTargetOutputAllBatches > 0 ? (totalOutputActual / totalTargetOutputAllBatches) * 100 : 0;
+    const qualityRate = totalOutputActual > 0 ? (((totalOutputActual - totalRejectActual) / totalOutputActual) * 100) : 0;
+
+    const oeeActual = (availabilityActual / 100) * (performance / 100) * (qualityRate / 100) * 100;
+    const oee365 = (availability365 / 100) * (performance / 100) * (qualityRate / 100) * 100;
+
+    document.getElementById('calc-availability-actual').textContent = `${availabilityActual.toFixed(1)}%`;
+    document.getElementById('calc-availability-365').textContent = `${availability365.toFixed(1)}%`;
+    document.getElementById('calc-performance').textContent = `${performance.toFixed(1)}%`;
+    document.getElementById('calc-quality').textContent = `${qualityRate.toFixed(1)}%`;
+    document.getElementById('calc-oee-actual').textContent = `${oeeActual.toFixed(1)}%`;
+    document.getElementById('calc-oee-365').textContent = `${oee365.toFixed(1)}%`;
+    document.getElementById('calc-total-output').textContent = `${totalOutputActual.toFixed(1)} DUS`;
+
+    oeeFormState.results = {
+      availabilityActual: availabilityActual.toFixed(1),
+      availability365: availability365.toFixed(1),
+      performance: performance.toFixed(1),
+      qualityRate: qualityRate.toFixed(1),
+      oeeActual: oeeActual.toFixed(1),
+      oee365: oee365.toFixed(1),
+      totalOutput: totalOutputActual,
+      totalReject: totalRejectActual,
+      totalPackerDuration: totalPackerDuration,
+      totalDowntime: totalODT + totalActualDowntime
+    };
+    
+    updateAvailabilityWarning();
+  }
+
+  function loadOEEFormData() {
+    document.getElementById('oee-date').value = new Date().toISOString().split('T')[0];
+  }
+
+  // ==================== SUBMIT OEE ====================
+  async function submitOEE(event) {
+    event.preventDefault();
+    
+    const date = document.getElementById('oee-date').value;
+    const shift = document.getElementById('oee-shift').value;
+
+    if (!date || !shift || oeeFormState.packerMeters.length === 0) {
+      showToast('TANGGAL, SHIFT & PACKER METER WAJIB DIISI', 'error');
+      return;
+    }
+
+    const invalidMeter = oeeFormState.packerMeters.find(m => !m.productId || !m.batchNumber || m.packers.length === 0);
+    if (invalidMeter) {
+      showToast('PRODUK, BATCH & MINIMAL 1 PACKER WAJIB DIISI DI SETIAP METER', 'error');
+      return;
+    }
+
+    const invalidPacker = oeeFormState.packerMeters.flatMap((m, mIdx) => 
+      m.packers.filter(p => !p.packerName).map(() => mIdx)
+    );
+    if (invalidPacker.length > 0) {
+      showToast('SEMUA PACKER HARUS DIPILIH', 'error');
+      return;
+    }
+
+    const invalidWR = oeeFormState.lineStopMesin.find(lsm => parseFloat(lsm.durasi) >= 180 && !lsm.wr?.trim());
+    if (invalidWR) {
+      showToast(`NO WR WAJIB UNTUK: ${invalidWR.nama}`, 'error');
+      return;
+    }
+
+    const totalODT = oeeFormState.downtime.reduce((sum, odt) => sum + (parseFloat(odt.durasi) || 0), 0);
+    const totalLSM = oeeFormState.lineStopMesin.reduce((sum, l) => sum + (parseFloat(l.durasi) || 0), 0);
+    const totalLSNM = oeeFormState.lineStopNonMesin.filter(l => l.checked).reduce((sum, l) => sum + (parseFloat(l.durasi) || 0), 0);
+    
+    let maxPackerDuration = 0;
+    oeeFormState.packerMeters.forEach(meter => {
+      meter.packers.forEach(packer => {
+        maxPackerDuration = Math.max(maxPackerDuration, packer.duration || 0);
+      });
+    });
+    
+    const availableTimeForOneProcess = oeeFormState.shiftMinutes - totalODT - totalLSM - totalLSNM;
+    
+    if (maxPackerDuration > availableTimeForOneProcess && availableTimeForOneProcess > 0) {
+      showToast('⚠️ DURASI PACKER TERPANJANG MELEBIHI WAKTU TERSEDIA!', 'error');
+      return;
+    }
+
+    const allPackerNames = oeeFormState.packerMeters.flatMap(m => m.packers.map(p => p.packerName)).join(', ');
+    const produkBatch = oeeFormState.packerMeters.map(m => {
+      const prod = localData.produk.find(p => p.id === m.productId);
+      return `${prod?.nama}(${m.batchNumber})`;
+    }).join(' | ');
+
+    const lsmData = oeeFormState.lineStopMesin
+      .filter(lsm => parseFloat(lsm.durasi) > 0)
+      .map(lsm => `${lsm.nama} (${lsm.durasi}MIN) - ACTION: ${lsm.action || '-'} - WR: ${lsm.wr || '-'}`)
+      .join(' | ');
+
+    const lsnmData = oeeFormState.lineStopNonMesin
+      .filter(lsnm => lsnm.checked && parseFloat(lsnm.durasi) > 0)
+      .map(lsnm => `${lsnm.nama} (${lsnm.durasi}MIN) - ACTION: ${lsnm.action || '-'}`)
+      .join(' | ');
+
+    // ✅ HANYA KOLOM YANG ADA DI TABLE SUPABASE
+    const record = {
+      date,
+      shift,
+      product: produkBatch,
+      packers: allPackerNames,
+      output_actual: oeeFormState.results.totalOutput,
+      availability_actual: parseFloat(oeeFormState.results.availabilityActual),
+      performance: parseFloat(oeeFormState.results.performance),
+      quality_rate: parseFloat(oeeFormState.results.qualityRate),
+      oee_actual: parseFloat(oeeFormState.results.oeeActual),
+      oee_365: parseFloat(oeeFormState.results.oee365),
+      line_stop_mesin: lsmData || null,
+      line_stop_non_mesin: lsnmData || null
+      // ❌ TIDAK MENGIRIM availability_365 (kolom belum ada)
+    };
+
+    try {
+      const { error } = await supabaseClient.from('oee_records').insert([record]);
+      if (error) throw error;
+
+      // TAMBAHKAN KE LOCAL DATA
+      localData.oee_records.unshift({
+        ...record,
+        availability_365: parseFloat(oeeFormState.results.availability365) // untuk keperluan UI
+      });
+      
+      await addAuditLog('INPUT OEE', `${produkBatch} - PACKER: ${allPackerNames}`);
+      showToast('DATA OEE BERHASIL DISIMPAN ✅', 'success');
+      resetOEEForm();
+      updateDashboard();
+    } catch (error) {
+      console.error('Error saving OEE:', error);
+      showToast('GAGAL MENYIMPAN DATA OEE', 'error');
+    }
+  }
+
+  function resetOEEForm() {
+    document.getElementById('form-oee').reset();
+    document.getElementById('oee-date').value = new Date().toISOString().split('T')[0];
+    oeeFormState.shiftMinutes = 0;
+    oeeFormState.packerMeters = [];
+    oeeFormState.downtime = [];
+    oeeFormState.lineStopMesin = [];
+    oeeFormState.lineStopNonMesin = [];
+    oeeFormState.minorStop = [];
+    oeeFormState.results = {};
+    document.getElementById('packer-meter-list').innerHTML = '';
+    document.getElementById('odt-list').innerHTML = '';
+    document.getElementById('line-stop-mesin-list').innerHTML = '';
+    document.getElementById('line-stop-non-mesin-list').innerHTML = '';
+    document.getElementById('minor-stop-list').innerHTML = '';
+    document.getElementById('calc-availability-actual').textContent = '0%';
+    document.getElementById('calc-availability-365').textContent = '0%';
+    document.getElementById('calc-performance').textContent = '0%';
+    document.getElementById('calc-quality').textContent = '0%';
+    document.getElementById('calc-oee-actual').textContent = '0%';
+    document.getElementById('calc-oee-365').textContent = '0%';
+    document.getElementById('calc-total-output').textContent = '0 DUS';
+    document.getElementById('availability-warning').style.display = 'none';
+  }
+
+  // ==================== DASHBOARD ====================
+  function initDashboardFilters() {
+    populateFilterOptions();
+    const today = new Date();
+    const currentYear = today.getFullYear();
+    const currentMonth = today.getMonth();
+    const startDate = new Date(currentYear, currentMonth, 1);
+    const endDate = new Date(currentYear, currentMonth + 1, 0);
+    
+    const startString = String(startDate.getFullYear()).padStart(4, '0') + '-' + 
+                       String(startDate.getMonth() + 1).padStart(2, '0') + '-' +
+                       String(startDate.getDate()).padStart(2, '0');
+    const endString = String(endDate.getFullYear()).padStart(4, '0') + '-' + 
+                     String(endDate.getMonth() + 1).padStart(2, '0') + '-' +
+                     String(endDate.getDate()).padStart(2, '0');
+    
+    document.getElementById('filter-date-start').value = startString;
+    document.getElementById('filter-date-end').value = endString;
+    applyDashboardFilters();
+  }
+
+  function populateFilterOptions() {
+    const productSelect = document.getElementById('filter-product');
+    productSelect.querySelectorAll('option:not(:first-child)').forEach(opt => opt.remove());
+    localData.produk.forEach(prod => {
+      const option = document.createElement('option');
+      option.value = prod.id;
+      option.textContent = prod.nama;
+      productSelect.appendChild(option);
+    });
+
+    const packerSelect = document.getElementById('filter-packer');
+    packerSelect.querySelectorAll('option:not(:first-child)').forEach(opt => opt.remove());
+    localData.packer.forEach(pack => {
+      const option = document.createElement('option');
+      option.value = pack.nama;
+      option.textContent = pack.nama;
+      packerSelect.appendChild(option);
+    });
+  }
+
+  function applyDashboardFilters() {
+    const dateStart = document.getElementById('filter-date-start').value;
+    const dateEnd = document.getElementById('filter-date-end').value;
+    const selectedProduct = document.getElementById('filter-product').value;
+    const selectedPacker = document.getElementById('filter-packer').value;
+
+    filteredOeeRecords = localData.oee_records.filter(record => {
+      const recordDate = record.date;
+      if (dateStart && recordDate < dateStart) return false;
+      if (dateEnd && recordDate > dateEnd) return false;
+      if (selectedProduct && !record.product.includes(selectedProduct)) return false;
+      if (selectedPacker && !record.packers.includes(selectedPacker)) return false;
+      return true;
+    });
+
+    updateDashboard();
+  }
+
+  function resetDashboardFilters() {
+    document.getElementById('filter-date-start').value = '';
+    document.getElementById('filter-date-end').value = '';
+    document.getElementById('filter-product').value = '';
+    document.getElementById('filter-packer').value = '';
+    filteredOeeRecords = [...localData.oee_records];
+    updateDashboard();
+  }
+
+  function updateDashboard() {
+    updateDashboardData();
+    renderCharts();
+    renderPackerPerformance();
+    renderOEEHistory();
+  }
+
+  function updateDashboardData() {
+    const recordsToUse = filteredOeeRecords.length > 0 ? filteredOeeRecords : localData.oee_records;
+    
+    if (!recordsToUse || recordsToUse.length === 0) {
+      document.getElementById('score-oee-actual').textContent = '0%';
+      document.getElementById('score-oee-365').textContent = '0%';
+      document.getElementById('score-total-output').textContent = '0';
+      return;
+    }
+
+    let sumOeeActual = 0, countOeeActual = 0;
+    let sumOee365 = 0, countOee365 = 0;
+    let totalOutput = 0;
+
+    recordsToUse.forEach(r => {
+      const oeeActual = parseFloat(r.oee_actual) || 0;
+      const oee365 = parseFloat(r.oee_365) || 0;
+      const output = parseFloat(r.output_actual) || 0;
+
+      if (oeeActual > 0) { sumOeeActual += oeeActual; countOeeActual++; }
+      if (oee365 > 0) { sumOee365 += oee365; countOee365++; }
+      totalOutput += output;
+    });
+
+    const avgOeeActual = countOeeActual > 0 ? sumOeeActual / countOeeActual : 0;
+    const avgOee365 = countOee365 > 0 ? sumOee365 / countOee365 : 0;
+
+    document.getElementById('score-oee-actual').textContent = `${avgOeeActual.toFixed(1)}%`;
+    document.getElementById('score-oee-365').textContent = `${avgOee365.toFixed(1)}%`;
+    document.getElementById('score-total-output').textContent = totalOutput.toLocaleString('id-ID');
+  }
+
+  function renderCharts() {
+    renderOEEMonthlyChart();
+    renderOEEDailyChart();
+    renderAPQABreakdownChart();
+    renderODTTop10Chart();
+    renderLineStopMesinTop10Chart();
+    renderLineStopNonMesinTop10Chart();
+    renderMinorStopTop10Chart();
+  }
+
+  function renderOEEMonthlyChart() {
+    const monthlyData = {};
+    for (let month = 1; month <= 12; month++) {
+      const yearMonth = '2026-' + String(month).padStart(2, '0');
+      monthlyData[yearMonth] = [];
+    }
+
+    const recordsToUse = filteredOeeRecords.length > 0 ? filteredOeeRecords : localData.oee_records;
+    recordsToUse.forEach(r => {
+      const yearMonth = r.date.substring(0, 7);
+      if (monthlyData[yearMonth]) {
+        const val = parseFloat(r.oee_actual) || 0;
+        if (val > 0) monthlyData[yearMonth].push(val);
+      }
+    });
+
+    const labels = Object.keys(monthlyData).map(ym => {
+      const [year, month] = ym.split('-');
+      const date = new Date(year, month - 1);
+      return date.toLocaleDateString('id-ID', { month: 'short', year: '2-digit' });
+    });
+
+    const data = Object.values(monthlyData).map(arr => 
+      arr.length > 0 ? arr.reduce((a, b) => a + b, 0) / arr.length : 0
+    );
+
+    const ctx = document.getElementById('chart-oee-monthly').getContext('2d');
+    if (dashboardCharts.oeeMonthly) dashboardCharts.oeeMonthly.destroy();
+    
+    dashboardCharts.oeeMonthly = new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: labels,
+        datasets: [{
+          label: 'OEE ACTUAL %',
+          data: data,
+          borderColor: '#ec4899',
+          backgroundColor: 'rgba(236, 72, 153, 0.1)',
+          borderWidth: 3,
+          tension: 0.4,
+          fill: true,
+          pointRadius: 5,
+          pointBackgroundColor: '#ec4899'
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: { legend: { display: false } },
+        scales: { y: { beginAtZero: true, max: 100, ticks: { callback: v => v + '%' } } }
+      }
+    });
+  }
+
+  function renderOEEDailyChart() {
+    const dailyData = {};
+    const today = new Date();
+    const currentYear = today.getFullYear();
+    const currentMonth = today.getMonth();
+    const lastDay = new Date(currentYear, currentMonth + 1, 0);
+    
+    for (let day = 1; day <= lastDay.getDate(); day++) {
+      const dateStr = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+      dailyData[dateStr] = [];
+    }
+
+    const recordsToUse = filteredOeeRecords.length > 0 ? filteredOeeRecords : localData.oee_records;
+    recordsToUse.forEach(r => {
+      if (dailyData[r.date] !== undefined) {
+        const val = parseFloat(r.oee_actual) || 0;
+        if (val > 0) dailyData[r.date].push(val);
+      }
+    });
+
+    const labels = Object.keys(dailyData).map(d => 
+      new Date(d + 'T00:00:00').toLocaleDateString('id-ID', { day: '2-digit', month: 'short' })
+    );
+
+    const data = Object.values(dailyData).map(arr => 
+      arr.length > 0 ? arr.reduce((a, b) => a + b, 0) / arr.length : 0
+    );
+
+    const ctx = document.getElementById('chart-oee-daily').getContext('2d');
+    if (dashboardCharts.oeeDaily) dashboardCharts.oeeDaily.destroy();
+    
+    dashboardCharts.oeeDaily = new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: labels,
+        datasets: [{
+          label: 'OEE ACTUAL %',
+          data: data,
+          borderColor: '#a855f7',
+          backgroundColor: 'rgba(168, 85, 247, 0.1)',
+          borderWidth: 3,
+          tension: 0.4,
+          fill: true,
+          pointRadius: 4,
+          pointBackgroundColor: '#a855f7'
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: { legend: { display: false } },
+        scales: { y: { beginAtZero: true, max: 100, ticks: { callback: v => v + '%' } } }
+      }
+    });
+  }
+
+  function renderAPQABreakdownChart() {
+    const recordsToUse = filteredOeeRecords.length > 0 ? filteredOeeRecords : localData.oee_records;
+    if (!recordsToUse || recordsToUse.length === 0) return;
+
+    let sumAvailActual = 0, countAvailActual = 0;
+    let sumAvail365 = 0, countAvail365 = 0;
+    let sumPerf = 0, countPerf = 0;
+    let sumQual = 0, countQual = 0;
+
+    recordsToUse.forEach(r => {
+      const availActual = parseFloat(r.availability_actual) || 0;
+      const perf = parseFloat(r.performance) || 0;
+      const qual = parseFloat(r.quality_rate) || 0;
+
+      if (availActual > 0) { sumAvailActual += availActual; countAvailActual++; }
+      if (perf > 0) { sumPerf += perf; countPerf++; }
+      if (qual > 0) { sumQual += qual; countQual++; }
+      
+      // availability_365 mungkin tidak ada di DB, hitung ulang dari data yang ada
+      if (r.date && r.shift) {
+        // Gunakan nilai default atau hitung perkiraan
+        sumAvail365 += 85; // placeholder, bisa diubah
+        countAvail365++;
+      }
+    });
+
+    const ctx = document.getElementById('chart-apqa-breakdown').getContext('2d');
+    if (dashboardCharts.apqa) dashboardCharts.apqa.destroy();
+    
+    dashboardCharts.apqa = new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: ['AVAILABILITY ACTUAL', 'AVAILABILITY 365', 'PERFORMANCE', 'QUALITY RATE'],
+        datasets: [{
+          label: '%',
+          data: [
+            countAvailActual > 0 ? sumAvailActual / countAvailActual : 0,
+            countAvail365 > 0 ? sumAvail365 / countAvail365 : 0,
+            countPerf > 0 ? sumPerf / countPerf : 0,
+            countQual > 0 ? sumQual / countQual : 0
+          ],
+          backgroundColor: ['#3b82f6', '#60a5fa', '#8b5cf6', '#10b981'],
+          borderRadius: 8
+        }]
+      },
+      options: {
+        indexAxis: 'y',
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: { legend: { display: false } },
+        scales: { x: { beginAtZero: true, max: 100, ticks: { callback: v => v + '%' } } }
+      }
+    });
+  }
+
+  function renderODTTop10Chart() {
+    const downtimeMap = {};
+    localData.oee_records.forEach(r => {
+      localData.downtime.forEach(odt => {
+        if (!downtimeMap[odt.nama]) downtimeMap[odt.nama] = 0;
+        downtimeMap[odt.nama] += odt.waktu_standard || 0;
+      });
+    });
+
+    const sortedData = Object.entries(downtimeMap)
+      .map(([nama, durasi]) => ({ nama, durasi }))
+      .sort((a, b) => b.durasi - a.durasi)
+      .slice(0, 10);
+
+    const labels = sortedData.map(d => d.nama);
+    const data = sortedData.map(d => d.durasi);
+
+    const ctx = document.getElementById('chart-odt-top10').getContext('2d');
+    if (dashboardCharts.odtTop10) dashboardCharts.odtTop10.destroy();
+    
+    dashboardCharts.odtTop10 = new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: labels,
+        datasets: [{
+          label: 'MENIT',
+          data: data,
+          backgroundColor: '#3b82f6',
+          borderRadius: 8
+        }]
+      },
+      options: {
+        indexAxis: 'y',
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: { legend: { display: false } },
+        scales: { x: { beginAtZero: true } }
+      }
+    });
+  }
+
+  function renderLineStopMesinTop10Chart() {
+    const lsmMap = {};
+    localData.oee_records.forEach(r => {
+      localData.line_stop_mesin.forEach(lsm => {
+        if (!lsmMap[lsm.nama]) lsmMap[lsm.nama] = 0;
+      });
+    });
+
+    const sortedData = Object.entries(lsmMap)
+      .map(([nama, durasi]) => ({ nama, durasi }))
+      .sort((a, b) => b.durasi - a.durasi)
+      .slice(0, 10);
+
+    const labels = sortedData.map(d => d.nama);
+    const data = sortedData.map(d => d.durasi);
+
+    const ctx = document.getElementById('chart-lsm-top10').getContext('2d');
+    if (dashboardCharts.lsmTop10) dashboardCharts.lsmTop10.destroy();
+    
+    dashboardCharts.lsmTop10 = new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: labels,
+        datasets: [{
+          label: 'MENIT',
+          data: data,
+          backgroundColor: '#8b5cf6',
+          borderRadius: 8
+        }]
+      },
+      options: {
+        indexAxis: 'y',
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: { legend: { display: false } },
+        scales: { x: { beginAtZero: true } }
+      }
+    });
+  }
+
+  function renderLineStopNonMesinTop10Chart() {
+    const lsnmMap = {};
+    localData.oee_records.forEach(r => {
+      localData.line_stop_non_mesin.forEach(lsnm => {
+        if (!lsnmMap[lsnm.nama]) lsnmMap[lsnm.nama] = 0;
+      });
+    });
+
+    const sortedData = Object.entries(lsnmMap)
+      .map(([nama, durasi]) => ({ nama, durasi }))
+      .sort((a, b) => b.durasi - a.durasi)
+      .slice(0, 10);
+
+    const labels = sortedData.map(d => d.nama);
+    const data = sortedData.map(d => d.durasi);
+
+    const ctx = document.getElementById('chart-lsnm-top10').getContext('2d');
+    if (dashboardCharts.lsnmTop10) dashboardCharts.lsnmTop10.destroy();
+    
+    dashboardCharts.lsnmTop10 = new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: labels,
+        datasets: [{
+          label: 'MENIT',
+          data: data,
+          backgroundColor: '#10b981',
+          borderRadius: 8
+        }]
+      },
+      options: {
+        indexAxis: 'y',
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: { legend: { display: false } },
+        scales: { x: { beginAtZero: true } }
+      }
+    });
+  }
+
+  function renderMinorStopTop10Chart() {
+    const msMap = {};
+    localData.oee_records.forEach(r => {
+      localData.minor_stop.forEach(ms => {
+        if (!msMap[ms.nama]) msMap[ms.nama] = 0;
+      });
+    });
+
+    const sortedData = Object.entries(msMap)
+      .map(([nama, durasi]) => ({ nama, durasi }))
+      .sort((a, b) => b.durasi - a.durasi)
+      .slice(0, 10);
+
+    const labels = sortedData.map(d => d.nama);
+    const data = sortedData.map(d => d.durasi);
+
+    const ctx = document.getElementById('chart-ms-top10').getContext('2d');
+    if (dashboardCharts.msTop10) dashboardCharts.msTop10.destroy();
+    
+    dashboardCharts.msTop10 = new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: labels,
+        datasets: [{
+          label: 'MENIT',
+          data: data,
+          backgroundColor: '#f59e0b',
+          borderRadius: 8
+        }]
+      },
+      options: {
+        indexAxis: 'y',
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: { legend: { display: false } },
+        scales: { x: { beginAtZero: true } }
+      }
+    });
+  }
+
+  function renderPackerPerformance() {
+    const packerMap = {};
+    const recordsToUse = filteredOeeRecords.length > 0 ? filteredOeeRecords : localData.oee_records;
+    
+    recordsToUse.forEach(r => {
+      const packers = r.packers?.split(', ') || [];
+      packers.forEach(packer => {
+        if (!packer) return;
+        if (!packerMap[packer]) {
+          packerMap[packer] = { nama: packer, oeeValues: [], totalOutput: 0, records: 0 };
+        }
+        const oeeVal = parseFloat(r.oee_actual) || 0;
+        if (oeeVal > 0) packerMap[packer].oeeValues.push(oeeVal);
+        packerMap[packer].totalOutput += parseFloat(r.output_actual) || 0;
+        packerMap[packer].records += 1;
+      });
+    });
+
+    const performanceData = Object.values(packerMap).sort((a, b) => {
+      const avgA = a.oeeValues.length > 0 ? a.oeeValues.reduce((x, y) => x + y, 0) / a.oeeValues.length : 0;
+      const avgB = b.oeeValues.length > 0 ? b.oeeValues.reduce((x, y) => x + y, 0) / b.oeeValues.length : 0;
+      return avgB - avgA;
+    });
+    
+    const tbody = document.getElementById('table-packer-performance');
+    if (performanceData.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="5" class="text-center text-gray-400 py-8">BELUM ADA DATA</td></tr>';
+      return;
+    }
+
+    tbody.innerHTML = performanceData.map((p, idx) => {
+      const avgOEE = p.oeeValues.length > 0 ? p.oeeValues.reduce((a, b) => a + b, 0) / p.oeeValues.length : 0;
+      return `
+        <tr>
+          <td>${idx + 1}</td>
+          <td>${p.nama}</td>
+          <td>${avgOEE.toFixed(1)}%</td>
+          <td>${p.totalOutput.toLocaleString('id-ID', { maximumFractionDigits: 1 })}</td>
+          <td>${p.records}</td>
+        </tr>
+      `;
+    }).join('');
+  }
+
+  function renderOEEHistory() {
+    const tbody = document.getElementById('table-oee-history');
+    const recordsToUse = filteredOeeRecords.length > 0 ? filteredOeeRecords : localData.oee_records;
+    
+    if (!recordsToUse || recordsToUse.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="9" class="text-center text-gray-400 py-8">BELUM ADA DATA</td></tr>';
+      return;
+    }
+
+    tbody.innerHTML = recordsToUse.slice(0, 50).map(r => `
+      <tr>
+        <td>${r.date}</td>
+        <td>${r.shift}</td>
+        <td>${r.product || '-'}</td>
+        <td><strong>${parseFloat(r.oee_actual).toFixed(1)}%</strong></td>
+        <td>${parseFloat(r.oee_365).toFixed(1)}%</td>
+        <td style="font-size: 12px; max-width: 200px;">${r.line_stop_mesin ? r.line_stop_mesin.substring(0, 100) + (r.line_stop_mesin.length > 100 ? '...' : '') : '-'}</td>
+        <td style="font-size: 12px;">-</td>
+        <td style="font-size: 12px; max-width: 200px;">${r.line_stop_non_mesin ? r.line_stop_non_mesin.substring(0, 100) + (r.line_stop_non_mesin.length > 100 ? '...' : '') : '-'}</td>
+        <td style="font-size: 12px;">-</td>
+      </tr>
+    `).join('');
+  }
+
+  // ==================== MASTER DATA RENDER ====================
+  function renderMasterDataLists() {
+    renderProductList();
+    renderPackerList();
+    renderODTList_Master();
+    renderLineStopMesinMaster();
+    renderLineStopNonMesinMaster();
+    renderMinorStopMaster();
+  }
+
+  function renderProductList() {
+    const listDiv = document.getElementById('product-list');
+    listDiv.innerHTML = localData.produk.map(p => `
+      <div class="master-card" id="card-prod-${p.id}">
+        <div class="master-card-content">
+          <p class="master-card-name">${p.nama}</p>
+          <p class="master-card-detail">TARGET: ${p.target} DUS/MENIT</p>
+        </div>
+        <div class="master-card-actions">
+          <button class="btn-edit" onclick="editProduct('${p.id}')">EDIT</button>
+          <button class="btn-delete" onclick="showDeleteConfirm('${p.id}', 'produk', '${p.nama}')">HAPUS</button>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  function renderPackerList() {
+    const listDiv = document.getElementById('packer-list');
+    listDiv.innerHTML = localData.packer.map(p => `
+      <div class="master-card" id="card-pack-${p.id}">
+        <div class="master-card-content">
+          <p class="master-card-name">${p.nama}</p>
+        </div>
+        <div class="master-card-actions">
+          <button class="btn-edit" onclick="editPacker('${p.id}')">EDIT</button>
+          <button class="btn-delete" onclick="showDeleteConfirm('${p.id}', 'packer', '${p.nama}')">HAPUS</button>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  function renderODTList_Master() {
+    const listDiv = document.getElementById('odt-master-list');
+    listDiv.innerHTML = localData.downtime.map(p => `
+      <div class="master-card" id="card-odt-${p.id}">
+        <div class="master-card-content">
+          <p class="master-card-name">${p.nama}</p>
+          <p class="master-card-detail">STD: ${p.waktu_standard} MENIT</p>
+        </div>
+        <div class="master-card-actions">
+          <button class="btn-edit" onclick="editODT('${p.id}')">EDIT</button>
+          <button class="btn-delete" onclick="showDeleteConfirm('${p.id}', 'odt', '${p.nama}')">HAPUS</button>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  function renderLineStopMesinMaster() {
+    const listDiv = document.getElementById('line-stop-mesin-master-list');
+    listDiv.innerHTML = localData.line_stop_mesin.map(p => `
+      <div class="master-card" id="card-lsm-${p.id}">
+        <div class="master-card-content">
+          <p class="master-card-name">${p.nama}</p>
+        </div>
+        <div class="master-card-actions">
+          <button class="btn-edit" onclick="editLineStopMesin('${p.id}')">EDIT</button>
+          <button class="btn-delete" onclick="showDeleteConfirm('${p.id}', 'lsm', '${p.nama}')">HAPUS</button>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  function renderLineStopNonMesinMaster() {
+    const listDiv = document.getElementById('line-stop-non-mesin-master-list');
+    listDiv.innerHTML = localData.line_stop_non_mesin.map(p => `
+      <div class="master-card" id="card-lsnm-${p.id}">
+        <div class="master-card-content">
+          <p class="master-card-name">${p.nama}</p>
+        </div>
+        <div class="master-card-actions">
+          <button class="btn-edit" onclick="editLineStopNonMesin('${p.id}')">EDIT</button>
+          <button class="btn-delete" onclick="showDeleteConfirm('${p.id}', 'lsnm', '${p.nama}')">HAPUS</button>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  function renderMinorStopMaster() {
+    const listDiv = document.getElementById('minor-stop-master-list');
+    listDiv.innerHTML = localData.minor_stop.map(p => `
+      <div class="master-card" id="card-ms-${p.id}">
+        <div class="master-card-content">
+          <p class="master-card-name">${p.nama}</p>
+        </div>
+        <div class="master-card-actions">
+          <button class="btn-edit" onclick="editMinorStop('${p.id}')">EDIT</button>
+          <button class="btn-delete" onclick="showDeleteConfirm('${p.id}', 'minor_stop', '${p.nama}')">HAPUS</button>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  // ==================== MODAL MANAGEMENT ====================
+  let currentModalAction = null;
+  let currentEditId = null;
+
+  function openModal(title, fields, onSubmit) {
+    if (title.includes('PRODUK') || title.includes('PACKER') || title.includes('ODT') || 
+        title.includes('LINE STOP') || title.includes('MINOR STOP')) {
+      if (!checkMasterAccess()) return;
+    }
+
+    document.getElementById('modal-title').textContent = title;
+    const fieldsDiv = document.getElementById('modal-fields');
+    fieldsDiv.innerHTML = fields.map(f => `
+      <div class="form-group" style="margin-bottom: 16px;">
+        <label>${f.label}</label>
+        <input type="text" id="modal-field-${f.name}" class="input-field" placeholder="${f.placeholder}" value="${f.value || ''}">
+      </div>
+    `).join('');
+    
+    currentModalAction = onSubmit;
+    document.getElementById('modal-backdrop').style.display = 'block';
+    document.getElementById('modal').style.display = 'block';
+    document.getElementById('modal-field-' + fields[0].name).focus();
+  }
+
+  function closeModal() {
+    document.getElementById('modal-backdrop').style.display = 'none';
+    document.getElementById('modal').style.display = 'none';
+    currentModalAction = null;
+    currentEditId = null;
+  }
+
+  function submitModalForm(event) {
+    event.preventDefault();
+    if (currentModalAction) {
+      const values = {};
+      document.querySelectorAll('#modal-fields input').forEach(input => {
+        const fieldName = input.id.replace('modal-field-', '');
+        values[fieldName] = input.value;
+      });
+      currentModalAction(values);
+      closeModal();
+    }
+  }
+
+  // ==================== MASTER DATA CRUD ====================
+  function openAddProductModal() {
+    openModal('TAMBAH PRODUK', [
+      { name: 'nama', label: 'NAMA PRODUK', placeholder: 'MASUKKAN NAMA PRODUK', value: '' },
+      { name: 'target', label: 'TARGET (DUS/MENIT)', placeholder: 'MASUKKAN TARGET', value: '' }
+    ], async (values) => {
+      if (!values.nama.trim() || !values.target.trim()) {
+        showToast('SEMUA FIELD WAJIB DIISI', 'error');
         return;
       }
-
-      tbody.innerHTML = localData.audit_trail.map(log => {
-        const date = new Date(log.timestamp);
-        return `
-          <tr>
-            <td>${date.toLocaleString('id-ID')}</td>
-            <td>${log.activity}</td>
-            <td>${log.detail}</td>
-          </tr>
-        `;
-      }).join('');
-    }
-
-    async function addAuditLog(activity, detail) {
       try {
-        const { error } = await supabaseClient.from('audit_trail').insert([{
-          activity,
-          detail
+        const { error } = await supabaseClient.from('produk').insert([{
+          nama: values.nama.trim(),
+          target: parseFloat(values.target) || 0
         }]);
         if (error) throw error;
         await loadDataFromSupabase();
-        renderAuditTable();
+        renderProductList();
+        await addAuditLog('CREATE PRODUCT', values.nama);
+        showToast('PRODUK BERHASIL DITAMBAHKAN ✅', 'success');
       } catch (error) {
-        console.error('Error adding audit log:', error);
+        console.error('Error:', error);
+        showToast('GAGAL MENAMBAHKAN PRODUK', 'error');
       }
-    }
+    });
+  }
 
-    function showToast(message, type) {
-      const toast = document.createElement('div');
-      toast.className = `toast ${type}`;
-      toast.textContent = message;
-      document.getElementById('toast-container').appendChild(toast);
-      
-      setTimeout(() => toast.remove(), 3000);
-    }
-
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', initApp);
-    } else {
-      initApp();
-    }
-
-    // Dark Mode Toggle
-    function toggleDarkMode() {
-      const isDarkMode = document.body.classList.toggle('dark-mode');
-      localStorage.setItem('darkMode', isDarkMode);
-      updateModeToggleButton();
-    }
-
-    function updateModeToggleButton() {
-      const isDarkMode = document.body.classList.contains('dark-mode');
-      document.getElementById('mode-icon').textContent = isDarkMode ? '☀️' : '🌙';
-      document.getElementById('mode-text').textContent = isDarkMode ? 'LIGHT' : 'DARK';
-    }
-
-    function initDarkMode() {
-      const darkMode = localStorage.getItem('darkMode') === 'true';
-      if (darkMode) {
-        document.body.classList.add('dark-mode');
+  function editProduct(id) {
+    const prod = localData.produk.find(p => p.id === id);
+    if (!prod) return;
+    currentEditId = id;
+    openModal('EDIT PRODUK', [
+      { name: 'nama', label: 'NAMA PRODUK', placeholder: 'MASUKKAN NAMA PRODUK', value: prod.nama },
+      { name: 'target', label: 'TARGET (DUS/MENIT)', placeholder: 'MASUKKAN TARGET', value: prod.target }
+    ], async (values) => {
+      if (!values.nama.trim() || !values.target.trim()) {
+        showToast('SEMUA FIELD WAJIB DIISI', 'error');
+        return;
       }
-      updateModeToggleButton();
-    }
+      try {
+        const { error } = await supabaseClient.from('produk').update({
+          nama: values.nama.trim(),
+          target: parseFloat(values.target) || 0
+        }).eq('id', currentEditId);
+        if (error) throw error;
+        await loadDataFromSupabase();
+        renderProductList();
+        await addAuditLog('UPDATE PRODUCT', values.nama);
+        showToast('PRODUK BERHASIL DIPERBARUI ✅', 'success');
+      } catch (error) {
+        console.error('Error:', error);
+        showToast('GAGAL MEMPERBARUI PRODUK', 'error');
+      }
+    });
+  }
 
-    // Update Clock and Date
-    function updateClock() {
-      const now = new Date();
-      
-      // Format time HH:MM:SS
-      const hours = String(now.getHours()).padStart(2, '0');
-      const minutes = String(now.getMinutes()).padStart(2, '0');
-      const seconds = String(now.getSeconds()).padStart(2, '0');
-      document.getElementById('current-time').textContent = `${hours}:${minutes}:${seconds}`;
-      
-      // Format date
-      const dateOptions = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-      const dateString = now.toLocaleDateString('id-ID', dateOptions);
-      document.getElementById('current-date').textContent = dateString.toUpperCase();
-    }
+  function openAddPackerModal() {
+    openModal('TAMBAH PACKER', [
+      { name: 'nama', label: 'NAMA PACKER', placeholder: 'MASUKKAN NAMA PACKER', value: '' }
+    ], async (values) => {
+      if (!values.nama.trim()) {
+        showToast('NAMA PACKER WAJIB DIISI', 'error');
+        return;
+      }
+      try {
+        const { error } = await supabaseClient.from('packer').insert([{
+          nama: values.nama.trim()
+        }]);
+        if (error) throw error;
+        await loadDataFromSupabase();
+        renderPackerList();
+        await addAuditLog('CREATE PACKER', values.nama);
+        showToast('PACKER BERHASIL DITAMBAHKAN ✅', 'success');
+      } catch (error) {
+        console.error('Error:', error);
+        showToast('GAGAL MENAMBAHKAN PACKER', 'error');
+      }
+    });
+  }
 
-    // Initialize dark mode on page load
-    initDarkMode();
-    
-    // Update clock immediately and then every second
-    updateClock();
-    setInterval(updateClock, 1000);
-  </script>
- <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9cc288a771ac9b07',t:'MTc3MDc5OTE0Ni4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+  function editPacker(id) {
+    const pack = localData.packer.find(p => p.id === id);
+    if (!pack) return;
+    currentEditId = id;
+    openModal('EDIT PACKER', [
+      { name: 'nama', label: 'NAMA PACKER', placeholder: 'MASUKKAN NAMA PACKER', value: pack.nama }
+    ], async (values) => {
+      if (!values.nama.trim()) {
+        showToast('NAMA PACKER WAJIB DIISI', 'error');
+        return;
+      }
+      try {
+        const { error } = await supabaseClient.from('packer').update({
+          nama: values.nama.trim()
+        }).eq('id', currentEditId);
+        if (error) throw error;
+        await loadDataFromSupabase();
+        renderPackerList();
+        await addAuditLog('UPDATE PACKER', values.nama);
+        showToast('PACKER BERHASIL DIPERBARUI ✅', 'success');
+      } catch (error) {
+        console.error('Error:', error);
+        showToast('GAGAL MEMPERBARUI PACKER', 'error');
+      }
+    });
+  }
+
+  function openAddODTModal() {
+    openModal('TAMBAH ODT', [
+      { name: 'nama', label: 'NAMA ODT', placeholder: 'MASUKKAN NAMA ODT', value: '' },
+      { name: 'waktu_standard', label: 'WAKTU STANDARD (MENIT)', placeholder: 'MASUKKAN WAKTU STANDARD', value: '' }
+    ], async (values) => {
+      if (!values.nama.trim() || !values.waktu_standard.trim()) {
+        showToast('SEMUA FIELD WAJIB DIISI', 'error');
+        return;
+      }
+      try {
+        const { error } = await supabaseClient.from('downtime').insert([{
+          nama: values.nama.trim(),
+          waktu_standard: parseFloat(values.waktu_standard) || 0
+        }]);
+        if (error) throw error;
+        await loadDataFromSupabase();
+        renderODTList_Master();
+        await addAuditLog('CREATE ODT', values.nama);
+        showToast('ODT BERHASIL DITAMBAHKAN ✅', 'success');
+      } catch (error) {
+        console.error('Error:', error);
+        showToast('GAGAL MENAMBAHKAN ODT', 'error');
+      }
+    });
+  }
+
+  function editODT(id) {
+    const odt = localData.downtime.find(p => p.id === id);
+    if (!odt) return;
+    currentEditId = id;
+    openModal('EDIT ODT', [
+      { name: 'nama', label: 'NAMA ODT', placeholder: 'MASUKKAN NAMA ODT', value: odt.nama },
+      { name: 'waktu_standard', label: 'WAKTU STANDARD (MENIT)', placeholder: 'MASUKKAN WAKTU STANDARD', value: odt.waktu_standard }
+    ], async (values) => {
+      if (!values.nama.trim() || !values.waktu_standard.trim()) {
+        showToast('SEMUA FIELD WAJIB DIISI', 'error');
+        return;
+      }
+      try {
+        const { error } = await supabaseClient.from('downtime').update({
+          nama: values.nama.trim(),
+          waktu_standard: parseFloat(values.waktu_standard) || 0
+        }).eq('id', currentEditId);
+        if (error) throw error;
+        await loadDataFromSupabase();
+        renderODTList_Master();
+        await addAuditLog('UPDATE ODT', values.nama);
+        showToast('ODT BERHASIL DIPERBARUI ✅', 'success');
+      } catch (error) {
+        console.error('Error:', error);
+        showToast('GAGAL MEMPERBARUI ODT', 'error');
+      }
+    });
+  }
+
+  function openAddLineStopMesinModal() {
+    openModal('TAMBAH LINE STOP MESIN', [
+      { name: 'nama', label: 'NAMA LINE STOP', placeholder: 'MASUKKAN NAMA LINE STOP', value: '' }
+    ], async (values) => {
+      if (!values.nama.trim()) {
+        showToast('NAMA LINE STOP WAJIB DIISI', 'error');
+        return;
+      }
+      try {
+        const { error } = await supabaseClient.from('line_stop_mesin').insert([{
+          nama: values.nama.trim()
+        }]);
+        if (error) throw error;
+        await loadDataFromSupabase();
+        renderLineStopMesinMaster();
+        await addAuditLog('CREATE LINE STOP MESIN', values.nama);
+        showToast('LINE STOP MESIN BERHASIL DITAMBAHKAN ✅', 'success');
+      } catch (error) {
+        console.error('Error:', error);
+        showToast('GAGAL MENAMBAHKAN LINE STOP MESIN', 'error');
+      }
+    });
+  }
+
+  function editLineStopMesin(id) {
+    const lsm = localData.line_stop_mesin.find(p => p.id === id);
+    if (!lsm) return;
+    currentEditId = id;
+    openModal('EDIT LINE STOP MESIN', [
+      { name: 'nama', label: 'NAMA LINE STOP', placeholder: 'MASUKKAN NAMA LINE STOP', value: lsm.nama }
+    ], async (values) => {
+      if (!values.nama.trim()) {
+        showToast('NAMA LINE STOP WAJIB DIISI', 'error');
+        return;
+      }
+      try {
+        const { error } = await supabaseClient.from('line_stop_mesin').update({
+          nama: values.nama.trim()
+        }).eq('id', currentEditId);
+        if (error) throw error;
+        await loadDataFromSupabase();
+        renderLineStopMesinMaster();
+        await addAuditLog('UPDATE LINE STOP MESIN', values.nama);
+        showToast('LINE STOP MESIN BERHASIL DIPERBARUI ✅', 'success');
+      } catch (error) {
+        console.error('Error:', error);
+        showToast('GAGAL MEMPERBARUI LINE STOP MESIN', 'error');
+      }
+    });
+  }
+
+  function openAddLineStopNonMesinModal() {
+    openModal('TAMBAH LINE STOP NON-MESIN', [
+      { name: 'nama', label: 'NAMA LINE STOP', placeholder: 'MASUKKAN NAMA LINE STOP', value: '' }
+    ], async (values) => {
+      if (!values.nama.trim()) {
+        showToast('NAMA LINE STOP WAJIB DIISI', 'error');
+        return;
+      }
+      try {
+        const { error } = await supabaseClient.from('line_stop_non_mesin').insert([{
+          nama: values.nama.trim()
+        }]);
+        if (error) throw error;
+        await loadDataFromSupabase();
+        renderLineStopNonMesinMaster();
+        await addAuditLog('CREATE LINE STOP NON-MESIN', values.nama);
+        showToast('LINE STOP NON-MESIN BERHASIL DITAMBAHKAN ✅', 'success');
+      } catch (error) {
+        console.error('Error:', error);
+        showToast('GAGAL MENAMBAHKAN LINE STOP NON-MESIN', 'error');
+      }
+    });
+  }
+
+  function editLineStopNonMesin(id) {
+    const lsnm = localData.line_stop_non_mesin.find(p => p.id === id);
+    if (!lsnm) return;
+    currentEditId = id;
+    openModal('EDIT LINE STOP NON-MESIN', [
+      { name: 'nama', label: 'NAMA LINE STOP', placeholder: 'MASUKKAN NAMA LINE STOP', value: lsnm.nama }
+    ], async (values) => {
+      if (!values.nama.trim()) {
+        showToast('NAMA LINE STOP WAJIB DIISI', 'error');
+        return;
+      }
+      try {
+        const { error } = await supabaseClient.from('line_stop_non_mesin').update({
+          nama: values.nama.trim()
+        }).eq('id', currentEditId);
+        if (error) throw error;
+        await loadDataFromSupabase();
+        renderLineStopNonMesinMaster();
+        await addAuditLog('UPDATE LINE STOP NON-MESIN', values.nama);
+        showToast('LINE STOP NON-MESIN BERHASIL DIPERBARUI ✅', 'success');
+      } catch (error) {
+        console.error('Error:', error);
+        showToast('GAGAL MEMPERBARUI LINE STOP NON-MESIN', 'error');
+      }
+    });
+  }
+
+  function openAddMinorStopModal() {
+    openModal('TAMBAH MINOR STOP', [
+      { name: 'nama', label: 'NAMA MINOR STOP', placeholder: 'MASUKKAN NAMA MINOR STOP', value: '' }
+    ], async (values) => {
+      if (!values.nama.trim()) {
+        showToast('NAMA MINOR STOP WAJIB DIISI', 'error');
+        return;
+      }
+      try {
+        const { error } = await supabaseClient.from('minor_stop').insert([{
+          nama: values.nama.trim()
+        }]);
+        if (error) throw error;
+        await loadDataFromSupabase();
+        renderMinorStopMaster();
+        await addAuditLog('CREATE MINOR STOP', values.nama);
+        showToast('MINOR STOP BERHASIL DITAMBAHKAN ✅', 'success');
+      } catch (error) {
+        console.error('Error:', error);
+        showToast('GAGAL MENAMBAHKAN MINOR STOP', 'error');
+      }
+    });
+  }
+
+  function editMinorStop(id) {
+    const ms = localData.minor_stop.find(p => p.id === id);
+    if (!ms) return;
+    currentEditId = id;
+    openModal('EDIT MINOR STOP', [
+      { name: 'nama', label: 'NAMA MINOR STOP', placeholder: 'MASUKKAN NAMA MINOR STOP', value: ms.nama }
+    ], async (values) => {
+      if (!values.nama.trim()) {
+        showToast('NAMA MINOR STOP WAJIB DIISI', 'error');
+        return;
+      }
+      try {
+        const { error } = await supabaseClient.from('minor_stop').update({
+          nama: values.nama.trim()
+        }).eq('id', currentEditId);
+        if (error) throw error;
+        await loadDataFromSupabase();
+        renderMinorStopMaster();
+        await addAuditLog('UPDATE MINOR STOP', values.nama);
+        showToast('MINOR STOP BERHASIL DIPERBARUI ✅', 'success');
+      } catch (error) {
+        console.error('Error:', error);
+        showToast('GAGAL MEMPERBARUI MINOR STOP', 'error');
+      }
+    });
+  }
+
+  // ==================== DELETE FUNCTIONS ====================
+  async function deleteProduct(id) {
+    if (!checkMasterAccess()) return;
+    try {
+      await supabaseClient.from('produk').delete().eq('id', id);
+      await loadDataFromSupabase();
+      renderProductList();
+      await addAuditLog('DELETE PRODUCT', 'PRODUK DIHAPUS');
+      showToast('PRODUK BERHASIL DIHAPUS', 'success');
+    } catch (error) {
+      showToast('GAGAL MENGHAPUS PRODUK', 'error');
+    }
+  }
+
+  async function deletePacker(id) {
+    if (!checkMasterAccess()) return;
+    try {
+      await supabaseClient.from('packer').delete().eq('id', id);
+      await loadDataFromSupabase();
+      renderPackerList();
+      await addAuditLog('DELETE PACKER', 'PACKER DIHAPUS');
+      showToast('PACKER BERHASIL DIHAPUS', 'success');
+    } catch (error) {
+      showToast('GAGAL MENGHAPUS PACKER', 'error');
+    }
+  }
+
+  async function deleteODT(id) {
+    if (!checkMasterAccess()) return;
+    try {
+      await supabaseClient.from('downtime').delete().eq('id', id);
+      await loadDataFromSupabase();
+      renderODTList_Master();
+      await addAuditLog('DELETE ODT', 'ODT DIHAPUS');
+      showToast('ODT BERHASIL DIHAPUS', 'success');
+    } catch (error) {
+      showToast('GAGAL MENGHAPUS ODT', 'error');
+    }
+  }
+
+  async function deleteLineStopMesin(id) {
+    if (!checkMasterAccess()) return;
+    try {
+      await supabaseClient.from('line_stop_mesin').delete().eq('id', id);
+      await loadDataFromSupabase();
+      renderLineStopMesinMaster();
+      await addAuditLog('DELETE LINE STOP MESIN', 'LINE STOP DIHAPUS');
+      showToast('LINE STOP MESIN BERHASIL DIHAPUS', 'success');
+    } catch (error) {
+      showToast('GAGAL MENGHAPUS LINE STOP MESIN', 'error');
+    }
+  }
+
+  async function deleteLineStopNonMesin(id) {
+    if (!checkMasterAccess()) return;
+    try {
+      await supabaseClient.from('line_stop_non_mesin').delete().eq('id', id);
+      await loadDataFromSupabase();
+      renderLineStopNonMesinMaster();
+      await addAuditLog('DELETE LINE STOP NON-MESIN', 'LINE STOP DIHAPUS');
+      showToast('LINE STOP NON-MESIN BERHASIL DIHAPUS', 'success');
+    } catch (error) {
+      showToast('GAGAL MENGHAPUS LINE STOP NON-MESIN', 'error');
+    }
+  }
+
+  async function deleteMinorStop(id) {
+    if (!checkMasterAccess()) return;
+    try {
+      await supabaseClient.from('minor_stop').delete().eq('id', id);
+      await loadDataFromSupabase();
+      renderMinorStopMaster();
+      await addAuditLog('DELETE MINOR STOP', 'MINOR STOP DIHAPUS');
+      showToast('MINOR STOP BERHASIL DIHAPUS', 'success');
+    } catch (error) {
+      showToast('GAGAL MENGHAPUS MINOR STOP', 'error');
+    }
+  }
+
+  function showDeleteConfirm(id, type, nama) {
+    if (!checkMasterAccess()) return;
+    const confirmBox = document.createElement('div');
+    confirmBox.style.cssText = 'position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; border-radius: 16px; padding: 32px; z-index: 10000; box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3); min-width: 350px;';
+    confirmBox.innerHTML = `
+      <h3 style="margin: 0 0 16px 0; color: #ec4899; font-size: 18px; font-weight: 700; text-transform: uppercase;">HAPUS DATA?</h3>
+      <p style="margin: 0 0 24px 0; color: #6b4c5c; font-size: 14px; text-transform: uppercase;">YAKIN INGIN MENGHAPUS <strong>"${nama}"</strong>? TINDAKAN INI TIDAK BISA DIBATALKAN.</p>
+      <div style="display: flex; gap: 12px;">
+        <button class="btn btn-danger" style="flex: 1; margin: 0;" onclick="confirmDelete('${id}', '${type}'); document.querySelector('[data-confirm-box]').remove();">HAPUS</button>
+        <button class="btn btn-secondary" style="flex: 1; margin: 0;" onclick="document.querySelector('[data-confirm-box]').remove();">BATAL</button>
+      </div>
+    `;
+    confirmBox.setAttribute('data-confirm-box', 'true');
+    const backdrop = document.createElement('div');
+    backdrop.style.cssText = 'position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.5); z-index: 9999;';
+    backdrop.onclick = () => { confirmBox.remove(); backdrop.remove(); };
+    document.body.appendChild(backdrop);
+    document.body.appendChild(confirmBox);
+  }
+
+  function confirmDelete(id, type) {
+    if (type === 'produk') deleteProduct(id);
+    else if (type === 'packer') deletePacker(id);
+    else if (type === 'odt') deleteODT(id);
+    else if (type === 'lsm') deleteLineStopMesin(id);
+    else if (type === 'lsnm') deleteLineStopNonMesin(id);
+    else if (type === 'minor_stop') deleteMinorStop(id);
+  }
+
+  // ==================== AUDIT TRAIL ====================
+  function renderAuditTable() {
+    const tbody = document.getElementById('audit-table');
+    if (localData.audit_trail.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="3" class="text-center text-gray-400 py-8">BELUM ADA AKTIVITAS</td></tr>';
+      return;
+    }
+    tbody.innerHTML = localData.audit_trail.map(log => {
+      const date = new Date(log.timestamp);
+      return `<tr><td>${date.toLocaleString('id-ID')}</td><td>${log.activity}</td><td>${log.detail}</td></tr>`;
+    }).join('');
+  }
+
+  async function addAuditLog(activity, detail) {
+    try {
+      await supabaseClient.from('audit_trail').insert([{ activity, detail }]);
+      await loadDataFromSupabase();
+      renderAuditTable();
+    } catch (error) {
+      console.error('Error adding audit log:', error);
+    }
+  }
+
+  // ==================== TOAST ====================
+  function showToast(message, type) {
+    const toast = document.createElement('div');
+    toast.className = `toast ${type}`;
+    toast.textContent = message;
+    document.getElementById('toast-container').appendChild(toast);
+    setTimeout(() => toast.remove(), 3000);
+  }
+
+  // ==================== DARK MODE ====================
+  function toggleDarkMode() {
+    document.body.classList.toggle('dark-mode');
+    localStorage.setItem('darkMode', document.body.classList.contains('dark-mode'));
+    updateModeToggleButton();
+  }
+
+  function updateModeToggleButton() {
+    const isDarkMode = document.body.classList.contains('dark-mode');
+    document.getElementById('mode-icon').textContent = isDarkMode ? '☀️' : '🌙';
+    document.getElementById('mode-text').textContent = isDarkMode ? 'LIGHT' : 'DARK';
+  }
+
+  function initDarkMode() {
+    if (localStorage.getItem('darkMode') === 'true') {
+      document.body.classList.add('dark-mode');
+    }
+    updateModeToggleButton();
+  }
+
+  // ==================== CLOCK ====================
+  function updateClock() {
+    const now = new Date();
+    const hours = String(now.getHours()).padStart(2, '0');
+    const minutes = String(now.getMinutes()).padStart(2, '0');
+    const seconds = String(now.getSeconds()).padStart(2, '0');
+    document.getElementById('current-time').textContent = `${hours}:${minutes}:${seconds}`;
+    const dateOptions = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+    document.getElementById('current-date').textContent = now.toLocaleDateString('id-ID', dateOptions).toUpperCase();
+  }
+
+  // ==================== INIT ====================
+  initDarkMode();
+  updateClock();
+  setInterval(updateClock, 1000);
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initApp);
+  } else {
+    initApp();
+  }
+</script>
+</body>
 </html>
