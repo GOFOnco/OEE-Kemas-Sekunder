@@ -3,7 +3,7 @@
  <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>OEE KEMAS SEKUNDER System</title>
+  <title>OEE KEMAS SEKUNDER SYSTEM</title>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
@@ -64,6 +64,7 @@
       font-size: clamp(10px, 2vw, 12px);
       opacity: 0.95;
       letter-spacing: 0.5px;
+      text-transform: uppercase;
     }
 
     .header-datetime {
@@ -74,12 +75,14 @@
       font-weight: 600;
       text-align: right;
       white-space: nowrap;
+      text-transform: uppercase;
     }
 
     .header-datetime-time {
       font-size: clamp(12px, 3vw, 16px);
       font-weight: 700;
       font-family: 'Courier New', monospace;
+      text-transform: uppercase;
     }
 
     .mode-toggle {
@@ -96,6 +99,7 @@
       align-items: center;
       gap: 6px;
       white-space: nowrap;
+      text-transform: uppercase;
     }
 
     .mode-toggle:hover {
@@ -247,6 +251,19 @@
       color: #f472b6;
     }
 
+    body.dark-mode #login-modal {
+      background: #2d2236;
+      color: #e5e5e5;
+    }
+
+    body.dark-mode .login-title {
+      color: #f472b6;
+    }
+
+    body.dark-mode .login-label {
+      color: #b9a2b3;
+    }
+
     table {
       width: 100%;
       border-collapse: collapse;
@@ -264,6 +281,7 @@
       color: #ec4899;
       border-bottom: 2px solid rgba(236, 72, 153, 0.2);
       white-space: nowrap;
+      text-transform: uppercase;
     }
 
     tbody td {
@@ -271,6 +289,7 @@
       color: #4a3f47;
       border-bottom: 1px solid rgba(236, 72, 153, 0.1);
       word-break: break-word;
+      text-transform: uppercase;
     }
 
     tbody tr:hover {
@@ -389,6 +408,7 @@
       display: flex;
       align-items: center;
       gap: 8px;
+      text-transform: uppercase;
     }
 
     .section-title::before {
@@ -424,6 +444,7 @@
       font-weight: 600;
       color: #6b4c5c;
       margin-bottom: 6px;
+      text-transform: uppercase;
     }
 
     .form-group input,
@@ -437,6 +458,7 @@
       transition: all 0.3s ease;
       background: #faf9fb;
       color: #4a3f47;
+      text-transform: uppercase;
     }
 
     .form-group input:focus,
@@ -459,11 +481,48 @@
       display: inline-flex;
       align-items: center;
       gap: 6px;
+      text-transform: uppercase;
     }
 
     .btn-small {
       padding: 6px 12px;
       font-size: clamp(10px, 1.5vw, 12px);
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #ec4899 0%, #d946a6 100%);
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background: linear-gradient(135deg, #d946a6 0%, #be185d 100%);
+    }
+
+    .btn-secondary {
+      background: #9ca3af;
+      color: white;
+    }
+
+    .btn-secondary:hover {
+      background: #6b7280;
+    }
+
+    .btn-success {
+      background: #10b981;
+      color: white;
+    }
+
+    .btn-success:hover {
+      background: #059669;
+    }
+
+    .btn-danger {
+      background: #ef4444;
+      color: white;
+    }
+
+    .btn-danger:hover {
+      background: #dc2626;
     }
 
     .score-cards {
@@ -517,6 +576,7 @@
       color: #6b4c5c;
       font-weight: 600;
       margin-bottom: 8px;
+      text-transform: uppercase;
     }
 
     .score-value {
@@ -526,6 +586,7 @@
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
+      text-transform: uppercase;
     }
 
     .chart-container {
@@ -550,6 +611,7 @@
       font-weight: 700;
       color: #d946a6;
       margin-bottom: 16px;
+      text-transform: uppercase;
     }
 
     @media (min-width: 768px) {
@@ -590,6 +652,7 @@
       animation: slideIn 0.3s ease;
       pointer-events: auto;
       border-left: 4px solid #ec4899;
+      text-transform: uppercase;
     }
 
     .toast.success {
@@ -622,6 +685,7 @@
       background: #faf9fb;
       color: #4a3f47;
       transition: all 0.2s ease;
+      text-transform: uppercase;
     }
 
     .input-field:focus {
@@ -694,12 +758,14 @@
       font-weight: 700;
       color: #d946a6;
       margin: 0 0 4px 0;
+      text-transform: uppercase;
     }
 
     .master-card-detail {
       font-size: clamp(10px, 2vw, 12px);
       color: #b9a2b3;
       margin: 0;
+      text-transform: uppercase;
     }
 
     .master-card-actions {
@@ -717,6 +783,7 @@
       font-size: clamp(9px, 1.5vw, 11px);
       font-weight: 600;
       transition: all 0.2s ease;
+      text-transform: uppercase;
     }
 
     .btn-edit {
@@ -762,24 +829,71 @@
       text-transform: uppercase;
     }
 
-    .toast {
+    #login-modal {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
       background: white;
-      color: #4a3f47;
-      padding: 12px 16px;
-      border-radius: 8px;
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
-      font-size: clamp(11px, 2vw, 13px);
-      font-weight: 600;
-      animation: slideIn 0.3s ease;
-      pointer-events: auto;
-      border-left: 4px solid #ec4899;
+      border-radius: 16px;
+      padding: 32px;
+      z-index: 10000;
+      min-width: 350px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
     }
 
-    @media (min-width: 768px) {
-      .toast {
-        padding: 16px 24px;
-        border-radius: 10px;
-      }
+    .login-title {
+      margin: 0 0 24px 0;
+      color: #ec4899;
+      font-size: 18px;
+      font-weight: 700;
+      text-transform: uppercase;
+      text-align: center;
+    }
+
+    .login-label {
+      font-size: 12px;
+      font-weight: 600;
+      color: #6b4c5c;
+      margin-bottom: 6px;
+      text-transform: uppercase;
+    }
+
+    .login-input {
+      width: 100%;
+      padding: 12px;
+      border: 2px solid #f3e8f0;
+      border-radius: 8px;
+      font-size: 14px;
+      font-family: inherit;
+      transition: all 0.3s ease;
+      margin-bottom: 16px;
+      text-transform: uppercase;
+    }
+
+    .login-input:focus {
+      outline: none;
+      border-color: #ec4899;
+      box-shadow: 0 0 0 3px rgba(236, 72, 153, 0.1);
+    }
+
+    .login-error {
+      color: #ef4444;
+      font-size: 12px;
+      margin-top: -12px;
+      margin-bottom: 16px;
+      text-align: center;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+
+    .login-buttons {
+      display: flex;
+      gap: 12px;
+    }
+
+    .text-center {
+      text-align: center;
     }
 
     .text-gray-400 {
@@ -800,7 +914,7 @@
    <div class="header">
     <div class="header-content">
      <h1>✨ OEE KEMAS SEKUNDER</h1>
-     <p>Created by MSTD GOF</p>
+     <p>CREATED BY MSTD GOF</p>
     </div>
     <div style="display: flex; flex-direction: column; gap: 16px; align-items: flex-end;">
      <div class="header-datetime">
@@ -808,139 +922,41 @@
        00:00:00
       </div>
       <div id="current-date">
-       Tanggal
+       TANGGAL
       </div>
-     </div><button class="mode-toggle" onclick="toggleDarkMode()"> <span id="mode-icon">🌙</span> <span id="mode-text">Dark</span> </button>
+     </div><button class="mode-toggle" onclick="toggleDarkMode()"> <span id="mode-icon">🌙</span> <span id="mode-text">DARK</span> </button>
     </div>
    </div>
-   <div class="tabs-container"><button class="tab-btn active" onclick="switchTab('input')">✏️ INPUT OEE</button> <button class="tab-btn" onclick="switchTab('dashboard')">📈 DASHBOARD</button> <button class="tab-btn" onclick="switchTab('master')">💾 MASTER DATA</button> <button class="tab-btn" onclick="switchTab('audit')">⚙️ AUDIT TRAIL</button>
+   <div class="tabs-container">
+    <button class="tab-btn active" onclick="switchTab('dashboard')">📈 DASHBOARD</button>
+    <button class="tab-btn" onclick="switchTab('input')">✏️ INPUT OEE</button>
+    <button class="tab-btn" onclick="switchTab('master')">💾 MASTER DATA</button>
+    <button class="tab-btn" onclick="switchTab('audit')">⚙️ AUDIT TRAIL</button>
    </div>
-   <div class="content"><!-- INPUT OEE TAB -->
-    <div id="input" class="tab-content active">
-     <form id="form-oee" onsubmit="submitOEE(event)">
-      <div class="form-section">
-       <div class="section-title">
-        Informasi Shift
-       </div>
-       <div class="form-row">
-        <div class="form-group"><label>Tanggal</label> <input type="date" id="oee-date" required>
-        </div>
-        <div class="form-group"><label>Shift</label> <select id="oee-shift" onchange="updateShiftMinutes()"> <option value="">-- Pilih Shift --</option> <option value="Shift 1">Shift 1 (07:00 - 15:30)</option> <option value="Shift 2">Shift 2 (15:20 - 22:50)</option> <option value="Shift 3">Shift 3 (22:40 - 07:10)</option> <option value="Longshift Pagi">Longshift Pagi (07:00 - 19:00)</option> <option value="Longshift Malam">Longshift Malam (19:00 - 07:00)</option> </select>
-        </div>
-       </div>
-      </div>
-      <div class="form-section">
-       <div class="section-title">
-        Packer Meter
-       </div><button type="button" class="btn btn-success" onclick="addPackerMeter()">+ Tambah Meter</button>
-       <div id="packer-meter-list" style="margin-top: 16px;"></div>
-      </div>
-      <div class="form-section">
-       <div class="section-title">
-        Operational Downtime (ODT)
-       </div>
-       <div id="odt-list"></div>
-      </div>
-      <div class="form-section">
-       <div class="section-title">
-        Line Stop Mesin
-       </div>
-       <div id="line-stop-mesin-list"></div>
-      </div>
-      <div class="form-section">
-       <div class="section-title">
-        Line Stop Non-Mesin
-       </div>
-       <div id="line-stop-non-mesin-list"></div>
-      </div>
-      <div class="form-section">
-       <div class="section-title">
-        Minor Stop
-       </div><button type="button" class="btn btn-success" onclick="addMinorStop()">+ Tambah Minor Stop</button>
-       <div id="minor-stop-list" style="margin-top: 16px;"></div>
-      </div>
-      <div class="form-section">
-       <div id="availability-warning" style="display: none;"></div>
-       <div class="section-title">
-        Hasil Perhitungan OEE
-       </div>
-       <div class="score-cards">
-        <div class="score-card">
-         <div class="score-label">
-          Availability (Actual)
-         </div>
-         <div class="score-value" id="calc-availability-actual">
-          0%
-         </div>
-        </div>
-        <div class="score-card">
-         <div class="score-label">
-          Performance
-         </div>
-         <div class="score-value" id="calc-performance">
-          0%
-         </div>
-        </div>
-        <div class="score-card">
-         <div class="score-label">
-          Quality Rate
-         </div>
-         <div class="score-value" id="calc-quality">
-          0%
-         </div>
-        </div>
-        <div class="score-card">
-         <div class="score-label">
-          OEE (Actual)
-         </div>
-         <div class="score-value" id="calc-oee-actual">
-          0%
-         </div>
-        </div>
-        <div class="score-card">
-         <div class="score-label">
-          OEE (365)
-         </div>
-         <div class="score-value" id="calc-oee-365">
-          0%
-         </div>
-        </div>
-        <div class="score-card">
-         <div class="score-label">
-          Total Output
-         </div>
-         <div class="score-value" id="calc-total-output" style="font-size: 24px;">
-          0 DUS
-         </div>
-        </div>
-       </div>
-      </div>
-      <div class="form-section" style="text-align: center;"><button type="submit" class="btn btn-primary" style="margin-right: 12px;">💾 Simpan Data OEE</button> <button type="button" class="btn btn-secondary" onclick="resetOEEForm()">�� Reset Form</button>
-      </div>
-     </form>
-    </div><!-- DASHBOARD TAB -->
-    <div id="dashboard" class="tab-content">
+   <div class="content">
+    <!-- DASHBOARD TAB -->
+    <div id="dashboard" class="tab-content active">
      <div class="form-section">
       <div class="section-title">
-       Filter Data
+       FILTER DATA
       </div>
       <div class="filter-group">
-       <div class="form-group"><label>Tanggal Mulai</label> <input type="date" id="filter-date-start" class="input-field" onchange="applyDashboardFilters()">
+       <div class="form-group"><label>TANGGAL MULAI</label> <input type="date" id="filter-date-start" class="input-field" onchange="applyDashboardFilters()">
        </div>
-       <div class="form-group"><label>Tanggal Akhir</label> <input type="date" id="filter-date-end" class="input-field" onchange="applyDashboardFilters()">
+       <div class="form-group"><label>TANGGAL AKHIR</label> <input type="date" id="filter-date-end" class="input-field" onchange="applyDashboardFilters()">
        </div>
-       <div class="form-group"><label>Produk</label> <select id="filter-product" class="input-field" onchange="applyDashboardFilters()"> <option value="">-- Semua Produk --</option> </select>
+       <div class="form-group"><label>PRODUK</label> <select id="filter-product" class="input-field" onchange="applyDashboardFilters()"> <option value="">-- SEMUA PRODUK --</option> </select>
        </div>
-       <div class="form-group"><label>Packer</label> <select id="filter-packer" class="input-field" onchange="applyDashboardFilters()"> <option value="">-- Semua Packer --</option> </select>
+       <div class="form-group"><label>PACKER</label> <select id="filter-packer" class="input-field" onchange="applyDashboardFilters()"> <option value="">-- SEMUA PACKER --</option> </select>
        </div>
-       <div style="display: flex; align-items: flex-end;"><button class="btn btn-secondary" onclick="resetDashboardFilters()" style="width: 100%;">Reset Filter</button>
+       <div style="display: flex; align-items: flex-end;"><button class="btn btn-secondary" onclick="resetDashboardFilters()" style="width: 100%;">RESET FILTER</button>
        </div>
       </div>
      </div>
      <div class="score-cards">
       <div class="score-card" id="score-card-oee-actual">
        <div class="score-label">
-        OEE Actual
+        OEE ACTUAL
        </div>
        <div class="score-value" id="score-oee-actual">
         0%
@@ -956,7 +972,7 @@
       </div>
       <div class="score-card">
        <div class="score-label">
-        Total Output
+        TOTAL OUTPUT
        </div>
        <div class="score-value" id="score-total-output" style="font-size: 24px;">
         0
@@ -965,59 +981,59 @@
      </div>
      <div class="chart-container">
       <div class="chart-title">
-       OEE Per Bulan (12 Bulan)
+       OEE PER BULAN (12 BULAN)
       </div>
       <canvas id="chart-oee-monthly" height="80"></canvas>
      </div>
      <div class="chart-container">
       <div class="chart-title">
-       OEE Per Hari (30 Hari Terakhir)
+       OEE PER HARI (30 HARI TERAKHIR)
       </div>
       <canvas id="chart-oee-daily" height="80"></canvas>
      </div>
      <div class="chart-container">
       <div class="chart-title">
-       A / P / Q / 365 Breakdown
+       A / P / Q / 365 BREAKDOWN
       </div>
       <canvas id="chart-apqa-breakdown" height="100"></canvas>
      </div>
      <div class="chart-container">
       <div class="chart-title">
-       Top 10 ODT (Menit)
+       TOP 10 ODT (MENIT)
       </div>
       <canvas id="chart-odt-top10" height="200"></canvas>
      </div>
      <div class="chart-container">
       <div class="chart-title">
-       Top 10 Line Stop Mesin (Menit)
+       TOP 10 LINE STOP MESIN (MENIT)
       </div>
       <canvas id="chart-lsm-top10" height="200"></canvas>
      </div>
      <div class="chart-container">
       <div class="chart-title">
-       Top 10 Line Stop Non-Mesin (Menit)
+       TOP 10 LINE STOP NON-MESIN (MENIT)
       </div>
       <canvas id="chart-lsnm-top10" height="200"></canvas>
      </div>
      <div class="chart-container">
       <div class="chart-title">
-       Top 10 Minor Stop (Menit)
+       TOP 10 MINOR STOP (MENIT)
       </div>
       <canvas id="chart-ms-top10" height="200"></canvas>
      </div>
      <div class="form-section">
       <div class="section-title">
-       Performa Packer
+       PERFORMA PACKER
       </div>
       <div class="table-wrapper">
        <table>
         <thead>
          <tr>
-          <th>No</th>
-          <th>Packer</th>
-          <th>Avg OEE Actual</th>
-          <th>Total Output</th>
-          <th>Records</th>
+          <th>NO</th>
+          <th>PACKER</th>
+          <th>AVG OEE ACTUAL</th>
+          <th>TOTAL OUTPUT</th>
+          <th>RECORDS</th>
          </tr>
         </thead>
         <tbody id="table-packer-performance"></tbody>
@@ -1026,78 +1042,184 @@
      </div>
      <div class="form-section">
       <div class="section-title">
-       Riwayat OEE
+       RIWAYAT OEE
       </div>
       <div class="table-wrapper">
        <table>
         <thead>
          <tr>
-          <th>Tanggal</th>
-          <th>Shift</th>
-          <th>Nomor Batch</th>
-          <th>OEE Actual</th>
+          <th>TANGGAL</th>
+          <th>SHIFT</th>
+          <th>NOMOR BATCH</th>
+          <th>OEE ACTUAL</th>
           <th>OEE 365</th>
-          <th>Abnormalitas LSM</th>
-          <th>Action LSM</th>
-          <th>Abnormalitas LSNM</th>
-          <th>Action LSNM</th>
+          <th>ABNORMALITAS LSM</th>
+          <th>ACTION LSM</th>
+          <th>ABNORMALITAS LSNM</th>
+          <th>ACTION LSNM</th>
          </tr>
         </thead>
         <tbody id="table-oee-history"></tbody>
        </table>
       </div>
      </div>
-    </div><!-- MASTER DATA TAB -->
+    </div>
+    <!-- INPUT OEE TAB -->
+    <div id="input" class="tab-content">
+     <form id="form-oee" onsubmit="submitOEE(event)">
+      <div class="form-section">
+       <div class="section-title">
+        INFORMASI SHIFT
+       </div>
+       <div class="form-row">
+        <div class="form-group"><label>TANGGAL</label> <input type="date" id="oee-date" required>
+        </div>
+        <div class="form-group"><label>SHIFT</label> <select id="oee-shift" onchange="updateShiftMinutes()"> <option value="">-- PILIH SHIFT --</option> <option value="Shift 1">SHIFT 1 (07:00 - 15:30)</option> <option value="Shift 2">SHIFT 2 (15:20 - 22:50)</option> <option value="Shift 3">SHIFT 3 (22:40 - 07:10)</option> <option value="Longshift Pagi">LONGSHIFT PAGI (07:00 - 19:00)</option> <option value="Longshift Malam">LONGSHIFT MALAM (19:00 - 07:00)</option> </select>
+        </div>
+       </div>
+      </div>
+      <div class="form-section">
+       <div class="section-title">
+        PACKER METER
+       </div><button type="button" class="btn btn-success" onclick="addPackerMeter()">+ TAMBAH METER</button>
+       <div id="packer-meter-list" style="margin-top: 16px;"></div>
+      </div>
+      <div class="form-section">
+       <div class="section-title">
+        OPERATIONAL DOWNTIME (ODT)
+       </div>
+       <div id="odt-list"></div>
+      </div>
+      <div class="form-section">
+       <div class="section-title">
+        LINE STOP MESIN
+       </div>
+       <div id="line-stop-mesin-list"></div>
+      </div>
+      <div class="form-section">
+       <div class="section-title">
+        LINE STOP NON-MESIN
+       </div>
+       <div id="line-stop-non-mesin-list"></div>
+      </div>
+      <div class="form-section">
+       <div class="section-title">
+        MINOR STOP
+       </div><button type="button" class="btn btn-success" onclick="addMinorStop()">+ TAMBAH MINOR STOP</button>
+       <div id="minor-stop-list" style="margin-top: 16px;"></div>
+      </div>
+      <div class="form-section">
+       <div id="availability-warning" style="display: none;"></div>
+       <div class="section-title">
+        HASIL PERHITUNGAN OEE
+       </div>
+       <div class="score-cards">
+        <div class="score-card">
+         <div class="score-label">
+          AVAILABILITY (ACTUAL)
+         </div>
+         <div class="score-value" id="calc-availability-actual">
+          0%
+         </div>
+        </div>
+        <div class="score-card">
+         <div class="score-label">
+          PERFORMANCE
+         </div>
+         <div class="score-value" id="calc-performance">
+          0%
+         </div>
+        </div>
+        <div class="score-card">
+         <div class="score-label">
+          QUALITY RATE
+         </div>
+         <div class="score-value" id="calc-quality">
+          0%
+         </div>
+        </div>
+        <div class="score-card">
+         <div class="score-label">
+          OEE (ACTUAL)
+         </div>
+         <div class="score-value" id="calc-oee-actual">
+          0%
+         </div>
+        </div>
+        <div class="score-card">
+         <div class="score-label">
+          OEE (365)
+         </div>
+         <div class="score-value" id="calc-oee-365">
+          0%
+         </div>
+        </div>
+        <div class="score-card">
+         <div class="score-label">
+          TOTAL OUTPUT
+         </div>
+         <div class="score-value" id="calc-total-output" style="font-size: 24px;">
+          0 DUS
+         </div>
+        </div>
+       </div>
+      </div>
+      <div class="form-section" style="text-align: center;"><button type="submit" class="btn btn-primary" style="margin-right: 12px;">💾 SIMPAN DATA OEE</button> <button type="button" class="btn btn-secondary" onclick="resetOEEForm()">🔄 RESET FORM</button>
+      </div>
+     </form>
+    </div>
+    <!-- MASTER DATA TAB -->
     <div id="master" class="tab-content">
      <div class="form-section">
       <div class="section-title">
-       Master Produk
-      </div><button class="btn btn-primary" onclick="openAddProductModal()">+ Produk Baru</button>
+       MASTER PRODUK
+      </div><button class="btn btn-primary" onclick="openAddProductModal()">+ PRODUK BARU</button>
       <div id="product-list" class="master-data-grid" style="margin-top: 16px;"></div>
      </div>
      <div class="form-section">
       <div class="section-title">
-       Master Packer
-      </div><button class="btn btn-primary" onclick="openAddPackerModal()">+ Packer Baru</button>
+       MASTER PACKER
+      </div><button class="btn btn-primary" onclick="openAddPackerModal()">+ PACKER BARU</button>
       <div id="packer-list" class="master-data-grid" style="margin-top: 16px;"></div>
      </div>
      <div class="form-section">
       <div class="section-title">
-       Master ODT
-      </div><button class="btn btn-primary" onclick="openAddODTModal()">+ ODT Baru</button>
+       MASTER ODT
+      </div><button class="btn btn-primary" onclick="openAddODTModal()">+ ODT BARU</button>
       <div id="odt-master-list" class="master-data-grid" style="margin-top: 16px;"></div>
      </div>
      <div class="form-section">
       <div class="section-title">
-       Master Line Stop Mesin
-      </div><button class="btn btn-primary" onclick="openAddLineStopMesinModal()">+ Line Stop Baru</button>
+       MASTER LINE STOP MESIN
+      </div><button class="btn btn-primary" onclick="openAddLineStopMesinModal()">+ LINE STOP BARU</button>
       <div id="line-stop-mesin-master-list" class="master-data-grid" style="margin-top: 16px;"></div>
      </div>
      <div class="form-section">
       <div class="section-title">
-       Master Line Stop Non-Mesin
-      </div><button class="btn btn-primary" onclick="openAddLineStopNonMesinModal()">+ Line Stop Baru</button>
+       MASTER LINE STOP NON-MESIN
+      </div><button class="btn btn-primary" onclick="openAddLineStopNonMesinModal()">+ LINE STOP BARU</button>
       <div id="line-stop-non-mesin-master-list" class="master-data-grid" style="margin-top: 16px;"></div>
      </div>
      <div class="form-section">
       <div class="section-title">
-       Master Minor Stop
-      </div><button class="btn btn-primary" onclick="openAddMinorStopModal()">+ Minor Stop Baru</button>
+       MASTER MINOR STOP
+      </div><button class="btn btn-primary" onclick="openAddMinorStopModal()">+ MINOR STOP BARU</button>
       <div id="minor-stop-master-list" class="master-data-grid" style="margin-top: 16px;"></div>
      </div>
-    </div><!-- AUDIT TRAIL TAB -->
+    </div>
+    <!-- AUDIT TRAIL TAB -->
     <div id="audit" class="tab-content">
      <div class="form-section">
       <div class="section-title">
-       Riwayat Aktivitas
+       RIWAYAT AKTIVITAS
       </div>
       <div class="table-wrapper">
        <table>
         <thead>
          <tr>
-          <th>Waktu</th>
-          <th>Aktivitas</th>
-          <th>Detail</th>
+          <th>WAKTU</th>
+          <th>AKTIVITAS</th>
+          <th>DETAIL</th>
          </tr>
         </thead>
         <tbody id="audit-table"></tbody>
@@ -1107,16 +1229,39 @@
     </div>
    </div>
   </div>
-  <div id="toast-container" class="toast-container"></div><!-- Modal Backdrop -->
-  <div id="modal-backdrop" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.5); z-index: 9998;" onclick="if(event.target === this) closeModal();"></div><!-- Modal -->
-  <div id="modal" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; border-radius: 16px; padding: 32px; z-index: 9999; min-width: 400px; box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);">
-   <h2 id="modal-title" style="margin: 0 0 24px 0; color: #ec4899; font-size: 18px; font-weight: 700; text-transform: uppercase;">Modal Title</h2>
-   <form id="modal-form" onsubmit="submitModalForm(event)">
-    <div id="modal-fields"></div>
-    <div style="display: flex; gap: 12px; margin-top: 24px;"><button type="submit" class="btn btn-primary" style="flex: 1;">Simpan</button> <button type="button" class="btn btn-secondary" style="flex: 1;" onclick="closeModal()">Batal</button>
+
+  <!-- LOGIN MODAL -->
+  <div id="login-backdrop" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.5); z-index: 10000;" onclick="if(event.target === this) closeLoginModal();"></div>
+  <div id="login-modal" style="display: none;">
+   <h2 class="login-title">🔐 MASTER DATA ACCESS</h2>
+   <form onsubmit="handleLogin(event)">
+    <div class="form-group">
+     <label class="login-label">PASSWORD</label>
+     <input type="password" id="login-password" class="login-input" placeholder="MASUKKAN PASSWORD" autocomplete="off">
+    </div>
+    <div id="login-error" class="login-error" style="display: none;">PASSWORD SALAH!</div>
+    <div class="login-buttons">
+     <button type="submit" class="btn btn-primary" style="flex: 1;">LOGIN</button>
+     <button type="button" class="btn btn-secondary" style="flex: 1;" onclick="closeLoginModal()">BATAL</button>
     </div>
    </form>
   </div>
+
+  <div id="toast-container" class="toast-container"></div>
+  
+  <!-- Modal Backdrop -->
+  <div id="modal-backdrop" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.5); z-index: 9998;" onclick="if(event.target === this) closeModal();"></div>
+  
+  <!-- Modal -->
+  <div id="modal" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; border-radius: 16px; padding: 32px; z-index: 9999; min-width: 400px; box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);">
+   <h2 id="modal-title" style="margin: 0 0 24px 0; color: #ec4899; font-size: 18px; font-weight: 700; text-transform: uppercase;">MODAL TITLE</h2>
+   <form id="modal-form" onsubmit="submitModalForm(event)">
+    <div id="modal-fields"></div>
+    <div style="display: flex; gap: 12px; margin-top: 24px;"><button type="submit" class="btn btn-primary" style="flex: 1;">SIMPAN</button> <button type="button" class="btn btn-secondary" style="flex: 1;" onclick="closeModal()">BATAL</button>
+    </div>
+   </form>
+  </div>
+
   <script>
     // Supabase Configuration
     const SUPABASE_URL = 'https://lxtnhdyxrkjbypahdsrf.supabase.co';
@@ -1126,6 +1271,10 @@
     if (window.supabase) {
       supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
     }
+
+    // MASTER DATA ACCESS CONTROL
+    const MASTER_PASSWORD = 'admin123';
+    let isMasterDataUnlocked = false;
 
     let localData = {
       produk: [],
@@ -1155,13 +1304,34 @@
       renderAuditTable();
       initDashboardFilters();
       updateDashboard();
+      
+      // Set default active tab to Dashboard
+      switchTab('dashboard');
     }
 
     window.switchTab = function(tabName) {
       document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
       document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
       document.getElementById(tabName).classList.add('active');
-      event.target.classList.add('active');
+      
+      // Find the button that corresponds to this tab and make it active
+      document.querySelectorAll('.tab-btn').forEach(btn => {
+        if (btn.textContent.includes(tabName === 'dashboard' ? 'DASHBOARD' : 
+                                    tabName === 'input' ? 'INPUT OEE' : 
+                                    tabName === 'master' ? 'MASTER DATA' : 'AUDIT TRAIL')) {
+          btn.classList.add('active');
+        }
+      });
+      
+      // Auto lock master data when switching away from master tab
+      if (tabName !== 'master') {
+        isMasterDataUnlocked = false;
+      } else {
+        // If switching to master tab, check if already unlocked
+        if (!isMasterDataUnlocked) {
+          showLoginModal();
+        }
+      }
       
       if (tabName === 'dashboard') {
         setTimeout(() => {
@@ -1169,6 +1339,50 @@
         }, 100);
       }
     };
+
+    // LOGIN FUNCTIONS
+    function showLoginModal() {
+      document.getElementById('login-backdrop').style.display = 'block';
+      document.getElementById('login-modal').style.display = 'block';
+      document.getElementById('login-error').style.display = 'none';
+      document.getElementById('login-password').value = '';
+      document.getElementById('login-password').focus();
+    }
+
+    function closeLoginModal() {
+      // If not unlocked, switch back to previous tab
+      if (!isMasterDataUnlocked) {
+        // Switch to dashboard
+        switchTab('dashboard');
+      }
+      document.getElementById('login-backdrop').style.display = 'none';
+      document.getElementById('login-modal').style.display = 'none';
+    }
+
+    function handleLogin(event) {
+      event.preventDefault();
+      const password = document.getElementById('login-password').value;
+      
+      if (password === MASTER_PASSWORD) {
+        isMasterDataUnlocked = true;
+        closeLoginModal();
+        showToast('MASTER DATA ACCESS GRANTED ✅', 'success');
+        renderMasterDataLists(); // Refresh master data
+      } else {
+        document.getElementById('login-error').style.display = 'block';
+        showToast('PASSWORD SALAH!', 'error');
+      }
+    }
+
+    // Check master data access before operations
+    function checkMasterAccess() {
+      if (!isMasterDataUnlocked) {
+        showToast('AKSES MASTER DATA DITOLAK! LOGIN TERLEBIH DAHULU', 'error');
+        showLoginModal();
+        return false;
+      }
+      return true;
+    }
 
     async function loadDataFromSupabase() {
       try {
@@ -1194,7 +1408,7 @@
         localData.audit_trail = auditRes.data || [];
       } catch (error) {
         console.error('Error loading data:', error);
-        showToast('Error loading data from Supabase', 'error');
+        showToast('ERROR LOADING DATA FROM SUPABASE', 'error');
       }
     }
 
@@ -1217,7 +1431,7 @@
     function addPackerMeter() {
       const shift = document.getElementById('oee-shift').value;
       if (!shift) {
-        showToast('Pilih shift terlebih dahulu', 'error');
+        showToast('PILIH SHIFT TERLEBIH DAHULU', 'error');
         return;
       }
 
@@ -1235,35 +1449,35 @@
     function renderPackerMeterList() {
       const listDiv = document.getElementById('packer-meter-list');
       if (oeeFormState.packerMeters.length === 0) {
-        listDiv.innerHTML = '<div class="empty-state"><div class="empty-state-icon">��</div><div class="empty-state-text">Belum ada meter ditambahkan</div></div>';
+        listDiv.innerHTML = '<div class="empty-state"><div class="empty-state-icon">📦</div><div class="empty-state-text">BELUM ADA METER DITAMBAHKAN</div></div>';
         return;
       }
 
       listDiv.innerHTML = oeeFormState.packerMeters.map(meter => `
         <div class="card" data-meter-id="${meter.id}">
           <div class="card-header">
-            <h3 class="card-title">Meter ${oeeFormState.packerMeters.indexOf(meter) + 1}</h3>
-            <button type="button" class="btn btn-danger btn-small" onclick="removePackerMeter('${meter.id}')">Hapus</button>
+            <h3 class="card-title">METER ${oeeFormState.packerMeters.indexOf(meter) + 1}</h3>
+            <button type="button" class="btn btn-danger btn-small" onclick="removePackerMeter('${meter.id}')">HAPUS</button>
           </div>
 
           <div class="form-row">
             <div class="form-group">
-              <label>Produk</label>
+              <label>PRODUK</label>
               <select class="meter-product input-field" onchange="updatePackerMeter('${meter.id}', 'product')">
-                <option value="">-- Pilih Produk --</option>
+                <option value="">-- PILIH PRODUK --</option>
                 ${localData.produk.map(p => `<option value="${p.id}" ${meter.productId === p.id ? 'selected' : ''}>${p.nama}</option>`).join('')}
               </select>
             </div>
             <div class="form-group">
-              <label>Batch Number</label>
-              <input type="text" class="meter-batch input-field" value="${meter.batchNumber}" placeholder="Batch Number" onchange="updatePackerMeter('${meter.id}', 'batch')">
+              <label>BATCH NUMBER</label>
+              <input type="text" class="meter-batch input-field" value="${meter.batchNumber}" placeholder="BATCH NUMBER" onchange="updatePackerMeter('${meter.id}', 'batch')">
             </div>
           </div>
 
           <div style="margin-top: 16px;">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
-              <h4 class="section-title" style="margin: 0;">Packer</h4>
-              <button type="button" class="btn btn-success btn-small" onclick="addPackerToMeter('${meter.id}')">+ Packer</button>
+              <h4 class="section-title" style="margin: 0;">PACKER</h4>
+              <button type="button" class="btn btn-success btn-small" onclick="addPackerToMeter('${meter.id}')">+ PACKER</button>
             </div>
             <div id="packers-${meter.id}"></div>
           </div>
@@ -1280,41 +1494,41 @@
       if (!container) return;
 
       if (meter.packers.length === 0) {
-        container.innerHTML = '<div class="empty-state"><div class="empty-state-text" style="font-size: 12px;">Tambah packer untuk meter ini</div></div>';
+        container.innerHTML = '<div class="empty-state"><div class="empty-state-text" style="font-size: 12px;">TAMBAH PACKER UNTUK METER INI</div></div>';
         return;
       }
 
       container.innerHTML = meter.packers.map(packer => `
         <div id="packer-${packer.id}" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(85px, 1fr)); gap: 8px; padding: 12px; background: white; border-radius: 8px; margin-bottom: 8px; border: 1px solid rgba(236, 72, 153, 0.1);">
           <div class="form-group">
-            <label style="font-size: 10px;">Packer</label>
+            <label style="font-size: 10px;">PACKER</label>
             <select class="packer-name input-field" style="font-size: 11px;" onchange="updatePacker('${packer.id}', '${meter.id}')">
-              <option value="">Pilih</option>
+              <option value="">PILIH</option>
               ${localData.packer.map(p => `<option value="${p.id}|${p.nama}" ${packer.packerId === p.id ? 'selected' : ''}>${p.nama}</option>`).join('')}
             </select>
           </div>
           <div class="form-group">
-            <label style="font-size: 10px;">Start</label>
+            <label style="font-size: 10px;">START</label>
             <input type="time" class="packer-start-time input-field" style="font-size: 11px;" value="${packer.startTime}" onchange="updatePacker('${packer.id}', '${meter.id}')">
           </div>
           <div class="form-group">
-            <label style="font-size: 10px;">End</label>
+            <label style="font-size: 10px;">END</label>
             <input type="time" class="packer-end-time input-field" style="font-size: 11px;" value="${packer.endTime}" onchange="updatePacker('${packer.id}', '${meter.id}')">
           </div>
           <div class="form-group">
-            <label style="font-size: 10px;">Durasi (Min)</label>
+            <label style="font-size: 10px;">DURASI (MIN)</label>
             <input type="number" class="packer-duration input-field" style="font-size: 11px;" value="${packer.duration}" readonly>
           </div>
           <div class="form-group">
-            <label style="font-size: 10px;">Output (DUS)</label>
-            <input type="number" class="packer-output input-field" style="font-size: 11px;" value="${packer.output}" placeholder="Output" onchange="updatePacker('${packer.id}', '${meter.id}')">
+            <label style="font-size: 10px;">OUTPUT (DUS)</label>
+            <input type="number" class="packer-output input-field" style="font-size: 11px;" value="${packer.output}" placeholder="OUTPUT" onchange="updatePacker('${packer.id}', '${meter.id}')">
           </div>
           <div class="form-group">
-            <label style="font-size: 10px;">Reject (DUS)</label>
-            <input type="number" class="packer-reject input-field" style="font-size: 11px;" value="${packer.reject}" placeholder="Reject" onchange="updatePacker('${packer.id}', '${meter.id}')">
+            <label style="font-size: 10px;">REJECT (DUS)</label>
+            <input type="number" class="packer-reject input-field" style="font-size: 11px;" value="${packer.reject}" placeholder="REJECT" onchange="updatePacker('${packer.id}', '${meter.id}')">
           </div>
           <div style="display: flex; align-items: flex-end;">
-            <button type="button" class="btn btn-danger btn-small" style="width: 100%; padding: 8px; font-size: 11px;" onclick="removePacker('${packer.id}', '${meter.id}')">Hapus</button>
+            <button type="button" class="btn btn-danger btn-small" style="width: 100%; padding: 8px; font-size: 11px;" onclick="removePacker('${packer.id}', '${meter.id}')">HAPUS</button>
           </div>
         </div>
       `).join('');
@@ -1429,7 +1643,7 @@
     function renderODTList() {
       const listDiv = document.getElementById('odt-list');
       if (localData.downtime.length === 0) {
-        listDiv.innerHTML = '<div class="empty-state"><div class="empty-state-text">Belum ada data ODT</div></div>';
+        listDiv.innerHTML = '<div class="empty-state"><div class="empty-state-text">BELUM ADA DATA ODT</div></div>';
         return;
       }
 
@@ -1441,9 +1655,9 @@
         <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 12px; padding: 12px; background: #f0f9ff; border-radius: 8px; align-items: center; margin-bottom: 8px; border: 1px solid rgba(59, 130, 246, 0.2);">
           <div>
             <p style="font-size: 13px; font-weight: 700; color: #3b82f6; margin: 0 0 4px 0; text-transform: uppercase;">${odt.nama}</p>
-            <p style="font-size: 11px; color: #60a5fa; margin: 0; text-transform: uppercase;">STD: ${odt.waktu_standard} menit</p>
+            <p style="font-size: 11px; color: #60a5fa; margin: 0; text-transform: uppercase;">STD: ${odt.waktu_standard} MENIT</p>
           </div>
-          <input type="number" class="input-field" value="${odt.durasi}" min="0" placeholder="Durasi Aktual" onchange="updateODT('${odt.id}', this.value)">
+          <input type="number" class="input-field" value="${odt.durasi}" min="0" placeholder="DURASI AKTUAL" onchange="updateODT('${odt.id}', this.value)">
         </div>
       `).join('');
     }
@@ -1459,7 +1673,7 @@
     function renderLineStopMesinList() {
       const listDiv = document.getElementById('line-stop-mesin-list');
       if (localData.line_stop_mesin.length === 0 && oeeFormState.lineStopMesin.length === 0) {
-        listDiv.innerHTML = '<div class="empty-state"><div class="empty-state-text">Belum ada data</div></div>';
+        listDiv.innerHTML = '<div class="empty-state"><div class="empty-state-text">BELUM ADA DATA</div></div>';
         return;
       }
 
@@ -1475,9 +1689,9 @@
             <div>
               <p style="font-size: 13px; font-weight: 700; color: #a855f7; margin: 0; text-transform: uppercase;">${lsm.nama}</p>
             </div>
-            <input type="number" class="input-field" value="${lsm.durasi}" min="0" placeholder="Durasi (Min)" onchange="updateLineStopMesin('${lsm.id}', 'durasi', this.value)">
-            <input type="text" class="input-field" value="${lsm.action}" placeholder="Action" onchange="updateLineStopMesin('${lsm.id}', 'action', this.value)">
-            <input type="text" class="input-field" style="${wrRequired ? 'border-color: #ef4444;' : ''}" value="${lsm.wr}" placeholder="No WR${wrRequired ? ' *' : ''}" onchange="updateLineStopMesin('${lsm.id}', 'wr', this.value)">
+            <input type="number" class="input-field" value="${lsm.durasi}" min="0" placeholder="DURASI (MIN)" onchange="updateLineStopMesin('${lsm.id}', 'durasi', this.value)">
+            <input type="text" class="input-field" value="${lsm.action}" placeholder="ACTION" onchange="updateLineStopMesin('${lsm.id}', 'action', this.value)">
+            <input type="text" class="input-field" style="${wrRequired ? 'border-color: #ef4444;' : ''}" value="${lsm.wr}" placeholder="NO WR${wrRequired ? ' *' : ''}" onchange="updateLineStopMesin('${lsm.id}', 'wr', this.value)">
           </div>
         `;
       }).join('');
@@ -1492,7 +1706,7 @@
     function renderLineStopNonMesinList() {
       const listDiv = document.getElementById('line-stop-non-mesin-list');
       if (localData.line_stop_non_mesin.length === 0 && oeeFormState.lineStopNonMesin.length === 0) {
-        listDiv.innerHTML = '<div class="empty-state"><div class="empty-state-text">Belum ada data</div></div>';
+        listDiv.innerHTML = '<div class="empty-state"><div class="empty-state-text">BELUM ADA DATA</div></div>';
         return;
       }
 
@@ -1506,8 +1720,8 @@
             <input type="checkbox" id="lsnm-${lsnm.id}" ${lsnm.checked ? 'checked' : ''} onchange="updateLineStopNonMesin('${lsnm.id}', 'checked', this.checked); renderLineStopNonMesinList();">
             <label for="lsnm-${lsnm.id}" style="font-size: 13px; font-weight: 600; color: #10b981; margin: 0; text-transform: uppercase; cursor: pointer;">${lsnm.nama}</label>
           </div>
-          <input type="number" class="input-field" value="${lsnm.durasi}" min="0" placeholder="Durasi (Min)" ${!lsnm.checked ? 'disabled' : ''} onchange="updateLineStopNonMesin('${lsnm.id}', 'durasi', this.value)">
-          <input type="text" class="input-field" value="${lsnm.action}" placeholder="Action" ${!lsnm.checked ? 'disabled' : ''} onchange="updateLineStopNonMesin('${lsnm.id}', 'action', this.value)">
+          <input type="number" class="input-field" value="${lsnm.durasi}" min="0" placeholder="DURASI (MIN)" ${!lsnm.checked ? 'disabled' : ''} onchange="updateLineStopNonMesin('${lsnm.id}', 'durasi', this.value)">
+          <input type="text" class="input-field" value="${lsnm.action}" placeholder="ACTION" ${!lsnm.checked ? 'disabled' : ''} onchange="updateLineStopNonMesin('${lsnm.id}', 'action', this.value)">
         </div>
       `).join('');
     }
@@ -1542,7 +1756,7 @@
     function renderMinorStopList() {
       const listDiv = document.getElementById('minor-stop-list');
       if (localData.minor_stop.length === 0 && oeeFormState.minorStop.length === 0) {
-        listDiv.innerHTML = '<div class="empty-state"><div class="empty-state-text">Belum ada data</div></div>';
+        listDiv.innerHTML = '<div class="empty-state"><div class="empty-state-text">BELUM ADA DATA</div></div>';
         return;
       }
 
@@ -1556,8 +1770,8 @@
             <input type="checkbox" id="ms-${ms.id}" ${ms.checked ? 'checked' : ''} onchange="updateMinorStop('${ms.id}', 'checked', this.checked); renderMinorStopList();">
             <label for="ms-${ms.id}" style="font-size: 13px; font-weight: 600; color: #d97706; margin: 0; text-transform: uppercase; cursor: pointer;">${ms.nama}</label>
           </div>
-          <input type="number" class="input-field" value="${ms.durasi}" min="0" placeholder="Durasi (Min)" ${!ms.checked ? 'disabled' : ''} onchange="updateMinorStop('${ms.id}', 'durasi', this.value)">
-          ${ms.isCustom ? `<button type="button" class="btn btn-danger btn-small" style="padding: 8px;" onclick="removeMinorStop('${ms.id}')">Hapus</button>` : ''}
+          <input type="number" class="input-field" value="${ms.durasi}" min="0" placeholder="DURASI (MIN)" ${!ms.checked ? 'disabled' : ''} onchange="updateMinorStop('${ms.id}', 'durasi', this.value)">
+          ${ms.isCustom ? `<button type="button" class="btn btn-danger btn-small" style="padding: 8px;" onclick="removeMinorStop('${ms.id}')">HAPUS</button>` : ''}
         </div>
       `).join('');
     }
@@ -1691,8 +1905,8 @@
         if (oeeFormState.availabilityWarning) {
           warningDiv.innerHTML = `
             <div style="background: #fef2f2; border: 2px solid #ef4444; border-radius: 10px; padding: 16px; margin-bottom: 16px; color: #dc2626;">
-              <p style="margin: 0 0 8px 0; font-weight: 700; text-transform: uppercase; font-size: 13px;">⚠️ Warning: Waktu Tidak Sesuai</p>
-              <p style="margin: 0; font-size: 12px;">Total waktu kerja (running meter ${totalPackerDuration.toFixed(0)} + ODT ${totalODT.toFixed(0)} + line stop ${totalActualDowntime.toFixed(0)} = ${totalTimeUsed.toFixed(0)} menit) melebihi durasi shift (${totalShiftMinutes.toFixed(0)} menit). Periksa kembali data Anda.</p>
+              <p style="margin: 0 0 8px 0; font-weight: 700; text-transform: uppercase; font-size: 13px;">⚠️ WARNING: WAKTU TIDAK SESUAI</p>
+              <p style="margin: 0; font-size: 12px;">TOTAL WAKTU KERJA (RUNNING METER ${totalPackerDuration.toFixed(0)} + ODT ${totalODT.toFixed(0)} + LINE STOP ${totalActualDowntime.toFixed(0)} = ${totalTimeUsed.toFixed(0)} MENIT) MELEBIHI DURASI SHIFT (${totalShiftMinutes.toFixed(0)} MENIT). PERIKSA KEMBALI DATA ANDA.</p>
             </div>
           `;
           warningDiv.style.display = 'block';
@@ -1727,13 +1941,13 @@
       const shift = document.getElementById('oee-shift').value;
 
       if (!date || !shift || oeeFormState.packerMeters.length === 0) {
-        showToast('Tanggal, shift & packer meter wajib diisi', 'error');
+        showToast('TANGGAL, SHIFT & PACKER METER WAJIB DIISI', 'error');
         return;
       }
 
       const invalidMeter = oeeFormState.packerMeters.find(m => !m.productId || !m.batchNumber || m.packers.length === 0);
       if (invalidMeter) {
-        showToast('Produk, batch & minimal 1 packer wajib diisi di setiap meter', 'error');
+        showToast('PRODUK, BATCH & MINIMAL 1 PACKER WAJIB DIISI DI SETIAP METER', 'error');
         return;
       }
 
@@ -1741,18 +1955,18 @@
         m.packers.filter(p => !p.packerName).map(() => mIdx)
       );
       if (invalidPacker.length > 0) {
-        showToast('Semua packer harus dipilih', 'error');
+        showToast('SEMUA PACKER HARUS DIPILIH', 'error');
         return;
       }
 
       const invalidWR = oeeFormState.lineStopMesin.find(lsm => parseFloat(lsm.durasi) >= 180 && !lsm.wr?.trim());
       if (invalidWR) {
-        showToast(`No WR wajib untuk: ${invalidWR.nama}`, 'error');
+        showToast(`NO WR WAJIB UNTUK: ${invalidWR.nama}`, 'error');
         return;
       }
 
       if (oeeFormState.availabilityWarning) {
-        showToast('⚠️ Total downtime melebihi sisa waktu! Cek data availability Anda', 'error');
+        showToast('⚠️ TOTAL DOWNTIME MELEBIHI SISA WAKTU! CEK DATA AVAILABILITY ANDA', 'error');
         return;
       }
 
@@ -1765,13 +1979,13 @@
       // Compile line stop mesin data
       const lsmData = oeeFormState.lineStopMesin
         .filter(lsm => parseFloat(lsm.durasi) > 0)
-        .map(lsm => `${lsm.nama} (${lsm.durasi}min) - Action: ${lsm.action || '-'} - WR: ${lsm.wr || '-'}`)
+        .map(lsm => `${lsm.nama} (${lsm.durasi}MIN) - ACTION: ${lsm.action || '-'} - WR: ${lsm.wr || '-'}`)
         .join(' | ');
 
       // Compile line stop non-mesin data
       const lsnmData = oeeFormState.lineStopNonMesin
         .filter(lsnm => lsnm.checked && parseFloat(lsnm.durasi) > 0)
-        .map(lsnm => `${lsnm.nama} (${lsnm.durasi}min) - Action: ${lsnm.action || '-'}`)
+        .map(lsnm => `${lsnm.nama} (${lsnm.durasi}MIN) - ACTION: ${lsnm.action || '-'}`)
         .join(' | ');
 
       const record = {
@@ -1794,13 +2008,13 @@
         if (error) throw error;
 
         localData.oee_records.unshift(record);
-        await addAuditLog('INPUT OEE', `${produkBatch} - Packer: ${allPackerNames}`);
-        showToast('Data OEE berhasil disimpan ��', 'success');
+        await addAuditLog('INPUT OEE', `${produkBatch} - PACKER: ${allPackerNames}`);
+        showToast('DATA OEE BERHASIL DISIMPAN ✅', 'success');
         resetOEEForm();
         updateDashboard();
       } catch (error) {
         console.error('Error saving OEE:', error);
-        showToast('Gagal menyimpan data OEE', 'error');
+        showToast('GAGAL MENYIMPAN DATA OEE', 'error');
       }
     }
 
@@ -2037,7 +2251,7 @@
         data: {
           labels: labels,
           datasets: [{
-            label: 'OEE Actual %',
+            label: 'OEE ACTUAL %',
             data: data,
             borderColor: '#ec4899',
             backgroundColor: 'rgba(236, 72, 153, 0.1)',
@@ -2097,7 +2311,7 @@
         data: {
           labels: labels,
           datasets: [{
-            label: 'OEE Actual %',
+            label: 'OEE ACTUAL %',
             data: data,
             borderColor: '#a855f7',
             backgroundColor: 'rgba(168, 85, 247, 0.1)',
@@ -2145,7 +2359,7 @@
       dashboardCharts.apqa = new Chart(ctx, {
         type: 'bar',
         data: {
-          labels: ['Availability Actual', 'Performance', 'Quality Rate', 'Availability 365'],
+          labels: ['AVAILABILITY ACTUAL', 'PERFORMANCE', 'QUALITY RATE', 'AVAILABILITY 365'],
           datasets: [{
             label: '%',
             data: [
@@ -2239,7 +2453,7 @@
         data: {
           labels: labels,
           datasets: [{
-            label: 'Menit',
+            label: 'MENIT',
             data: data,
             backgroundColor: '#3b82f6',
             borderRadius: 8
@@ -2265,7 +2479,7 @@
                 ctx.fillStyle = '#000';
                 ctx.textAlign = 'right';
                 ctx.textBaseline = 'middle';
-                ctx.fillText(value.toFixed(0) + 'min', x - 8, y);
+                ctx.fillText(value.toFixed(0) + 'MIN', x - 8, y);
               });
             });
           }
@@ -2300,7 +2514,7 @@
         data: {
           labels: labels,
           datasets: [{
-            label: 'Menit',
+            label: 'MENIT',
             data: data,
             backgroundColor: '#8b5cf6',
             borderRadius: 8
@@ -2326,7 +2540,7 @@
                 ctx.fillStyle = '#000';
                 ctx.textAlign = 'right';
                 ctx.textBaseline = 'middle';
-                ctx.fillText(value.toFixed(0) + 'min', x - 8, y);
+                ctx.fillText(value.toFixed(0) + 'MIN', x - 8, y);
               });
             });
           }
@@ -2361,7 +2575,7 @@
         data: {
           labels: labels,
           datasets: [{
-            label: 'Menit',
+            label: 'MENIT',
             data: data,
             backgroundColor: '#10b981',
             borderRadius: 8
@@ -2387,7 +2601,7 @@
                 ctx.fillStyle = '#000';
                 ctx.textAlign = 'right';
                 ctx.textBaseline = 'middle';
-                ctx.fillText(value.toFixed(0) + 'min', x - 8, y);
+                ctx.fillText(value.toFixed(0) + 'MIN', x - 8, y);
               });
             });
           }
@@ -2422,7 +2636,7 @@
         data: {
           labels: labels,
           datasets: [{
-            label: 'Menit',
+            label: 'MENIT',
             data: data,
             backgroundColor: '#f59e0b',
             borderRadius: 8
@@ -2448,7 +2662,7 @@
                 ctx.fillStyle = '#000';
                 ctx.textAlign = 'right';
                 ctx.textBaseline = 'middle';
-                ctx.fillText(value.toFixed(0) + 'min', x - 8, y);
+                ctx.fillText(value.toFixed(0) + 'MIN', x - 8, y);
               });
             });
           }
@@ -2484,7 +2698,7 @@
       
       const tbody = document.getElementById('table-packer-performance');
       if (performanceData.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="5" class="text-center text-gray-400 py-8">Belum ada data</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="5" class="text-center text-gray-400 py-8">BELUM ADA DATA</td></tr>';
         return;
       }
 
@@ -2507,7 +2721,7 @@
       const recordsToUse = filteredOeeRecords.length > 0 ? filteredOeeRecords : localData.oee_records;
       
       if (!recordsToUse || recordsToUse.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="9" class="text-center text-gray-400 py-8">Belum ada data</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="9" class="text-center text-gray-400 py-8">BELUM ADA DATA</td></tr>';
         return;
       }
 
@@ -2541,11 +2755,11 @@
         <div class="master-card" id="card-prod-${p.id}">
           <div class="master-card-content">
             <p class="master-card-name">${p.nama}</p>
-            <p class="master-card-detail">Target: ${p.target} DUS/menit</p>
+            <p class="master-card-detail">TARGET: ${p.target} DUS/MENIT</p>
           </div>
           <div class="master-card-actions">
-            <button class="btn-edit" onclick="editProduct('${p.id}')">Edit</button>
-            <button class="btn-delete" id="del-btn-prod-${p.id}" onclick="showDeleteConfirm('${p.id}', 'produk', '${p.nama}')">Hapus</button>
+            <button class="btn-edit" onclick="editProduct('${p.id}')">EDIT</button>
+            <button class="btn-delete" id="del-btn-prod-${p.id}" onclick="showDeleteConfirm('${p.id}', 'produk', '${p.nama}')">HAPUS</button>
           </div>
         </div>
       `).join('');
@@ -2559,8 +2773,8 @@
             <p class="master-card-name">${p.nama}</p>
           </div>
           <div class="master-card-actions">
-            <button class="btn-edit" onclick="editPacker('${p.id}')">Edit</button>
-            <button class="btn-delete" onclick="showDeleteConfirm('${p.id}', 'packer', '${p.nama}')">Hapus</button>
+            <button class="btn-edit" onclick="editPacker('${p.id}')">EDIT</button>
+            <button class="btn-delete" onclick="showDeleteConfirm('${p.id}', 'packer', '${p.nama}')">HAPUS</button>
           </div>
         </div>
       `).join('');
@@ -2572,11 +2786,11 @@
         <div class="master-card" id="card-odt-${p.id}">
           <div class="master-card-content">
             <p class="master-card-name">${p.nama}</p>
-            <p class="master-card-detail">Std: ${p.waktu_standard} menit</p>
+            <p class="master-card-detail">STD: ${p.waktu_standard} MENIT</p>
           </div>
           <div class="master-card-actions">
-            <button class="btn-edit" onclick="editODT('${p.id}')">Edit</button>
-            <button class="btn-delete" onclick="showDeleteConfirm('${p.id}', 'odt', '${p.nama}')">Hapus</button>
+            <button class="btn-edit" onclick="editODT('${p.id}')">EDIT</button>
+            <button class="btn-delete" onclick="showDeleteConfirm('${p.id}', 'odt', '${p.nama}')">HAPUS</button>
           </div>
         </div>
       `).join('');
@@ -2590,8 +2804,8 @@
             <p class="master-card-name">${p.nama}</p>
           </div>
           <div class="master-card-actions">
-            <button class="btn-edit" onclick="editLineStopMesin('${p.id}')">Edit</button>
-            <button class="btn-delete" onclick="showDeleteConfirm('${p.id}', 'lsm', '${p.nama}')">Hapus</button>
+            <button class="btn-edit" onclick="editLineStopMesin('${p.id}')">EDIT</button>
+            <button class="btn-delete" onclick="showDeleteConfirm('${p.id}', 'lsm', '${p.nama}')">HAPUS</button>
           </div>
         </div>
       `).join('');
@@ -2605,8 +2819,8 @@
             <p class="master-card-name">${p.nama}</p>
           </div>
           <div class="master-card-actions">
-            <button class="btn-edit" onclick="editLineStopNonMesin('${p.id}')">Edit</button>
-            <button class="btn-delete" onclick="showDeleteConfirm('${p.id}', 'lsnm', '${p.nama}')">Hapus</button>
+            <button class="btn-edit" onclick="editLineStopNonMesin('${p.id}')">EDIT</button>
+            <button class="btn-delete" onclick="showDeleteConfirm('${p.id}', 'lsnm', '${p.nama}')">HAPUS</button>
           </div>
         </div>
       `).join('');
@@ -2620,8 +2834,8 @@
             <p class="master-card-name">${p.nama}</p>
           </div>
           <div class="master-card-actions">
-            <button class="btn-edit" onclick="editMinorStop('${p.id}')">Edit</button>
-            <button class="btn-delete" onclick="showDeleteConfirm('${p.id}', 'minor_stop', '${p.nama}')">Hapus</button>
+            <button class="btn-edit" onclick="editMinorStop('${p.id}')">EDIT</button>
+            <button class="btn-delete" onclick="showDeleteConfirm('${p.id}', 'minor_stop', '${p.nama}')">HAPUS</button>
           </div>
         </div>
       `).join('');
@@ -2632,6 +2846,14 @@
     let currentEditId = null;
 
     function openModal(title, fields, onSubmit) {
+      // Check master data access for master-related modals
+      if (title.includes('PRODUK') || title.includes('PACKER') || title.includes('ODT') || 
+          title.includes('LINE STOP') || title.includes('MINOR STOP')) {
+        if (!checkMasterAccess()) {
+          return;
+        }
+      }
+
       document.getElementById('modal-title').textContent = title;
       const fieldsDiv = document.getElementById('modal-fields');
       fieldsDiv.innerHTML = fields.map(f => `
@@ -2671,12 +2893,12 @@
 
     // Master Data CRUD Functions
     function openAddProductModal() {
-      openModal('Tambah Produk', [
-        { name: 'nama', label: 'Nama Produk', placeholder: 'Masukkan nama produk', value: '' },
-        { name: 'target', label: 'Target (DUS/menit)', placeholder: 'Masukkan target', value: '' }
+      openModal('TAMBAH PRODUK', [
+        { name: 'nama', label: 'NAMA PRODUK', placeholder: 'MASUKKAN NAMA PRODUK', value: '' },
+        { name: 'target', label: 'TARGET (DUS/MENIT)', placeholder: 'MASUKKAN TARGET', value: '' }
       ], async (values) => {
         if (!values.nama.trim() || !values.target.trim()) {
-          showToast('Semua field wajib diisi', 'error');
+          showToast('SEMUA FIELD WAJIB DIISI', 'error');
           return;
         }
 
@@ -2690,10 +2912,10 @@
           await loadDataFromSupabase();
           renderProductList();
           await addAuditLog('CREATE PRODUCT', values.nama);
-          showToast('Produk berhasil ditambahkan ���', 'success');
+          showToast('PRODUK BERHASIL DITAMBAHKAN ✅', 'success');
         } catch (error) {
           console.error('Error:', error);
-          showToast('Gagal menambahkan produk', 'error');
+          showToast('GAGAL MENAMBAHKAN PRODUK', 'error');
         }
       });
     }
@@ -2703,12 +2925,12 @@
       if (!prod) return;
 
       currentEditId = id;
-      openModal('Edit Produk', [
-        { name: 'nama', label: 'Nama Produk', placeholder: 'Masukkan nama produk', value: prod.nama },
-        { name: 'target', label: 'Target (DUS/menit)', placeholder: 'Masukkan target', value: prod.target }
+      openModal('EDIT PRODUK', [
+        { name: 'nama', label: 'NAMA PRODUK', placeholder: 'MASUKKAN NAMA PRODUK', value: prod.nama },
+        { name: 'target', label: 'TARGET (DUS/MENIT)', placeholder: 'MASUKKAN TARGET', value: prod.target }
       ], async (values) => {
         if (!values.nama.trim() || !values.target.trim()) {
-          showToast('Semua field wajib diisi', 'error');
+          showToast('SEMUA FIELD WAJIB DIISI', 'error');
           return;
         }
 
@@ -2722,20 +2944,20 @@
           await loadDataFromSupabase();
           renderProductList();
           await addAuditLog('UPDATE PRODUCT', values.nama);
-          showToast('Produk berhasil diperbarui ���', 'success');
+          showToast('PRODUK BERHASIL DIPERBARUI ✅', 'success');
         } catch (error) {
           console.error('Error:', error);
-          showToast('Gagal memperbarui produk', 'error');
+          showToast('GAGAL MEMPERBARUI PRODUK', 'error');
         }
       });
     }
 
     function openAddPackerModal() {
-      openModal('Tambah Packer', [
-        { name: 'nama', label: 'Nama Packer', placeholder: 'Masukkan nama packer', value: '' }
+      openModal('TAMBAH PACKER', [
+        { name: 'nama', label: 'NAMA PACKER', placeholder: 'MASUKKAN NAMA PACKER', value: '' }
       ], async (values) => {
         if (!values.nama.trim()) {
-          showToast('Nama packer wajib diisi', 'error');
+          showToast('NAMA PACKER WAJIB DIISI', 'error');
           return;
         }
 
@@ -2748,10 +2970,10 @@
           await loadDataFromSupabase();
           renderPackerList();
           await addAuditLog('CREATE PACKER', values.nama);
-          showToast('Packer berhasil ditambahkan ✨', 'success');
+          showToast('PACKER BERHASIL DITAMBAHKAN ✅', 'success');
         } catch (error) {
           console.error('Error:', error);
-          showToast('Gagal menambahkan packer', 'error');
+          showToast('GAGAL MENAMBAHKAN PACKER', 'error');
         }
       });
     }
@@ -2761,11 +2983,11 @@
       if (!pack) return;
 
       currentEditId = id;
-      openModal('Edit Packer', [
-        { name: 'nama', label: 'Nama Packer', placeholder: 'Masukkan nama packer', value: pack.nama }
+      openModal('EDIT PACKER', [
+        { name: 'nama', label: 'NAMA PACKER', placeholder: 'MASUKKAN NAMA PACKER', value: pack.nama }
       ], async (values) => {
         if (!values.nama.trim()) {
-          showToast('Nama packer wajib diisi', 'error');
+          showToast('NAMA PACKER WAJIB DIISI', 'error');
           return;
         }
 
@@ -2778,21 +3000,21 @@
           await loadDataFromSupabase();
           renderPackerList();
           await addAuditLog('UPDATE PACKER', values.nama);
-          showToast('Packer berhasil diperbarui ✨', 'success');
+          showToast('PACKER BERHASIL DIPERBARUI ✅', 'success');
         } catch (error) {
           console.error('Error:', error);
-          showToast('Gagal memperbarui packer', 'error');
+          showToast('GAGAL MEMPERBARUI PACKER', 'error');
         }
       });
     }
 
     function openAddODTModal() {
-      openModal('Tambah ODT', [
-        { name: 'nama', label: 'Nama ODT', placeholder: 'Masukkan nama ODT', value: '' },
-        { name: 'waktu_standard', label: 'Waktu Standard (Menit)', placeholder: 'Masukkan waktu standard', value: '' }
+      openModal('TAMBAH ODT', [
+        { name: 'nama', label: 'NAMA ODT', placeholder: 'MASUKKAN NAMA ODT', value: '' },
+        { name: 'waktu_standard', label: 'WAKTU STANDARD (MENIT)', placeholder: 'MASUKKAN WAKTU STANDARD', value: '' }
       ], async (values) => {
         if (!values.nama.trim() || !values.waktu_standard.trim()) {
-          showToast('Semua field wajib diisi', 'error');
+          showToast('SEMUA FIELD WAJIB DIISI', 'error');
           return;
         }
 
@@ -2806,10 +3028,10 @@
           await loadDataFromSupabase();
           renderODTList_Master();
           await addAuditLog('CREATE ODT', values.nama);
-          showToast('ODT berhasil ditambahkan ✨', 'success');
+          showToast('ODT BERHASIL DITAMBAHKAN ✅', 'success');
         } catch (error) {
           console.error('Error:', error);
-          showToast('Gagal menambahkan ODT', 'error');
+          showToast('GAGAL MENAMBAHKAN ODT', 'error');
         }
       });
     }
@@ -2819,12 +3041,12 @@
       if (!odt) return;
 
       currentEditId = id;
-      openModal('Edit ODT', [
-        { name: 'nama', label: 'Nama ODT', placeholder: 'Masukkan nama ODT', value: odt.nama },
-        { name: 'waktu_standard', label: 'Waktu Standard (Menit)', placeholder: 'Masukkan waktu standard', value: odt.waktu_standard }
+      openModal('EDIT ODT', [
+        { name: 'nama', label: 'NAMA ODT', placeholder: 'MASUKKAN NAMA ODT', value: odt.nama },
+        { name: 'waktu_standard', label: 'WAKTU STANDARD (MENIT)', placeholder: 'MASUKKAN WAKTU STANDARD', value: odt.waktu_standard }
       ], async (values) => {
         if (!values.nama.trim() || !values.waktu_standard.trim()) {
-          showToast('Semua field wajib diisi', 'error');
+          showToast('SEMUA FIELD WAJIB DIISI', 'error');
           return;
         }
 
@@ -2838,20 +3060,20 @@
           await loadDataFromSupabase();
           renderODTList_Master();
           await addAuditLog('UPDATE ODT', values.nama);
-          showToast('ODT berhasil diperbarui ✨', 'success');
+          showToast('ODT BERHASIL DIPERBARUI ✅', 'success');
         } catch (error) {
           console.error('Error:', error);
-          showToast('Gagal memperbarui ODT', 'error');
+          showToast('GAGAL MEMPERBARUI ODT', 'error');
         }
       });
     }
 
     function openAddLineStopMesinModal() {
-      openModal('Tambah Line Stop Mesin', [
-        { name: 'nama', label: 'Nama Line Stop', placeholder: 'Masukkan nama line stop', value: '' }
+      openModal('TAMBAH LINE STOP MESIN', [
+        { name: 'nama', label: 'NAMA LINE STOP', placeholder: 'MASUKKAN NAMA LINE STOP', value: '' }
       ], async (values) => {
         if (!values.nama.trim()) {
-          showToast('Nama line stop wajib diisi', 'error');
+          showToast('NAMA LINE STOP WAJIB DIISI', 'error');
           return;
         }
 
@@ -2864,10 +3086,10 @@
           await loadDataFromSupabase();
           renderLineStopMesinMaster();
           await addAuditLog('CREATE LINE STOP MESIN', values.nama);
-          showToast('Line stop mesin berhasil ditambahkan ✨', 'success');
+          showToast('LINE STOP MESIN BERHASIL DITAMBAHKAN ✅', 'success');
         } catch (error) {
           console.error('Error:', error);
-          showToast('Gagal menambahkan line stop mesin', 'error');
+          showToast('GAGAL MENAMBAHKAN LINE STOP MESIN', 'error');
         }
       });
     }
@@ -2877,11 +3099,11 @@
       if (!lsm) return;
 
       currentEditId = id;
-      openModal('Edit Line Stop Mesin', [
-        { name: 'nama', label: 'Nama Line Stop', placeholder: 'Masukkan nama line stop', value: lsm.nama }
+      openModal('EDIT LINE STOP MESIN', [
+        { name: 'nama', label: 'NAMA LINE STOP', placeholder: 'MASUKKAN NAMA LINE STOP', value: lsm.nama }
       ], async (values) => {
         if (!values.nama.trim()) {
-          showToast('Nama line stop wajib diisi', 'error');
+          showToast('NAMA LINE STOP WAJIB DIISI', 'error');
           return;
         }
 
@@ -2894,20 +3116,20 @@
           await loadDataFromSupabase();
           renderLineStopMesinMaster();
           await addAuditLog('UPDATE LINE STOP MESIN', values.nama);
-          showToast('Line stop mesin berhasil diperbarui ✨', 'success');
+          showToast('LINE STOP MESIN BERHASIL DIPERBARUI ✅', 'success');
         } catch (error) {
           console.error('Error:', error);
-          showToast('Gagal memperbarui line stop mesin', 'error');
+          showToast('GAGAL MEMPERBARUI LINE STOP MESIN', 'error');
         }
       });
     }
 
     function openAddLineStopNonMesinModal() {
-      openModal('Tambah Line Stop Non-Mesin', [
-        { name: 'nama', label: 'Nama Line Stop', placeholder: 'Masukkan nama line stop', value: '' }
+      openModal('TAMBAH LINE STOP NON-MESIN', [
+        { name: 'nama', label: 'NAMA LINE STOP', placeholder: 'MASUKKAN NAMA LINE STOP', value: '' }
       ], async (values) => {
         if (!values.nama.trim()) {
-          showToast('Nama line stop wajib diisi', 'error');
+          showToast('NAMA LINE STOP WAJIB DIISI', 'error');
           return;
         }
 
@@ -2920,10 +3142,10 @@
           await loadDataFromSupabase();
           renderLineStopNonMesinMaster();
           await addAuditLog('CREATE LINE STOP NON-MESIN', values.nama);
-          showToast('Line stop non-mesin berhasil ditambahkan ✨', 'success');
+          showToast('LINE STOP NON-MESIN BERHASIL DITAMBAHKAN ✅', 'success');
         } catch (error) {
           console.error('Error:', error);
-          showToast('Gagal menambahkan line stop non-mesin', 'error');
+          showToast('GAGAL MENAMBAHKAN LINE STOP NON-MESIN', 'error');
         }
       });
     }
@@ -2933,11 +3155,11 @@
       if (!lsnm) return;
 
       currentEditId = id;
-      openModal('Edit Line Stop Non-Mesin', [
-        { name: 'nama', label: 'Nama Line Stop', placeholder: 'Masukkan nama line stop', value: lsnm.nama }
+      openModal('EDIT LINE STOP NON-MESIN', [
+        { name: 'nama', label: 'NAMA LINE STOP', placeholder: 'MASUKKAN NAMA LINE STOP', value: lsnm.nama }
       ], async (values) => {
         if (!values.nama.trim()) {
-          showToast('Nama line stop wajib diisi', 'error');
+          showToast('NAMA LINE STOP WAJIB DIISI', 'error');
           return;
         }
 
@@ -2950,20 +3172,20 @@
           await loadDataFromSupabase();
           renderLineStopNonMesinMaster();
           await addAuditLog('UPDATE LINE STOP NON-MESIN', values.nama);
-          showToast('Line stop non-mesin berhasil diperbarui ✨', 'success');
+          showToast('LINE STOP NON-MESIN BERHASIL DIPERBARUI ✅', 'success');
         } catch (error) {
           console.error('Error:', error);
-          showToast('Gagal memperbarui line stop non-mesin', 'error');
+          showToast('GAGAL MEMPERBARUI LINE STOP NON-MESIN', 'error');
         }
       });
     }
 
     function openAddMinorStopModal() {
-      openModal('Tambah Minor Stop', [
-        { name: 'nama', label: 'Nama Minor Stop', placeholder: 'Masukkan nama minor stop', value: '' }
+      openModal('TAMBAH MINOR STOP', [
+        { name: 'nama', label: 'NAMA MINOR STOP', placeholder: 'MASUKKAN NAMA MINOR STOP', value: '' }
       ], async (values) => {
         if (!values.nama.trim()) {
-          showToast('Nama minor stop wajib diisi', 'error');
+          showToast('NAMA MINOR STOP WAJIB DIISI', 'error');
           return;
         }
 
@@ -2976,10 +3198,10 @@
           await loadDataFromSupabase();
           renderMinorStopMaster();
           await addAuditLog('CREATE MINOR STOP', values.nama);
-          showToast('Minor stop berhasil ditambahkan ✨', 'success');
+          showToast('MINOR STOP BERHASIL DITAMBAHKAN ✅', 'success');
         } catch (error) {
           console.error('Error:', error);
-          showToast('Gagal menambahkan minor stop', 'error');
+          showToast('GAGAL MENAMBAHKAN MINOR STOP', 'error');
         }
       });
     }
@@ -2989,11 +3211,11 @@
       if (!ms) return;
 
       currentEditId = id;
-      openModal('Edit Minor Stop', [
-        { name: 'nama', label: 'Nama Minor Stop', placeholder: 'Masukkan nama minor stop', value: ms.nama }
+      openModal('EDIT MINOR STOP', [
+        { name: 'nama', label: 'NAMA MINOR STOP', placeholder: 'MASUKKAN NAMA MINOR STOP', value: ms.nama }
       ], async (values) => {
         if (!values.nama.trim()) {
-          showToast('Nama minor stop wajib diisi', 'error');
+          showToast('NAMA MINOR STOP WAJIB DIISI', 'error');
           return;
         }
 
@@ -3006,107 +3228,121 @@
           await loadDataFromSupabase();
           renderMinorStopMaster();
           await addAuditLog('UPDATE MINOR STOP', values.nama);
-          showToast('Minor stop berhasil diperbarui ✨', 'success');
+          showToast('MINOR STOP BERHASIL DIPERBARUI ✅', 'success');
         } catch (error) {
           console.error('Error:', error);
-          showToast('Gagal memperbarui minor stop', 'error');
+          showToast('GAGAL MEMPERBARUI MINOR STOP', 'error');
         }
       });
     }
 
     async function deleteProduct(id) {
+      if (!checkMasterAccess()) return;
+      
       try {
         const { error } = await supabaseClient.from('produk').delete().eq('id', id);
         if (error) throw error;
         await loadDataFromSupabase();
         renderProductList();
-        await addAuditLog('DELETE PRODUCT', 'Produk dihapus');
-        showToast('Produk berhasil dihapus', 'success');
+        await addAuditLog('DELETE PRODUCT', 'PRODUK DIHAPUS');
+        showToast('PRODUK BERHASIL DIHAPUS', 'success');
       } catch (error) {
         console.error('Error:', error);
-        showToast('Gagal menghapus produk', 'error');
+        showToast('GAGAL MENGHAPUS PRODUK', 'error');
       }
     }
 
     async function deletePacker(id) {
+      if (!checkMasterAccess()) return;
+      
       try {
         const { error } = await supabaseClient.from('packer').delete().eq('id', id);
         if (error) throw error;
         await loadDataFromSupabase();
         renderPackerList();
-        await addAuditLog('DELETE PACKER', 'Packer dihapus');
-        showToast('Packer berhasil dihapus', 'success');
+        await addAuditLog('DELETE PACKER', 'PACKER DIHAPUS');
+        showToast('PACKER BERHASIL DIHAPUS', 'success');
       } catch (error) {
         console.error('Error:', error);
-        showToast('Gagal menghapus packer', 'error');
+        showToast('GAGAL MENGHAPUS PACKER', 'error');
       }
     }
 
     async function deleteODT(id) {
+      if (!checkMasterAccess()) return;
+      
       try {
         const { error } = await supabaseClient.from('downtime').delete().eq('id', id);
         if (error) throw error;
         await loadDataFromSupabase();
         renderODTList_Master();
-        await addAuditLog('DELETE ODT', 'ODT dihapus');
-        showToast('ODT berhasil dihapus', 'success');
+        await addAuditLog('DELETE ODT', 'ODT DIHAPUS');
+        showToast('ODT BERHASIL DIHAPUS', 'success');
       } catch (error) {
         console.error('Error:', error);
-        showToast('Gagal menghapus ODT', 'error');
+        showToast('GAGAL MENGHAPUS ODT', 'error');
       }
     }
 
     async function deleteLineStopMesin(id) {
+      if (!checkMasterAccess()) return;
+      
       try {
         const { error } = await supabaseClient.from('line_stop_mesin').delete().eq('id', id);
         if (error) throw error;
         await loadDataFromSupabase();
         renderLineStopMesinMaster();
-        await addAuditLog('DELETE LINE STOP MESIN', 'Line Stop dihapus');
-        showToast('Line stop mesin berhasil dihapus', 'success');
+        await addAuditLog('DELETE LINE STOP MESIN', 'LINE STOP DIHAPUS');
+        showToast('LINE STOP MESIN BERHASIL DIHAPUS', 'success');
       } catch (error) {
         console.error('Error:', error);
-        showToast('Gagal menghapus line stop mesin', 'error');
+        showToast('GAGAL MENGHAPUS LINE STOP MESIN', 'error');
       }
     }
 
     async function deleteLineStopNonMesin(id) {
+      if (!checkMasterAccess()) return;
+      
       try {
         const { error } = await supabaseClient.from('line_stop_non_mesin').delete().eq('id', id);
         if (error) throw error;
         await loadDataFromSupabase();
         renderLineStopNonMesinMaster();
-        await addAuditLog('DELETE LINE STOP NON-MESIN', 'Line Stop dihapus');
-        showToast('Line stop non-mesin berhasil dihapus', 'success');
+        await addAuditLog('DELETE LINE STOP NON-MESIN', 'LINE STOP DIHAPUS');
+        showToast('LINE STOP NON-MESIN BERHASIL DIHAPUS', 'success');
       } catch (error) {
         console.error('Error:', error);
-        showToast('Gagal menghapus line stop non-mesin', 'error');
+        showToast('GAGAL MENGHAPUS LINE STOP NON-MESIN', 'error');
       }
     }
 
     async function deleteMinorStop(id) {
+      if (!checkMasterAccess()) return;
+      
       try {
         const { error } = await supabaseClient.from('minor_stop').delete().eq('id', id);
         if (error) throw error;
         await loadDataFromSupabase();
         renderMinorStopMaster();
-        await addAuditLog('DELETE MINOR STOP', 'Minor Stop dihapus');
-        showToast('Minor stop berhasil dihapus', 'success');
+        await addAuditLog('DELETE MINOR STOP', 'MINOR STOP DIHAPUS');
+        showToast('MINOR STOP BERHASIL DIHAPUS', 'success');
       } catch (error) {
         console.error('Error:', error);
-        showToast('Gagal menghapus minor stop', 'error');
+        showToast('GAGAL MENGHAPUS MINOR STOP', 'error');
       }
     }
 
     function showDeleteConfirm(id, type, nama) {
+      if (!checkMasterAccess()) return;
+
       const confirmBox = document.createElement('div');
       confirmBox.style.cssText = 'position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; border-radius: 16px; padding: 32px; z-index: 10000; box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3); min-width: 350px;';
       confirmBox.innerHTML = `
-        <h3 style="margin: 0 0 16px 0; color: #ec4899; font-size: 18px; font-weight: 700;">Hapus Data?</h3>
-        <p style="margin: 0 0 24px 0; color: #6b4c5c; font-size: 14px;">Yakin ingin menghapus <strong>"${nama}"</strong>? Tindakan ini tidak bisa dibatalkan.</p>
+        <h3 style="margin: 0 0 16px 0; color: #ec4899; font-size: 18px; font-weight: 700; text-transform: uppercase;">HAPUS DATA?</h3>
+        <p style="margin: 0 0 24px 0; color: #6b4c5c; font-size: 14px; text-transform: uppercase;">YAKIN INGIN MENGHAPUS <strong>"${nama}"</strong>? TINDAKAN INI TIDAK BISA DIBATALKAN.</p>
         <div style="display: flex; gap: 12px;">
-          <button class="btn btn-danger" style="flex: 1; margin: 0;" onclick="confirmDelete('${id}', '${type}'); document.querySelector('[data-confirm-box]').remove();">Hapus</button>
-          <button class="btn btn-secondary" style="flex: 1; margin: 0;" onclick="document.querySelector('[data-confirm-box]').remove();">Batal</button>
+          <button class="btn btn-danger" style="flex: 1; margin: 0;" onclick="confirmDelete('${id}', '${type}'); document.querySelector('[data-confirm-box]').remove();">HAPUS</button>
+          <button class="btn btn-secondary" style="flex: 1; margin: 0;" onclick="document.querySelector('[data-confirm-box]').remove();">BATAL</button>
         </div>
       `;
       confirmBox.setAttribute('data-confirm-box', 'true');
@@ -3134,7 +3370,7 @@
     function renderAuditTable() {
       const tbody = document.getElementById('audit-table');
       if (localData.audit_trail.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="3" class="text-center text-gray-400 py-8">Belum ada aktivitas</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="3" class="text-center text-gray-400 py-8">BELUM ADA AKTIVITAS</td></tr>';
         return;
       }
 
@@ -3189,7 +3425,7 @@
     function updateModeToggleButton() {
       const isDarkMode = document.body.classList.contains('dark-mode');
       document.getElementById('mode-icon').textContent = isDarkMode ? '☀️' : '🌙';
-      document.getElementById('mode-text').textContent = isDarkMode ? 'Light' : 'Dark';
+      document.getElementById('mode-text').textContent = isDarkMode ? 'LIGHT' : 'DARK';
     }
 
     function initDarkMode() {
@@ -3213,7 +3449,7 @@
       // Format date
       const dateOptions = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
       const dateString = now.toLocaleDateString('id-ID', dateOptions);
-      document.getElementById('current-date').textContent = dateString;
+      document.getElementById('current-date').textContent = dateString.toUpperCase();
     }
 
     // Initialize dark mode on page load
