@@ -527,7 +527,7 @@
 
     .score-cards {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
       gap: 12px;
       margin-bottom: 20px;
     }
@@ -552,7 +552,7 @@
 
     @media (min-width: 768px) {
       .score-card {
-        padding: 24px;
+        padding: 20px;
         border-radius: 14px;
       }
     }
@@ -1117,7 +1117,7 @@
        <div id="minor-stop-list" style="margin-top: 16px;"></div>
       </div>
       
-      <!-- PACKER METER - DIPINDAHKAN SETELAH MINOR STOP -->
+      <!-- PACKER METER -->
       <div class="form-section">
        <div class="section-title">
         PACKER METER
@@ -1138,6 +1138,14 @@
           AVAILABILITY (ACTUAL)
          </div>
          <div class="score-value" id="calc-availability-actual">
+          0%
+         </div>
+        </div>
+        <div class="score-card">
+         <div class="score-label">
+          AVAILABILITY 365
+         </div>
+         <div class="score-value" id="calc-availability-365">
           0%
          </div>
         </div>
@@ -1167,7 +1175,7 @@
         </div>
         <div class="score-card">
          <div class="score-label">
-          OEE (365)
+          OEE 365
          </div>
          <div class="score-value" id="calc-oee-365">
           0%
@@ -1498,9 +1506,6 @@
       const totalODT = oeeFormState.downtime.reduce((sum, odt) => sum + (parseFloat(odt.durasi) || 0), 0);
       const totalLSM = oeeFormState.lineStopMesin.reduce((sum, l) => sum + (parseFloat(l.durasi) || 0), 0);
       const totalLSNM = oeeFormState.lineStopNonMesin.filter(l => l.checked).reduce((sum, l) => sum + (parseFloat(l.durasi) || 0), 0);
-      
-      // Hitung durasi terpanjang dari semua packer di semua meter KECUALI meter yang sedang di-render
-      // Ini untuk sisa waktu meter baru nanti, bukan untuk meter yang sudah ada
       
       listDiv.innerHTML = oeeFormState.packerMeters.map((meter, index) => {
         // Hitung durasi terpanjang dari semua packer di semua meter SEBELUM meter ini
@@ -1929,8 +1934,11 @@
       const plannedProductionTime = totalShiftMinutes - totalODT;
       const availableTime = plannedProductionTime - totalActualDowntime;
       
+      // AVAILABILITY ACTUAL = (Available Time / Planned Production Time) × 100%
       const availabilityActual = plannedProductionTime > 0 ? (availableTime / plannedProductionTime) * 100 : 0;
-      const availability365 = totalShiftMinutes > 0 ? (availableTime / totalShiftMinutes) * 100 : 0;
+      
+      // AVAILABILITY 365 = (Jam Kerja - Total ODT - Total LSM - Total LSNM) / Jam Kerja × 100%
+      const availability365 = totalShiftMinutes > 0 ? ((totalShiftMinutes - totalODT - totalLineStopMesin - totalLineStopNonMesin) / totalShiftMinutes) * 100 : 0;
 
       let totalTargetOutputAllBatches = 0;
       
@@ -1983,9 +1991,11 @@
       const qualityRate = totalOutputActual > 0 ? (((totalOutputActual - totalRejectActual) / totalOutputActual) * 100) : 0;
 
       const oeeActual = (availabilityActual / 100) * (performance / 100) * (qualityRate / 100) * 100;
-      const oee365 = (performance / 100) * (qualityRate / 100) * 100;
+      const oee365 = (availability365 / 100) * (performance / 100) * (qualityRate / 100) * 100;
 
+      // UPDATE SCORE CARDS
       document.getElementById('calc-availability-actual').textContent = `${availabilityActual.toFixed(1)}%`;
+      document.getElementById('calc-availability-365').textContent = `${availability365.toFixed(1)}%`;
       document.getElementById('calc-performance').textContent = `${performance.toFixed(1)}%`;
       document.getElementById('calc-quality').textContent = `${qualityRate.toFixed(1)}%`;
       document.getElementById('calc-oee-actual').textContent = `${oeeActual.toFixed(1)}%`;
@@ -2089,6 +2099,7 @@
         packers: allPackerNames,
         output_actual: oeeFormState.results.totalOutput,
         availability_actual: parseFloat(oeeFormState.results.availabilityActual),
+        availability_365: parseFloat(oeeFormState.results.availability365),
         performance: parseFloat(oeeFormState.results.performance),
         quality_rate: parseFloat(oeeFormState.results.qualityRate),
         oee_actual: parseFloat(oeeFormState.results.oeeActual),
@@ -2128,6 +2139,7 @@
       document.getElementById('line-stop-non-mesin-list').innerHTML = '';
       document.getElementById('minor-stop-list').innerHTML = '';
       document.getElementById('calc-availability-actual').textContent = '0%';
+      document.getElementById('calc-availability-365').textContent = '0%';
       document.getElementById('calc-performance').textContent = '0%';
       document.getElementById('calc-quality').textContent = '0%';
       document.getElementById('calc-oee-actual').textContent = '0%';
@@ -2280,7 +2292,7 @@
       const card365 = document.getElementById('score-card-oee-365');
 
       if (cardActual) {
-        if (oeeActual < 88) {
+        if (oeeActual < 85) {
           cardActual.style.background = 'linear-gradient(135deg, #fef2f2 0%, #fef2f2 100%)';
           cardActual.style.borderColor = '#ef4444';
         } else {
@@ -2290,7 +2302,7 @@
       }
 
       if (card365) {
-        if (oee365 < 55) {
+        if (oee365 < 80) {
           card365.style.background = 'linear-gradient(135deg, #fef2f2 0%, #fef2f2 100%)';
           card365.style.borderColor = '#ef4444';
         } else {
@@ -2431,21 +2443,20 @@
       if (!recordsToUse || recordsToUse.length === 0) return;
 
       let sumAvailActual = 0, countAvailActual = 0;
+      let sumAvail365 = 0, countAvail365 = 0;
       let sumPerf = 0, countPerf = 0;
       let sumQual = 0, countQual = 0;
-      let sumAvail365 = 0, countAvail365 = 0;
 
       recordsToUse.forEach(r => {
         const availActual = parseFloat(r.availability_actual) || 0;
+        const avail365 = parseFloat(r.availability_365) || 0;
         const perf = parseFloat(r.performance) || 0;
         const qual = parseFloat(r.quality_rate) || 0;
 
         if (availActual > 0) { sumAvailActual += availActual; countAvailActual++; }
+        if (avail365 > 0) { sumAvail365 += avail365; countAvail365++; }
         if (perf > 0) { sumPerf += perf; countPerf++; }
         if (qual > 0) { sumQual += qual; countQual++; }
-        
-        sumAvail365 += 100;
-        countAvail365++;
       });
 
       const ctx = document.getElementById('chart-apqa-breakdown').getContext('2d');
@@ -2454,16 +2465,16 @@
       dashboardCharts.apqa = new Chart(ctx, {
         type: 'bar',
         data: {
-          labels: ['AVAILABILITY ACTUAL', 'PERFORMANCE', 'QUALITY RATE', 'AVAILABILITY 365'],
+          labels: ['AVAILABILITY ACTUAL', 'AVAILABILITY 365', 'PERFORMANCE', 'QUALITY RATE'],
           datasets: [{
             label: '%',
             data: [
               countAvailActual > 0 ? sumAvailActual / countAvailActual : 0,
+              countAvail365 > 0 ? sumAvail365 / countAvail365 : 0,
               countPerf > 0 ? sumPerf / countPerf : 0,
-              countQual > 0 ? sumQual / countQual : 0,
-              countAvail365 > 0 ? sumAvail365 / countAvail365 : 0
+              countQual > 0 ? sumQual / countQual : 0
             ],
-            backgroundColor: ['#3b82f6', '#8b5cf6', '#10b981', '#f59e0b'],
+            backgroundColor: ['#3b82f6', '#60a5fa', '#8b5cf6', '#10b981'],
             borderRadius: 8
           }]
         },
