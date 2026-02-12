@@ -694,6 +694,12 @@
       background: white;
     }
 
+    .input-field[readonly] {
+      background: #f3e8f0;
+      color: #be185d;
+      font-weight: bold;
+    }
+
     .empty-state {
       text-align: center;
       padding: 32px 16px;
@@ -1078,36 +1084,49 @@
         </div>
        </div>
       </div>
-      <div class="form-section">
-       <div class="section-title">
-        PACKER METER
-       </div><button type="button" class="btn btn-success" onclick="addPackerMeter()">+ TAMBAH METER</button>
-       <div id="packer-meter-list" style="margin-top: 16px;"></div>
-      </div>
+      
+      <!-- OPERATIONAL DOWNTIME (ODT) -->
       <div class="form-section">
        <div class="section-title">
         OPERATIONAL DOWNTIME (ODT)
        </div>
        <div id="odt-list"></div>
       </div>
+      
+      <!-- LINE STOP MESIN -->
       <div class="form-section">
        <div class="section-title">
         LINE STOP MESIN
        </div>
        <div id="line-stop-mesin-list"></div>
       </div>
+      
+      <!-- LINE STOP NON-MESIN -->
       <div class="form-section">
        <div class="section-title">
         LINE STOP NON-MESIN
        </div>
        <div id="line-stop-non-mesin-list"></div>
       </div>
+      
+      <!-- MINOR STOP -->
       <div class="form-section">
        <div class="section-title">
         MINOR STOP
        </div><button type="button" class="btn btn-success" onclick="addMinorStop()">+ TAMBAH MINOR STOP</button>
        <div id="minor-stop-list" style="margin-top: 16px;"></div>
       </div>
+      
+      <!-- PACKER METER - DIPINDAHKAN SETELAH MINOR STOP -->
+      <div class="form-section">
+       <div class="section-title">
+        PACKER METER
+       </div>
+       <button type="button" class="btn btn-success" onclick="addPackerMeter()">+ TAMBAH METER</button>
+       <div id="packer-meter-list" style="margin-top: 16px;"></div>
+      </div>
+      
+      <!-- HASIL PERHITUNGAN OEE -->
       <div class="form-section">
        <div id="availability-warning" style="display: none;"></div>
        <div class="section-title">
@@ -1426,8 +1445,10 @@
       renderLineStopMesinList();
       renderLineStopNonMesinList();
       renderMinorStopList();
+      renderPackerMeterList(); // Re-render packer meters with updated remaining time
     }
 
+    // ==================== PACKER METER FUNCTIONS ====================
     function addPackerMeter() {
       const shift = document.getElementById('oee-shift').value;
       if (!shift) {
@@ -1435,14 +1456,34 @@
         return;
       }
 
+      // Hitung total ODT
+      const totalODT = oeeFormState.downtime.reduce((sum, odt) => sum + (parseFloat(odt.durasi) || 0), 0);
+      
+      // Hitung total Line Stop Mesin
+      const totalLSM = oeeFormState.lineStopMesin.reduce((sum, l) => sum + (parseFloat(l.durasi) || 0), 0);
+      
+      // Hitung total Line Stop Non-Mesin (hanya yang dicentang)
+      const totalLSNM = oeeFormState.lineStopNonMesin.filter(l => l.checked).reduce((sum, l) => sum + (parseFloat(l.durasi) || 0), 0);
+      
+      // Hitung durasi terpanjang dari semua packer di semua meter yang sudah ada
+      let maxDurationAllMeters = 0;
+      oeeFormState.packerMeters.forEach(meter => {
+        meter.packers.forEach(packer => {
+          maxDurationAllMeters = Math.max(maxDurationAllMeters, packer.duration || 0);
+        });
+      });
+
+      // Sisa waktu = shift minutes - (total ODT + total LSM + total LSNM + durasi terpanjang)
+      const remainingTime = Math.max(0, oeeFormState.shiftMinutes - totalODT - totalLSM - totalLSNM - maxDurationAllMeters);
+
       oeeFormState.packerMeters.push({
         id: 'meter_' + Date.now(),
         productId: '',
         batchNumber: '',
-        totalOutput: 0,
-        totalReject: 0,
+        remainingTime: remainingTime,
         packers: []
       });
+      
       renderPackerMeterList();
     }
 
@@ -1453,40 +1494,70 @@
         return;
       }
 
-      listDiv.innerHTML = oeeFormState.packerMeters.map(meter => `
-        <div class="card" data-meter-id="${meter.id}">
-          <div class="card-header">
-            <h3 class="card-title">METER ${oeeFormState.packerMeters.indexOf(meter) + 1}</h3>
-            <button type="button" class="btn btn-danger btn-small" onclick="removePackerMeter('${meter.id}')">HAPUS</button>
-          </div>
+      // Hitung total ODT, LSM, LSNM untuk perhitungan sisa waktu
+      const totalODT = oeeFormState.downtime.reduce((sum, odt) => sum + (parseFloat(odt.durasi) || 0), 0);
+      const totalLSM = oeeFormState.lineStopMesin.reduce((sum, l) => sum + (parseFloat(l.durasi) || 0), 0);
+      const totalLSNM = oeeFormState.lineStopNonMesin.filter(l => l.checked).reduce((sum, l) => sum + (parseFloat(l.durasi) || 0), 0);
+      
+      // Hitung durasi terpanjang dari semua packer di semua meter KECUALI meter yang sedang di-render
+      // Ini untuk sisa waktu meter baru nanti, bukan untuk meter yang sudah ada
+      
+      listDiv.innerHTML = oeeFormState.packerMeters.map((meter, index) => {
+        // Hitung durasi terpanjang dari semua packer di semua meter SEBELUM meter ini
+        let maxDurationBeforeThisMeter = 0;
+        for (let i = 0; i < index; i++) {
+          const prevMeter = oeeFormState.packerMeters[i];
+          prevMeter.packers.forEach(packer => {
+            maxDurationBeforeThisMeter = Math.max(maxDurationBeforeThisMeter, packer.duration || 0);
+          });
+        }
+        
+        // Sisa waktu untuk meter ini = shift minutes - (total ODT + total LSM + total LSNM + maxDurationBeforeThisMeter)
+        const remainingTimeForThisMeter = Math.max(0, oeeFormState.shiftMinutes - totalODT - totalLSM - totalLSNM - maxDurationBeforeThisMeter);
+        meter.remainingTime = remainingTimeForThisMeter;
+        
+        return `
+          <div class="card" data-meter-id="${meter.id}" style="margin-bottom: 20px; padding: 16px; border: 2px solid rgba(236, 72, 153, 0.2); border-radius: 12px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+              <h3 style="margin: 0; font-size: 16px; font-weight: 700; color: #ec4899; text-transform: uppercase;">METER ${index + 1}</h3>
+              <button type="button" class="btn btn-danger btn-small" onclick="removePackerMeter('${meter.id}')">HAPUS</button>
+            </div>
 
-          <div class="form-row">
-            <div class="form-group">
-              <label>PRODUK</label>
-              <select class="meter-product input-field" onchange="updatePackerMeter('${meter.id}', 'product')">
-                <option value="">-- PILIH PRODUK --</option>
-                ${localData.produk.map(p => `<option value="${p.id}" ${meter.productId === p.id ? 'selected' : ''}>${p.nama}</option>`).join('')}
-              </select>
+            <div class="form-row">
+              <div class="form-group">
+                <label>PRODUK</label>
+                <select class="meter-product input-field" onchange="updatePackerMeter('${meter.id}', 'product')">
+                  <option value="">-- PILIH PRODUK --</option>
+                  ${localData.produk.map(p => `<option value="${p.id}" ${meter.productId === p.id ? 'selected' : ''}>${p.nama}</option>`).join('')}
+                </select>
+              </div>
+              <div class="form-group">
+                <label>BATCH NUMBER</label>
+                <input type="text" class="meter-batch input-field" value="${meter.batchNumber}" placeholder="BATCH NUMBER" onchange="updatePackerMeter('${meter.id}', 'batch')">
+              </div>
+              <div class="form-group">
+                <label>SISA WAKTU (MENIT)</label>
+                <input type="number" class="meter-remaining-time input-field" value="${meter.remainingTime.toFixed(0)}" readonly>
+              </div>
             </div>
-            <div class="form-group">
-              <label>BATCH NUMBER</label>
-              <input type="text" class="meter-batch input-field" value="${meter.batchNumber}" placeholder="BATCH NUMBER" onchange="updatePackerMeter('${meter.id}', 'batch')">
-            </div>
-          </div>
 
-          <div style="margin-top: 16px;">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
-              <h4 class="section-title" style="margin: 0;">PACKER</h4>
-              <button type="button" class="btn btn-success btn-small" onclick="addPackerToMeter('${meter.id}')">+ PACKER</button>
+            <div style="margin-top: 16px;">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                <h4 class="section-title" style="margin: 0; font-size: 14px;">PACKER</h4>
+                <button type="button" class="btn btn-success btn-small" onclick="addPackerToMeter('${meter.id}')">+ TAMBAH PACKER</button>
+              </div>
+              <div id="packers-${meter.id}"></div>
             </div>
-            <div id="packers-${meter.id}"></div>
           </div>
-        </div>
-      `).join('');
+        `;
+      }).join('');
 
       oeeFormState.packerMeters.forEach(meter => {
         renderPackersInMeter(meter);
       });
+      
+      // Update availability warning setelah render
+      updateAvailabilityWarning();
     }
 
     function renderPackersInMeter(meter) {
@@ -1494,12 +1565,12 @@
       if (!container) return;
 
       if (meter.packers.length === 0) {
-        container.innerHTML = '<div class="empty-state"><div class="empty-state-text" style="font-size: 12px;">TAMBAH PACKER UNTUK METER INI</div></div>';
+        container.innerHTML = '<div class="empty-state"><div class="empty-state-text" style="font-size: 12px;">BELUM ADA PACKER DITAMBAHKAN</div></div>';
         return;
       }
 
       container.innerHTML = meter.packers.map(packer => `
-        <div id="packer-${packer.id}" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(85px, 1fr)); gap: 8px; padding: 12px; background: white; border-radius: 8px; margin-bottom: 8px; border: 1px solid rgba(236, 72, 153, 0.1);">
+        <div id="packer-${packer.id}" style="display: grid; grid-template-columns: 2fr 1fr 1.5fr 1.5fr 0.8fr; gap: 8px; padding: 12px; background: #fdf2f8; border-radius: 8px; margin-bottom: 8px; border: 1px solid rgba(236, 72, 153, 0.2); align-items: end;">
           <div class="form-group">
             <label style="font-size: 10px;">PACKER</label>
             <select class="packer-name input-field" style="font-size: 11px;" onchange="updatePacker('${packer.id}', '${meter.id}')">
@@ -1508,16 +1579,8 @@
             </select>
           </div>
           <div class="form-group">
-            <label style="font-size: 10px;">START</label>
-            <input type="time" class="packer-start-time input-field" style="font-size: 11px;" value="${packer.startTime}" onchange="updatePacker('${packer.id}', '${meter.id}')">
-          </div>
-          <div class="form-group">
-            <label style="font-size: 10px;">END</label>
-            <input type="time" class="packer-end-time input-field" style="font-size: 11px;" value="${packer.endTime}" onchange="updatePacker('${packer.id}', '${meter.id}')">
-          </div>
-          <div class="form-group">
             <label style="font-size: 10px;">DURASI (MIN)</label>
-            <input type="number" class="packer-duration input-field" style="font-size: 11px;" value="${packer.duration}" readonly>
+            <input type="number" class="packer-duration input-field" style="font-size: 11px;" value="${packer.duration}" min="0" max="${meter.remainingTime}" placeholder="DURASI" onchange="validatePackerDuration(this, '${packer.id}', '${meter.id}')">
           </div>
           <div class="form-group">
             <label style="font-size: 10px;">OUTPUT (DUS)</label>
@@ -1534,6 +1597,29 @@
       `).join('');
     }
 
+    // Validasi durasi tidak melebihi sisa waktu
+    function validatePackerDuration(input, packerId, meterId) {
+      const meter = oeeFormState.packerMeters.find(m => m.id === meterId);
+      if (!meter) return;
+      
+      const packer = meter.packers.find(p => p.id === packerId);
+      if (!packer) return;
+      
+      let duration = parseFloat(input.value) || 0;
+      
+      // Validasi: durasi tidak boleh melebihi sisa waktu meter
+      if (duration > meter.remainingTime) {
+        showToast(`DURASI TIDAK BOLEH MELEBIHI SISA WAKTU (${meter.remainingTime.toFixed(0)} MENIT)`, 'error');
+        duration = meter.remainingTime;
+        input.value = duration;
+      }
+      
+      packer.duration = duration;
+      
+      // Update packer dan re-render meter list untuk update sisa waktu meter berikutnya
+      updatePacker(packerId, meterId);
+    }
+
     function removePackerMeter(meterId) {
       oeeFormState.packerMeters = oeeFormState.packerMeters.filter(m => m.id !== meterId);
       renderPackerMeterList();
@@ -1544,22 +1630,10 @@
       const meter = oeeFormState.packerMeters.find(m => m.id === meterId);
       if (!meter) return;
 
-      const shift = document.getElementById('oee-shift').value;
-      const shiftSchedule = {
-        'Shift 1': { start: '07:00', end: '15:30' },
-        'Shift 2': { start: '15:20', end: '22:50' },
-        'Shift 3': { start: '22:40', end: '07:10' },
-        'Longshift Pagi': { start: '07:00', end: '19:00' },
-        'Longshift Malam': { start: '19:00', end: '07:00' }
-      };
-      const schedule = shiftSchedule[shift] || { start: '07:00', end: '15:30' };
-
       meter.packers.push({
         id: 'packer_' + Date.now(),
         packerId: '',
         packerName: '',
-        startTime: schedule.start,
-        endTime: schedule.end,
         duration: 0,
         output: 0,
         reject: 0
@@ -1579,10 +1653,6 @@
         meter.productId = meterDiv.querySelector('.meter-product').value;
       } else if (field === 'batch') {
         meter.batchNumber = meterDiv.querySelector('.meter-batch').value;
-      } else if (field === 'output') {
-        meter.totalOutput = parseFloat(meterDiv.querySelector('.meter-total-output').value) || 0;
-      } else if (field === 'reject') {
-        meter.totalReject = parseFloat(meterDiv.querySelector('.meter-total-reject').value) || 0;
       }
 
       calculateOEE();
@@ -1599,8 +1669,6 @@
       if (!packerDiv) return;
 
       const nameSelect = packerDiv.querySelector('.packer-name');
-      const startTimeInput = packerDiv.querySelector('.packer-start-time');
-      const endTimeInput = packerDiv.querySelector('.packer-end-time');
       const durationInput = packerDiv.querySelector('.packer-duration');
       const outputInput = packerDiv.querySelector('.packer-output');
       const rejectInput = packerDiv.querySelector('.packer-reject');
@@ -1608,26 +1676,12 @@
       const [packerId_, packerName] = nameSelect.value.split('|') || ['', ''];
       packer.packerId = packerId_;
       packer.packerName = packerName;
-      packer.startTime = startTimeInput.value;
-      packer.endTime = endTimeInput.value;
+      packer.duration = parseFloat(durationInput.value) || 0;
       packer.output = parseFloat(outputInput.value) || 0;
       packer.reject = parseFloat(rejectInput.value) || 0;
 
-      if (packer.startTime && packer.endTime) {
-        const [startHour, startMin] = packer.startTime.split(':').map(Number);
-        const [endHour, endMin] = packer.endTime.split(':').map(Number);
-
-        let startTotalMin = startHour * 60 + startMin;
-        let endTotalMin = endHour * 60 + endMin;
-
-        if (endTotalMin <= startTotalMin) {
-          endTotalMin += 24 * 60;
-        }
-
-        packer.duration = Math.max(0, endTotalMin - startTotalMin);
-        durationInput.value = packer.duration;
-      }
-
+      // Re-render packer meter list to update remaining time for next meters
+      renderPackerMeterList();
       calculateOEE();
     }
 
@@ -1636,9 +1690,49 @@
       if (meter) {
         meter.packers = meter.packers.filter(p => p.id !== packerId);
         renderPackersInMeter(meter);
+        // Re-render packer meter list to update remaining time for next meters
+        renderPackerMeterList();
       }
       calculateOEE();
     }
+    
+    // UPDATE AVAILABILITY WARNING - Menggunakan durasi terpanjang
+    function updateAvailabilityWarning() {
+      const warningDiv = document.getElementById('availability-warning');
+      if (!warningDiv) return;
+      
+      // Hitung total ODT, LSM, LSNM
+      const totalODT = oeeFormState.downtime.reduce((sum, odt) => sum + (parseFloat(odt.durasi) || 0), 0);
+      const totalLSM = oeeFormState.lineStopMesin.reduce((sum, l) => sum + (parseFloat(l.durasi) || 0), 0);
+      const totalLSNM = oeeFormState.lineStopNonMesin.filter(l => l.checked).reduce((sum, l) => sum + (parseFloat(l.durasi) || 0), 0);
+      
+      // Hitung durasi terpanjang dari semua packer di semua meter
+      let maxPackerDuration = 0;
+      oeeFormState.packerMeters.forEach(meter => {
+        meter.packers.forEach(packer => {
+          maxPackerDuration = Math.max(maxPackerDuration, packer.duration || 0);
+        });
+      });
+      
+      // Waktu yang tersedia untuk satu kali proses produksi
+      const availableTimeForOneProcess = oeeFormState.shiftMinutes - totalODT - totalLSM - totalLSNM;
+      
+      // Warning muncul jika durasi terpanjang > availableTimeForOneProcess
+      const isWarning = maxPackerDuration > availableTimeForOneProcess && availableTimeForOneProcess > 0;
+      
+      if (isWarning) {
+        warningDiv.innerHTML = `
+          <div style="background: #fef2f2; border: 2px solid #ef4444; border-radius: 10px; padding: 16px; margin-bottom: 16px; color: #dc2626;">
+            <p style="margin: 0 0 8px 0; font-weight: 700; text-transform: uppercase; font-size: 13px;">⚠️ WARNING: WAKTU TIDAK SESUAI</p>
+            <p style="margin: 0; font-size: 12px;">DURASI PACKER TERPANJANG (${maxPackerDuration.toFixed(0)} MENIT) MELEBIHI WAKTU TERSEDIA (${availableTimeForOneProcess.toFixed(0)} MENIT). PERIKSA KEMBALI DATA ANDA.</p>
+          </div>
+        `;
+        warningDiv.style.display = 'block';
+      } else {
+        warningDiv.style.display = 'none';
+      }
+    }
+    // ==================== END PACKER METER FUNCTIONS ====================
 
     function renderODTList() {
       const listDiv = document.getElementById('odt-list');
@@ -1667,6 +1761,8 @@
       if (odt) {
         odt.durasi = parseFloat(durasi) || 0;
       }
+      // Update remaining time in packer meters
+      renderPackerMeterList();
       calculateOEE();
     }
 
@@ -1700,6 +1796,8 @@
     function updateLineStopMesin(id, field, value) {
       const lsm = oeeFormState.lineStopMesin.find(l => l.id === id);
       if (lsm) lsm[field] = value;
+      // Update remaining time in packer meters
+      renderPackerMeterList();
       calculateOEE();
     }
 
@@ -1739,6 +1837,8 @@
           lsnm[field] = value;
         }
       }
+      // Update remaining time in packer meters
+      renderPackerMeterList();
       calculateOEE();
     }
 
@@ -1825,14 +1925,7 @@
       // Total downtime = ODT actual + Line Stop (all types)
       const totalDowntime = totalODT + totalActualDowntime;
 
-      // Check if RUNNING METER + ODT ACTUAL + LINE STOP exceeds shift minutes
-      const totalTimeUsed = totalPackerDuration + totalDowntime;
-      oeeFormState.availabilityWarning = totalTimeUsed > totalShiftMinutes;
-
       // Calculate availability based on OEE formula
-      // Availability Actual = (Jam Kerja - Total ODT - Line Stop Mesin - Line Stop Non-Mesin) / (Jam Kerja - Total ODT)
-      // Availability 365 = (Jam Kerja - Total ODT - Line Stop Mesin - Line Stop Non-Mesin) / Jam Kerja
-      
       const plannedProductionTime = totalShiftMinutes - totalODT;
       const availableTime = plannedProductionTime - totalActualDowntime;
       
@@ -1899,22 +1992,6 @@
       document.getElementById('calc-oee-365').textContent = `${oee365.toFixed(1)}%`;
       document.getElementById('calc-total-output').textContent = `${totalOutputActual.toFixed(1)} DUS`;
 
-      // Show warning if total running time + downtime exceeds shift duration
-      const warningDiv = document.getElementById('availability-warning');
-      if (warningDiv) {
-        if (oeeFormState.availabilityWarning) {
-          warningDiv.innerHTML = `
-            <div style="background: #fef2f2; border: 2px solid #ef4444; border-radius: 10px; padding: 16px; margin-bottom: 16px; color: #dc2626;">
-              <p style="margin: 0 0 8px 0; font-weight: 700; text-transform: uppercase; font-size: 13px;">⚠️ WARNING: WAKTU TIDAK SESUAI</p>
-              <p style="margin: 0; font-size: 12px;">TOTAL WAKTU KERJA (RUNNING METER ${totalPackerDuration.toFixed(0)} + ODT ${totalODT.toFixed(0)} + LINE STOP ${totalActualDowntime.toFixed(0)} = ${totalTimeUsed.toFixed(0)} MENIT) MELEBIHI DURASI SHIFT (${totalShiftMinutes.toFixed(0)} MENIT). PERIKSA KEMBALI DATA ANDA.</p>
-            </div>
-          `;
-          warningDiv.style.display = 'block';
-        } else {
-          warningDiv.style.display = 'none';
-        }
-      }
-
       oeeFormState.results = {
         availabilityActual: availabilityActual.toFixed(1),
         availability365: availability365.toFixed(1),
@@ -1928,6 +2005,9 @@
         totalPackerDuration: totalPackerDuration,
         totalDowntime: totalDowntime
       };
+      
+      // Update availability warning setelah kalkulasi
+      updateAvailabilityWarning();
     }
 
     function loadOEEFormData() {
@@ -1965,8 +2045,22 @@
         return;
       }
 
-      if (oeeFormState.availabilityWarning) {
-        showToast('⚠️ TOTAL DOWNTIME MELEBIHI SISA WAKTU! CEK DATA AVAILABILITY ANDA', 'error');
+      // Cek warning availability
+      const totalODT = oeeFormState.downtime.reduce((sum, odt) => sum + (parseFloat(odt.durasi) || 0), 0);
+      const totalLSM = oeeFormState.lineStopMesin.reduce((sum, l) => sum + (parseFloat(l.durasi) || 0), 0);
+      const totalLSNM = oeeFormState.lineStopNonMesin.filter(l => l.checked).reduce((sum, l) => sum + (parseFloat(l.durasi) || 0), 0);
+      
+      let maxPackerDuration = 0;
+      oeeFormState.packerMeters.forEach(meter => {
+        meter.packers.forEach(packer => {
+          maxPackerDuration = Math.max(maxPackerDuration, packer.duration || 0);
+        });
+      });
+      
+      const availableTimeForOneProcess = oeeFormState.shiftMinutes - totalODT - totalLSM - totalLSNM;
+      
+      if (maxPackerDuration > availableTimeForOneProcess && availableTimeForOneProcess > 0) {
+        showToast('⚠️ DURASI PACKER TERPANJANG MELEBIHI WAKTU TERSEDIA!', 'error');
         return;
       }
 
@@ -2039,6 +2133,7 @@
       document.getElementById('calc-oee-actual').textContent = '0%';
       document.getElementById('calc-oee-365').textContent = '0%';
       document.getElementById('calc-total-output').textContent = '0 DUS';
+      document.getElementById('availability-warning').style.display = 'none';
     }
 
     let dashboardCharts = {};
@@ -2380,49 +2475,8 @@
             legend: { display: false }
           },
           scales: { x: { beginAtZero: true, max: 100, ticks: { callback: v => v + '%' } } }
-        },
-        plugins: [{
-          id: 'chartAreaPlugin',
-          afterDatasetsDraw(chart) {
-            const { ctx, data } = chart;
-            chart.data.datasets.forEach((dataset, datasetIndex) => {
-              chart.getDatasetMeta(datasetIndex).data.forEach((datapoint, index) => {
-                const { x, y } = datapoint.tooltipPosition();
-                const value = dataset.data[index];
-                
-                ctx.font = 'bold 13px Segoe UI';
-                ctx.fillStyle = '#000';
-                ctx.textAlign = 'right';
-                ctx.textBaseline = 'middle';
-                ctx.fillText(value.toFixed(1) + '%', x - 8, y);
-              });
-            });
-          }
-        }]
-      });
-    }
-
-    function getTopDowntimeData(type) {
-      const downtimeMap = {};
-
-      localData.oee_records.forEach(r => {
-        const recordDate = r.date;
-        const recordShift = r.shift;
-        const key = `${recordDate}-${recordShift}`;
-
-        if (type === 'odt') {
-          localData.downtime.forEach(odt => {
-            const downtimeKey = `${odt.nama}_${key}`;
-            if (!downtimeMap[downtimeKey]) {
-              downtimeMap[downtimeKey] = { name: odt.nama, durasi: 0 };
-            }
-          });
         }
       });
-
-      return Object.values(downtimeMap)
-        .sort((a, b) => b.durasi - a.durasi)
-        .slice(0, 10);
     }
 
     function renderODTTop10Chart() {
@@ -2465,25 +2519,7 @@
           maintainAspectRatio: false,
           plugins: { legend: { display: false } },
           scales: { x: { beginAtZero: true } }
-        },
-        plugins: [{
-          id: 'chartAreaPlugin',
-          afterDatasetsDraw(chart) {
-            const { ctx, data } = chart;
-            chart.data.datasets.forEach((dataset, datasetIndex) => {
-              chart.getDatasetMeta(datasetIndex).data.forEach((datapoint, index) => {
-                const { x, y } = datapoint.tooltipPosition();
-                const value = dataset.data[index];
-                
-                ctx.font = 'bold 12px Segoe UI';
-                ctx.fillStyle = '#000';
-                ctx.textAlign = 'right';
-                ctx.textBaseline = 'middle';
-                ctx.fillText(value.toFixed(0) + 'MIN', x - 8, y);
-              });
-            });
-          }
-        }]
+        }
       });
     }
 
@@ -2526,25 +2562,7 @@
           maintainAspectRatio: false,
           plugins: { legend: { display: false } },
           scales: { x: { beginAtZero: true } }
-        },
-        plugins: [{
-          id: 'chartAreaPlugin',
-          afterDatasetsDraw(chart) {
-            const { ctx, data } = chart;
-            chart.data.datasets.forEach((dataset, datasetIndex) => {
-              chart.getDatasetMeta(datasetIndex).data.forEach((datapoint, index) => {
-                const { x, y } = datapoint.tooltipPosition();
-                const value = dataset.data[index];
-                
-                ctx.font = 'bold 12px Segoe UI';
-                ctx.fillStyle = '#000';
-                ctx.textAlign = 'right';
-                ctx.textBaseline = 'middle';
-                ctx.fillText(value.toFixed(0) + 'MIN', x - 8, y);
-              });
-            });
-          }
-        }]
+        }
       });
     }
 
@@ -2587,25 +2605,7 @@
           maintainAspectRatio: false,
           plugins: { legend: { display: false } },
           scales: { x: { beginAtZero: true } }
-        },
-        plugins: [{
-          id: 'chartAreaPlugin',
-          afterDatasetsDraw(chart) {
-            const { ctx, data } = chart;
-            chart.data.datasets.forEach((dataset, datasetIndex) => {
-              chart.getDatasetMeta(datasetIndex).data.forEach((datapoint, index) => {
-                const { x, y } = datapoint.tooltipPosition();
-                const value = dataset.data[index];
-                
-                ctx.font = 'bold 12px Segoe UI';
-                ctx.fillStyle = '#000';
-                ctx.textAlign = 'right';
-                ctx.textBaseline = 'middle';
-                ctx.fillText(value.toFixed(0) + 'MIN', x - 8, y);
-              });
-            });
-          }
-        }]
+        }
       });
     }
 
@@ -2648,25 +2648,7 @@
           maintainAspectRatio: false,
           plugins: { legend: { display: false } },
           scales: { x: { beginAtZero: true } }
-        },
-        plugins: [{
-          id: 'chartAreaPlugin',
-          afterDatasetsDraw(chart) {
-            const { ctx, data } = chart;
-            chart.data.datasets.forEach((dataset, datasetIndex) => {
-              chart.getDatasetMeta(datasetIndex).data.forEach((datapoint, index) => {
-                const { x, y } = datapoint.tooltipPosition();
-                const value = dataset.data[index];
-                
-                ctx.font = 'bold 12px Segoe UI';
-                ctx.fillStyle = '#000';
-                ctx.textAlign = 'right';
-                ctx.textBaseline = 'middle';
-                ctx.fillText(value.toFixed(0) + 'MIN', x - 8, y);
-              });
-            });
-          }
-        }]
+        }
       });
     }
 
