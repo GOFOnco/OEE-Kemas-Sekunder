@@ -1090,10 +1090,9 @@
                 <th>NOMOR BATCH</th>
                 <th>OEE ACTUAL</th>
                 <th>OEE 365</th>
-                <th>ABNORMALITAS LSM</th>
-                <th>ACTION LSM</th>
-                <th>ABNORMALITAS LSNM</th>
-                <th>ACTION LSNM</th>
+                <th>LINE STOP MESIN</th>
+                <th>LINE STOP NON-MESIN</th>
+                <th>MINOR STOP</th>
               </tr>
             </thead>
             <tbody id="table-oee-history"></tbody>
@@ -1306,11 +1305,24 @@
 
   // ==================== LOCAL DATA ====================
   let localData = {
-    produk: [], packer: [], downtime: [], line_stop_mesin: [], line_stop_non_mesin: [], minor_stop: [], oee_records: [], audit_trail: []
+    produk: [],
+    packer: [],
+    downtime: [],
+    line_stop_mesin: [],
+    line_stop_non_mesin: [],
+    minor_stop: [],
+    oee_records: [],
+    audit_trail: []
   };
 
   let oeeFormState = {
-    shiftMinutes: 0, packerMeters: [], downtime: [], lineStopMesin: [], lineStopNonMesin: [], minorStop: [], results: {}
+    shiftMinutes: 0,
+    packerMeters: [],
+    downtime: [],
+    lineStopMesin: [],
+    lineStopNonMesin: [],
+    minorStop: [],
+    results: {}
   };
 
   let dashboardCharts = {};
@@ -1432,7 +1444,9 @@
     let maxDurationAllMeters = 0;
     oeeFormState.packerMeters.forEach(m => m.packers.forEach(p => maxDurationAllMeters = Math.max(maxDurationAllMeters, p.duration || 0)));
     oeeFormState.packerMeters.push({
-      id: 'meter_' + Date.now(), productId: '', batchNumber: '',
+      id: 'meter_' + Date.now(),
+      productId: '',
+      batchNumber: '',
       remainingTime: Math.max(0, oeeFormState.shiftMinutes - totalODT - totalLSM - totalLSNM - maxDurationAllMeters),
       packers: []
     });
@@ -1648,7 +1662,14 @@
       return;
     }
     if (oeeFormState.lineStopMesin.length === 0) {
-      oeeFormState.lineStopMesin = localData.line_stop_mesin.map(m => ({ id: m.id, nama: m.nama, durasi: 0, action: '', wr: '', isCustom: false }));
+      oeeFormState.lineStopMesin = localData.line_stop_mesin.map(m => ({ 
+        id: m.id, 
+        nama: m.nama, 
+        durasi: 0, 
+        action: '', 
+        wr: '', 
+        isCustom: false 
+      }));
     }
     listDiv.innerHTML = oeeFormState.lineStopMesin.map(lsm => {
       const wrRequired = (parseFloat(lsm.durasi) || 0) >= 180;
@@ -1678,7 +1699,14 @@
       return;
     }
     if (oeeFormState.lineStopNonMesin.length === 0) {
-      oeeFormState.lineStopNonMesin = localData.line_stop_non_mesin.map(m => ({ id: m.id, nama: m.nama, durasi: 0, action: '', checked: false, isCustom: false }));
+      oeeFormState.lineStopNonMesin = localData.line_stop_non_mesin.map(m => ({ 
+        id: m.id, 
+        nama: m.nama, 
+        durasi: 0, 
+        action: '', 
+        checked: false, 
+        isCustom: false 
+      }));
     }
     listDiv.innerHTML = oeeFormState.lineStopNonMesin.map(lsnm => `
       <div class="lsnm-row">
@@ -1706,7 +1734,13 @@
 
   // ==================== MINOR STOP ====================
   function addMinorStop() {
-    oeeFormState.minorStop.push({ id: 'ms_' + Date.now(), nama: '', durasi: 0, checked: false, isCustom: true });
+    oeeFormState.minorStop.push({ 
+      id: 'ms_' + Date.now(), 
+      nama: prompt('MASUKKAN NAMA MINOR STOP:', '') || 'MINOR STOP', 
+      durasi: 0, 
+      checked: false, 
+      isCustom: true 
+    });
     renderMinorStopList();
   }
 
@@ -1717,7 +1751,13 @@
       return;
     }
     if (oeeFormState.minorStop.length === 0) {
-      oeeFormState.minorStop = localData.minor_stop.map(m => ({ id: m.id, nama: m.nama, durasi: 0, checked: false, isCustom: false }));
+      oeeFormState.minorStop = localData.minor_stop.map(m => ({ 
+        id: m.id, 
+        nama: m.nama, 
+        durasi: 0, 
+        checked: false, 
+        isCustom: false 
+      }));
     }
     listDiv.innerHTML = oeeFormState.minorStop.map(ms => `
       <div class="ms-row">
@@ -1784,10 +1824,19 @@
     document.getElementById('calc-total-output').textContent = `${totalOutput.toFixed(1)} DUS`;
     
     oeeFormState.results = {
-      availabilityActual: availActual.toFixed(1), availability365: avail365.toFixed(1),
-      performance: performance.toFixed(1), qualityRate: quality.toFixed(1),
-      oeeActual: oeeActual.toFixed(1), oee365: oee365.toFixed(1),
-      totalOutput, totalReject, totalPackerDuration, totalDowntime: totalODT + totalActualDowntime
+      availabilityActual: availActual.toFixed(1),
+      availability365: avail365.toFixed(1),
+      performance: performance.toFixed(1),
+      qualityRate: quality.toFixed(1),
+      oeeActual: oeeActual.toFixed(1),
+      oee365: oee365.toFixed(1),
+      totalOutput,
+      totalReject,
+      totalPackerDuration,
+      totalODT,
+      totalLSM,
+      totalLSNM,
+      totalMinor
     };
     updateAvailabilityWarning();
   }
@@ -1801,57 +1850,109 @@
     event.preventDefault();
     const date = document.getElementById('oee-date').value;
     const shift = document.getElementById('oee-shift').value;
+    
     if (!date || !shift || oeeFormState.packerMeters.length === 0) {
       showToast('TANGGAL, SHIFT & PACKER METER WAJIB DIISI', 'error');
       return;
     }
+    
     if (oeeFormState.packerMeters.find(m => !m.productId || !m.batchNumber || m.packers.length === 0)) {
       showToast('PRODUK, BATCH & MINIMAL 1 PACKER WAJIB DIISI DI SETIAP METER', 'error');
       return;
     }
+    
     if (oeeFormState.packerMeters.flatMap(m => m.packers.filter(p => !p.packerName)).length > 0) {
       showToast('SEMUA PACKER HARUS DIPILIH', 'error');
       return;
     }
+    
     const invalidWR = oeeFormState.lineStopMesin.find(lsm => (parseFloat(lsm.durasi) || 0) >= 180 && !lsm.wr?.trim());
     if (invalidWR) {
       showToast(`NO WR WAJIB UNTUK: ${invalidWR.nama}`, 'error');
       return;
     }
+
     const totalODT = oeeFormState.downtime.reduce((s, o) => s + (parseFloat(o.durasi) || 0), 0);
     const totalLSM = oeeFormState.lineStopMesin.reduce((s, l) => s + (parseFloat(l.durasi) || 0), 0);
     const totalLSNM = oeeFormState.lineStopNonMesin.filter(l => l.checked).reduce((s, l) => s + (parseFloat(l.durasi) || 0), 0);
     let maxDur = 0;
     oeeFormState.packerMeters.forEach(m => m.packers.forEach(p => maxDur = Math.max(maxDur, p.duration || 0)));
+    
     if (maxDur > (oeeFormState.shiftMinutes - totalODT - totalLSM - totalLSNM) && (oeeFormState.shiftMinutes - totalODT - totalLSM - totalLSNM) > 0) {
       showToast('⚠️ DURASI PACKER TERPANJANG MELEBIHI WAKTU TERSEDIA!', 'error');
       return;
     }
+
     const allPackerNames = oeeFormState.packerMeters.flatMap(m => m.packers.map(p => p.packerName)).join(', ');
     const produkBatch = oeeFormState.packerMeters.map(m => {
       const prod = localData.produk.find(p => p.id === m.productId);
       return `${prod?.nama}(${m.batchNumber})`;
     }).join(' | ');
-    const lsmData = oeeFormState.lineStopMesin.filter(lsm => parseFloat(lsm.durasi) > 0).map(lsm => `${lsm.nama} (${lsm.durasi}MIN) - ACTION: ${lsm.action || '-'} - WR: ${lsm.wr || '-'}`).join(' | ');
-    const lsnmData = oeeFormState.lineStopNonMesin.filter(lsnm => lsnm.checked && parseFloat(lsnm.durasi) > 0).map(lsnm => `${lsnm.nama} (${lsnm.durasi}MIN) - ACTION: ${lsnm.action || '-'}`).join(' | ');
-    
+
+    // ==================== SAVE DETAILED DOWNTIME DATA ====================
+    const lsmDetails = oeeFormState.lineStopMesin
+      .filter(lsm => parseFloat(lsm.durasi) > 0)
+      .map(lsm => ({
+        nama: lsm.nama,
+        durasi: parseFloat(lsm.durasi),
+        action: lsm.action || '',
+        wr: lsm.wr || ''
+      }));
+
+    const lsnmDetails = oeeFormState.lineStopNonMesin
+      .filter(lsnm => lsnm.checked && parseFloat(lsnm.durasi) > 0)
+      .map(lsnm => ({
+        nama: lsnm.nama,
+        durasi: parseFloat(lsnm.durasi),
+        action: lsnm.action || ''
+      }));
+
+    const minorStopDetails = oeeFormState.minorStop
+      .filter(ms => ms.checked && parseFloat(ms.durasi) > 0)
+      .map(ms => ({
+        nama: ms.nama,
+        durasi: parseFloat(ms.durasi)
+      }));
+
+    // ==================== COMPILE STRING FOR DISPLAY ====================
+    const lsmString = lsmDetails.map(l => `${l.nama} (${l.durasi} MIN) - ACTION: ${l.action || '-'} - WR: ${l.wr || '-'}`).join(' | ');
+    const lsnmString = lsnmDetails.map(l => `${l.nama} (${l.durasi} MIN) - ACTION: ${l.action || '-'}`).join(' | ');
+    const msString = minorStopDetails.map(m => `${m.nama} (${m.durasi} MIN)`).join(' | ');
+
     const record = {
-      date, shift, product: produkBatch, packers: allPackerNames,
+      date,
+      shift,
+      product: produkBatch,
+      packers: allPackerNames,
       output_actual: oeeFormState.results.totalOutput,
       availability_actual: parseFloat(oeeFormState.results.availabilityActual),
       performance: parseFloat(oeeFormState.results.performance),
       quality_rate: parseFloat(oeeFormState.results.qualityRate),
       oee_actual: parseFloat(oeeFormState.results.oeeActual),
       oee_365: parseFloat(oeeFormState.results.oee365),
-      line_stop_mesin: lsmData || null,
-      line_stop_non_mesin: lsnmData || null
+      line_stop_mesin: lsmString || null,
+      line_stop_non_mesin: lsnmString || null,
+      minor_stop: msString || null,
+      // Store detailed data as JSON for analytics
+      lsm_details: lsmDetails,
+      lsnm_details: lsnmDetails,
+      ms_details: minorStopDetails
     };
 
     try {
       const { error } = await supabaseClient.from('oee_records').insert([record]);
       if (error) throw error;
-      localData.oee_records.unshift({ ...record, availability_365: parseFloat(oeeFormState.results.availability365) });
-      await addAuditLog('INPUT OEE', `${produkBatch} - PACKER: ${allPackerNames}`);
+      
+      // Add to local data with all details
+      localData.oee_records.unshift({ 
+        ...record, 
+        availability_365: parseFloat(oeeFormState.results.availability365),
+        lsm_details: lsmDetails,
+        lsnm_details: lsnmDetails,
+        ms_details: minorStopDetails
+      });
+      
+      await addAuditLog('INPUT OEE', `${produkBatch} - PACKER: ${allPackerNames} | LSM: ${lsmDetails.length} | LSNM: ${lsnmDetails.length} | MS: ${minorStopDetails.length}`);
       showToast('DATA OEE BERHASIL DISIMPAN ✅', 'success');
       resetOEEForm();
       updateDashboard();
@@ -1864,7 +1965,15 @@
   function resetOEEForm() {
     document.getElementById('form-oee').reset();
     document.getElementById('oee-date').value = new Date().toISOString().split('T')[0];
-    oeeFormState = { shiftMinutes: 0, packerMeters: [], downtime: [], lineStopMesin: [], lineStopNonMesin: [], minorStop: [], results: {} };
+    oeeFormState = { 
+      shiftMinutes: 0, 
+      packerMeters: [], 
+      downtime: [], 
+      lineStopMesin: [], 
+      lineStopNonMesin: [], 
+      minorStop: [], 
+      results: {} 
+    };
     document.getElementById('packer-meter-list').innerHTML = '';
     document.getElementById('odt-list').innerHTML = '';
     document.getElementById('line-stop-mesin-list').innerHTML = '';
@@ -1918,8 +2027,8 @@
     filteredOeeRecords = localData.oee_records.filter(r => {
       if (ds && r.date < ds) return false;
       if (de && r.date > de) return false;
-      if (sp && !r.product.includes(sp)) return false;
-      if (spk && !r.packers.includes(spk)) return false;
+      if (sp && !r.product?.includes(sp)) return false;
+      if (spk && !r.packers?.includes(spk)) return false;
       return true;
     });
     updateDashboard();
@@ -1951,7 +2060,9 @@
     }
     let sActual = 0, cActual = 0, s365 = 0, c365 = 0, tOut = 0;
     recs.forEach(r => {
-      const a = parseFloat(r.oee_actual) || 0, b = parseFloat(r.oee_365) || 0, o = parseFloat(r.output_actual) || 0;
+      const a = parseFloat(r.oee_actual) || 0;
+      const b = parseFloat(r.oee_365) || 0;
+      const o = parseFloat(r.output_actual) || 0;
       if (a > 0) { sActual += a; cActual++; }
       if (b > 0) { s365 += b; c365++; }
       tOut += o;
@@ -1959,6 +2070,353 @@
     document.getElementById('score-oee-actual').textContent = `${(cActual ? sActual / cActual : 0).toFixed(1)}%`;
     document.getElementById('score-oee-365').textContent = `${(c365 ? s365 / c365 : 0).toFixed(1)}%`;
     document.getElementById('score-total-output').textContent = tOut.toLocaleString('id-ID');
+  }
+
+  // ==================== DOWNTIME CHARTS - FIXED VERSION ====================
+  function renderODTTop10Chart() {
+    const downtimeMap = {};
+    
+    // Aggregate ODT durations from all OEE records
+    const records = filteredOeeRecords.length ? filteredOeeRecords : localData.oee_records;
+    records.forEach(record => {
+      // Use standard durations from master data as approximation
+      localData.downtime.forEach(odt => {
+        if (!downtimeMap[odt.nama]) downtimeMap[odt.nama] = 0;
+        // If we have actual ODT data from the form state, use that, otherwise use standard
+        const formODT = oeeFormState.downtime.find(d => d.id === odt.id);
+        downtimeMap[odt.nama] += formODT?.durasi || odt.waktu_standard || 0;
+      });
+    });
+
+    const sortedData = Object.entries(downtimeMap)
+      .map(([nama, durasi]) => ({ nama, durasi }))
+      .sort((a, b) => b.durasi - a.durasi)
+      .slice(0, 10);
+
+    const ctx = document.getElementById('chart-odt-top10').getContext('2d');
+    if (dashboardCharts.odtTop10) dashboardCharts.odtTop10.destroy();
+    
+    dashboardCharts.odtTop10 = new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: sortedData.map(d => d.nama),
+        datasets: [{
+          label: 'MENIT',
+          data: sortedData.map(d => d.durasi),
+          backgroundColor: '#3b82f6',
+          borderRadius: 8
+        }]
+      },
+      options: {
+        indexAxis: 'y',
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: { legend: { display: false } },
+        scales: { x: { beginAtZero: true } }
+      }
+    });
+  }
+
+  function renderLineStopMesinTop10Chart() {
+    const lsmMap = {};
+    
+    // Aggregate Line Stop Mesin durations from all OEE records
+    const records = filteredOeeRecords.length ? filteredOeeRecords : localData.oee_records;
+    records.forEach(record => {
+      // Check if record has lsm_details (from new format)
+      if (record.lsm_details && Array.isArray(record.lsm_details)) {
+        record.lsm_details.forEach(lsm => {
+          if (!lsmMap[lsm.nama]) lsmMap[lsm.nama] = 0;
+          lsmMap[lsm.nama] += lsm.durasi || 0;
+        });
+      } 
+      // Fallback to parsing string format for backward compatibility
+      else if (record.line_stop_mesin) {
+        const matches = record.line_stop_mesin.match(/([^(]+)\s*\((\d+)\s*MIN\)/g);
+        if (matches) {
+          matches.forEach(match => {
+            const nameMatch = match.match(/([^(]+)\s*\((\d+)\s*MIN\)/);
+            if (nameMatch) {
+              const nama = nameMatch[1].trim();
+              const durasi = parseInt(nameMatch[2]) || 0;
+              if (!lsmMap[nama]) lsmMap[nama] = 0;
+              lsmMap[nama] += durasi;
+            }
+          });
+        }
+      }
+    });
+
+    const sortedData = Object.entries(lsmMap)
+      .map(([nama, durasi]) => ({ nama, durasi }))
+      .sort((a, b) => b.durasi - a.durasi)
+      .slice(0, 10);
+
+    const ctx = document.getElementById('chart-lsm-top10').getContext('2d');
+    if (dashboardCharts.lsmTop10) dashboardCharts.lsmTop10.destroy();
+    
+    dashboardCharts.lsmTop10 = new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: sortedData.map(d => d.nama),
+        datasets: [{
+          label: 'MENIT',
+          data: sortedData.map(d => d.durasi),
+          backgroundColor: '#8b5cf6',
+          borderRadius: 8
+        }]
+      },
+      options: {
+        indexAxis: 'y',
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: { legend: { display: false } },
+        scales: { x: { beginAtZero: true } }
+      }
+    });
+  }
+
+  function renderLineStopNonMesinTop10Chart() {
+    const lsnmMap = {};
+    
+    // Aggregate Line Stop Non-Mesin durations from all OEE records
+    const records = filteredOeeRecords.length ? filteredOeeRecords : localData.oee_records;
+    records.forEach(record => {
+      // Check if record has lsnm_details (from new format)
+      if (record.lsnm_details && Array.isArray(record.lsnm_details)) {
+        record.lsnm_details.forEach(lsnm => {
+          if (!lsnmMap[lsnm.nama]) lsnmMap[lsnm.nama] = 0;
+          lsnmMap[lsnm.nama] += lsnm.durasi || 0;
+        });
+      }
+      // Fallback to parsing string format for backward compatibility
+      else if (record.line_stop_non_mesin) {
+        const matches = record.line_stop_non_mesin.match(/([^(]+)\s*\((\d+)\s*MIN\)/g);
+        if (matches) {
+          matches.forEach(match => {
+            const nameMatch = match.match(/([^(]+)\s*\((\d+)\s*MIN\)/);
+            if (nameMatch) {
+              const nama = nameMatch[1].trim();
+              const durasi = parseInt(nameMatch[2]) || 0;
+              if (!lsnmMap[nama]) lsnmMap[nama] = 0;
+              lsnmMap[nama] += durasi;
+            }
+          });
+        }
+      }
+    });
+
+    const sortedData = Object.entries(lsnmMap)
+      .map(([nama, durasi]) => ({ nama, durasi }))
+      .sort((a, b) => b.durasi - a.durasi)
+      .slice(0, 10);
+
+    const ctx = document.getElementById('chart-lsnm-top10').getContext('2d');
+    if (dashboardCharts.lsnmTop10) dashboardCharts.lsnmTop10.destroy();
+    
+    dashboardCharts.lsnmTop10 = new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: sortedData.map(d => d.nama),
+        datasets: [{
+          label: 'MENIT',
+          data: sortedData.map(d => d.durasi),
+          backgroundColor: '#10b981',
+          borderRadius: 8
+        }]
+      },
+      options: {
+        indexAxis: 'y',
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: { legend: { display: false } },
+        scales: { x: { beginAtZero: true } }
+      }
+    });
+  }
+
+  function renderMinorStopTop10Chart() {
+    const msMap = {};
+    
+    // Aggregate Minor Stop durations from all OEE records
+    const records = filteredOeeRecords.length ? filteredOeeRecords : localData.oee_records;
+    records.forEach(record => {
+      // Check if record has ms_details (from new format)
+      if (record.ms_details && Array.isArray(record.ms_details)) {
+        record.ms_details.forEach(ms => {
+          if (!msMap[ms.nama]) msMap[ms.nama] = 0;
+          msMap[ms.nama] += ms.durasi || 0;
+        });
+      }
+      // Fallback to parsing string format for backward compatibility
+      else if (record.minor_stop) {
+        const matches = record.minor_stop.match(/([^(]+)\s*\((\d+)\s*MIN\)/g);
+        if (matches) {
+          matches.forEach(match => {
+            const nameMatch = match.match(/([^(]+)\s*\((\d+)\s*MIN\)/);
+            if (nameMatch) {
+              const nama = nameMatch[1].trim();
+              const durasi = parseInt(nameMatch[2]) || 0;
+              if (!msMap[nama]) msMap[nama] = 0;
+              msMap[nama] += durasi;
+            }
+          });
+        }
+      }
+    });
+
+    const sortedData = Object.entries(msMap)
+      .map(([nama, durasi]) => ({ nama, durasi }))
+      .sort((a, b) => b.durasi - a.durasi)
+      .slice(0, 10);
+
+    const ctx = document.getElementById('chart-ms-top10').getContext('2d');
+    if (dashboardCharts.msTop10) dashboardCharts.msTop10.destroy();
+    
+    dashboardCharts.msTop10 = new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: sortedData.map(d => d.nama),
+        datasets: [{
+          label: 'MENIT',
+          data: sortedData.map(d => d.durasi),
+          backgroundColor: '#f59e0b',
+          borderRadius: 8
+        }]
+      },
+      options: {
+        indexAxis: 'y',
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: { legend: { display: false } },
+        scales: { x: { beginAtZero: true } }
+      }
+    });
+  }
+
+  function renderOEEMonthlyChart() {
+    const monthly = {};
+    for (let m = 1; m <= 12; m++) monthly[`2026-${String(m).padStart(2,'0')}`] = [];
+    const recs = filteredOeeRecords.length ? filteredOeeRecords : localData.oee_records;
+    recs.forEach(r => { 
+      if (monthly[r.date?.substring(0,7)]) { 
+        const v = parseFloat(r.oee_actual) || 0; 
+        if (v > 0) monthly[r.date.substring(0,7)].push(v); 
+      } 
+    });
+    const labels = Object.keys(monthly).map(ym => { 
+      const [y,m] = ym.split('-'); 
+      return new Date(y,m-1).toLocaleDateString('id-ID',{month:'short',year:'2-digit'}); 
+    });
+    const data = Object.values(monthly).map(arr => arr.length ? arr.reduce((a,b)=>a+b,0)/arr.length : 0);
+    const ctx = document.getElementById('chart-oee-monthly').getContext('2d');
+    if (dashboardCharts.oeeMonthly) dashboardCharts.oeeMonthly.destroy();
+    dashboardCharts.oeeMonthly = new Chart(ctx, {
+      type: 'line',
+      data: { 
+        labels, 
+        datasets: [{ 
+          label: 'OEE ACTUAL %', 
+          data, 
+          borderColor: '#ec4899', 
+          backgroundColor: 'rgba(236,72,153,0.1)', 
+          borderWidth: 3, 
+          tension: 0.4, 
+          fill: true, 
+          pointRadius: 5, 
+          pointBackgroundColor: '#ec4899' 
+        }] 
+      },
+      options: { 
+        responsive: true, 
+        maintainAspectRatio: false, 
+        plugins: { legend: { display: false } }, 
+        scales: { y: { beginAtZero: true, max: 100, ticks: { callback: v => v + '%' } } } 
+      }
+    });
+  }
+
+  function renderOEEDailyChart() {
+    const daily = {};
+    const today = new Date(), year = today.getFullYear(), month = today.getMonth(), last = new Date(year, month + 1, 0).getDate();
+    for (let d = 1; d <= last; d++) daily[`${year}-${String(month+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`] = [];
+    const recs = filteredOeeRecords.length ? filteredOeeRecords : localData.oee_records;
+    recs.forEach(r => { 
+      if (daily[r.date]) { 
+        const v = parseFloat(r.oee_actual) || 0; 
+        if (v > 0) daily[r.date].push(v); 
+      } 
+    });
+    const labels = Object.keys(daily).map(d => new Date(d+'T00:00:00').toLocaleDateString('id-ID',{day:'2-digit',month:'short'}));
+    const data = Object.values(daily).map(arr => arr.length ? arr.reduce((a,b)=>a+b,0)/arr.length : 0);
+    const ctx = document.getElementById('chart-oee-daily').getContext('2d');
+    if (dashboardCharts.oeeDaily) dashboardCharts.oeeDaily.destroy();
+    dashboardCharts.oeeDaily = new Chart(ctx, {
+      type: 'line',
+      data: { 
+        labels, 
+        datasets: [{ 
+          label: 'OEE ACTUAL %', 
+          data, 
+          borderColor: '#a855f7', 
+          backgroundColor: 'rgba(168,85,247,0.1)', 
+          borderWidth: 3, 
+          tension: 0.4, 
+          fill: true, 
+          pointRadius: 4, 
+          pointBackgroundColor: '#a855f7' 
+        }] 
+      },
+      options: { 
+        responsive: true, 
+        maintainAspectRatio: false, 
+        plugins: { legend: { display: false } }, 
+        scales: { y: { beginAtZero: true, max: 100, ticks: { callback: v => v + '%' } } } 
+      }
+    });
+  }
+
+  function renderAPQABreakdownChart() {
+    const recs = filteredOeeRecords.length ? filteredOeeRecords : localData.oee_records;
+    if (!recs || !recs.length) return;
+    let sAA = 0, cAA = 0, sA365 = 0, cA365 = 0, sPerf = 0, cPerf = 0, sQual = 0, cQual = 0;
+    recs.forEach(r => {
+      const aa = parseFloat(r.availability_actual) || 0;
+      const perf = parseFloat(r.performance) || 0;
+      const qual = parseFloat(r.quality_rate) || 0;
+      if (aa > 0) { sAA += aa; cAA++; }
+      if (perf > 0) { sPerf += perf; cPerf++; }
+      if (qual > 0) { sQual += qual; cQual++; }
+      // Use actual availability_365 if available, otherwise estimate
+      const a365 = parseFloat(r.availability_365) || 85;
+      sA365 += a365; cA365++;
+    });
+    const ctx = document.getElementById('chart-apqa-breakdown').getContext('2d');
+    if (dashboardCharts.apqa) dashboardCharts.apqa.destroy();
+    dashboardCharts.apqa = new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: ['AVAILABILITY ACTUAL', 'AVAILABILITY 365', 'PERFORMANCE', 'QUALITY RATE'],
+        datasets: [{
+          label: '%',
+          data: [
+            cAA ? sAA / cAA : 0, 
+            cA365 ? sA365 / cA365 : 0, 
+            cPerf ? sPerf / cPerf : 0, 
+            cQual ? sQual / cQual : 0
+          ],
+          backgroundColor: ['#3b82f6', '#60a5fa', '#8b5cf6', '#10b981'],
+          borderRadius: 8
+        }]
+      },
+      options: { 
+        indexAxis: 'y', 
+        responsive: true, 
+        maintainAspectRatio: false, 
+        plugins: { legend: { display: false } }, 
+        scales: { x: { beginAtZero: true, max: 100, ticks: { callback: v => v + '%' } } } 
+      }
+    });
   }
 
   function renderCharts() {
@@ -1969,119 +2427,6 @@
     renderLineStopMesinTop10Chart();
     renderLineStopNonMesinTop10Chart();
     renderMinorStopTop10Chart();
-  }
-
-  function renderOEEMonthlyChart() {
-    const monthly = {};
-    for (let m = 1; m <= 12; m++) monthly[`2026-${String(m).padStart(2,'0')}`] = [];
-    const recs = filteredOeeRecords.length ? filteredOeeRecords : localData.oee_records;
-    recs.forEach(r => { if (monthly[r.date.substring(0,7)]) { const v = parseFloat(r.oee_actual) || 0; if (v > 0) monthly[r.date.substring(0,7)].push(v); } });
-    const labels = Object.keys(monthly).map(ym => { const [y,m] = ym.split('-'); return new Date(y,m-1).toLocaleDateString('id-ID',{month:'short',year:'2-digit'}); });
-    const data = Object.values(monthly).map(arr => arr.length ? arr.reduce((a,b)=>a+b,0)/arr.length : 0);
-    const ctx = document.getElementById('chart-oee-monthly').getContext('2d');
-    if (dashboardCharts.oeeMonthly) dashboardCharts.oeeMonthly.destroy();
-    dashboardCharts.oeeMonthly = new Chart(ctx, {
-      type: 'line',
-      data: { labels, datasets: [{ label: 'OEE ACTUAL %', data, borderColor: '#ec4899', backgroundColor: 'rgba(236,72,153,0.1)', borderWidth: 3, tension: 0.4, fill: true, pointRadius: 5, pointBackgroundColor: '#ec4899' }] },
-      options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, max: 100, ticks: { callback: v => v + '%' } } } }
-    });
-  }
-
-  function renderOEEDailyChart() {
-    const daily = {};
-    const today = new Date(), year = today.getFullYear(), month = today.getMonth(), last = new Date(year, month + 1, 0).getDate();
-    for (let d = 1; d <= last; d++) daily[`${year}-${String(month+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`] = [];
-    const recs = filteredOeeRecords.length ? filteredOeeRecords : localData.oee_records;
-    recs.forEach(r => { if (daily[r.date]) { const v = parseFloat(r.oee_actual) || 0; if (v > 0) daily[r.date].push(v); } });
-    const labels = Object.keys(daily).map(d => new Date(d+'T00:00:00').toLocaleDateString('id-ID',{day:'2-digit',month:'short'}));
-    const data = Object.values(daily).map(arr => arr.length ? arr.reduce((a,b)=>a+b,0)/arr.length : 0);
-    const ctx = document.getElementById('chart-oee-daily').getContext('2d');
-    if (dashboardCharts.oeeDaily) dashboardCharts.oeeDaily.destroy();
-    dashboardCharts.oeeDaily = new Chart(ctx, {
-      type: 'line',
-      data: { labels, datasets: [{ label: 'OEE ACTUAL %', data, borderColor: '#a855f7', backgroundColor: 'rgba(168,85,247,0.1)', borderWidth: 3, tension: 0.4, fill: true, pointRadius: 4, pointBackgroundColor: '#a855f7' }] },
-      options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, max: 100, ticks: { callback: v => v + '%' } } } }
-    });
-  }
-
-  function renderAPQABreakdownChart() {
-    const recs = filteredOeeRecords.length ? filteredOeeRecords : localData.oee_records;
-    if (!recs || !recs.length) return;
-    let sAA = 0, cAA = 0, sA365 = 0, cA365 = 0, sPerf = 0, cPerf = 0, sQual = 0, cQual = 0;
-    recs.forEach(r => {
-      const aa = parseFloat(r.availability_actual) || 0, perf = parseFloat(r.performance) || 0, qual = parseFloat(r.quality_rate) || 0;
-      if (aa > 0) { sAA += aa; cAA++; }
-      if (perf > 0) { sPerf += perf; cPerf++; }
-      if (qual > 0) { sQual += qual; cQual++; }
-      sA365 += 85; cA365++;
-    });
-    const ctx = document.getElementById('chart-apqa-breakdown').getContext('2d');
-    if (dashboardCharts.apqa) dashboardCharts.apqa.destroy();
-    dashboardCharts.apqa = new Chart(ctx, {
-      type: 'bar',
-      data: {
-        labels: ['AVAILABILITY ACTUAL', 'AVAILABILITY 365', 'PERFORMANCE', 'QUALITY RATE'],
-        datasets: [{
-          label: '%',
-          data: [cAA ? sAA/cAA : 0, cA365 ? sA365/cA365 : 0, cPerf ? sPerf/cPerf : 0, cQual ? sQual/cQual : 0],
-          backgroundColor: ['#3b82f6', '#60a5fa', '#8b5cf6', '#10b981'],
-          borderRadius: 8
-        }]
-      },
-      options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { beginAtZero: true, max: 100, ticks: { callback: v => v + '%' } } } }
-    });
-  }
-
-  function renderODTTop10Chart() {
-    const map = {};
-    localData.oee_records.forEach(() => localData.downtime.forEach(odt => { if (!map[odt.nama]) map[odt.nama] = 0; map[odt.nama] += odt.waktu_standard || 0; }));
-    const sorted = Object.entries(map).map(([n,d]) => ({ nama: n, durasi: d })).sort((a,b) => b.durasi - a.durasi).slice(0,10);
-    const ctx = document.getElementById('chart-odt-top10').getContext('2d');
-    if (dashboardCharts.odtTop10) dashboardCharts.odtTop10.destroy();
-    dashboardCharts.odtTop10 = new Chart(ctx, {
-      type: 'bar',
-      data: { labels: sorted.map(d => d.nama), datasets: [{ label: 'MENIT', data: sorted.map(d => d.durasi), backgroundColor: '#3b82f6', borderRadius: 8 }] },
-      options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { beginAtZero: true } } }
-    });
-  }
-
-  function renderLineStopMesinTop10Chart() {
-    const map = {};
-    localData.oee_records.forEach(() => localData.line_stop_mesin.forEach(l => { if (!map[l.nama]) map[l.nama] = 0; }));
-    const sorted = Object.entries(map).map(([n,d]) => ({ nama: n, durasi: d })).sort((a,b) => b.durasi - a.durasi).slice(0,10);
-    const ctx = document.getElementById('chart-lsm-top10').getContext('2d');
-    if (dashboardCharts.lsmTop10) dashboardCharts.lsmTop10.destroy();
-    dashboardCharts.lsmTop10 = new Chart(ctx, {
-      type: 'bar',
-      data: { labels: sorted.map(d => d.nama), datasets: [{ label: 'MENIT', data: sorted.map(d => d.durasi), backgroundColor: '#8b5cf6', borderRadius: 8 }] },
-      options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { beginAtZero: true } } }
-    });
-  }
-
-  function renderLineStopNonMesinTop10Chart() {
-    const map = {};
-    localData.oee_records.forEach(() => localData.line_stop_non_mesin.forEach(l => { if (!map[l.nama]) map[l.nama] = 0; }));
-    const sorted = Object.entries(map).map(([n,d]) => ({ nama: n, durasi: d })).sort((a,b) => b.durasi - a.durasi).slice(0,10);
-    const ctx = document.getElementById('chart-lsnm-top10').getContext('2d');
-    if (dashboardCharts.lsnmTop10) dashboardCharts.lsnmTop10.destroy();
-    dashboardCharts.lsnmTop10 = new Chart(ctx, {
-      type: 'bar',
-      data: { labels: sorted.map(d => d.nama), datasets: [{ label: 'MENIT', data: sorted.map(d => d.durasi), backgroundColor: '#10b981', borderRadius: 8 }] },
-      options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { beginAtZero: true } } }
-    });
-  }
-
-  function renderMinorStopTop10Chart() {
-    const map = {};
-    localData.oee_records.forEach(() => localData.minor_stop.forEach(m => { if (!map[m.nama]) map[m.nama] = 0; }));
-    const sorted = Object.entries(map).map(([n,d]) => ({ nama: n, durasi: d })).sort((a,b) => b.durasi - a.durasi).slice(0,10);
-    const ctx = document.getElementById('chart-ms-top10').getContext('2d');
-    if (dashboardCharts.msTop10) dashboardCharts.msTop10.destroy();
-    dashboardCharts.msTop10 = new Chart(ctx, {
-      type: 'bar',
-      data: { labels: sorted.map(d => d.nama), datasets: [{ label: 'MENIT', data: sorted.map(d => d.durasi), backgroundColor: '#f59e0b', borderRadius: 8 }] },
-      options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { beginAtZero: true } } }
-    });
   }
 
   function renderPackerPerformance() {
@@ -2103,7 +2448,10 @@
       return bb - aa;
     });
     const tbody = document.getElementById('table-packer-performance');
-    if (!data.length) { tbody.innerHTML = '<tr><td colspan="5" class="text-center text-gray-400 py-8">BELUM ADA DATA</td></tr>'; return; }
+    if (!data.length) { 
+      tbody.innerHTML = '<tr><td colspan="5" class="text-center text-gray-400 py-8">BELUM ADA DATA</td></tr>'; 
+      return; 
+    }
     tbody.innerHTML = data.map((p,i) => {
       const avg = p.oeeValues.length ? p.oeeValues.reduce((a,b)=>a+b,0)/p.oeeValues.length : 0;
       return `<tr><td>${i+1}</td><td>${p.nama}</td><td>${avg.toFixed(1)}%</td><td>${p.totalOutput.toLocaleString('id-ID',{maximumFractionDigits:1})}</td><td>${p.records}</td></tr>`;
@@ -2113,16 +2461,20 @@
   function renderOEEHistory() {
     const tbody = document.getElementById('table-oee-history');
     const recs = filteredOeeRecords.length ? filteredOeeRecords : localData.oee_records;
-    if (!recs || !recs.length) { tbody.innerHTML = '<tr><td colspan="9" class="text-center text-gray-400 py-8">BELUM ADA DATA</td></tr>'; return; }
+    if (!recs || !recs.length) { 
+      tbody.innerHTML = '<tr><td colspan="8" class="text-center text-gray-400 py-8">BELUM ADA DATA</td></tr>'; 
+      return; 
+    }
     tbody.innerHTML = recs.slice(0,50).map(r => `
       <tr>
-        <td>${r.date}</td><td>${r.shift}</td><td>${r.product || '-'}</td>
+        <td>${r.date || '-'}</td>
+        <td>${r.shift || '-'}</td>
+        <td>${r.product || '-'}</td>
         <td><strong>${(parseFloat(r.oee_actual)||0).toFixed(1)}%</strong></td>
         <td>${(parseFloat(r.oee_365)||0).toFixed(1)}%</td>
-        <td style="font-size: 12px; max-width: 200px;">${r.line_stop_mesin ? r.line_stop_mesin.substring(0,50)+(r.line_stop_mesin.length>50?'...':'') : '-'}</td>
-        <td style="font-size: 12px;">-</td>
-        <td style="font-size: 12px; max-width: 200px;">${r.line_stop_non_mesin ? r.line_stop_non_mesin.substring(0,50)+(r.line_stop_non_mesin.length>50?'...':'') : '-'}</td>
-        <td style="font-size: 12px;">-</td>
+        <td style="font-size: 12px; max-width: 150px;">${r.line_stop_mesin ? (r.line_stop_mesin.length > 30 ? r.line_stop_mesin.substring(0,30)+'...' : r.line_stop_mesin) : '-'}</td>
+        <td style="font-size: 12px; max-width: 150px;">${r.line_stop_non_mesin ? (r.line_stop_non_mesin.length > 30 ? r.line_stop_non_mesin.substring(0,30)+'...' : r.line_stop_non_mesin) : '-'}</td>
+        <td style="font-size: 12px; max-width: 150px;">${r.minor_stop ? (r.minor_stop.length > 30 ? r.minor_stop.substring(0,30)+'...' : r.minor_stop) : '-'}</td>
       </tr>
     `).join('');
   }
@@ -2238,7 +2590,8 @@
   function closeModal() {
     document.getElementById('modal-backdrop').style.display = 'none';
     document.getElementById('modal').style.display = 'none';
-    currentModalAction = null; currentEditId = null;
+    currentModalAction = null; 
+    currentEditId = null;
   }
 
   function submitModalForm(e) {
@@ -2439,12 +2792,71 @@
   }
 
   // ==================== DELETE FUNCTIONS ====================
-  async function deleteProduct(id) { if (!checkMasterAccess()) return; try { await supabaseClient.from('produk').delete().eq('id',id); await loadDataFromSupabase(); renderProductList(); await addAuditLog('DELETE PRODUCT','PRODUK DIHAPUS'); showToast('PRODUK BERHASIL DIHAPUS','success'); } catch(e){ showToast('GAGAL MENGHAPUS PRODUK','error'); } }
-  async function deletePacker(id) { if (!checkMasterAccess()) return; try { await supabaseClient.from('packer').delete().eq('id',id); await loadDataFromSupabase(); renderPackerList(); await addAuditLog('DELETE PACKER','PACKER DIHAPUS'); showToast('PACKER BERHASIL DIHAPUS','success'); } catch(e){ showToast('GAGAL MENGHAPUS PACKER','error'); } }
-  async function deleteODT(id) { if (!checkMasterAccess()) return; try { await supabaseClient.from('downtime').delete().eq('id',id); await loadDataFromSupabase(); renderODTList_Master(); await addAuditLog('DELETE ODT','ODT DIHAPUS'); showToast('ODT BERHASIL DIHAPUS','success'); } catch(e){ showToast('GAGAL MENGHAPUS ODT','error'); } }
-  async function deleteLineStopMesin(id) { if (!checkMasterAccess()) return; try { await supabaseClient.from('line_stop_mesin').delete().eq('id',id); await loadDataFromSupabase(); renderLineStopMesinMaster(); await addAuditLog('DELETE LINE STOP MESIN','LINE STOP DIHAPUS'); showToast('LINE STOP MESIN BERHASIL DIHAPUS','success'); } catch(e){ showToast('GAGAL MENGHAPUS LINE STOP MESIN','error'); } }
-  async function deleteLineStopNonMesin(id) { if (!checkMasterAccess()) return; try { await supabaseClient.from('line_stop_non_mesin').delete().eq('id',id); await loadDataFromSupabase(); renderLineStopNonMesinMaster(); await addAuditLog('DELETE LINE STOP NON-MESIN','LINE STOP DIHAPUS'); showToast('LINE STOP NON-MESIN BERHASIL DIHAPUS','success'); } catch(e){ showToast('GAGAL MENGHAPUS LINE STOP NON-MESIN','error'); } }
-  async function deleteMinorStop(id) { if (!checkMasterAccess()) return; try { await supabaseClient.from('minor_stop').delete().eq('id',id); await loadDataFromSupabase(); renderMinorStopMaster(); await addAuditLog('DELETE MINOR STOP','MINOR STOP DIHAPUS'); showToast('MINOR STOP BERHASIL DIHAPUS','success'); } catch(e){ showToast('GAGAL MENGHAPUS MINOR STOP','error'); } }
+  async function deleteProduct(id) { 
+    if (!checkMasterAccess()) return; 
+    try { 
+      await supabaseClient.from('produk').delete().eq('id',id); 
+      await loadDataFromSupabase(); 
+      renderProductList(); 
+      await addAuditLog('DELETE PRODUCT','PRODUK DIHAPUS'); 
+      showToast('PRODUK BERHASIL DIHAPUS','success'); 
+    } catch(e){ showToast('GAGAL MENGHAPUS PRODUK','error'); } 
+  }
+  
+  async function deletePacker(id) { 
+    if (!checkMasterAccess()) return; 
+    try { 
+      await supabaseClient.from('packer').delete().eq('id',id); 
+      await loadDataFromSupabase(); 
+      renderPackerList(); 
+      await addAuditLog('DELETE PACKER','PACKER DIHAPUS'); 
+      showToast('PACKER BERHASIL DIHAPUS','success'); 
+    } catch(e){ showToast('GAGAL MENGHAPUS PACKER','error'); } 
+  }
+  
+  async function deleteODT(id) { 
+    if (!checkMasterAccess()) return; 
+    try { 
+      await supabaseClient.from('downtime').delete().eq('id',id); 
+      await loadDataFromSupabase(); 
+      renderODTList_Master(); 
+      await addAuditLog('DELETE ODT','ODT DIHAPUS'); 
+      showToast('ODT BERHASIL DIHAPUS','success'); 
+    } catch(e){ showToast('GAGAL MENGHAPUS ODT','error'); } 
+  }
+  
+  async function deleteLineStopMesin(id) { 
+    if (!checkMasterAccess()) return; 
+    try { 
+      await supabaseClient.from('line_stop_mesin').delete().eq('id',id); 
+      await loadDataFromSupabase(); 
+      renderLineStopMesinMaster(); 
+      await addAuditLog('DELETE LINE STOP MESIN','LINE STOP DIHAPUS'); 
+      showToast('LINE STOP MESIN BERHASIL DIHAPUS','success'); 
+    } catch(e){ showToast('GAGAL MENGHAPUS LINE STOP MESIN','error'); } 
+  }
+  
+  async function deleteLineStopNonMesin(id) { 
+    if (!checkMasterAccess()) return; 
+    try { 
+      await supabaseClient.from('line_stop_non_mesin').delete().eq('id',id); 
+      await loadDataFromSupabase(); 
+      renderLineStopNonMesinMaster(); 
+      await addAuditLog('DELETE LINE STOP NON-MESIN','LINE STOP DIHAPUS'); 
+      showToast('LINE STOP NON-MESIN BERHASIL DIHAPUS','success'); 
+    } catch(e){ showToast('GAGAL MENGHAPUS LINE STOP NON-MESIN','error'); } 
+  }
+  
+  async function deleteMinorStop(id) { 
+    if (!checkMasterAccess()) return; 
+    try { 
+      await supabaseClient.from('minor_stop').delete().eq('id',id); 
+      await loadDataFromSupabase(); 
+      renderMinorStopMaster(); 
+      await addAuditLog('DELETE MINOR STOP','MINOR STOP DIHAPUS'); 
+      showToast('MINOR STOP BERHASIL DIHAPUS','success'); 
+    } catch(e){ showToast('GAGAL MENGHAPUS MINOR STOP','error'); } 
+  }
 
   function showDeleteConfirm(id, type, nama) {
     if (!checkMasterAccess()) return;
@@ -2478,12 +2890,19 @@
   // ==================== AUDIT TRAIL ====================
   function renderAuditTable() {
     const tbody = document.getElementById('audit-table');
-    if (localData.audit_trail.length === 0) { tbody.innerHTML = '<tr><td colspan="3" class="text-center text-gray-400 py-8">BELUM ADA AKTIVITAS</td></tr>'; return; }
+    if (localData.audit_trail.length === 0) { 
+      tbody.innerHTML = '<tr><td colspan="3" class="text-center text-gray-400 py-8">BELUM ADA AKTIVITAS</td></tr>'; 
+      return; 
+    }
     tbody.innerHTML = localData.audit_trail.map(l => `<tr><td>${new Date(l.timestamp).toLocaleString('id-ID')}</td><td>${l.activity}</td><td>${l.detail}</td></tr>`).join('');
   }
 
   async function addAuditLog(activity, detail) {
-    try { await supabaseClient.from('audit_trail').insert([{ activity, detail }]); await loadDataFromSupabase(); renderAuditTable(); } catch(e) { console.error(e); }
+    try { 
+      await supabaseClient.from('audit_trail').insert([{ activity, detail }]); 
+      await loadDataFromSupabase(); 
+      renderAuditTable(); 
+    } catch(e) { console.error(e); }
   }
 
   // ==================== TOAST ====================
