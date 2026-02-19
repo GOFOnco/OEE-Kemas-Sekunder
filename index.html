@@ -54,6 +54,12 @@
       text-transform: uppercase;
     }
 
+    input::placeholder, textarea::placeholder {
+      text-transform: uppercase;
+      opacity: 0.7;
+      font-size: 11px;
+    }
+
     /* ==================== HEADER ==================== */
     .header {
       background: linear-gradient(135deg, var(--primary) 0%, #d946a6 50%, var(--primary-dark) 100%);
@@ -1179,13 +1185,13 @@
           <div id="line-stop-mesin-list"></div>
         </div>
 
-        <!-- LINE STOP NON-MESIN -->
+        <!-- LINE STOP NON-MESIN (TANPA CHECKBOX) -->
         <div class="form-section">
           <div class="section-title">LINE STOP NON-MESIN</div>
           <div id="line-stop-non-mesin-list"></div>
         </div>
 
-        <!-- MINOR STOP -->
+        <!-- MINOR STOP (TANPA CHECKBOX) -->
         <div class="form-section">
           <div class="section-title">MINOR STOP</div>
           <button type="button" class="btn btn-success w-100" onclick="addMinorStop()">+ TAMBAH MINOR STOP</button>
@@ -1481,18 +1487,31 @@
       showToast('PILIH SHIFT TERLEBIH DAHULU', 'error');
       return;
     }
+    
+    // Hitung total downtime
     const totalODT = oeeFormState.downtime.reduce((s, o) => s + (parseFloat(o.durasi) || 0), 0);
     const totalLSM = oeeFormState.lineStopMesin.reduce((s, l) => s + (parseFloat(l.durasi) || 0), 0);
-    const totalLSNM = oeeFormState.lineStopNonMesin.filter(l => l.checked).reduce((s, l) => s + (parseFloat(l.durasi) || 0), 0);
-    let maxDurationAllMeters = 0;
-    oeeFormState.packerMeters.forEach(m => m.packers.forEach(p => maxDurationAllMeters = Math.max(maxDurationAllMeters, p.duration || 0)));
+    const totalLSNM = oeeFormState.lineStopNonMesin.reduce((s, l) => s + (parseFloat(l.durasi) || 0), 0);
+    
+    // Hitung total durasi SEMUA packer dari meter yang sudah ada
+    let totalExistingDuration = 0;
+    oeeFormState.packerMeters.forEach(meter => {
+      meter.packers.forEach(packer => {
+        totalExistingDuration += packer.duration || 0;
+      });
+    });
+    
+    // Sisa waktu untuk meter baru = shift minutes - total downtime - total durasi existing
+    const remainingTime = Math.max(0, oeeFormState.shiftMinutes - totalODT - totalLSM - totalLSNM - totalExistingDuration);
+    
     oeeFormState.packerMeters.push({
       id: 'meter_' + Date.now(),
       productId: '',
       batchNumber: '',
-      remainingTime: Math.max(0, oeeFormState.shiftMinutes - totalODT - totalLSM - totalLSNM - maxDurationAllMeters),
+      remainingTime: remainingTime,
       packers: []
     });
+    
     renderPackerMeterList();
   }
 
@@ -1502,15 +1521,23 @@
       listDiv.innerHTML = '<div class="empty-state"><div class="empty-state-icon">📦</div><div class="empty-state-text">BELUM ADA METER DITAMBAHKAN</div></div>';
       return;
     }
+    
     const totalODT = oeeFormState.downtime.reduce((s, o) => s + (parseFloat(o.durasi) || 0), 0);
     const totalLSM = oeeFormState.lineStopMesin.reduce((s, l) => s + (parseFloat(l.durasi) || 0), 0);
-    const totalLSNM = oeeFormState.lineStopNonMesin.filter(l => l.checked).reduce((s, l) => s + (parseFloat(l.durasi) || 0), 0);
+    const totalLSNM = oeeFormState.lineStopNonMesin.reduce((s, l) => s + (parseFloat(l.durasi) || 0), 0);
+    
     listDiv.innerHTML = oeeFormState.packerMeters.map((meter, index) => {
-      let maxDurationBeforeThisMeter = 0;
+      // Hitung total durasi semua packer dari meter-meter sebelumnya
+      let totalPreviousDuration = 0;
       for (let i = 0; i < index; i++) {
-        oeeFormState.packerMeters[i].packers.forEach(p => maxDurationBeforeThisMeter = Math.max(maxDurationBeforeThisMeter, p.duration || 0));
+        oeeFormState.packerMeters[i].packers.forEach(p => {
+          totalPreviousDuration += p.duration || 0;
+        });
       }
-      meter.remainingTime = Math.max(0, oeeFormState.shiftMinutes - totalODT - totalLSM - totalLSNM - maxDurationBeforeThisMeter);
+      
+      // Sisa waktu untuk meter ini = shift minutes - total downtime - total durasi meter sebelumnya
+      meter.remainingTime = Math.max(0, oeeFormState.shiftMinutes - totalODT - totalLSM - totalLSNM - totalPreviousDuration);
+      
       return `
         <div class="card" data-meter-id="${meter.id}">
           <div class="card-header">
@@ -1544,6 +1571,7 @@
         </div>
       `;
     }).join('');
+    
     oeeFormState.packerMeters.forEach(meter => renderPackersInMeter(meter));
     updateAvailabilityWarning();
   }
@@ -1566,7 +1594,7 @@
         </div>
         <div class="form-group">
           <label style="font-size: 10px;">DURASI (MIN)</label>
-          <input type="number" class="packer-duration input-field" style="font-size: 11px;" value="${packer.duration}" min="0" max="${meter.remainingTime}" placeholder="DURASI" onchange="validatePackerDuration(this, '${packer.id}', '${meter.id}')">
+          <input type="number" class="packer-duration input-field" style="font-size: 11px;" value="${packer.duration}" min="0" max="${meter.remainingTime}" placeholder="ACTUAL TIME" onchange="validatePackerDuration(this, '${packer.id}', '${meter.id}')">
         </div>
         <div class="form-group">
           <label style="font-size: 10px;">OUTPUT (DUS)</label>
@@ -1661,15 +1689,19 @@
     if (!warningDiv) return;
     const totalODT = oeeFormState.downtime.reduce((s, o) => s + (parseFloat(o.durasi) || 0), 0);
     const totalLSM = oeeFormState.lineStopMesin.reduce((s, l) => s + (parseFloat(l.durasi) || 0), 0);
-    const totalLSNM = oeeFormState.lineStopNonMesin.filter(l => l.checked).reduce((s, l) => s + (parseFloat(l.durasi) || 0), 0);
-    let maxPackerDuration = 0;
-    oeeFormState.packerMeters.forEach(m => m.packers.forEach(p => maxPackerDuration = Math.max(maxPackerDuration, p.duration || 0)));
-    const availableTime = oeeFormState.shiftMinutes - totalODT - totalLSM - totalLSNM;
-    if (maxPackerDuration > availableTime && availableTime > 0) {
+    const totalLSNM = oeeFormState.lineStopNonMesin.reduce((s, l) => s + (parseFloat(l.durasi) || 0), 0);
+    
+    // Hitung total durasi semua packer
+    let totalPackerDuration = 0;
+    oeeFormState.packerMeters.forEach(m => m.packers.forEach(p => totalPackerDuration += p.duration || 0));
+    
+    const totalUsedTime = totalODT + totalLSM + totalLSNM + totalPackerDuration;
+    
+    if (totalUsedTime > oeeFormState.shiftMinutes && oeeFormState.shiftMinutes > 0) {
       warningDiv.innerHTML = `
         <div class="warning-box">
-          <p class="warning-title">⚠️ WARNING: WAKTU TIDAK SESUAI</p>
-          <p class="warning-text">DURASI PACKER TERPANJANG (${maxPackerDuration.toFixed(0)} MENIT) MELEBIHI WAKTU TERSEDIA (${availableTime.toFixed(0)} MENIT). PERIKSA KEMBALI DATA ANDA.</p>
+          <p class="warning-title">⚠️ WARNING: TOTAL WAKTU MELEBIHI SHIFT</p>
+          <p class="warning-text">TOTAL WAKTU TERPAKAI (${totalUsedTime.toFixed(0)} MENIT) MELEBIHI DURASI SHIFT (${oeeFormState.shiftMinutes} MENIT). PERIKSA KEMBALI DATA ANDA.</p>
         </div>
       `;
       warningDiv.style.display = 'block';
@@ -1697,14 +1729,50 @@
           <p style="font-size: 13px; font-weight: 700; color: #3b82f6; margin: 0 0 4px;">${odt.nama}</p>
           <p style="font-size: 11px; color: #60a5fa; margin: 0;">STD: ${odt.waktu_standard} MENIT</p>
         </div>
-        <input type="number" class="input-field" value="${odt.durasi}" min="0" placeholder="DURASI AKTUAL" onchange="updateODT('${odt.id}', this.value)">
+        <input type="number" class="input-field" value="${odt.durasi}" min="0" placeholder="ACTUAL TIME" onchange="updateODT('${odt.id}', this.value)">
       </div>
     `).join('');
   }
 
   function updateODT(id, durasi) {
     const odt = oeeFormState.downtime.find(o => o.id === id);
-    if (odt) odt.durasi = parseFloat(durasi) || 0;
+    if (!odt) return;
+    
+    const actualDurasi = parseFloat(durasi) || 0;
+    const standar = odt.waktu_standard;
+    
+    // HITUNG SELISIH JIKA MELEBIHI STANDAR
+    const selisih = actualDurasi - standar;
+    
+    if (selisih > 0) {
+      // ODT TETAP MENGGUNAKAN STANDAR
+      odt.durasi = standar;
+      
+      // CARI APAKAH SUDAH ADA LSNM DENGAN NAMA "ODT OVER {nama_odt}"
+      const existingIndex = oeeFormState.lineStopNonMesin.findIndex(l => l.nama === `ODT OVER ${odt.nama}`);
+      
+      if (existingIndex >= 0) {
+        // UPDATE LSNM YANG SUDAH ADA
+        oeeFormState.lineStopNonMesin[existingIndex].durasi = selisih;
+      } else {
+        // BUAT LSNM BARU
+        oeeFormState.lineStopNonMesin.push({
+          id: `lsnm_odtover_${odt.id}_${Date.now()}`,
+          nama: `ODT OVER ${odt.nama}`,
+          durasi: selisih,
+          action: '',
+          isCustom: true
+        });
+      }
+    } else {
+      // JIKA TIDAK MELEBIHI STANDAR, PAKAI ACTUAL
+      odt.durasi = actualDurasi;
+      
+      // HAPUS LSNM YANG TERKAIT JIKA ADA
+      oeeFormState.lineStopNonMesin = oeeFormState.lineStopNonMesin.filter(l => l.nama !== `ODT OVER ${odt.nama}`);
+    }
+    
+    renderLineStopNonMesinList();
     renderPackerMeterList();
     calculateOEE();
   }
@@ -1731,7 +1799,7 @@
       return `
         <div class="lsm-row">
           <div><p style="font-size: 13px; font-weight: 700; color: #a855f7; margin: 0;">${lsm.nama}</p></div>
-          <input type="number" class="input-field" value="${lsm.durasi}" min="0" placeholder="DURASI (MIN)" onchange="updateLineStopMesin('${lsm.id}', 'durasi', this.value)">
+          <input type="number" class="input-field" value="${lsm.durasi}" min="0" placeholder="ACTUAL TIME" onchange="updateLineStopMesin('${lsm.id}', 'durasi', this.value)">
           <input type="text" class="input-field" value="${lsm.action}" placeholder="ACTION" onchange="updateLineStopMesin('${lsm.id}', 'action', this.value)">
           <input type="text" class="input-field" style="${wrRequired ? 'border-color: #ef4444;' : ''}" value="${lsm.wr}" placeholder="NO WR${wrRequired ? ' *' : ''}" onchange="updateLineStopMesin('${lsm.id}', 'wr', this.value)">
         </div>
@@ -1746,31 +1814,56 @@
     calculateOEE();
   }
 
-  // ==================== LINE STOP NON-MESIN ====================
+  // ==================== LINE STOP NON-MESIN (TANPA CHECKBOX) ====================
   function renderLineStopNonMesinList() {
     const listDiv = document.getElementById('line-stop-non-mesin-list');
-    if (localData.line_stop_non_mesin.length === 0 && oeeFormState.lineStopNonMesin.length === 0) {
-      listDiv.innerHTML = '<div class="empty-state"><div class="empty-state-text">BELUM ADA DATA</div></div>';
-      return;
-    }
-    if (oeeFormState.lineStopNonMesin.length === 0) {
-      oeeFormState.lineStopNonMesin = localData.line_stop_non_mesin.map(m => ({ 
+    
+    // Gabungkan master data dengan ODT over records
+    let allLSNM = [];
+    
+    // Master data
+    if (localData.line_stop_non_mesin && localData.line_stop_non_mesin.length > 0) {
+      const masterLSNM = localData.line_stop_non_mesin.map(m => ({ 
         id: m.id, 
         nama: m.nama, 
         durasi: 0, 
         action: '', 
-        checked: false, 
         isCustom: false 
       }));
+      allLSNM = [...allLSNM, ...masterLSNM];
     }
+    
+    // Custom LSNM (termasuk ODT over)
+    if (oeeFormState.lineStopNonMesin && oeeFormState.lineStopNonMesin.length > 0) {
+      const customLSNM = oeeFormState.lineStopNonMesin.filter(l => l.isCustom);
+      allLSNM = [...allLSNM, ...customLSNM];
+    }
+    
+    // Hapus duplikat berdasarkan ID
+    const uniqueLSNM = [];
+    const ids = new Set();
+    allLSNM.forEach(l => {
+      if (!ids.has(l.id)) {
+        ids.add(l.id);
+        uniqueLSNM.push(l);
+      }
+    });
+    
+    oeeFormState.lineStopNonMesin = uniqueLSNM;
+
+    if (oeeFormState.lineStopNonMesin.length === 0) {
+      listDiv.innerHTML = '<div class="empty-state"><div class="empty-state-text">BELUM ADA DATA</div></div>';
+      return;
+    }
+
     listDiv.innerHTML = oeeFormState.lineStopNonMesin.map(lsnm => `
       <div class="lsnm-row">
-        <div style="display: flex; align-items: center; gap: 8px;">
-          <input type="checkbox" id="lsnm-${lsnm.id}" ${lsnm.checked ? 'checked' : ''} onchange="updateLineStopNonMesin('${lsnm.id}', 'checked', this.checked); renderLineStopNonMesinList();">
-          <label for="lsnm-${lsnm.id}" style="font-size: 13px; font-weight: 600; color: #10b981; margin: 0; cursor: pointer;">${lsnm.nama}</label>
+        <div>
+          <p style="font-size: 13px; font-weight: 700; color: #10b981; margin: 0;">${lsnm.nama}</p>
         </div>
-        <input type="number" class="input-field" value="${lsnm.durasi}" min="0" placeholder="DURASI (MIN)" ${!lsnm.checked ? 'disabled' : ''} onchange="updateLineStopNonMesin('${lsnm.id}', 'durasi', this.value)">
-        <input type="text" class="input-field" value="${lsnm.action}" placeholder="ACTION" ${!lsnm.checked ? 'disabled' : ''} onchange="updateLineStopNonMesin('${lsnm.id}', 'action', this.value)">
+        <input type="number" class="input-field" value="${lsnm.durasi}" min="0" placeholder="ACTUAL TIME" onchange="updateLineStopNonMesin('${lsnm.id}', 'durasi', this.value)">
+        <input type="text" class="input-field" value="${lsnm.action}" placeholder="ACTION" onchange="updateLineStopNonMesin('${lsnm.id}', 'action', this.value)">
+        ${lsnm.isCustom ? `<button type="button" class="btn btn-danger btn-small" style="padding: 8px;" onclick="removeLineStopNonMesin('${lsnm.id}')">HAPUS</button>` : ''}
       </div>
     `).join('');
   }
@@ -1778,16 +1871,19 @@
   function updateLineStopNonMesin(id, field, value) {
     const lsnm = oeeFormState.lineStopNonMesin.find(l => l.id === id);
     if (lsnm) {
-      if (field === 'checked') {
-        lsnm.checked = value;
-        if (!value) { lsnm.durasi = 0; lsnm.action = ''; }
-      } else lsnm[field] = value;
+      lsnm[field] = value;
     }
     renderPackerMeterList();
     calculateOEE();
   }
 
-  // ==================== MINOR STOP ====================
+  function removeLineStopNonMesin(id) {
+    oeeFormState.lineStopNonMesin = oeeFormState.lineStopNonMesin.filter(l => l.id !== id);
+    renderLineStopNonMesinList();
+    calculateOEE();
+  }
+
+  // ==================== MINOR STOP (TANPA CHECKBOX) ====================
   function addMinorStop() {
     const nama = prompt('MASUKKAN NAMA MINOR STOP:', '');
     if (!nama || !nama.trim()) {
@@ -1798,7 +1894,6 @@
       id: 'ms_' + Date.now(), 
       nama: nama.trim().toUpperCase(), 
       durasi: 0, 
-      checked: false, 
       isCustom: true 
     });
     renderMinorStopList();
@@ -1807,28 +1902,27 @@
   function renderMinorStopList() {
     const listDiv = document.getElementById('minor-stop-list');
     
-    // Combine master data with custom minor stops
+    // Gabungkan master data dengan custom minor stops
     let allMinorStops = [];
     
-    // Add master data
+    // Master data
     if (localData.minor_stop && localData.minor_stop.length > 0) {
       const masterStops = localData.minor_stop.map(m => ({ 
         id: m.id, 
         nama: m.nama, 
         durasi: 0, 
-        checked: false, 
         isCustom: false 
       }));
       allMinorStops = [...allMinorStops, ...masterStops];
     }
     
-    // Add custom stops from form state
+    // Custom stops dari form state
     if (oeeFormState.minorStop && oeeFormState.minorStop.length > 0) {
       const customStops = oeeFormState.minorStop.filter(ms => ms.isCustom);
       allMinorStops = [...allMinorStops, ...customStops];
     }
     
-    // Remove duplicates by ID
+    // Hapus duplikat berdasarkan ID
     const uniqueStops = [];
     const ids = new Set();
     allMinorStops.forEach(ms => {
@@ -1847,11 +1941,10 @@
 
     listDiv.innerHTML = oeeFormState.minorStop.map(ms => `
       <div class="ms-row">
-        <div style="display: flex; align-items: center; gap: 8px;">
-          <input type="checkbox" id="ms-${ms.id}" ${ms.checked ? 'checked' : ''} onchange="updateMinorStop('${ms.id}', 'checked', this.checked); renderMinorStopList();">
-          <label for="ms-${ms.id}" style="font-size: 13px; font-weight: 600; color: #d97706; margin: 0; cursor: pointer;">${ms.nama}</label>
+        <div>
+          <p style="font-size: 13px; font-weight: 700; color: #d97706; margin: 0;">${ms.nama}</p>
         </div>
-        <input type="number" class="input-field" value="${ms.durasi}" min="0" placeholder="DURASI (MIN)" ${!ms.checked ? 'disabled' : ''} onchange="updateMinorStop('${ms.id}', 'durasi', this.value)">
+        <input type="number" class="input-field" value="${ms.durasi}" min="0" placeholder="ACTUAL TIME" onchange="updateMinorStop('${ms.id}', 'durasi', this.value)">
         ${ms.isCustom ? `<button type="button" class="btn btn-danger btn-small" style="padding: 8px;" onclick="removeMinorStop('${ms.id}')">HAPUS</button>` : ''}
       </div>
     `).join('');
@@ -1860,10 +1953,7 @@
   function updateMinorStop(id, field, value) {
     const ms = oeeFormState.minorStop.find(m => m.id === id);
     if (ms) {
-      if (field === 'checked') {
-        ms.checked = value;
-        if (!value) ms.durasi = 0;
-      } else ms[field] = value;
+      ms[field] = value;
     }
     calculateOEE();
   }
@@ -1885,8 +1975,8 @@
     
     const totalODT = oeeFormState.downtime.reduce((s, o) => s + (parseFloat(o.durasi) || 0), 0);
     const totalLSM = oeeFormState.lineStopMesin.reduce((s, l) => s + (parseFloat(l.durasi) || 0), 0);
-    const totalLSNM = oeeFormState.lineStopNonMesin.filter(l => l.checked).reduce((s, l) => s + (parseFloat(l.durasi) || 0), 0);
-    const totalMinor = oeeFormState.minorStop.filter(m => m.checked).reduce((s, m) => s + (parseFloat(m.durasi) || 0), 0);
+    const totalLSNM = oeeFormState.lineStopNonMesin.reduce((s, l) => s + (parseFloat(l.durasi) || 0), 0);
+    const totalMinor = oeeFormState.minorStop.reduce((s, m) => s + (parseFloat(m.durasi) || 0), 0);
     const totalActualDowntime = totalLSM + totalLSNM + totalMinor;
     
     const plannedTime = oeeFormState.shiftMinutes - totalODT;
@@ -1941,7 +2031,7 @@
     document.getElementById('oee-date').value = new Date().toISOString().split('T')[0];
   }
 
-  // ==================== SUBMIT OEE - FIXED WITH MINOR STOP ====================
+  // ==================== SUBMIT OEE ====================
   async function submitOEE(event) {
     event.preventDefault();
     const date = document.getElementById('oee-date').value;
@@ -1970,12 +2060,12 @@
 
     const totalODT = oeeFormState.downtime.reduce((s, o) => s + (parseFloat(o.durasi) || 0), 0);
     const totalLSM = oeeFormState.lineStopMesin.reduce((s, l) => s + (parseFloat(l.durasi) || 0), 0);
-    const totalLSNM = oeeFormState.lineStopNonMesin.filter(l => l.checked).reduce((s, l) => s + (parseFloat(l.durasi) || 0), 0);
-    let maxDur = 0;
-    oeeFormState.packerMeters.forEach(m => m.packers.forEach(p => maxDur = Math.max(maxDur, p.duration || 0)));
+    const totalLSNM = oeeFormState.lineStopNonMesin.reduce((s, l) => s + (parseFloat(l.durasi) || 0), 0);
+    const totalPackerDuration = oeeFormState.packerMeters.flatMap(m => m.packers).reduce((s, p) => s + (p.duration || 0), 0);
+    const totalTime = totalODT + totalLSM + totalLSNM + totalPackerDuration;
     
-    if (maxDur > (oeeFormState.shiftMinutes - totalODT - totalLSM - totalLSNM) && (oeeFormState.shiftMinutes - totalODT - totalLSM - totalLSNM) > 0) {
-      showToast('⚠️ DURASI PACKER TERPANJANG MELEBIHI WAKTU TERSEDIA!', 'error');
+    if (totalTime > oeeFormState.shiftMinutes && oeeFormState.shiftMinutes > 0) {
+      showToast(`⚠️ TOTAL WAKTU (${totalTime.toFixed(0)} MENIT) MELEBIHI DURASI SHIFT (${oeeFormState.shiftMinutes} MENIT)!`, 'error');
       return;
     }
 
@@ -1985,7 +2075,7 @@
       return `${prod?.nama}(${m.batchNumber})`;
     }).join(' | ');
 
-    // ==================== SAVE DETAILED DOWNTIME DATA ====================
+    // SAVE DETAILED DOWNTIME DATA
     const lsmDetails = oeeFormState.lineStopMesin
       .filter(lsm => parseFloat(lsm.durasi) > 0)
       .map(lsm => ({
@@ -1996,7 +2086,7 @@
       }));
 
     const lsnmDetails = oeeFormState.lineStopNonMesin
-      .filter(lsnm => lsnm.checked && parseFloat(lsnm.durasi) > 0)
+      .filter(lsnm => parseFloat(lsnm.durasi) > 0)
       .map(lsnm => ({
         nama: lsnm.nama,
         durasi: parseFloat(lsnm.durasi),
@@ -2004,18 +2094,18 @@
       }));
 
     const minorStopDetails = oeeFormState.minorStop
-      .filter(ms => ms.checked && parseFloat(ms.durasi) > 0)
+      .filter(ms => parseFloat(ms.durasi) > 0)
       .map(ms => ({
         nama: ms.nama,
         durasi: parseFloat(ms.durasi)
       }));
 
-    // ==================== COMPILE STRING FOR DISPLAY ====================
+    // COMPILE STRING FOR DISPLAY
     const lsmString = lsmDetails.map(l => `${l.nama} (${l.durasi} MIN) - ACTION: ${l.action || '-'} - WR: ${l.wr || '-'}`).join(' | ');
     const lsnmString = lsnmDetails.map(l => `${l.nama} (${l.durasi} MIN) - ACTION: ${l.action || '-'}`).join(' | ');
     const msString = minorStopDetails.map(m => `${m.nama} (${m.durasi} MIN)`).join(' | ');
 
-    // ==================== SAVE TO SUPABASE - WITH MINOR STOP COLUMN ====================
+    // SAVE TO SUPABASE
     const record = {
       date,
       shift,
@@ -2029,25 +2119,25 @@
       oee_365: parseFloat(oeeFormState.results.oee365),
       line_stop_mesin: lsmString || null,
       line_stop_non_mesin: lsnmString || null,
-      minor_stop: msString || null  // ✅ SEKARANG MINOR STOP TERSIMPAN DI DATABASE!
+      minor_stop: msString || null
     };
 
     try {
       const { error } = await supabaseClient.from('oee_records').insert([record]);
       if (error) throw error;
       
-      // ==================== SAVE TO LOCAL DATA WITH ALL DETAILS ====================
+      // SAVE TO LOCAL DATA WITH ALL DETAILS
       const newRecord = { 
         ...record, 
         availability_365: parseFloat(oeeFormState.results.availability365),
         lsm_details: lsmDetails,
         lsnm_details: lsnmDetails,
-        ms_details: minorStopDetails  // ⬅️ TETAP SIMPAN DI LOCAL UNTUK CHART
+        ms_details: minorStopDetails
       };
       
       localData.oee_records.unshift(newRecord);
       
-      console.log('✅ Record saved with minor stop details:', newRecord);
+      console.log('✅ Record saved with details:', newRecord);
       
       await addAuditLog('INPUT OEE', `${produkBatch} - PACKER: ${allPackerNames} | LSM: ${lsmDetails.length} | LSNM: ${lsnmDetails.length} | MS: ${minorStopDetails.length}`);
       showToast('DATA OEE BERHASIL DISIMPAN ✅', 'success');
@@ -2069,7 +2159,7 @@
       lineStopMesin: [], 
       lineStopNonMesin: [], 
       minorStop: [], 
-      results: {} 
+      results: {}
     };
     document.getElementById('packer-meter-list').innerHTML = '';
     document.getElementById('odt-list').innerHTML = '';
@@ -2169,7 +2259,7 @@
     document.getElementById('score-total-output').textContent = tOut.toLocaleString('id-ID');
   }
 
-  // ==================== CHART FUNCTIONS WITH LABELS ====================
+  // ==================== CHART FUNCTIONS ====================
   function createBarChartWithLabels(canvasId, labels, data, label, backgroundColor) {
     const ctx = document.getElementById(canvasId).getContext('2d');
     if (dashboardCharts[canvasId]) dashboardCharts[canvasId].destroy();
@@ -2208,7 +2298,7 @@
             grid: { display: true },
             ticks: {
               callback: function(value) {
-                return value; // HANYA ANGKA, TANPA SATUAN
+                return value;
               }
             }
           },
@@ -2247,7 +2337,7 @@
               ctx.textAlign = 'left';
               ctx.textBaseline = 'middle';
               
-              const valueText = value.toFixed(0); // TANPA SATUAN
+              const valueText = value.toFixed(0);
               const textX = barX + 8;
               const textY = barY;
               
@@ -2309,102 +2399,6 @@
     });
   }
 
-  function createBarChart(canvasId, labels, data, label, backgroundColor) {
-    const ctx = document.getElementById(canvasId).getContext('2d');
-    if (dashboardCharts[canvasId]) dashboardCharts[canvasId].destroy();
-    
-    dashboardCharts[canvasId] = new Chart(ctx, {
-      type: 'bar',
-      data: {
-        labels: labels,
-        datasets: [{
-          label: label,
-          data: data,
-          backgroundColor: backgroundColor,
-          borderRadius: 8,
-          barPercentage: 0.7,
-          categoryPercentage: 0.8
-        }]
-      },
-      options: {
-        indexAxis: 'y',
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: {
-          legend: { display: false },
-          tooltip: { 
-            enabled: true,
-            callbacks: {
-              label: function(context) {
-                return `${context.raw} MENIT`;
-              }
-            }
-          }
-        },
-        scales: {
-          x: { 
-            beginAtZero: true,
-            grid: { display: true },
-            ticks: {
-              callback: function(value) {
-                return value; // HANYA ANGKA
-              }
-            }
-          },
-          y: { 
-            grid: { display: false },
-            ticks: {
-              font: { size: 11 },
-              callback: function(val) {
-                const label = this.getLabelForValue(val);
-                return label.length > 25 ? label.substr(0, 23) + '...' : label;
-              }
-            }
-          }
-        },
-        layout: {
-          padding: { right: 60 }
-        }
-      },
-      plugins: [{
-        id: 'valueLabels',
-        afterDatasetsDraw(chart) {
-          const { ctx } = chart;
-          ctx.save();
-          
-          chart.data.datasets.forEach((dataset, datasetIndex) => {
-            const meta = chart.getDatasetMeta(datasetIndex);
-            
-            meta.data.forEach((element, index) => {
-              const value = dataset.data[index];
-              if (value === 0) return;
-              
-              const barX = element.x;
-              const barY = element.y;
-              
-              ctx.font = 'bold 11px "Segoe UI", "Trebuchet MS", sans-serif';
-              ctx.textAlign = 'left';
-              ctx.textBaseline = 'middle';
-              
-              const valueText = value.toFixed(0);
-              const textX = barX + 8;
-              const textY = barY;
-              
-              ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
-              const textWidth = ctx.measureText(valueText).width;
-              ctx.fillRect(textX - 4, textY - 10, textWidth + 8, 20);
-              
-              ctx.fillStyle = '#000000';
-              ctx.fillText(valueText, textX, textY);
-            });
-          });
-          
-          ctx.restore();
-        }
-      }]
-    });
-  }
-
   // ==================== DOWNTIME CHARTS ====================
   function renderODTTop10Chart() {
     const downtimeMap = {};
@@ -2423,7 +2417,7 @@
       .slice(0, 10);
 
     if (sortedData.length === 0) {
-      createBarChart('chart-odt-top10', ['TIDAK ADA DATA'], [0], 'MENIT', '#3b82f6');
+      createBarChartWithLabels('chart-odt-top10', ['TIDAK ADA DATA'], [0], 'MENIT', '#3b82f6');
       return;
     }
 
@@ -2468,7 +2462,7 @@
       .slice(0, 10);
 
     if (sortedData.length === 0) {
-      createBarChart('chart-lsm-top10', ['TIDAK ADA DATA'], [0], 'MENIT', '#8b5cf6');
+      createBarChartWithLabels('chart-lsm-top10', ['TIDAK ADA DATA'], [0], 'MENIT', '#8b5cf6');
       return;
     }
 
@@ -2513,7 +2507,7 @@
       .slice(0, 10);
 
     if (sortedData.length === 0) {
-      createBarChart('chart-lsnm-top10', ['TIDAK ADA DATA'], [0], 'MENIT', '#10b981');
+      createBarChartWithLabels('chart-lsnm-top10', ['TIDAK ADA DATA'], [0], 'MENIT', '#10b981');
       return;
     }
 
@@ -2526,26 +2520,19 @@
     );
   }
 
-  // ==================== FIXED MINOR STOP TOP 10 CHART ====================
   function renderMinorStopTop10Chart() {
-    console.log('🔄 RENDERING MINOR STOP CHART...');
     const msMap = {};
     
     const records = filteredOeeRecords.length ? filteredOeeRecords : localData.oee_records;
-    console.log(`📊 TOTAL RECORDS: ${records.length}`);
     
-    records.forEach((record, idx) => {
-      // PRIORITAS: ambil dari ms_details (array of objects)
+    records.forEach(record => {
       if (record.ms_details && Array.isArray(record.ms_details) && record.ms_details.length > 0) {
-        console.log(`✅ RECORD ${idx+1}: FOUND ${record.ms_details.length} MINOR STOP DETAILS`);
         record.ms_details.forEach(ms => {
           if (!msMap[ms.nama]) msMap[ms.nama] = 0;
-          msMap[ms.nama] += ms.durasi || 0; // PENJUMLAHAN
+          msMap[ms.nama] += ms.durasi || 0;
         });
       }
-      // FALLBACK: parse dari string minor_stop (dari database)
       else if (record.minor_stop) {
-        console.log(`⚠️ RECORD ${idx+1}: USING STRING PARSING - ${record.minor_stop}`);
         const matches = record.minor_stop.match(/([^(]+)\s*\((\d+)\s*MIN\)/g);
         if (matches) {
           matches.forEach(match => {
@@ -2554,24 +2541,20 @@
               const nama = nameMatch[1].trim();
               const durasi = parseInt(nameMatch[2]) || 0;
               if (!msMap[nama]) msMap[nama] = 0;
-              msMap[nama] += durasi; // PENJUMLAHAN
+              msMap[nama] += durasi;
             }
           });
         }
       }
     });
 
-    console.log('📈 MINOR STOP MAP:', msMap);
-
     const sortedData = Object.entries(msMap)
       .map(([nama, durasi]) => ({ nama, durasi }))
       .sort((a, b) => b.durasi - a.durasi)
       .slice(0, 10);
 
-    console.log('🏆 TOP 10 MINOR STOP:', sortedData);
-
     if (sortedData.length === 0) {
-      createBarChart('chart-ms-top10', ['TIDAK ADA DATA'], [0], 'MENIT', '#f59e0b');
+      createBarChartWithLabels('chart-ms-top10', ['TIDAK ADA DATA'], [0], 'MENIT', '#f59e0b');
       return;
     }
 
@@ -2741,7 +2724,7 @@
     renderODTTop10Chart();
     renderLineStopMesinTop10Chart();
     renderLineStopNonMesinTop10Chart();
-    renderMinorStopTop10Chart(); // ✅ SEKARANG MINOR STOP CHART BERFUNGSI!
+    renderMinorStopTop10Chart();
   }
 
   function renderPackerPerformance() {
