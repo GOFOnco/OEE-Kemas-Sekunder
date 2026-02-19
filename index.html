@@ -224,6 +224,7 @@
       display: flex;
       align-items: center;
       gap: 8px;
+      word-break: break-word;
     }
 
     .section-title::before {
@@ -252,6 +253,7 @@
       font-weight: 600;
       color: #6b4c5c;
       margin-bottom: 4px;
+      word-break: break-word;
     }
 
     .form-group input,
@@ -268,6 +270,7 @@
       width: 100%;
       -webkit-appearance: none;
       appearance: none;
+      word-break: break-word;
     }
 
     .form-group input:focus,
@@ -366,6 +369,7 @@
       transition: var(--transition);
       display: flex;
       flex-direction: column;
+      word-break: break-word;
     }
 
     .score-card:hover {
@@ -378,6 +382,7 @@
       color: #6b4c5c;
       font-weight: 600;
       margin-bottom: 8px;
+      word-break: break-word;
     }
 
     .score-value {
@@ -388,6 +393,7 @@
       -webkit-text-fill-color: transparent;
       background-clip: text;
       line-height: 1.2;
+      word-break: break-word;
     }
 
     /* ==================== PACKER METER CARDS ==================== */
@@ -418,6 +424,7 @@
       font-size: 16px;
       font-weight: 700;
       color: var(--primary);
+      word-break: break-word;
     }
 
     /* ==================== PACKER ROW ==================== */
@@ -508,13 +515,15 @@
       font-weight: 700;
       color: var(--primary);
       border-bottom: 2px solid rgba(236, 72, 153, 0.2);
-      white-space: nowrap;
+      white-space: normal;
+      word-break: break-word;
     }
 
     tbody td {
       padding: 10px 8px;
       border-bottom: 1px solid rgba(236, 72, 153, 0.1);
       word-break: break-word;
+      white-space: normal;
     }
 
     tbody tr:hover {
@@ -555,18 +564,16 @@
       font-weight: 700;
       color: #d946a6;
       margin: 0 0 4px;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
+      word-break: break-word;
+      white-space: normal;
     }
 
     .master-card-detail {
       font-size: clamp(10px, 2vw, 11px);
       color: #b9a2b3;
       margin: 0;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
+      word-break: break-word;
+      white-space: normal;
     }
 
     .master-card-actions {
@@ -583,6 +590,7 @@
       font-size: clamp(9px, 1.5vw, 10px);
       font-weight: 600;
       transition: var(--transition);
+      white-space: nowrap;
     }
 
     .btn-edit {
@@ -619,6 +627,7 @@
       font-size: clamp(11px, 2vw, 13px);
       font-weight: 600;
       letter-spacing: 0.5px;
+      word-break: break-word;
     }
 
     /* ==================== WARNING ==================== */
@@ -635,11 +644,13 @@
       margin: 0 0 8px;
       font-weight: 700;
       font-size: 13px;
+      word-break: break-word;
     }
 
     .warning-text {
       margin: 0;
       font-size: 12px;
+      word-break: break-word;
     }
 
     /* ==================== CHARTS ==================== */
@@ -650,6 +661,7 @@
       margin-bottom: 16px;
       box-shadow: var(--box-shadow);
       border: 1px solid rgba(236, 72, 153, 0.1);
+      overflow-x: auto;
     }
 
     .chart-title {
@@ -657,12 +669,19 @@
       font-weight: 700;
       color: #d946a6;
       margin-bottom: 16px;
+      word-break: break-word;
+    }
+
+    .chart-wrapper {
+      position: relative;
+      min-height: 300px;
+      width: 100%;
     }
 
     canvas {
       width: 100% !important;
       height: auto !important;
-      max-height: 250px;
+      max-height: 300px;
     }
 
     /* ==================== TOAST ==================== */
@@ -740,6 +759,7 @@
       font-size: 18px;
       font-weight: 700;
       text-align: center;
+      word-break: break-word;
     }
 
     .login-input {
@@ -764,6 +784,7 @@
       margin-bottom: 16px;
       text-align: center;
       font-weight: 600;
+      word-break: break-word;
     }
 
     .login-buttons {
@@ -909,6 +930,10 @@
         width: 95%;
         padding: 20px;
       }
+      
+      .chart-wrapper {
+        min-height: 250px;
+      }
     }
 
     @media (min-width: 641px) and (max-width: 1024px) {
@@ -949,6 +974,8 @@
     .flex-col { flex-direction: column; }
     .gap-8 { gap: 8px; }
     .gap-12 { gap: 12px; }
+    .word-break { word-break: break-word; }
+    .white-space-normal { white-space: normal; }
   </style>
   <style>@view-transition { navigation: auto; }</style>
 </head>
@@ -1032,31 +1059,45 @@
       <!-- CHARTS -->
       <div class="chart-container">
         <div class="chart-title">OEE PER BULAN (12 BULAN)</div>
-        <canvas id="chart-oee-monthly"></canvas>
+        <div class="chart-wrapper">
+          <canvas id="chart-oee-monthly"></canvas>
+        </div>
       </div>
       <div class="chart-container">
         <div class="chart-title">OEE PER HARI (30 HARI TERAKHIR)</div>
-        <canvas id="chart-oee-daily"></canvas>
+        <div class="chart-wrapper">
+          <canvas id="chart-oee-daily"></canvas>
+        </div>
       </div>
       <div class="chart-container">
         <div class="chart-title">A / P / Q / 365 BREAKDOWN</div>
-        <canvas id="chart-apqa-breakdown"></canvas>
+        <div class="chart-wrapper">
+          <canvas id="chart-apqa-breakdown"></canvas>
+        </div>
       </div>
       <div class="chart-container">
         <div class="chart-title">TOP 10 ODT (MENIT)</div>
-        <canvas id="chart-odt-top10"></canvas>
+        <div class="chart-wrapper">
+          <canvas id="chart-odt-top10"></canvas>
+        </div>
       </div>
       <div class="chart-container">
         <div class="chart-title">TOP 10 LINE STOP MESIN (MENIT)</div>
-        <canvas id="chart-lsm-top10"></canvas>
+        <div class="chart-wrapper">
+          <canvas id="chart-lsm-top10"></canvas>
+        </div>
       </div>
       <div class="chart-container">
         <div class="chart-title">TOP 10 LINE STOP NON-MESIN (MENIT)</div>
-        <canvas id="chart-lsnm-top10"></canvas>
+        <div class="chart-wrapper">
+          <canvas id="chart-lsnm-top10"></canvas>
+        </div>
       </div>
       <div class="chart-container">
         <div class="chart-title">TOP 10 MINOR STOP (MENIT)</div>
-        <canvas id="chart-ms-top10"></canvas>
+        <div class="chart-wrapper">
+          <canvas id="chart-ms-top10"></canvas>
+        </div>
       </div>
 
       <!-- PACKER PERFORMANCE TABLE -->
@@ -1414,6 +1455,8 @@
       localData.minor_stop = msRes.data || [];
       localData.oee_records = oeeRes.data || [];
       localData.audit_trail = auditRes.data || [];
+      
+      console.log('✅ Data loaded from Supabase. OEE records:', localData.oee_records.length);
     } catch (error) {
       console.error('Error loading data:', error);
       showToast('ERROR LOADING DATA FROM SUPABASE', 'error');
@@ -1564,7 +1607,14 @@
   function addPackerToMeter(meterId) {
     const meter = oeeFormState.packerMeters.find(m => m.id === meterId);
     if (meter) {
-      meter.packers.push({ id: 'packer_' + Date.now(), packerId: '', packerName: '', duration: 0, output: 0, reject: 0 });
+      meter.packers.push({ 
+        id: 'packer_' + Date.now(), 
+        packerId: '', 
+        packerName: '', 
+        duration: 0, 
+        output: 0, 
+        reject: 0 
+      });
       renderPackersInMeter(meter);
     }
   }
@@ -1634,7 +1684,12 @@
       return;
     }
     if (oeeFormState.downtime.length === 0) {
-      oeeFormState.downtime = localData.downtime.map(d => ({ id: d.id, nama: d.nama, waktu_standard: d.waktu_standard, durasi: 0 }));
+      oeeFormState.downtime = localData.downtime.map(d => ({ 
+        id: d.id, 
+        nama: d.nama, 
+        waktu_standard: d.waktu_standard, 
+        durasi: 0 
+      }));
     }
     listDiv.innerHTML = oeeFormState.downtime.map(odt => `
       <div class="downtime-row">
@@ -1734,9 +1789,14 @@
 
   // ==================== MINOR STOP ====================
   function addMinorStop() {
+    const nama = prompt('MASUKKAN NAMA MINOR STOP:', '');
+    if (!nama || !nama.trim()) {
+      showToast('NAMA MINOR STOP WAJIB DIISI', 'error');
+      return;
+    }
     oeeFormState.minorStop.push({ 
       id: 'ms_' + Date.now(), 
-      nama: prompt('MASUKKAN NAMA MINOR STOP:', '') || 'MINOR STOP', 
+      nama: nama.trim().toUpperCase(), 
       durasi: 0, 
       checked: false, 
       isCustom: true 
@@ -1746,19 +1806,45 @@
 
   function renderMinorStopList() {
     const listDiv = document.getElementById('minor-stop-list');
-    if (localData.minor_stop.length === 0 && oeeFormState.minorStop.length === 0) {
-      listDiv.innerHTML = '<div class="empty-state"><div class="empty-state-text">BELUM ADA DATA</div></div>';
-      return;
-    }
-    if (oeeFormState.minorStop.length === 0) {
-      oeeFormState.minorStop = localData.minor_stop.map(m => ({ 
+    
+    // Combine master data with custom minor stops
+    let allMinorStops = [];
+    
+    // Add master data
+    if (localData.minor_stop && localData.minor_stop.length > 0) {
+      const masterStops = localData.minor_stop.map(m => ({ 
         id: m.id, 
         nama: m.nama, 
         durasi: 0, 
         checked: false, 
         isCustom: false 
       }));
+      allMinorStops = [...allMinorStops, ...masterStops];
     }
+    
+    // Add custom stops from form state
+    if (oeeFormState.minorStop && oeeFormState.minorStop.length > 0) {
+      const customStops = oeeFormState.minorStop.filter(ms => ms.isCustom);
+      allMinorStops = [...allMinorStops, ...customStops];
+    }
+    
+    // Remove duplicates by ID
+    const uniqueStops = [];
+    const ids = new Set();
+    allMinorStops.forEach(ms => {
+      if (!ids.has(ms.id)) {
+        ids.add(ms.id);
+        uniqueStops.push(ms);
+      }
+    });
+    
+    oeeFormState.minorStop = uniqueStops;
+
+    if (oeeFormState.minorStop.length === 0) {
+      listDiv.innerHTML = '<div class="empty-state"><div class="empty-state-text">BELUM ADA DATA MINOR STOP</div></div>';
+      return;
+    }
+
     listDiv.innerHTML = oeeFormState.minorStop.map(ms => `
       <div class="ms-row">
         <div style="display: flex; align-items: center; gap: 8px;">
@@ -1796,22 +1882,32 @@
       totalOutput += p.output || 0;
       totalReject += p.reject || 0;
     }));
+    
     const totalODT = oeeFormState.downtime.reduce((s, o) => s + (parseFloat(o.durasi) || 0), 0);
     const totalLSM = oeeFormState.lineStopMesin.reduce((s, l) => s + (parseFloat(l.durasi) || 0), 0);
     const totalLSNM = oeeFormState.lineStopNonMesin.filter(l => l.checked).reduce((s, l) => s + (parseFloat(l.durasi) || 0), 0);
     const totalMinor = oeeFormState.minorStop.filter(m => m.checked).reduce((s, m) => s + (parseFloat(m.durasi) || 0), 0);
     const totalActualDowntime = totalLSM + totalLSNM + totalMinor;
+    
     const plannedTime = oeeFormState.shiftMinutes - totalODT;
     const availableTime = plannedTime - totalActualDowntime;
+    
     const availActual = plannedTime > 0 ? (availableTime / plannedTime) * 100 : 0;
     const avail365 = oeeFormState.shiftMinutes > 0 ? ((oeeFormState.shiftMinutes - totalODT - totalLSM - totalLSNM) / oeeFormState.shiftMinutes) * 100 : 0;
+    
     let totalTarget = 0;
     oeeFormState.packerMeters.forEach(meter => {
       const product = localData.produk.find(p => p.id === meter.productId);
-      if (product) meter.packers.forEach(p => totalTarget += (p.duration || 0) * product.target);
+      if (product) {
+        meter.packers.forEach(p => {
+          totalTarget += (p.duration || 0) * product.target;
+        });
+      }
     });
+    
     const performance = totalTarget > 0 ? (totalOutput / totalTarget) * 100 : 0;
     const quality = totalOutput > 0 ? ((totalOutput - totalReject) / totalOutput) * 100 : 0;
+    
     const oeeActual = (availActual / 100) * (performance / 100) * (quality / 100) * 100;
     const oee365 = (avail365 / 100) * (performance / 100) * (quality / 100) * 100;
     
@@ -1845,7 +1941,7 @@
     document.getElementById('oee-date').value = new Date().toISOString().split('T')[0];
   }
 
-  // ==================== SUBMIT OEE ====================
+  // ==================== SUBMIT OEE - FIXED WITH MINOR STOP ====================
   async function submitOEE(event) {
     event.preventDefault();
     const date = document.getElementById('oee-date').value;
@@ -1919,6 +2015,7 @@
     const lsnmString = lsnmDetails.map(l => `${l.nama} (${l.durasi} MIN) - ACTION: ${l.action || '-'}`).join(' | ');
     const msString = minorStopDetails.map(m => `${m.nama} (${m.durasi} MIN)`).join(' | ');
 
+    // ==================== SAVE TO SUPABASE - WITH MINOR STOP COLUMN ====================
     const record = {
       date,
       shift,
@@ -1932,33 +2029,33 @@
       oee_365: parseFloat(oeeFormState.results.oee365),
       line_stop_mesin: lsmString || null,
       line_stop_non_mesin: lsnmString || null,
-      minor_stop: msString || null,
-      // Store detailed data as JSON for analytics
-      lsm_details: lsmDetails,
-      lsnm_details: lsnmDetails,
-      ms_details: minorStopDetails
+      minor_stop: msString || null  // ✅ SEKARANG MINOR STOP TERSIMPAN DI DATABASE!
     };
 
     try {
       const { error } = await supabaseClient.from('oee_records').insert([record]);
       if (error) throw error;
       
-      // Add to local data with all details
-      localData.oee_records.unshift({ 
+      // ==================== SAVE TO LOCAL DATA WITH ALL DETAILS ====================
+      const newRecord = { 
         ...record, 
         availability_365: parseFloat(oeeFormState.results.availability365),
         lsm_details: lsmDetails,
         lsnm_details: lsnmDetails,
-        ms_details: minorStopDetails
-      });
+        ms_details: minorStopDetails  // ⬅️ TETAP SIMPAN DI LOCAL UNTUK CHART
+      };
+      
+      localData.oee_records.unshift(newRecord);
+      
+      console.log('✅ Record saved with minor stop details:', newRecord);
       
       await addAuditLog('INPUT OEE', `${produkBatch} - PACKER: ${allPackerNames} | LSM: ${lsmDetails.length} | LSNM: ${lsnmDetails.length} | MS: ${minorStopDetails.length}`);
       showToast('DATA OEE BERHASIL DISIMPAN ✅', 'success');
       resetOEEForm();
       updateDashboard();
     } catch (error) {
-      console.error('Error saving OEE:', error);
-      showToast('GAGAL MENYIMPAN DATA OEE', 'error');
+      console.error('❌ Error saving OEE:', error);
+      showToast('GAGAL MENYIMPAN DATA OEE - ' + (error.message || ''), 'error');
     }
   }
 
@@ -2072,19 +2169,251 @@
     document.getElementById('score-total-output').textContent = tOut.toLocaleString('id-ID');
   }
 
-  // ==================== DOWNTIME CHARTS - FIXED VERSION ====================
+  // ==================== CHART FUNCTIONS WITH LABELS ====================
+  function createBarChartWithLabels(canvasId, labels, data, label, backgroundColor) {
+    const ctx = document.getElementById(canvasId).getContext('2d');
+    if (dashboardCharts[canvasId]) dashboardCharts[canvasId].destroy();
+    
+    dashboardCharts[canvasId] = new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: labels,
+        datasets: [{
+          label: label,
+          data: data,
+          backgroundColor: backgroundColor,
+          borderRadius: 8,
+          barPercentage: 0.7,
+          categoryPercentage: 0.8
+        }]
+      },
+      options: {
+        indexAxis: 'y',
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { display: false },
+          tooltip: { 
+            enabled: true,
+            callbacks: {
+              label: function(context) {
+                return `${context.raw} MENIT`;
+              }
+            }
+          }
+        },
+        scales: {
+          x: { 
+            beginAtZero: true,
+            grid: { display: true },
+            ticks: {
+              callback: function(value) {
+                return value; // HANYA ANGKA, TANPA SATUAN
+              }
+            }
+          },
+          y: { 
+            grid: { display: false },
+            ticks: {
+              font: { size: 11, weight: 'bold' },
+              callback: function(val) {
+                const label = this.getLabelForValue(val);
+                return label.length > 25 ? label.substr(0, 23) + '...' : label;
+              }
+            }
+          }
+        },
+        layout: {
+          padding: { right: 60 }
+        }
+      },
+      plugins: [{
+        id: 'valueLabels',
+        afterDatasetsDraw(chart) {
+          const { ctx } = chart;
+          ctx.save();
+          
+          chart.data.datasets.forEach((dataset, datasetIndex) => {
+            const meta = chart.getDatasetMeta(datasetIndex);
+            
+            meta.data.forEach((element, index) => {
+              const value = dataset.data[index];
+              if (value === 0) return;
+              
+              const barX = element.x;
+              const barY = element.y;
+              
+              ctx.font = 'bold 11px "Segoe UI", "Trebuchet MS", sans-serif';
+              ctx.textAlign = 'left';
+              ctx.textBaseline = 'middle';
+              
+              const valueText = value.toFixed(0); // TANPA SATUAN
+              const textX = barX + 8;
+              const textY = barY;
+              
+              ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
+              const textWidth = ctx.measureText(valueText).width;
+              ctx.fillRect(textX - 4, textY - 10, textWidth + 8, 20);
+              
+              ctx.fillStyle = '#000000';
+              ctx.fillText(valueText, textX, textY);
+            });
+          });
+          
+          ctx.restore();
+        }
+      }]
+    });
+  }
+
+  function createLineChart(canvasId, labels, data, label, borderColor, backgroundColor) {
+    const ctx = document.getElementById(canvasId).getContext('2d');
+    if (dashboardCharts[canvasId]) dashboardCharts[canvasId].destroy();
+    
+    dashboardCharts[canvasId] = new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: labels,
+        datasets: [{
+          label: label,
+          data: data,
+          borderColor: borderColor,
+          backgroundColor: backgroundColor,
+          borderWidth: 3,
+          tension: 0.4,
+          fill: true,
+          pointRadius: 4,
+          pointBackgroundColor: borderColor
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { display: false },
+          tooltip: { enabled: true }
+        },
+        scales: {
+          y: { 
+            beginAtZero: true, 
+            max: 100, 
+            ticks: { callback: v => v + '%' },
+            grid: { display: true }
+          },
+          x: { 
+            grid: { display: false },
+            ticks: { maxRotation: 45, minRotation: 30 }
+          }
+        }
+      }
+    });
+  }
+
+  function createBarChart(canvasId, labels, data, label, backgroundColor) {
+    const ctx = document.getElementById(canvasId).getContext('2d');
+    if (dashboardCharts[canvasId]) dashboardCharts[canvasId].destroy();
+    
+    dashboardCharts[canvasId] = new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: labels,
+        datasets: [{
+          label: label,
+          data: data,
+          backgroundColor: backgroundColor,
+          borderRadius: 8,
+          barPercentage: 0.7,
+          categoryPercentage: 0.8
+        }]
+      },
+      options: {
+        indexAxis: 'y',
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { display: false },
+          tooltip: { 
+            enabled: true,
+            callbacks: {
+              label: function(context) {
+                return `${context.raw} MENIT`;
+              }
+            }
+          }
+        },
+        scales: {
+          x: { 
+            beginAtZero: true,
+            grid: { display: true },
+            ticks: {
+              callback: function(value) {
+                return value; // HANYA ANGKA
+              }
+            }
+          },
+          y: { 
+            grid: { display: false },
+            ticks: {
+              font: { size: 11 },
+              callback: function(val) {
+                const label = this.getLabelForValue(val);
+                return label.length > 25 ? label.substr(0, 23) + '...' : label;
+              }
+            }
+          }
+        },
+        layout: {
+          padding: { right: 60 }
+        }
+      },
+      plugins: [{
+        id: 'valueLabels',
+        afterDatasetsDraw(chart) {
+          const { ctx } = chart;
+          ctx.save();
+          
+          chart.data.datasets.forEach((dataset, datasetIndex) => {
+            const meta = chart.getDatasetMeta(datasetIndex);
+            
+            meta.data.forEach((element, index) => {
+              const value = dataset.data[index];
+              if (value === 0) return;
+              
+              const barX = element.x;
+              const barY = element.y;
+              
+              ctx.font = 'bold 11px "Segoe UI", "Trebuchet MS", sans-serif';
+              ctx.textAlign = 'left';
+              ctx.textBaseline = 'middle';
+              
+              const valueText = value.toFixed(0);
+              const textX = barX + 8;
+              const textY = barY;
+              
+              ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
+              const textWidth = ctx.measureText(valueText).width;
+              ctx.fillRect(textX - 4, textY - 10, textWidth + 8, 20);
+              
+              ctx.fillStyle = '#000000';
+              ctx.fillText(valueText, textX, textY);
+            });
+          });
+          
+          ctx.restore();
+        }
+      }]
+    });
+  }
+
+  // ==================== DOWNTIME CHARTS ====================
   function renderODTTop10Chart() {
     const downtimeMap = {};
     
-    // Aggregate ODT durations from all OEE records
     const records = filteredOeeRecords.length ? filteredOeeRecords : localData.oee_records;
     records.forEach(record => {
-      // Use standard durations from master data as approximation
       localData.downtime.forEach(odt => {
         if (!downtimeMap[odt.nama]) downtimeMap[odt.nama] = 0;
-        // If we have actual ODT data from the form state, use that, otherwise use standard
-        const formODT = oeeFormState.downtime.find(d => d.id === odt.id);
-        downtimeMap[odt.nama] += formODT?.durasi || odt.waktu_standard || 0;
+        downtimeMap[odt.nama] += odt.waktu_standard || 0;
       });
     });
 
@@ -2093,45 +2422,31 @@
       .sort((a, b) => b.durasi - a.durasi)
       .slice(0, 10);
 
-    const ctx = document.getElementById('chart-odt-top10').getContext('2d');
-    if (dashboardCharts.odtTop10) dashboardCharts.odtTop10.destroy();
-    
-    dashboardCharts.odtTop10 = new Chart(ctx, {
-      type: 'bar',
-      data: {
-        labels: sortedData.map(d => d.nama),
-        datasets: [{
-          label: 'MENIT',
-          data: sortedData.map(d => d.durasi),
-          backgroundColor: '#3b82f6',
-          borderRadius: 8
-        }]
-      },
-      options: {
-        indexAxis: 'y',
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: { legend: { display: false } },
-        scales: { x: { beginAtZero: true } }
-      }
-    });
+    if (sortedData.length === 0) {
+      createBarChart('chart-odt-top10', ['TIDAK ADA DATA'], [0], 'MENIT', '#3b82f6');
+      return;
+    }
+
+    createBarChartWithLabels(
+      'chart-odt-top10',
+      sortedData.map(d => d.nama),
+      sortedData.map(d => d.durasi),
+      'MENIT',
+      '#3b82f6'
+    );
   }
 
   function renderLineStopMesinTop10Chart() {
     const lsmMap = {};
     
-    // Aggregate Line Stop Mesin durations from all OEE records
     const records = filteredOeeRecords.length ? filteredOeeRecords : localData.oee_records;
     records.forEach(record => {
-      // Check if record has lsm_details (from new format)
       if (record.lsm_details && Array.isArray(record.lsm_details)) {
         record.lsm_details.forEach(lsm => {
           if (!lsmMap[lsm.nama]) lsmMap[lsm.nama] = 0;
           lsmMap[lsm.nama] += lsm.durasi || 0;
         });
-      } 
-      // Fallback to parsing string format for backward compatibility
-      else if (record.line_stop_mesin) {
+      } else if (record.line_stop_mesin) {
         const matches = record.line_stop_mesin.match(/([^(]+)\s*\((\d+)\s*MIN\)/g);
         if (matches) {
           matches.forEach(match => {
@@ -2152,45 +2467,31 @@
       .sort((a, b) => b.durasi - a.durasi)
       .slice(0, 10);
 
-    const ctx = document.getElementById('chart-lsm-top10').getContext('2d');
-    if (dashboardCharts.lsmTop10) dashboardCharts.lsmTop10.destroy();
-    
-    dashboardCharts.lsmTop10 = new Chart(ctx, {
-      type: 'bar',
-      data: {
-        labels: sortedData.map(d => d.nama),
-        datasets: [{
-          label: 'MENIT',
-          data: sortedData.map(d => d.durasi),
-          backgroundColor: '#8b5cf6',
-          borderRadius: 8
-        }]
-      },
-      options: {
-        indexAxis: 'y',
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: { legend: { display: false } },
-        scales: { x: { beginAtZero: true } }
-      }
-    });
+    if (sortedData.length === 0) {
+      createBarChart('chart-lsm-top10', ['TIDAK ADA DATA'], [0], 'MENIT', '#8b5cf6');
+      return;
+    }
+
+    createBarChartWithLabels(
+      'chart-lsm-top10',
+      sortedData.map(d => d.nama),
+      sortedData.map(d => d.durasi),
+      'MENIT',
+      '#8b5cf6'
+    );
   }
 
   function renderLineStopNonMesinTop10Chart() {
     const lsnmMap = {};
     
-    // Aggregate Line Stop Non-Mesin durations from all OEE records
     const records = filteredOeeRecords.length ? filteredOeeRecords : localData.oee_records;
     records.forEach(record => {
-      // Check if record has lsnm_details (from new format)
       if (record.lsnm_details && Array.isArray(record.lsnm_details)) {
         record.lsnm_details.forEach(lsnm => {
           if (!lsnmMap[lsnm.nama]) lsnmMap[lsnm.nama] = 0;
           lsnmMap[lsnm.nama] += lsnm.durasi || 0;
         });
-      }
-      // Fallback to parsing string format for backward compatibility
-      else if (record.line_stop_non_mesin) {
+      } else if (record.line_stop_non_mesin) {
         const matches = record.line_stop_non_mesin.match(/([^(]+)\s*\((\d+)\s*MIN\)/g);
         if (matches) {
           matches.forEach(match => {
@@ -2211,45 +2512,40 @@
       .sort((a, b) => b.durasi - a.durasi)
       .slice(0, 10);
 
-    const ctx = document.getElementById('chart-lsnm-top10').getContext('2d');
-    if (dashboardCharts.lsnmTop10) dashboardCharts.lsnmTop10.destroy();
-    
-    dashboardCharts.lsnmTop10 = new Chart(ctx, {
-      type: 'bar',
-      data: {
-        labels: sortedData.map(d => d.nama),
-        datasets: [{
-          label: 'MENIT',
-          data: sortedData.map(d => d.durasi),
-          backgroundColor: '#10b981',
-          borderRadius: 8
-        }]
-      },
-      options: {
-        indexAxis: 'y',
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: { legend: { display: false } },
-        scales: { x: { beginAtZero: true } }
-      }
-    });
+    if (sortedData.length === 0) {
+      createBarChart('chart-lsnm-top10', ['TIDAK ADA DATA'], [0], 'MENIT', '#10b981');
+      return;
+    }
+
+    createBarChartWithLabels(
+      'chart-lsnm-top10',
+      sortedData.map(d => d.nama),
+      sortedData.map(d => d.durasi),
+      'MENIT',
+      '#10b981'
+    );
   }
 
+  // ==================== FIXED MINOR STOP TOP 10 CHART ====================
   function renderMinorStopTop10Chart() {
+    console.log('🔄 RENDERING MINOR STOP CHART...');
     const msMap = {};
     
-    // Aggregate Minor Stop durations from all OEE records
     const records = filteredOeeRecords.length ? filteredOeeRecords : localData.oee_records;
-    records.forEach(record => {
-      // Check if record has ms_details (from new format)
-      if (record.ms_details && Array.isArray(record.ms_details)) {
+    console.log(`📊 TOTAL RECORDS: ${records.length}`);
+    
+    records.forEach((record, idx) => {
+      // PRIORITAS: ambil dari ms_details (array of objects)
+      if (record.ms_details && Array.isArray(record.ms_details) && record.ms_details.length > 0) {
+        console.log(`✅ RECORD ${idx+1}: FOUND ${record.ms_details.length} MINOR STOP DETAILS`);
         record.ms_details.forEach(ms => {
           if (!msMap[ms.nama]) msMap[ms.nama] = 0;
-          msMap[ms.nama] += ms.durasi || 0;
+          msMap[ms.nama] += ms.durasi || 0; // PENJUMLAHAN
         });
       }
-      // Fallback to parsing string format for backward compatibility
+      // FALLBACK: parse dari string minor_stop (dari database)
       else if (record.minor_stop) {
+        console.log(`⚠️ RECORD ${idx+1}: USING STRING PARSING - ${record.minor_stop}`);
         const matches = record.minor_stop.match(/([^(]+)\s*\((\d+)\s*MIN\)/g);
         if (matches) {
           matches.forEach(match => {
@@ -2258,40 +2554,34 @@
               const nama = nameMatch[1].trim();
               const durasi = parseInt(nameMatch[2]) || 0;
               if (!msMap[nama]) msMap[nama] = 0;
-              msMap[nama] += durasi;
+              msMap[nama] += durasi; // PENJUMLAHAN
             }
           });
         }
       }
     });
 
+    console.log('📈 MINOR STOP MAP:', msMap);
+
     const sortedData = Object.entries(msMap)
       .map(([nama, durasi]) => ({ nama, durasi }))
       .sort((a, b) => b.durasi - a.durasi)
       .slice(0, 10);
 
-    const ctx = document.getElementById('chart-ms-top10').getContext('2d');
-    if (dashboardCharts.msTop10) dashboardCharts.msTop10.destroy();
-    
-    dashboardCharts.msTop10 = new Chart(ctx, {
-      type: 'bar',
-      data: {
-        labels: sortedData.map(d => d.nama),
-        datasets: [{
-          label: 'MENIT',
-          data: sortedData.map(d => d.durasi),
-          backgroundColor: '#f59e0b',
-          borderRadius: 8
-        }]
-      },
-      options: {
-        indexAxis: 'y',
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: { legend: { display: false } },
-        scales: { x: { beginAtZero: true } }
-      }
-    });
+    console.log('🏆 TOP 10 MINOR STOP:', sortedData);
+
+    if (sortedData.length === 0) {
+      createBarChart('chart-ms-top10', ['TIDAK ADA DATA'], [0], 'MENIT', '#f59e0b');
+      return;
+    }
+
+    createBarChartWithLabels(
+      'chart-ms-top10',
+      sortedData.map(d => d.nama),
+      sortedData.map(d => d.durasi),
+      'MENIT',
+      '#f59e0b'
+    );
   }
 
   function renderOEEMonthlyChart() {
@@ -2309,31 +2599,15 @@
       return new Date(y,m-1).toLocaleDateString('id-ID',{month:'short',year:'2-digit'}); 
     });
     const data = Object.values(monthly).map(arr => arr.length ? arr.reduce((a,b)=>a+b,0)/arr.length : 0);
-    const ctx = document.getElementById('chart-oee-monthly').getContext('2d');
-    if (dashboardCharts.oeeMonthly) dashboardCharts.oeeMonthly.destroy();
-    dashboardCharts.oeeMonthly = new Chart(ctx, {
-      type: 'line',
-      data: { 
-        labels, 
-        datasets: [{ 
-          label: 'OEE ACTUAL %', 
-          data, 
-          borderColor: '#ec4899', 
-          backgroundColor: 'rgba(236,72,153,0.1)', 
-          borderWidth: 3, 
-          tension: 0.4, 
-          fill: true, 
-          pointRadius: 5, 
-          pointBackgroundColor: '#ec4899' 
-        }] 
-      },
-      options: { 
-        responsive: true, 
-        maintainAspectRatio: false, 
-        plugins: { legend: { display: false } }, 
-        scales: { y: { beginAtZero: true, max: 100, ticks: { callback: v => v + '%' } } } 
-      }
-    });
+    
+    createLineChart(
+      'chart-oee-monthly',
+      labels,
+      data,
+      'OEE ACTUAL %',
+      '#ec4899',
+      'rgba(236,72,153,0.1)'
+    );
   }
 
   function renderOEEDailyChart() {
@@ -2349,36 +2623,21 @@
     });
     const labels = Object.keys(daily).map(d => new Date(d+'T00:00:00').toLocaleDateString('id-ID',{day:'2-digit',month:'short'}));
     const data = Object.values(daily).map(arr => arr.length ? arr.reduce((a,b)=>a+b,0)/arr.length : 0);
-    const ctx = document.getElementById('chart-oee-daily').getContext('2d');
-    if (dashboardCharts.oeeDaily) dashboardCharts.oeeDaily.destroy();
-    dashboardCharts.oeeDaily = new Chart(ctx, {
-      type: 'line',
-      data: { 
-        labels, 
-        datasets: [{ 
-          label: 'OEE ACTUAL %', 
-          data, 
-          borderColor: '#a855f7', 
-          backgroundColor: 'rgba(168,85,247,0.1)', 
-          borderWidth: 3, 
-          tension: 0.4, 
-          fill: true, 
-          pointRadius: 4, 
-          pointBackgroundColor: '#a855f7' 
-        }] 
-      },
-      options: { 
-        responsive: true, 
-        maintainAspectRatio: false, 
-        plugins: { legend: { display: false } }, 
-        scales: { y: { beginAtZero: true, max: 100, ticks: { callback: v => v + '%' } } } 
-      }
-    });
+    
+    createLineChart(
+      'chart-oee-daily',
+      labels,
+      data,
+      'OEE ACTUAL %',
+      '#a855f7',
+      'rgba(168,85,247,0.1)'
+    );
   }
 
   function renderAPQABreakdownChart() {
     const recs = filteredOeeRecords.length ? filteredOeeRecords : localData.oee_records;
     if (!recs || !recs.length) return;
+    
     let sAA = 0, cAA = 0, sA365 = 0, cA365 = 0, sPerf = 0, cPerf = 0, sQual = 0, cQual = 0;
     recs.forEach(r => {
       const aa = parseFloat(r.availability_actual) || 0;
@@ -2387,13 +2646,14 @@
       if (aa > 0) { sAA += aa; cAA++; }
       if (perf > 0) { sPerf += perf; cPerf++; }
       if (qual > 0) { sQual += qual; cQual++; }
-      // Use actual availability_365 if available, otherwise estimate
       const a365 = parseFloat(r.availability_365) || 85;
       sA365 += a365; cA365++;
     });
+
     const ctx = document.getElementById('chart-apqa-breakdown').getContext('2d');
-    if (dashboardCharts.apqa) dashboardCharts.apqa.destroy();
-    dashboardCharts.apqa = new Chart(ctx, {
+    if (dashboardCharts['chart-apqa-breakdown']) dashboardCharts['chart-apqa-breakdown'].destroy();
+    
+    dashboardCharts['chart-apqa-breakdown'] = new Chart(ctx, {
       type: 'bar',
       data: {
         labels: ['AVAILABILITY ACTUAL', 'AVAILABILITY 365', 'PERFORMANCE', 'QUALITY RATE'],
@@ -2406,16 +2666,71 @@
             cQual ? sQual / cQual : 0
           ],
           backgroundColor: ['#3b82f6', '#60a5fa', '#8b5cf6', '#10b981'],
-          borderRadius: 8
+          borderRadius: 8,
+          barPercentage: 0.7,
+          categoryPercentage: 0.8
         }]
       },
-      options: { 
-        indexAxis: 'y', 
-        responsive: true, 
-        maintainAspectRatio: false, 
-        plugins: { legend: { display: false } }, 
-        scales: { x: { beginAtZero: true, max: 100, ticks: { callback: v => v + '%' } } } 
-      }
+      options: {
+        indexAxis: 'y',
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { display: false },
+          tooltip: { enabled: true }
+        },
+        scales: {
+          x: { 
+            beginAtZero: true, 
+            max: 100, 
+            ticks: { callback: v => v + '%' },
+            grid: { display: true }
+          },
+          y: { 
+            grid: { display: false },
+            ticks: { font: { size: 11, weight: 'bold' } }
+          }
+        },
+        layout: {
+          padding: { right: 60 }
+        }
+      },
+      plugins: [{
+        id: 'valueLabels',
+        afterDatasetsDraw(chart) {
+          const { ctx } = chart;
+          ctx.save();
+          
+          chart.data.datasets.forEach((dataset, datasetIndex) => {
+            const meta = chart.getDatasetMeta(datasetIndex);
+            
+            meta.data.forEach((element, index) => {
+              const value = dataset.data[index];
+              if (value === 0) return;
+              
+              const barX = element.x;
+              const barY = element.y;
+              
+              ctx.font = 'bold 11px "Segoe UI", "Trebuchet MS", sans-serif';
+              ctx.textAlign = 'left';
+              ctx.textBaseline = 'middle';
+              
+              const valueText = value.toFixed(1) + '%';
+              const textX = barX + 8;
+              const textY = barY;
+              
+              ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
+              const textWidth = ctx.measureText(valueText).width;
+              ctx.fillRect(textX - 4, textY - 10, textWidth + 8, 20);
+              
+              ctx.fillStyle = '#000000';
+              ctx.fillText(valueText, textX, textY);
+            });
+          });
+          
+          ctx.restore();
+        }
+      }]
     });
   }
 
@@ -2426,7 +2741,7 @@
     renderODTTop10Chart();
     renderLineStopMesinTop10Chart();
     renderLineStopNonMesinTop10Chart();
-    renderMinorStopTop10Chart();
+    renderMinorStopTop10Chart(); // ✅ SEKARANG MINOR STOP CHART BERFUNGSI!
   }
 
   function renderPackerPerformance() {
@@ -2467,14 +2782,14 @@
     }
     tbody.innerHTML = recs.slice(0,50).map(r => `
       <tr>
-        <td>${r.date || '-'}</td>
-        <td>${r.shift || '-'}</td>
-        <td>${r.product || '-'}</td>
-        <td><strong>${(parseFloat(r.oee_actual)||0).toFixed(1)}%</strong></td>
-        <td>${(parseFloat(r.oee_365)||0).toFixed(1)}%</td>
-        <td style="font-size: 12px; max-width: 150px;">${r.line_stop_mesin ? (r.line_stop_mesin.length > 30 ? r.line_stop_mesin.substring(0,30)+'...' : r.line_stop_mesin) : '-'}</td>
-        <td style="font-size: 12px; max-width: 150px;">${r.line_stop_non_mesin ? (r.line_stop_non_mesin.length > 30 ? r.line_stop_non_mesin.substring(0,30)+'...' : r.line_stop_non_mesin) : '-'}</td>
-        <td style="font-size: 12px; max-width: 150px;">${r.minor_stop ? (r.minor_stop.length > 30 ? r.minor_stop.substring(0,30)+'...' : r.minor_stop) : '-'}</td>
+        <td style="white-space: normal; word-break: break-word;">${r.date || '-'}</td>
+        <td style="white-space: normal; word-break: break-word;">${r.shift || '-'}</td>
+        <td style="white-space: normal; word-break: break-word;">${r.product || '-'}</td>
+        <td style="white-space: normal; word-break: break-word;"><strong>${(parseFloat(r.oee_actual)||0).toFixed(1)}%</strong></td>
+        <td style="white-space: normal; word-break: break-word;">${(parseFloat(r.oee_365)||0).toFixed(1)}%</td>
+        <td style="white-space: normal; word-break: break-word; max-width: 200px;">${r.line_stop_mesin ? (r.line_stop_mesin.length > 40 ? r.line_stop_mesin.substring(0,40)+'...' : r.line_stop_mesin) : '-'}</td>
+        <td style="white-space: normal; word-break: break-word; max-width: 200px;">${r.line_stop_non_mesin ? (r.line_stop_non_mesin.length > 40 ? r.line_stop_non_mesin.substring(0,40)+'...' : r.line_stop_non_mesin) : '-'}</td>
+        <td style="white-space: normal; word-break: break-word; max-width: 200px;">${r.minor_stop ? (r.minor_stop.length > 40 ? r.minor_stop.substring(0,40)+'...' : r.minor_stop) : '-'}</td>
       </tr>
     `).join('');
   }
