@@ -49,13 +49,14 @@
       min-height: 100vh;
     }
 
-    /* ==================== TYPOGRAPHY ==================== */
-    h1, h2, h3, h4, h5, h6, p, span, div, label, button, input, select, textarea, th, td {
-      text-transform: uppercase;
+    /* ==================== TYPOGRAPHY - SEMUA UPPERCASE ==================== */
+    h1, h2, h3, h4, h5, h6, p, span, div, label, button, input, select, textarea, th, td, option, .btn, .section-title, .chart-title, .score-label, .master-card-name, .master-card-detail, .empty-state-text, .toast, .warning-title, .warning-text, .login-title, .login-label, .login-error {
+      text-transform: uppercase !important;
     }
 
+    /* Placeholder styling */
     input::placeholder, textarea::placeholder {
-      text-transform: uppercase;
+      text-transform: uppercase !important;
       opacity: 0.7;
       font-size: 11px;
     }
@@ -1369,7 +1370,8 @@
     lineStopMesin: [],
     lineStopNonMesin: [],
     minorStop: [],
-    results: {}
+    results: {},
+    odtOverRecords: []
   };
 
   let dashboardCharts = {};
@@ -2187,7 +2189,8 @@
       lineStopMesin: [], 
       lineStopNonMesin: [], 
       minorStop: [], 
-      results: {}
+      results: {},
+      odtOverRecords: []
     };
     document.getElementById('packer-meter-list').innerHTML = '';
     document.getElementById('odt-list').innerHTML = '';
