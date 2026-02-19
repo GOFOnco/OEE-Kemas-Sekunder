@@ -1493,16 +1493,18 @@
     const totalLSM = oeeFormState.lineStopMesin.reduce((s, l) => s + (parseFloat(l.durasi) || 0), 0);
     const totalLSNM = oeeFormState.lineStopNonMesin.reduce((s, l) => s + (parseFloat(l.durasi) || 0), 0);
     
-    // Hitung total durasi SEMUA packer dari meter yang sudah ada
-    let totalExistingDuration = 0;
+    // Hitung total durasi PALING LAMA dari semua meter yang sudah ada
+    let totalMaxDuration = 0;
     oeeFormState.packerMeters.forEach(meter => {
+      let maxDurInMeter = 0;
       meter.packers.forEach(packer => {
-        totalExistingDuration += packer.duration || 0;
+        maxDurInMeter = Math.max(maxDurInMeter, packer.duration || 0);
       });
+      totalMaxDuration += maxDurInMeter;
     });
     
-    // Sisa waktu untuk meter baru = shift minutes - total downtime - total durasi existing
-    const remainingTime = Math.max(0, oeeFormState.shiftMinutes - totalODT - totalLSM - totalLSNM - totalExistingDuration);
+    // Sisa waktu untuk meter baru = shift minutes - total downtime - total durasi terlama meter sebelumnya
+    const remainingTime = Math.max(0, oeeFormState.shiftMinutes - totalODT - totalLSM - totalLSNM - totalMaxDuration);
     
     oeeFormState.packerMeters.push({
       id: 'meter_' + Date.now(),
@@ -1527,16 +1529,19 @@
     const totalLSNM = oeeFormState.lineStopNonMesin.reduce((s, l) => s + (parseFloat(l.durasi) || 0), 0);
     
     listDiv.innerHTML = oeeFormState.packerMeters.map((meter, index) => {
-      // Hitung total durasi semua packer dari meter-meter sebelumnya
-      let totalPreviousDuration = 0;
+      // Hitung total durasi PALING LAMA dari meter-meter sebelumnya
+      let totalMaxPreviousDuration = 0;
       for (let i = 0; i < index; i++) {
-        oeeFormState.packerMeters[i].packers.forEach(p => {
-          totalPreviousDuration += p.duration || 0;
+        const meterPrev = oeeFormState.packerMeters[i];
+        let maxDurInMeter = 0;
+        meterPrev.packers.forEach(p => {
+          maxDurInMeter = Math.max(maxDurInMeter, p.duration || 0);
         });
+        totalMaxPreviousDuration += maxDurInMeter;
       }
       
-      // Sisa waktu untuk meter ini = shift minutes - total downtime - total durasi meter sebelumnya
-      meter.remainingTime = Math.max(0, oeeFormState.shiftMinutes - totalODT - totalLSM - totalLSNM - totalPreviousDuration);
+      // Sisa waktu untuk meter ini = shift minutes - total downtime - total durasi terlama meter sebelumnya
+      meter.remainingTime = Math.max(0, oeeFormState.shiftMinutes - totalODT - totalLSM - totalLSNM - totalMaxPreviousDuration);
       
       return `
         <div class="card" data-meter-id="${meter.id}">
@@ -1691,11 +1696,17 @@
     const totalLSM = oeeFormState.lineStopMesin.reduce((s, l) => s + (parseFloat(l.durasi) || 0), 0);
     const totalLSNM = oeeFormState.lineStopNonMesin.reduce((s, l) => s + (parseFloat(l.durasi) || 0), 0);
     
-    // Hitung total durasi semua packer
-    let totalPackerDuration = 0;
-    oeeFormState.packerMeters.forEach(m => m.packers.forEach(p => totalPackerDuration += p.duration || 0));
+    // Hitung total durasi PALING LAMA dari setiap meter
+    let totalMaxDuration = 0;
+    oeeFormState.packerMeters.forEach(meter => {
+      let maxDurInMeter = 0;
+      meter.packers.forEach(p => {
+        maxDurInMeter = Math.max(maxDurInMeter, p.duration || 0);
+      });
+      totalMaxDuration += maxDurInMeter;
+    });
     
-    const totalUsedTime = totalODT + totalLSM + totalLSNM + totalPackerDuration;
+    const totalUsedTime = totalODT + totalLSM + totalLSNM + totalMaxDuration;
     
     if (totalUsedTime > oeeFormState.shiftMinutes && oeeFormState.shiftMinutes > 0) {
       warningDiv.innerHTML = `
@@ -1966,12 +1977,19 @@
 
   // ==================== CALCULATE OEE ====================
   function calculateOEE() {
-    let totalOutput = 0, totalReject = 0, totalPackerDuration = 0;
-    oeeFormState.packerMeters.forEach(m => m.packers.forEach(p => {
-      totalPackerDuration += p.duration || 0;
-      totalOutput += p.output || 0;
-      totalReject += p.reject || 0;
-    }));
+    let totalOutput = 0, totalReject = 0;
+    
+    // Hitung total durasi PALING LAMA dari setiap meter
+    let totalMaxDuration = 0;
+    oeeFormState.packerMeters.forEach(meter => {
+      let maxDurInMeter = 0;
+      meter.packers.forEach(p => {
+        maxDurInMeter = Math.max(maxDurInMeter, p.duration || 0);
+        totalOutput += p.output || 0;
+        totalReject += p.reject || 0;
+      });
+      totalMaxDuration += maxDurInMeter;
+    });
     
     const totalODT = oeeFormState.downtime.reduce((s, o) => s + (parseFloat(o.durasi) || 0), 0);
     const totalLSM = oeeFormState.lineStopMesin.reduce((s, l) => s + (parseFloat(l.durasi) || 0), 0);
@@ -2018,7 +2036,7 @@
       oee365: oee365.toFixed(1),
       totalOutput,
       totalReject,
-      totalPackerDuration,
+      totalMaxDuration,
       totalODT,
       totalLSM,
       totalLSNM,
@@ -2061,8 +2079,18 @@
     const totalODT = oeeFormState.downtime.reduce((s, o) => s + (parseFloat(o.durasi) || 0), 0);
     const totalLSM = oeeFormState.lineStopMesin.reduce((s, l) => s + (parseFloat(l.durasi) || 0), 0);
     const totalLSNM = oeeFormState.lineStopNonMesin.reduce((s, l) => s + (parseFloat(l.durasi) || 0), 0);
-    const totalPackerDuration = oeeFormState.packerMeters.flatMap(m => m.packers).reduce((s, p) => s + (p.duration || 0), 0);
-    const totalTime = totalODT + totalLSM + totalLSNM + totalPackerDuration;
+    
+    // Hitung total durasi PALING LAMA dari setiap meter
+    let totalMaxDuration = 0;
+    oeeFormState.packerMeters.forEach(meter => {
+      let maxDurInMeter = 0;
+      meter.packers.forEach(p => {
+        maxDurInMeter = Math.max(maxDurInMeter, p.duration || 0);
+      });
+      totalMaxDuration += maxDurInMeter;
+    });
+    
+    const totalTime = totalODT + totalLSM + totalLSNM + totalMaxDuration;
     
     if (totalTime > oeeFormState.shiftMinutes && oeeFormState.shiftMinutes > 0) {
       showToast(`⚠️ TOTAL WAKTU (${totalTime.toFixed(0)} MENIT) MELEBIHI DURASI SHIFT (${oeeFormState.shiftMinutes} MENIT)!`, 'error');
