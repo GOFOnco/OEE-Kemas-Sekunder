@@ -733,8 +733,8 @@
       to { transform: translateX(0); opacity: 1; }
     }
 
-    /* ==================== MODAL ==================== */
-    #modal-backdrop, #login-backdrop {
+    /* ==================== LOGIN MODAL ==================== */
+    #login-backdrop, #modal-backdrop {
       position: fixed;
       top: 0;
       left: 0;
@@ -744,7 +744,7 @@
       z-index: 9998;
     }
 
-    #modal, #login-modal {
+    #login-modal, #modal {
       position: fixed;
       top: 50%;
       left: 50%;
@@ -754,7 +754,7 @@
       padding: 24px;
       z-index: 9999;
       width: 90%;
-      max-width: 450px;
+      max-width: 400px;
       max-height: 90vh;
       overflow-y: auto;
       box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
@@ -797,6 +797,38 @@
     .login-buttons {
       display: flex;
       gap: 12px;
+    }
+
+    .user-info {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .user-badge {
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 20px;
+      padding: 6px 12px;
+      font-size: 12px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .logout-btn {
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      color: white;
+      padding: 6px 12px;
+      border-radius: var(--border-radius-sm);
+      cursor: pointer;
+      font-size: 11px;
+      font-weight: 600;
+    }
+
+    .logout-btn:hover {
+      background: rgba(255, 255, 255, 0.2);
     }
 
     /* ==================== DARK MODE ==================== */
@@ -999,19 +1031,22 @@
         <div class="header-datetime-time" id="current-time">00:00:00</div>
         <div id="current-date">TANGGAL</div>
       </div>
-      <button class="mode-toggle" onclick="toggleDarkMode()">
-        <span id="mode-icon">🌙</span>
-        <span id="mode-text">DARK</span>
-      </button>
+      <div style="display: flex; gap: 8px; align-items: center;">
+        <div id="user-info" style="display: none;" class="user-info">
+          <span class="user-badge" id="user-badge">👤 GUEST</span>
+          <button class="logout-btn" onclick="logout()">LOGOUT</button>
+        </div>
+        <button class="mode-toggle" onclick="toggleDarkMode()">
+          <span id="mode-icon">🌙</span>
+          <span id="mode-text">DARK</span>
+        </button>
+      </div>
     </div>
   </div>
 
   <!-- ==================== TABS ==================== -->
-  <div class="tabs-container">
-    <button class="tab-btn active" onclick="switchTab('dashboard')">📈 DASHBOARD</button>
-    <button class="tab-btn" onclick="switchTab('input')">✏️ INPUT OEE</button>
-    <button class="tab-btn" onclick="switchTab('master')">💾 MASTER DATA</button>
-    <button class="tab-btn" onclick="switchTab('audit')">⚙️ AUDIT TRAIL</button>
+  <div class="tabs-container" id="tabs-container">
+    <!-- Tabs will be dynamically rendered based on user role -->
   </div>
 
   <!-- ==================== CONTENT ==================== -->
@@ -1308,16 +1343,17 @@
 <!-- ==================== LOGIN MODAL ==================== -->
 <div id="login-backdrop" style="display: none;" onclick="if(event.target === this) closeLoginModal();"></div>
 <div id="login-modal" style="display: none;">
-  <h2 class="login-title">🔐 MASTER DATA ACCESS</h2>
+  <h2 class="login-title">🔐 LOGIN OEE SYSTEM</h2>
   <form onsubmit="handleLogin(event)">
     <div class="form-group">
-      <label class="login-label">PASSWORD</label>
-      <input type="password" id="login-password" class="login-input" placeholder="MASUKKAN PASSWORD" autocomplete="off">
+      <label class="login-label">USER ID / INISIAL</label>
+      <input type="text" id="login-userid" class="login-input" placeholder="MASUKKAN USER ID" autocomplete="off">
     </div>
-    <div id="login-error" class="login-error" style="display: none;">PASSWORD SALAH!</div>
-    <div class="login-buttons">
-      <button type="submit" class="btn btn-primary" style="flex: 1;">LOGIN</button>
-      <button type="button" class="btn btn-secondary" style="flex: 1;" onclick="closeLoginModal()">BATAL</button>
+    <div id="login-error" class="login-error" style="display: none;">USER ID TIDAK TERDAFTAR!</div>
+    <div class="login-buttons" style="flex-direction: column; gap: 8px;">
+      <button type="submit" class="btn btn-primary w-100">LOGIN</button>
+      <button type="button" class="btn btn-secondary w-100" onclick="handleGuestLogin()">MASUK SEBAGAI GUEST</button>
+      <button type="button" class="btn btn-secondary w-100" onclick="closeLoginModal()">BATAL</button>
     </div>
   </form>
 </div>
@@ -1347,9 +1383,9 @@
   let supabaseClient = null;
   if (window.supabase) supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-  // ==================== MASTER DATA ACCESS ====================
-  const MASTER_PASSWORD = 'admin123';
-  let isMasterDataUnlocked = false;
+  // ==================== AUTH CONFIG ====================
+  const ADMIN_INISIAL = 'ERW'; // Admin dengan akses penuh
+  let currentUser = null; // { id: 'USERID', role: 'packer' | 'admin' | 'guest' }
 
   // ==================== LOCAL DATA ====================
   let localData = {
@@ -1380,66 +1416,126 @@
   // ==================== INIT APP ====================
   async function initApp() {
     await loadDataFromSupabase();
-    loadOEEFormData();
-    renderMasterDataLists();
-    renderAuditTable();
-    initDashboardFilters();
-    updateDashboard();
-    switchTab('dashboard');
+    // Show login modal on startup
+    showLoginModal();
   }
 
-  // ==================== SWITCH TAB ====================
-  window.switchTab = function(tabName) {
-    document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
-    document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-    document.getElementById(tabName).classList.add('active');
-    document.querySelectorAll('.tab-btn').forEach(btn => {
-      if (btn.textContent.includes(tabName === 'dashboard' ? 'DASHBOARD' : 
-          tabName === 'input' ? 'INPUT OEE' : 
-          tabName === 'master' ? 'MASTER DATA' : 'AUDIT TRAIL')) {
-        btn.classList.add('active');
-      }
-    });
-    if (tabName !== 'master') isMasterDataUnlocked = false;
-    else if (!isMasterDataUnlocked) showLoginModal();
-    if (tabName === 'dashboard') setTimeout(() => renderCharts(), 100);
-  };
-
-  // ==================== LOGIN FUNCTIONS ====================
+  // ==================== AUTH FUNCTIONS ====================
   function showLoginModal() {
     document.getElementById('login-backdrop').style.display = 'block';
     document.getElementById('login-modal').style.display = 'block';
     document.getElementById('login-error').style.display = 'none';
-    document.getElementById('login-password').value = '';
-    document.getElementById('login-password').focus();
+    document.getElementById('login-userid').value = '';
+    document.getElementById('login-userid').focus();
   }
 
   function closeLoginModal() {
-    if (!isMasterDataUnlocked) switchTab('dashboard');
     document.getElementById('login-backdrop').style.display = 'none';
     document.getElementById('login-modal').style.display = 'none';
   }
 
   function handleLogin(event) {
     event.preventDefault();
-    if (document.getElementById('login-password').value === MASTER_PASSWORD) {
-      isMasterDataUnlocked = true;
-      closeLoginModal();
-      showToast('MASTER DATA ACCESS GRANTED ✅', 'success');
-      renderMasterDataLists();
-    } else {
+    const userId = document.getElementById('login-userid').value.trim().toUpperCase();
+    
+    if (!userId) {
       document.getElementById('login-error').style.display = 'block';
-      showToast('PASSWORD SALAH!', 'error');
+      document.getElementById('login-error').textContent = 'USER ID WAJIB DIISI!';
+      return;
     }
+
+    // Check if user is admin
+    if (userId === ADMIN_INISIAL) {
+      currentUser = { id: userId, role: 'admin' };
+      closeLoginModal();
+      showToast(`SELAMAT DATANG ADMIN ${userId} ✅`, 'success');
+      renderUIForUserRole();
+      return;
+    }
+
+    // Check if user is a registered packer
+    const packerExists = localData.packer.some(p => p.nama.toUpperCase() === userId);
+    if (packerExists) {
+      currentUser = { id: userId, role: 'packer' };
+      closeLoginModal();
+      showToast(`SELAMAT DATANG PACKER ${userId} ✅`, 'success');
+      renderUIForUserRole();
+      return;
+    }
+
+    // Invalid user
+    document.getElementById('login-error').style.display = 'block';
+    document.getElementById('login-error').textContent = 'USER ID TIDAK TERDAFTAR!';
+    showToast('USER ID TIDAK TERDAFTAR!', 'error');
   }
 
-  function checkMasterAccess() {
-    if (!isMasterDataUnlocked) {
-      showToast('AKSES MASTER DATA DITOLAK! LOGIN TERLEBIH DAHULU', 'error');
-      showLoginModal();
-      return false;
+  function handleGuestLogin() {
+    currentUser = { id: 'GUEST', role: 'guest' };
+    closeLoginModal();
+    showToast('SELAMAT DATANG GUEST 👤', 'success');
+    renderUIForUserRole();
+  }
+
+  function logout() {
+    currentUser = null;
+    document.getElementById('user-info').style.display = 'none';
+    showLoginModal();
+    // Hide all tabs except dashboard (will be hidden by renderUIForUserRole)
+    renderUIForUserRole();
+  }
+
+  function renderUIForUserRole() {
+    // Update user info display
+    if (currentUser) {
+      const userInfo = document.getElementById('user-info');
+      const userBadge = document.getElementById('user-badge');
+      userInfo.style.display = 'flex';
+      
+      let roleIcon = '👤';
+      if (currentUser.role === 'admin') roleIcon = '👑';
+      else if (currentUser.role === 'packer') roleIcon = '📦';
+      else roleIcon = '👤';
+      
+      userBadge.innerHTML = `${roleIcon} ${currentUser.id} (${currentUser.role.toUpperCase()})`;
+    } else {
+      document.getElementById('user-info').style.display = 'none';
     }
-    return true;
+
+    // Render tabs based on user role
+    renderTabs();
+    
+    // Switch to dashboard tab
+    switchTab('dashboard');
+  }
+
+  function renderTabs() {
+    const tabsContainer = document.getElementById('tabs-container');
+    let tabsHTML = '';
+    
+    if (currentUser) {
+      // Dashboard always visible for all roles
+      tabsHTML += '<button class="tab-btn active" onclick="switchTab(\'dashboard\')">📈 DASHBOARD</button>';
+      
+      // Input tab - visible for admin and packer
+      if (currentUser.role === 'admin' || currentUser.role === 'packer') {
+        tabsHTML += '<button class="tab-btn" onclick="switchTab(\'input\')">✏️ INPUT OEE</button>';
+      }
+      
+      // Master tab - visible only for admin
+      if (currentUser.role === 'admin') {
+        tabsHTML += '<button class="tab-btn" onclick="switchTab(\'master\')">💾 MASTER DATA</button>';
+      }
+      
+      // Audit trail - visible for admin and guest
+      if (currentUser.role === 'admin' || currentUser.role === 'guest') {
+        tabsHTML += '<button class="tab-btn" onclick="switchTab(\'audit\')">⚙️ AUDIT TRAIL</button>';
+      }
+    }
+    
+    tabsContainer.innerHTML = tabsHTML;
+    
+    // Hide all tab contents initially
+    document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
   }
 
   // ==================== LOAD DATA FROM SUPABASE ====================
@@ -1470,6 +1566,34 @@
       showToast('ERROR LOADING DATA FROM SUPABASE', 'error');
     }
   }
+
+  // ==================== SWITCH TAB ====================
+  window.switchTab = function(tabName) {
+    document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+    document.getElementById(tabName).classList.add('active');
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+      if (btn.textContent.includes(tabName === 'dashboard' ? 'DASHBOARD' : 
+          tabName === 'input' ? 'INPUT OEE' : 
+          tabName === 'master' ? 'MASTER DATA' : 'AUDIT TRAIL')) {
+        btn.classList.add('active');
+      }
+    });
+    if (tabName === 'dashboard') {
+      populateFilterOptions();
+      applyDashboardFilters();
+      setTimeout(() => renderCharts(), 100);
+    }
+    if (tabName === 'master' && currentUser?.role === 'admin') {
+      renderMasterDataLists();
+    }
+    if (tabName === 'audit') {
+      renderAuditTable();
+    }
+    if (tabName === 'input' && (currentUser?.role === 'admin' || currentUser?.role === 'packer')) {
+      loadOEEFormData();
+    }
+  };
 
   // ==================== SHIFT ====================
   function updateShiftMinutes() {
@@ -2169,7 +2293,7 @@
       
       console.log('✅ Record saved with details:', newRecord);
       
-      await addAuditLog('INPUT OEE', `${produkBatch} - PACKER: ${allPackerNames} | LSM: ${lsmDetails.length} | LSNM: ${lsnmDetails.length} | MS: ${minorStopDetails.length}`);
+      await addAuditLog('INPUT OEE', `${produkBatch} - PACKER: ${allPackerNames} | LSM: ${lsmDetails.length} | LSNM: ${lsnmDetails.length} | MS: ${minorStopDetails.length} - USER: ${currentUser?.id}`);
       showToast('DATA OEE BERHASIL DISIMPAN ✅', 'success');
       resetOEEForm();
       updateDashboard();
@@ -2900,9 +3024,6 @@
   let currentModalAction = null, currentEditId = null;
 
   function openModal(title, fields, onSubmit) {
-    if (title.includes('PRODUK') || title.includes('PACKER') || title.includes('ODT') || title.includes('LINE STOP') || title.includes('MINOR STOP')) {
-      if (!checkMasterAccess()) return;
-    }
     document.getElementById('modal-title').textContent = title;
     document.getElementById('modal-fields').innerHTML = fields.map(f => `
       <div class="form-group" style="margin-bottom: 16px;">
@@ -2944,7 +3065,7 @@
         await supabaseClient.from('produk').insert([{ nama: v.nama.trim(), target: parseFloat(v.target) || 0 }]);
         await loadDataFromSupabase();
         renderProductList();
-        await addAuditLog('CREATE PRODUCT', v.nama);
+        await addAuditLog('CREATE PRODUCT', `${v.nama} - USER: ${currentUser?.id}`);
         showToast('PRODUK BERHASIL DITAMBAHKAN ✅', 'success');
       } catch (e) { showToast('GAGAL MENAMBAHKAN PRODUK', 'error'); }
     });
@@ -2963,7 +3084,7 @@
         await supabaseClient.from('produk').update({ nama: v.nama.trim(), target: parseFloat(v.target) || 0 }).eq('id', currentEditId);
         await loadDataFromSupabase();
         renderProductList();
-        await addAuditLog('UPDATE PRODUCT', v.nama);
+        await addAuditLog('UPDATE PRODUCT', `${v.nama} - USER: ${currentUser?.id}`);
         showToast('PRODUK BERHASIL DIPERBARUI ✅', 'success');
       } catch (e) { showToast('GAGAL MEMPERBARUI PRODUK', 'error'); }
     });
@@ -2976,7 +3097,7 @@
         await supabaseClient.from('packer').insert([{ nama: v.nama.trim() }]);
         await loadDataFromSupabase();
         renderPackerList();
-        await addAuditLog('CREATE PACKER', v.nama);
+        await addAuditLog('CREATE PACKER', `${v.nama} - USER: ${currentUser?.id}`);
         showToast('PACKER BERHASIL DITAMBAHKAN ✅', 'success');
       } catch (e) { showToast('GAGAL MENAMBAHKAN PACKER', 'error'); }
     });
@@ -2992,7 +3113,7 @@
         await supabaseClient.from('packer').update({ nama: v.nama.trim() }).eq('id', currentEditId);
         await loadDataFromSupabase();
         renderPackerList();
-        await addAuditLog('UPDATE PACKER', v.nama);
+        await addAuditLog('UPDATE PACKER', `${v.nama} - USER: ${currentUser?.id}`);
         showToast('PACKER BERHASIL DIPERBARUI ✅', 'success');
       } catch (e) { showToast('GAGAL MEMPERBARUI PACKER', 'error'); }
     });
@@ -3008,7 +3129,7 @@
         await supabaseClient.from('downtime').insert([{ nama: v.nama.trim(), waktu_standard: parseFloat(v.waktu_standard) || 0 }]);
         await loadDataFromSupabase();
         renderODTList_Master();
-        await addAuditLog('CREATE ODT', v.nama);
+        await addAuditLog('CREATE ODT', `${v.nama} - STD: ${v.waktu_standard} MENIT - USER: ${currentUser?.id}`);
         showToast('ODT BERHASIL DITAMBAHKAN ✅', 'success');
       } catch (e) { showToast('GAGAL MENAMBAHKAN ODT', 'error'); }
     });
@@ -3027,7 +3148,7 @@
         await supabaseClient.from('downtime').update({ nama: v.nama.trim(), waktu_standard: parseFloat(v.waktu_standard) || 0 }).eq('id', currentEditId);
         await loadDataFromSupabase();
         renderODTList_Master();
-        await addAuditLog('UPDATE ODT', v.nama);
+        await addAuditLog('UPDATE ODT', `${v.nama} - STD: ${v.waktu_standard} MENIT - USER: ${currentUser?.id}`);
         showToast('ODT BERHASIL DIPERBARUI ✅', 'success');
       } catch (e) { showToast('GAGAL MEMPERBARUI ODT', 'error'); }
     });
@@ -3040,7 +3161,7 @@
         await supabaseClient.from('line_stop_mesin').insert([{ nama: v.nama.trim() }]);
         await loadDataFromSupabase();
         renderLineStopMesinMaster();
-        await addAuditLog('CREATE LINE STOP MESIN', v.nama);
+        await addAuditLog('CREATE LINE STOP MESIN', `${v.nama} - USER: ${currentUser?.id}`);
         showToast('LINE STOP MESIN BERHASIL DITAMBAHKAN ✅', 'success');
       } catch (e) { showToast('GAGAL MENAMBAHKAN LINE STOP MESIN', 'error'); }
     });
@@ -3056,7 +3177,7 @@
         await supabaseClient.from('line_stop_mesin').update({ nama: v.nama.trim() }).eq('id', currentEditId);
         await loadDataFromSupabase();
         renderLineStopMesinMaster();
-        await addAuditLog('UPDATE LINE STOP MESIN', v.nama);
+        await addAuditLog('UPDATE LINE STOP MESIN', `${v.nama} - USER: ${currentUser?.id}`);
         showToast('LINE STOP MESIN BERHASIL DIPERBARUI ✅', 'success');
       } catch (e) { showToast('GAGAL MEMPERBARUI LINE STOP MESIN', 'error'); }
     });
@@ -3069,7 +3190,7 @@
         await supabaseClient.from('line_stop_non_mesin').insert([{ nama: v.nama.trim() }]);
         await loadDataFromSupabase();
         renderLineStopNonMesinMaster();
-        await addAuditLog('CREATE LINE STOP NON-MESIN', v.nama);
+        await addAuditLog('CREATE LINE STOP NON-MESIN', `${v.nama} - USER: ${currentUser?.id}`);
         showToast('LINE STOP NON-MESIN BERHASIL DITAMBAHKAN ✅', 'success');
       } catch (e) { showToast('GAGAL MENAMBAHKAN LINE STOP NON-MESIN', 'error'); }
     });
@@ -3085,7 +3206,7 @@
         await supabaseClient.from('line_stop_non_mesin').update({ nama: v.nama.trim() }).eq('id', currentEditId);
         await loadDataFromSupabase();
         renderLineStopNonMesinMaster();
-        await addAuditLog('UPDATE LINE STOP NON-MESIN', v.nama);
+        await addAuditLog('UPDATE LINE STOP NON-MESIN', `${v.nama} - USER: ${currentUser?.id}`);
         showToast('LINE STOP NON-MESIN BERHASIL DIPERBARUI ✅', 'success');
       } catch (e) { showToast('GAGAL MEMPERBARUI LINE STOP NON-MESIN', 'error'); }
     });
@@ -3098,7 +3219,7 @@
         await supabaseClient.from('minor_stop').insert([{ nama: v.nama.trim() }]);
         await loadDataFromSupabase();
         renderMinorStopMaster();
-        await addAuditLog('CREATE MINOR STOP', v.nama);
+        await addAuditLog('CREATE MINOR STOP', `${v.nama} - USER: ${currentUser?.id}`);
         showToast('MINOR STOP BERHASIL DITAMBAHKAN ✅', 'success');
       } catch (e) { showToast('GAGAL MENAMBAHKAN MINOR STOP', 'error'); }
     });
@@ -3114,7 +3235,7 @@
         await supabaseClient.from('minor_stop').update({ nama: v.nama.trim() }).eq('id', currentEditId);
         await loadDataFromSupabase();
         renderMinorStopMaster();
-        await addAuditLog('UPDATE MINOR STOP', v.nama);
+        await addAuditLog('UPDATE MINOR STOP', `${v.nama} - USER: ${currentUser?.id}`);
         showToast('MINOR STOP BERHASIL DIPERBARUI ✅', 'success');
       } catch (e) { showToast('GAGAL MEMPERBARUI MINOR STOP', 'error'); }
     });
@@ -3122,73 +3243,66 @@
 
   // ==================== DELETE FUNCTIONS ====================
   async function deleteProduct(id) { 
-    if (!checkMasterAccess()) return; 
     try { 
       await supabaseClient.from('produk').delete().eq('id',id); 
       await loadDataFromSupabase(); 
       renderProductList(); 
-      await addAuditLog('DELETE PRODUCT','PRODUK DIHAPUS'); 
+      await addAuditLog('DELETE PRODUCT', `PRODUK ID: ${id} DIHAPUS - USER: ${currentUser?.id}`); 
       showToast('PRODUK BERHASIL DIHAPUS','success'); 
     } catch(e){ showToast('GAGAL MENGHAPUS PRODUK','error'); } 
   }
   
   async function deletePacker(id) { 
-    if (!checkMasterAccess()) return; 
     try { 
       await supabaseClient.from('packer').delete().eq('id',id); 
       await loadDataFromSupabase(); 
       renderPackerList(); 
-      await addAuditLog('DELETE PACKER','PACKER DIHAPUS'); 
+      await addAuditLog('DELETE PACKER', `PACKER ID: ${id} DIHAPUS - USER: ${currentUser?.id}`); 
       showToast('PACKER BERHASIL DIHAPUS','success'); 
     } catch(e){ showToast('GAGAL MENGHAPUS PACKER','error'); } 
   }
   
   async function deleteODT(id) { 
-    if (!checkMasterAccess()) return; 
     try { 
       await supabaseClient.from('downtime').delete().eq('id',id); 
       await loadDataFromSupabase(); 
       renderODTList_Master(); 
-      await addAuditLog('DELETE ODT','ODT DIHAPUS'); 
+      await addAuditLog('DELETE ODT', `ODT ID: ${id} DIHAPUS - USER: ${currentUser?.id}`); 
       showToast('ODT BERHASIL DIHAPUS','success'); 
     } catch(e){ showToast('GAGAL MENGHAPUS ODT','error'); } 
   }
   
   async function deleteLineStopMesin(id) { 
-    if (!checkMasterAccess()) return; 
     try { 
       await supabaseClient.from('line_stop_mesin').delete().eq('id',id); 
       await loadDataFromSupabase(); 
       renderLineStopMesinMaster(); 
-      await addAuditLog('DELETE LINE STOP MESIN','LINE STOP DIHAPUS'); 
+      await addAuditLog('DELETE LINE STOP MESIN', `LINE STOP ID: ${id} DIHAPUS - USER: ${currentUser?.id}`); 
       showToast('LINE STOP MESIN BERHASIL DIHAPUS','success'); 
     } catch(e){ showToast('GAGAL MENGHAPUS LINE STOP MESIN','error'); } 
   }
   
   async function deleteLineStopNonMesin(id) { 
-    if (!checkMasterAccess()) return; 
     try { 
       await supabaseClient.from('line_stop_non_mesin').delete().eq('id',id); 
       await loadDataFromSupabase(); 
       renderLineStopNonMesinMaster(); 
-      await addAuditLog('DELETE LINE STOP NON-MESIN','LINE STOP DIHAPUS'); 
+      await addAuditLog('DELETE LINE STOP NON-MESIN', `LINE STOP ID: ${id} DIHAPUS - USER: ${currentUser?.id}`); 
       showToast('LINE STOP NON-MESIN BERHASIL DIHAPUS','success'); 
     } catch(e){ showToast('GAGAL MENGHAPUS LINE STOP NON-MESIN','error'); } 
   }
   
   async function deleteMinorStop(id) { 
-    if (!checkMasterAccess()) return; 
     try { 
       await supabaseClient.from('minor_stop').delete().eq('id',id); 
       await loadDataFromSupabase(); 
       renderMinorStopMaster(); 
-      await addAuditLog('DELETE MINOR STOP','MINOR STOP DIHAPUS'); 
+      await addAuditLog('DELETE MINOR STOP', `MINOR STOP ID: ${id} DIHAPUS - USER: ${currentUser?.id}`); 
       showToast('MINOR STOP BERHASIL DIHAPUS','success'); 
     } catch(e){ showToast('GAGAL MENGHAPUS MINOR STOP','error'); } 
   }
 
   function showDeleteConfirm(id, type, nama) {
-    if (!checkMasterAccess()) return;
     const box = document.createElement('div');
     box.style.cssText = 'position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:white;border-radius:16px;padding:32px;z-index:10000;box-shadow:0 20px 60px rgba(0,0,0,0.3);min-width:350px;';
     box.innerHTML = `
