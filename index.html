@@ -446,10 +446,10 @@
       align-items: end;
     }
 
-    /* ==================== DOWNTIME ROWS - DENGAN FREKUENSI ==================== */
+    /* ==================== DOWNTIME ROWS ==================== */
     .downtime-row {
       display: grid;
-      grid-template-columns: 2fr 0.5fr 1fr; /* FREKUENSI DITAMBAHKAN */
+      grid-template-columns: 2fr 0.5fr 1fr;
       gap: 12px;
       padding: 12px;
       background: #f0f9ff;
@@ -904,7 +904,7 @@
       }
 
       .downtime-row {
-        grid-template-columns: 1fr; /* RESPONSIVE UNTUK FREKUENSI */
+        grid-template-columns: 1fr;
       }
       
       .lsm-row,
@@ -1022,7 +1022,7 @@
     <div id="dashboard" class="tab-content active">
       <div class="form-section">
         <div class="section-title">FILTER DATA</div>
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px;">
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px;">
           <div class="form-group">
             <label>TANGGAL MULAI</label>
             <input type="date" id="filter-date-start" class="input-field" onchange="applyDashboardFilters()">
@@ -1030,6 +1030,17 @@
           <div class="form-group">
             <label>TANGGAL AKHIR</label>
             <input type="date" id="filter-date-end" class="input-field" onchange="applyDashboardFilters()">
+          </div>
+          <div class="form-group">
+            <label>SHIFT</label> <!-- FILTER SHIFT BARU -->
+            <select id="filter-shift" class="input-field" onchange="applyDashboardFilters()">
+              <option value="">-- SEMUA SHIFT --</option>
+              <option value="Shift 1">SHIFT 1</option>
+              <option value="Shift 2">SHIFT 2</option>
+              <option value="Shift 3">SHIFT 3</option>
+              <option value="Longshift Pagi">LONGSHIFT PAGI</option>
+              <option value="Longshift Malam">LONGSHIFT MALAM</option>
+            </select>
           </div>
           <div class="form-group">
             <label>PRODUK</label>
@@ -1217,7 +1228,7 @@
           </div>
         </div>
 
-        <!-- OPERATIONAL DOWNTIME (ODT) - DENGAN FREKUENSI -->
+        <!-- OPERATIONAL DOWNTIME (ODT) -->
         <div class="form-section">
           <div class="section-title">OPERATIONAL DOWNTIME (ODT)</div>
           <div id="odt-list"></div>
@@ -1543,7 +1554,6 @@
       return;
     }
     
-    // HITUNG TOTAL DOWNTIME (ODT TOTAL = FREKUENSI × DURASI)
     const totalODT = oeeFormState.downtime.reduce((s, o) => s + ((parseFloat(o.frekuensi) || 1) * (parseFloat(o.durasi) || 0)), 0);
     const totalLSM = oeeFormState.lineStopMesin.reduce((s, l) => s + (parseFloat(l.durasi) || 0), 0);
     const totalLSNM = oeeFormState.lineStopNonMesin.reduce((s, l) => s + (parseFloat(l.durasi) || 0), 0);
@@ -1577,13 +1587,11 @@
       return;
     }
     
-    // HITUNG TOTAL ODT DENGAN FREKUENSI
     const totalODT = oeeFormState.downtime.reduce((s, o) => s + ((parseFloat(o.frekuensi) || 1) * (parseFloat(o.durasi) || 0)), 0);
     const totalLSM = oeeFormState.lineStopMesin.reduce((s, l) => s + (parseFloat(l.durasi) || 0), 0);
     const totalLSNM = oeeFormState.lineStopNonMesin.reduce((s, l) => s + (parseFloat(l.durasi) || 0), 0);
     
     listDiv.innerHTML = oeeFormState.packerMeters.map((meter, index) => {
-      // HITUNG TOTAL DURASI PALING LAMA DARI METER-METER SEBELUMNYA
       let totalMaxPreviousDuration = 0;
       for (let i = 0; i < index; i++) {
         const meterPrev = oeeFormState.packerMeters[i];
@@ -1746,7 +1754,6 @@
     const warningDiv = document.getElementById('availability-warning');
     if (!warningDiv) return;
     
-    // HITUNG TOTAL ODT DENGAN FREKUENSI
     const totalODT = oeeFormState.downtime.reduce((s, o) => s + ((parseFloat(o.frekuensi) || 1) * (parseFloat(o.durasi) || 0)), 0);
     const totalLSM = oeeFormState.lineStopMesin.reduce((s, l) => s + (parseFloat(l.durasi) || 0), 0);
     const totalLSNM = oeeFormState.lineStopNonMesin.reduce((s, l) => s + (parseFloat(l.durasi) || 0), 0);
@@ -1773,7 +1780,7 @@
     } else warningDiv.style.display = 'none';
   }
 
-  // ==================== ODT - DENGAN FREKUENSI ====================
+  // ==================== ODT ====================
   function renderODTList() {
     const listDiv = document.getElementById('odt-list');
     if (localData.downtime.length === 0) {
@@ -1785,12 +1792,11 @@
         id: d.id, 
         nama: d.nama, 
         waktu_standard: d.waktu_standard, 
-        frekuensi: 1, // DEFAULT FREKUENSI = 1
+        frekuensi: 1,
         durasi: 0 
       }));
     }
     listDiv.innerHTML = oeeFormState.downtime.map(odt => {
-      // HITUNG TOTAL DURASI = FREKUENSI × DURASI
       const totalDurasi = (parseFloat(odt.frekuensi) || 1) * (parseFloat(odt.durasi) || 0);
       return `
         <div class="downtime-row">
@@ -1814,7 +1820,7 @@
     if (odt) {
       odt.frekuensi = parseInt(frekuensi) || 1;
       if (odt.frekuensi < 1) odt.frekuensi = 1;
-      renderODTList(); // RE-RENDER UNTUK UPDATE TOTAL DURASI
+      renderODTList();
       calculateOEE();
     }
   }
@@ -1827,25 +1833,19 @@
     const standar = odt.waktu_standard;
     const frekuensi = odt.frekuensi || 1;
     
-    // HITUNG SELISIH PER KEJADIAN, LALU KALIKAN DENGAN FREKUENSI
     const selisihPerKejadian = Math.max(0, actualDurasi - standar);
     const totalSelisih = selisihPerKejadian * frekuensi;
     
-    // ODT TETAP MENGGUNAKAN DURASI PER KEJADIAN (TIDAK DIKALI FREKUENSI UNTUK INPUT)
     odt.durasi = actualDurasi;
     
-    // NAMA ODT OVER
     const odtOverName = `ODT OVER ${odt.nama}`;
     
-    // CARI APAKAH SUDAH ADA LSNM DENGAN NAMA TERSEBUT
     const existingIndex = oeeFormState.lineStopNonMesin.findIndex(l => l.nama === odtOverName);
     
     if (totalSelisih > 0) {
       if (existingIndex >= 0) {
-        // UPDATE LSNM YANG SUDAH ADA DENGAN TOTAL SELISIH
         oeeFormState.lineStopNonMesin[existingIndex].durasi = totalSelisih;
       } else {
-        // BUAT LSNM BARU
         oeeFormState.lineStopNonMesin.push({
           id: `lsnm_odtover_${odt.id}_${Date.now()}`,
           nama: odtOverName,
@@ -1855,12 +1855,11 @@
         });
       }
     } else {
-      // HAPUS LSNM YANG TERKAIT JIKA TIDAK ADA SELISIH
       oeeFormState.lineStopNonMesin = oeeFormState.lineStopNonMesin.filter(l => l.nama !== odtOverName);
     }
     
     renderLineStopNonMesinList();
-    renderODTList(); // RE-RENDER UNTUK UPDATE TOTAL DURASI
+    renderODTList();
     renderPackerMeterList();
     calculateOEE();
   }
@@ -2059,7 +2058,6 @@
       totalMaxDuration += maxDurInMeter;
     });
     
-    // HITUNG TOTAL ODT DENGAN FREKUENSI
     const totalODT = oeeFormState.downtime.reduce((s, o) => s + ((parseFloat(o.frekuensi) || 1) * (parseFloat(o.durasi) || 0)), 0);
     const totalLSM = oeeFormState.lineStopMesin.reduce((s, l) => s + (parseFloat(l.durasi) || 0), 0);
     const totalLSNM = oeeFormState.lineStopNonMesin.reduce((s, l) => s + (parseFloat(l.durasi) || 0), 0);
@@ -2165,7 +2163,6 @@
       return;
     }
 
-    // HITUNG TOTAL ODT DENGAN FREKUENSI
     const totalODT = oeeFormState.downtime.reduce((s, o) => s + ((parseFloat(o.frekuensi) || 1) * (parseFloat(o.durasi) || 0)), 0);
     const totalLSM = oeeFormState.lineStopMesin.reduce((s, l) => s + (parseFloat(l.durasi) || 0), 0);
     const totalLSNM = oeeFormState.lineStopNonMesin.reduce((s, l) => s + (parseFloat(l.durasi) || 0), 0);
@@ -2216,7 +2213,6 @@
         durasi: parseFloat(ms.durasi)
       }));
 
-    // SIMPAN JUGA DATA ODT DENGAN FREKUENSI UNTUK KEPERLUAN DETAIL
     const odtDetails = oeeFormState.downtime
       .filter(odt => parseFloat(odt.durasi) > 0)
       .map(odt => ({
@@ -2246,7 +2242,7 @@
       line_stop_mesin: lsmString || null,
       line_stop_non_mesin: lsnmString || null,
       minor_stop: msString || null,
-      operational_downtime: odtString || null, // SIMPAN DETAIL ODT
+      operational_downtime: odtString || null,
       notes: notes || null
     };
 
@@ -2328,6 +2324,7 @@
       opt.textContent = p.nama;
       productSelect.appendChild(opt);
     });
+    
     const packerSelect = document.getElementById('filter-packer');
     packerSelect.querySelectorAll('option:not(:first-child)').forEach(o => o.remove());
     localData.packer.forEach(p => {
@@ -2336,16 +2333,21 @@
       opt.textContent = p.nama;
       packerSelect.appendChild(opt);
     });
+    
+    // SHIFT FILTER SUDAH MANUAL DI HTML, TIDAK PERLU POPULATE DARI DATABASE
   }
 
   function applyDashboardFilters() {
     const ds = document.getElementById('filter-date-start').value;
     const de = document.getElementById('filter-date-end').value;
+    const shift = document.getElementById('filter-shift').value; // AMBIL FILTER SHIFT
     const sp = document.getElementById('filter-product').value;
     const spk = document.getElementById('filter-packer').value;
+    
     filteredOeeRecords = localData.oee_records.filter(r => {
       if (ds && r.date < ds) return false;
       if (de && r.date > de) return false;
+      if (shift && r.shift !== shift) return false; // FILTER SHIFT
       if (sp && !r.product?.includes(sp)) return false;
       if (spk && !r.packers?.includes(spk)) return false;
       return true;
@@ -2356,6 +2358,7 @@
   function resetDashboardFilters() {
     document.getElementById('filter-date-start').value = '';
     document.getElementById('filter-date-end').value = '';
+    document.getElementById('filter-shift').value = ''; // RESET SHIFT
     document.getElementById('filter-product').value = '';
     document.getElementById('filter-packer').value = '';
     filteredOeeRecords = [...localData.oee_records];
