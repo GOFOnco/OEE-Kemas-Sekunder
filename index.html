@@ -54,6 +54,7 @@
       text-transform: uppercase !important;
     }
 
+    /* Placeholder styling */
     input::placeholder, textarea::placeholder {
       text-transform: uppercase !important;
       opacity: 0.7;
@@ -449,7 +450,7 @@
     /* ==================== DOWNTIME ROWS ==================== */
     .downtime-row {
       display: grid;
-      grid-template-columns: 2fr 0.5fr 1fr;
+      grid-template-columns: 2fr 1fr;
       gap: 12px;
       padding: 12px;
       background: #f0f9ff;
@@ -903,10 +904,7 @@
         grid-template-columns: 1fr;
       }
 
-      .downtime-row {
-        grid-template-columns: 1fr;
-      }
-      
+      .downtime-row,
       .lsm-row,
       .lsnm-row,
       .ms-row {
@@ -1022,7 +1020,7 @@
     <div id="dashboard" class="tab-content active">
       <div class="form-section">
         <div class="section-title">FILTER DATA</div>
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px;">
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px;">
           <div class="form-group">
             <label>TANGGAL MULAI</label>
             <input type="date" id="filter-date-start" class="input-field" onchange="applyDashboardFilters()">
@@ -1030,17 +1028,6 @@
           <div class="form-group">
             <label>TANGGAL AKHIR</label>
             <input type="date" id="filter-date-end" class="input-field" onchange="applyDashboardFilters()">
-          </div>
-          <div class="form-group">
-            <label>SHIFT</label> <!-- FILTER SHIFT BARU -->
-            <select id="filter-shift" class="input-field" onchange="applyDashboardFilters()">
-              <option value="">-- SEMUA SHIFT --</option>
-              <option value="Shift 1">SHIFT 1</option>
-              <option value="Shift 2">SHIFT 2</option>
-              <option value="Shift 3">SHIFT 3</option>
-              <option value="Longshift Pagi">LONGSHIFT PAGI</option>
-              <option value="Longshift Malam">LONGSHIFT MALAM</option>
-            </select>
           </div>
           <div class="form-group">
             <label>PRODUK</label>
@@ -1130,8 +1117,7 @@
                 <th>NO</th>
                 <th>PACKER</th>
                 <th>AVG OEE ACTUAL</th>
-                <th>TARGET OUTPUT</th>
-                <th>OUTPUT ACTUAL</th>
+                <th>TOTAL OUTPUT</th>
                 <th>RECORDS</th>
               </tr>
             </thead>
@@ -1149,55 +1135,15 @@
               <tr>
                 <th>TANGGAL</th>
                 <th>SHIFT</th>
-                <th>PACKER</th>
                 <th>NOMOR BATCH</th>
                 <th>OEE ACTUAL</th>
                 <th>OEE 365</th>
-                <th>NOTES</th>
+                <th>LINE STOP MESIN</th>
+                <th>LINE STOP NON-MESIN</th>
+                <th>MINOR STOP</th>
               </tr>
             </thead>
             <tbody id="table-oee-history"></tbody>
-          </table>
-        </div>
-      </div>
-
-      <!-- LINE STOP MESIN DETAIL -->
-      <div class="form-section">
-        <div class="section-title">DETAIL LINE STOP MESIN</div>
-        <div class="table-wrapper">
-          <table>
-            <thead>
-              <tr>
-                <th>TANGGAL</th>
-                <th>SHIFT</th>
-                <th>PACKER</th>
-                <th>LINE STOP MESIN</th>
-                <th>DURASI (MENIT)</th>
-                <th>NO WR</th>
-                <th>ACTION</th>
-              </tr>
-            </thead>
-            <tbody id="table-lsm-detail"></tbody>
-          </table>
-        </div>
-      </div>
-
-      <!-- LINE STOP NON-MESIN DETAIL -->
-      <div class="form-section">
-        <div class="section-title">DETAIL LINE STOP NON-MESIN</div>
-        <div class="table-wrapper">
-          <table>
-            <thead>
-              <tr>
-                <th>TANGGAL</th>
-                <th>SHIFT</th>
-                <th>PACKER</th>
-                <th>LINE STOP NON-MESIN</th>
-                <th>DURASI (MENIT)</th>
-                <th>ACTION</th>
-              </tr>
-            </thead>
-            <tbody id="table-lsnm-detail"></tbody>
           </table>
         </div>
       </div>
@@ -1260,18 +1206,9 @@
           <div id="packer-meter-list" class="mt-16"></div>
         </div>
 
-        <!-- NOTES -->
-        <div class="form-section">
-          <div class="section-title">NOTES</div>
-          <div class="form-group">
-            <textarea id="oee-notes" rows="3" placeholder="TAMBAHKAN CATATAN (OPSIONAL)"></textarea>
-          </div>
-        </div>
-
         <!-- HASIL PERHITUNGAN OEE -->
         <div class="form-section">
           <div id="availability-warning" style="display: none;"></div>
-          <div id="oee-over100-warning" style="display: none;" class="warning-box"></div>
           <div class="section-title">HASIL PERHITUNGAN OEE</div>
           <div class="score-cards">
             <div class="score-card">
@@ -1307,7 +1244,7 @@
 
         <!-- ACTION BUTTONS -->
         <div class="form-section" style="display: flex; gap: 12px; flex-wrap: wrap;">
-          <button type="submit" class="btn btn-primary" style="flex: 1;" id="submit-oee-btn">💾 SIMPAN DATA OEE</button>
+          <button type="submit" class="btn btn-primary" style="flex: 1;">💾 SIMPAN DATA OEE</button>
           <button type="button" class="btn btn-secondary" style="flex: 1;" onclick="resetOEEForm()">🔄 RESET FORM</button>
         </div>
       </form>
@@ -1434,8 +1371,7 @@
     lineStopNonMesin: [],
     minorStop: [],
     results: {},
-    odtOverRecords: [],
-    notes: ''
+    odtOverRecords: []
   };
 
   let dashboardCharts = {};
@@ -1554,10 +1490,12 @@
       return;
     }
     
-    const totalODT = oeeFormState.downtime.reduce((s, o) => s + ((parseFloat(o.frekuensi) || 1) * (parseFloat(o.durasi) || 0)), 0);
+    // Hitung total downtime
+    const totalODT = oeeFormState.downtime.reduce((s, o) => s + (parseFloat(o.durasi) || 0), 0);
     const totalLSM = oeeFormState.lineStopMesin.reduce((s, l) => s + (parseFloat(l.durasi) || 0), 0);
     const totalLSNM = oeeFormState.lineStopNonMesin.reduce((s, l) => s + (parseFloat(l.durasi) || 0), 0);
     
+    // Hitung total durasi PALING LAMA dari semua meter yang sudah ada
     let totalMaxDuration = 0;
     oeeFormState.packerMeters.forEach(meter => {
       let maxDurInMeter = 0;
@@ -1567,6 +1505,7 @@
       totalMaxDuration += maxDurInMeter;
     });
     
+    // Sisa waktu untuk meter baru = shift minutes - total downtime - total durasi terlama meter sebelumnya
     const remainingTime = Math.max(0, oeeFormState.shiftMinutes - totalODT - totalLSM - totalLSNM - totalMaxDuration);
     
     oeeFormState.packerMeters.push({
@@ -1587,11 +1526,12 @@
       return;
     }
     
-    const totalODT = oeeFormState.downtime.reduce((s, o) => s + ((parseFloat(o.frekuensi) || 1) * (parseFloat(o.durasi) || 0)), 0);
+    const totalODT = oeeFormState.downtime.reduce((s, o) => s + (parseFloat(o.durasi) || 0), 0);
     const totalLSM = oeeFormState.lineStopMesin.reduce((s, l) => s + (parseFloat(l.durasi) || 0), 0);
     const totalLSNM = oeeFormState.lineStopNonMesin.reduce((s, l) => s + (parseFloat(l.durasi) || 0), 0);
     
     listDiv.innerHTML = oeeFormState.packerMeters.map((meter, index) => {
+      // Hitung total durasi PALING LAMA dari meter-meter sebelumnya
       let totalMaxPreviousDuration = 0;
       for (let i = 0; i < index; i++) {
         const meterPrev = oeeFormState.packerMeters[i];
@@ -1602,6 +1542,7 @@
         totalMaxPreviousDuration += maxDurInMeter;
       }
       
+      // Sisa waktu untuk meter ini = shift minutes - total downtime - total durasi terlama meter sebelumnya
       meter.remainingTime = Math.max(0, oeeFormState.shiftMinutes - totalODT - totalLSM - totalLSNM - totalMaxPreviousDuration);
       
       return `
@@ -1753,11 +1694,11 @@
   function updateAvailabilityWarning() {
     const warningDiv = document.getElementById('availability-warning');
     if (!warningDiv) return;
-    
-    const totalODT = oeeFormState.downtime.reduce((s, o) => s + ((parseFloat(o.frekuensi) || 1) * (parseFloat(o.durasi) || 0)), 0);
+    const totalODT = oeeFormState.downtime.reduce((s, o) => s + (parseFloat(o.durasi) || 0), 0);
     const totalLSM = oeeFormState.lineStopMesin.reduce((s, l) => s + (parseFloat(l.durasi) || 0), 0);
     const totalLSNM = oeeFormState.lineStopNonMesin.reduce((s, l) => s + (parseFloat(l.durasi) || 0), 0);
     
+    // Hitung total durasi PALING LAMA dari setiap meter
     let totalMaxDuration = 0;
     oeeFormState.packerMeters.forEach(meter => {
       let maxDurInMeter = 0;
@@ -1792,37 +1733,18 @@
         id: d.id, 
         nama: d.nama, 
         waktu_standard: d.waktu_standard, 
-        frekuensi: 1,
         durasi: 0 
       }));
     }
-    listDiv.innerHTML = oeeFormState.downtime.map(odt => {
-      const totalDurasi = (parseFloat(odt.frekuensi) || 1) * (parseFloat(odt.durasi) || 0);
-      return `
-        <div class="downtime-row">
-          <div>
-            <p style="font-size: 13px; font-weight: 700; color: #3b82f6; margin: 0 0 4px;">${odt.nama}</p>
-            <p style="font-size: 11px; color: #60a5fa; margin: 0;">STD: ${odt.waktu_standard} MENIT</p>
-            <p style="font-size: 11px; color: #ef4444; margin: 4px 0 0;">TOTAL: ${totalDurasi} MENIT</p>
-          </div>
-          <div class="form-group" style="min-width: 60px;">
-            <label style="font-size: 9px;">FREKUENSI</label>
-            <input type="number" class="input-field" value="${odt.frekuensi || 1}" min="1" step="1" placeholder="FREK" onchange="updateODTFrekuensi('${odt.id}', this.value)">
-          </div>
-          <input type="number" class="input-field" value="${odt.durasi}" min="0" placeholder="DURASI" onchange="updateODT('${odt.id}', this.value)">
+    listDiv.innerHTML = oeeFormState.downtime.map(odt => `
+      <div class="downtime-row">
+        <div>
+          <p style="font-size: 13px; font-weight: 700; color: #3b82f6; margin: 0 0 4px;">${odt.nama}</p>
+          <p style="font-size: 11px; color: #60a5fa; margin: 0;">STD: ${odt.waktu_standard} MENIT</p>
         </div>
-      `;
-    }).join('');
-  }
-
-  function updateODTFrekuensi(id, frekuensi) {
-    const odt = oeeFormState.downtime.find(o => o.id === id);
-    if (odt) {
-      odt.frekuensi = parseInt(frekuensi) || 1;
-      if (odt.frekuensi < 1) odt.frekuensi = 1;
-      renderODTList();
-      calculateOEE();
-    }
+        <input type="number" class="input-field" value="${odt.durasi}" min="0" placeholder="ACTUAL TIME" onchange="updateODT('${odt.id}', this.value)">
+      </div>
+    `).join('');
   }
 
   function updateODT(id, durasi) {
@@ -1831,35 +1753,39 @@
     
     const actualDurasi = parseFloat(durasi) || 0;
     const standar = odt.waktu_standard;
-    const frekuensi = odt.frekuensi || 1;
     
-    const selisihPerKejadian = Math.max(0, actualDurasi - standar);
-    const totalSelisih = selisihPerKejadian * frekuensi;
+    // HITUNG SELISIH JIKA MELEBIHI STANDAR
+    const selisih = actualDurasi - standar;
     
-    odt.durasi = actualDurasi;
-    
-    const odtOverName = `ODT OVER ${odt.nama}`;
-    
-    const existingIndex = oeeFormState.lineStopNonMesin.findIndex(l => l.nama === odtOverName);
-    
-    if (totalSelisih > 0) {
+    if (selisih > 0) {
+      // ODT TETAP MENGGUNAKAN STANDAR
+      odt.durasi = standar;
+      
+      // CARI APAKAH SUDAH ADA LSNM DENGAN NAMA "ODT OVER {nama_odt}"
+      const existingIndex = oeeFormState.lineStopNonMesin.findIndex(l => l.nama === `ODT OVER ${odt.nama}`);
+      
       if (existingIndex >= 0) {
-        oeeFormState.lineStopNonMesin[existingIndex].durasi = totalSelisih;
+        // UPDATE LSNM YANG SUDAH ADA
+        oeeFormState.lineStopNonMesin[existingIndex].durasi = selisih;
       } else {
+        // BUAT LSNM BARU
         oeeFormState.lineStopNonMesin.push({
           id: `lsnm_odtover_${odt.id}_${Date.now()}`,
-          nama: odtOverName,
-          durasi: totalSelisih,
+          nama: `ODT OVER ${odt.nama}`,
+          durasi: selisih,
           action: '',
           isCustom: true
         });
       }
     } else {
-      oeeFormState.lineStopNonMesin = oeeFormState.lineStopNonMesin.filter(l => l.nama !== odtOverName);
+      // JIKA TIDAK MELEBIHI STANDAR, PAKAI ACTUAL
+      odt.durasi = actualDurasi;
+      
+      // HAPUS LSNM YANG TERKAIT JIKA ADA
+      oeeFormState.lineStopNonMesin = oeeFormState.lineStopNonMesin.filter(l => l.nama !== `ODT OVER ${odt.nama}`);
     }
     
     renderLineStopNonMesinList();
-    renderODTList();
     renderPackerMeterList();
     calculateOEE();
   }
@@ -1901,12 +1827,14 @@
     calculateOEE();
   }
 
-  // ==================== LINE STOP NON-MESIN ====================
+  // ==================== LINE STOP NON-MESIN (TANPA CHECKBOX) ====================
   function renderLineStopNonMesinList() {
     const listDiv = document.getElementById('line-stop-non-mesin-list');
     
+    // Gabungkan master data dengan ODT over records
     let allLSNM = [];
     
+    // Master data
     if (localData.line_stop_non_mesin && localData.line_stop_non_mesin.length > 0) {
       const masterLSNM = localData.line_stop_non_mesin.map(m => ({ 
         id: m.id, 
@@ -1918,11 +1846,13 @@
       allLSNM = [...allLSNM, ...masterLSNM];
     }
     
+    // Custom LSNM (termasuk ODT over)
     if (oeeFormState.lineStopNonMesin && oeeFormState.lineStopNonMesin.length > 0) {
       const customLSNM = oeeFormState.lineStopNonMesin.filter(l => l.isCustom);
       allLSNM = [...allLSNM, ...customLSNM];
     }
     
+    // Hapus duplikat berdasarkan ID
     const uniqueLSNM = [];
     const ids = new Set();
     allLSNM.forEach(l => {
@@ -1966,7 +1896,7 @@
     calculateOEE();
   }
 
-  // ==================== MINOR STOP ====================
+  // ==================== MINOR STOP (TANPA CHECKBOX) ====================
   function addMinorStop() {
     const nama = prompt('MASUKKAN NAMA MINOR STOP:', '');
     if (!nama || !nama.trim()) {
@@ -1985,8 +1915,10 @@
   function renderMinorStopList() {
     const listDiv = document.getElementById('minor-stop-list');
     
+    // Gabungkan master data dengan custom minor stops
     let allMinorStops = [];
     
+    // Master data
     if (localData.minor_stop && localData.minor_stop.length > 0) {
       const masterStops = localData.minor_stop.map(m => ({ 
         id: m.id, 
@@ -1997,11 +1929,13 @@
       allMinorStops = [...allMinorStops, ...masterStops];
     }
     
+    // Custom stops dari form state
     if (oeeFormState.minorStop && oeeFormState.minorStop.length > 0) {
       const customStops = oeeFormState.minorStop.filter(ms => ms.isCustom);
       allMinorStops = [...allMinorStops, ...customStops];
     }
     
+    // Hapus duplikat berdasarkan ID
     const uniqueStops = [];
     const ids = new Set();
     allMinorStops.forEach(ms => {
@@ -2047,6 +1981,7 @@
   function calculateOEE() {
     let totalOutput = 0, totalReject = 0;
     
+    // Hitung total durasi PALING LAMA dari setiap meter
     let totalMaxDuration = 0;
     oeeFormState.packerMeters.forEach(meter => {
       let maxDurInMeter = 0;
@@ -2058,7 +1993,7 @@
       totalMaxDuration += maxDurInMeter;
     });
     
-    const totalODT = oeeFormState.downtime.reduce((s, o) => s + ((parseFloat(o.frekuensi) || 1) * (parseFloat(o.durasi) || 0)), 0);
+    const totalODT = oeeFormState.downtime.reduce((s, o) => s + (parseFloat(o.durasi) || 0), 0);
     const totalLSM = oeeFormState.lineStopMesin.reduce((s, l) => s + (parseFloat(l.durasi) || 0), 0);
     const totalLSNM = oeeFormState.lineStopNonMesin.reduce((s, l) => s + (parseFloat(l.durasi) || 0), 0);
     const totalMinor = oeeFormState.minorStop.reduce((s, m) => s + (parseFloat(m.durasi) || 0), 0);
@@ -2067,8 +2002,8 @@
     const plannedTime = oeeFormState.shiftMinutes - totalODT;
     const availableTime = plannedTime - totalActualDowntime;
     
-    let availActual = plannedTime > 0 ? (availableTime / plannedTime) * 100 : 0;
-    let avail365 = oeeFormState.shiftMinutes > 0 ? ((oeeFormState.shiftMinutes - totalODT - totalLSM - totalLSNM) / oeeFormState.shiftMinutes) * 100 : 0;
+    const availActual = plannedTime > 0 ? (availableTime / plannedTime) * 100 : 0;
+    const avail365 = oeeFormState.shiftMinutes > 0 ? ((oeeFormState.shiftMinutes - totalODT - totalLSM - totalLSNM) / oeeFormState.shiftMinutes) * 100 : 0;
     
     let totalTarget = 0;
     oeeFormState.packerMeters.forEach(meter => {
@@ -2080,24 +2015,11 @@
       }
     });
     
-    let performance = totalTarget > 0 ? (totalOutput / totalTarget) * 100 : 0;
-    let quality = totalOutput > 0 ? ((totalOutput - totalReject) / totalOutput) * 100 : 0;
+    const performance = totalTarget > 0 ? (totalOutput / totalTarget) * 100 : 0;
+    const quality = totalOutput > 0 ? ((totalOutput - totalReject) / totalOutput) * 100 : 0;
     
-    let oeeActual = (availActual / 100) * (performance / 100) * (quality / 100) * 100;
-    let oee365 = (avail365 / 100) * (performance / 100) * (quality / 100) * 100;
-    
-    const hasOver100 = availActual > 100 || avail365 > 100 || performance > 100 || quality > 100;
-    
-    const over100Warning = document.getElementById('oee-over100-warning');
-    if (hasOver100) {
-      over100Warning.innerHTML = `
-        <p class="warning-title">⚠️ PERINGATAN: KOMPONEN OEE > 100%</p>
-        <p class="warning-text">TERDAPAT KOMPONEN OEE YANG MELEBIHI 100%. CEK KEMBALI DATA ANDA.</p>
-      `;
-      over100Warning.style.display = 'block';
-    } else {
-      over100Warning.style.display = 'none';
-    }
+    const oeeActual = (availActual / 100) * (performance / 100) * (quality / 100) * 100;
+    const oee365 = (avail365 / 100) * (performance / 100) * (quality / 100) * 100;
     
     document.getElementById('calc-availability-actual').textContent = `${availActual.toFixed(1)}%`;
     document.getElementById('calc-availability-365').textContent = `${avail365.toFixed(1)}%`;
@@ -2120,8 +2042,7 @@
       totalODT,
       totalLSM,
       totalLSNM,
-      totalMinor,
-      hasOver100
+      totalMinor
     };
     updateAvailabilityWarning();
   }
@@ -2135,7 +2056,6 @@
     event.preventDefault();
     const date = document.getElementById('oee-date').value;
     const shift = document.getElementById('oee-shift').value;
-    const notes = document.getElementById('oee-notes').value;
     
     if (!date || !shift || oeeFormState.packerMeters.length === 0) {
       showToast('TANGGAL, SHIFT & PACKER METER WAJIB DIISI', 'error');
@@ -2158,15 +2078,11 @@
       return;
     }
 
-    if (oeeFormState.results.hasOver100) {
-      showToast('TERDAPAT KOMPONEN OEE YANG MELEBIHI 100%. CEK KEMBALI DATA ANDA.', 'error');
-      return;
-    }
-
-    const totalODT = oeeFormState.downtime.reduce((s, o) => s + ((parseFloat(o.frekuensi) || 1) * (parseFloat(o.durasi) || 0)), 0);
+    const totalODT = oeeFormState.downtime.reduce((s, o) => s + (parseFloat(o.durasi) || 0), 0);
     const totalLSM = oeeFormState.lineStopMesin.reduce((s, l) => s + (parseFloat(l.durasi) || 0), 0);
     const totalLSNM = oeeFormState.lineStopNonMesin.reduce((s, l) => s + (parseFloat(l.durasi) || 0), 0);
     
+    // Hitung total durasi PALING LAMA dari setiap meter
     let totalMaxDuration = 0;
     oeeFormState.packerMeters.forEach(meter => {
       let maxDurInMeter = 0;
@@ -2189,6 +2105,7 @@
       return `${prod?.nama}(${m.batchNumber})`;
     }).join(' | ');
 
+    // SAVE DETAILED DOWNTIME DATA
     const lsmDetails = oeeFormState.lineStopMesin
       .filter(lsm => parseFloat(lsm.durasi) > 0)
       .map(lsm => ({
@@ -2213,21 +2130,12 @@
         durasi: parseFloat(ms.durasi)
       }));
 
-    const odtDetails = oeeFormState.downtime
-      .filter(odt => parseFloat(odt.durasi) > 0)
-      .map(odt => ({
-        nama: odt.nama,
-        frekuensi: odt.frekuensi || 1,
-        durasiPerKejadian: parseFloat(odt.durasi),
-        totalDurasi: (odt.frekuensi || 1) * parseFloat(odt.durasi),
-        waktuStandard: odt.waktu_standard
-      }));
-
+    // COMPILE STRING FOR DISPLAY
     const lsmString = lsmDetails.map(l => `${l.nama} (${l.durasi} MIN) - ACTION: ${l.action || '-'} - WR: ${l.wr || '-'}`).join(' | ');
     const lsnmString = lsnmDetails.map(l => `${l.nama} (${l.durasi} MIN) - ACTION: ${l.action || '-'}`).join(' | ');
     const msString = minorStopDetails.map(m => `${m.nama} (${m.durasi} MIN)`).join(' | ');
-    const odtString = odtDetails.map(o => `${o.nama}: ${o.frekuensi}x ${o.durasiPerKejadian} MIN (TOTAL: ${o.totalDurasi} MIN)`).join(' | ');
 
+    // SAVE TO SUPABASE
     const record = {
       date,
       shift,
@@ -2241,29 +2149,27 @@
       oee_365: parseFloat(oeeFormState.results.oee365),
       line_stop_mesin: lsmString || null,
       line_stop_non_mesin: lsnmString || null,
-      minor_stop: msString || null,
-      operational_downtime: odtString || null,
-      notes: notes || null
+      minor_stop: msString || null
     };
 
     try {
       const { error } = await supabaseClient.from('oee_records').insert([record]);
       if (error) throw error;
       
+      // SAVE TO LOCAL DATA WITH ALL DETAILS
       const newRecord = { 
         ...record, 
         availability_365: parseFloat(oeeFormState.results.availability365),
         lsm_details: lsmDetails,
         lsnm_details: lsnmDetails,
-        ms_details: minorStopDetails,
-        odt_details: odtDetails
+        ms_details: minorStopDetails
       };
       
       localData.oee_records.unshift(newRecord);
       
       console.log('✅ Record saved with details:', newRecord);
       
-      await addAuditLog('INPUT OEE', `${produkBatch} - PACKER: ${allPackerNames} | ODT: ${odtDetails.length} | LSM: ${lsmDetails.length} | LSNM: ${lsnmDetails.length} | MS: ${minorStopDetails.length} | NOTES: ${notes || '-'}`);
+      await addAuditLog('INPUT OEE', `${produkBatch} - PACKER: ${allPackerNames} | LSM: ${lsmDetails.length} | LSNM: ${lsnmDetails.length} | MS: ${minorStopDetails.length}`);
       showToast('DATA OEE BERHASIL DISIMPAN ✅', 'success');
       resetOEEForm();
       updateDashboard();
@@ -2276,7 +2182,6 @@
   function resetOEEForm() {
     document.getElementById('form-oee').reset();
     document.getElementById('oee-date').value = new Date().toISOString().split('T')[0];
-    document.getElementById('oee-notes').value = '';
     oeeFormState = { 
       shiftMinutes: 0, 
       packerMeters: [], 
@@ -2285,8 +2190,7 @@
       lineStopNonMesin: [], 
       minorStop: [], 
       results: {},
-      odtOverRecords: [],
-      notes: ''
+      odtOverRecords: []
     };
     document.getElementById('packer-meter-list').innerHTML = '';
     document.getElementById('odt-list').innerHTML = '';
@@ -2301,7 +2205,6 @@
     document.getElementById('calc-oee-365').textContent = '0%';
     document.getElementById('calc-total-output').textContent = '0 DUS';
     document.getElementById('availability-warning').style.display = 'none';
-    document.getElementById('oee-over100-warning').style.display = 'none';
   }
 
   // ==================== DASHBOARD ====================
@@ -2324,7 +2227,6 @@
       opt.textContent = p.nama;
       productSelect.appendChild(opt);
     });
-    
     const packerSelect = document.getElementById('filter-packer');
     packerSelect.querySelectorAll('option:not(:first-child)').forEach(o => o.remove());
     localData.packer.forEach(p => {
@@ -2333,21 +2235,16 @@
       opt.textContent = p.nama;
       packerSelect.appendChild(opt);
     });
-    
-    // SHIFT FILTER SUDAH MANUAL DI HTML, TIDAK PERLU POPULATE DARI DATABASE
   }
 
   function applyDashboardFilters() {
     const ds = document.getElementById('filter-date-start').value;
     const de = document.getElementById('filter-date-end').value;
-    const shift = document.getElementById('filter-shift').value; // AMBIL FILTER SHIFT
     const sp = document.getElementById('filter-product').value;
     const spk = document.getElementById('filter-packer').value;
-    
     filteredOeeRecords = localData.oee_records.filter(r => {
       if (ds && r.date < ds) return false;
       if (de && r.date > de) return false;
-      if (shift && r.shift !== shift) return false; // FILTER SHIFT
       if (sp && !r.product?.includes(sp)) return false;
       if (spk && !r.packers?.includes(spk)) return false;
       return true;
@@ -2358,7 +2255,6 @@
   function resetDashboardFilters() {
     document.getElementById('filter-date-start').value = '';
     document.getElementById('filter-date-end').value = '';
-    document.getElementById('filter-shift').value = ''; // RESET SHIFT
     document.getElementById('filter-product').value = '';
     document.getElementById('filter-packer').value = '';
     filteredOeeRecords = [...localData.oee_records];
@@ -2370,8 +2266,6 @@
     renderCharts();
     renderPackerPerformance();
     renderOEEHistory();
-    renderLSMDetailTable();
-    renderLSNMDetailTable();
   }
 
   function updateDashboardData() {
@@ -2542,12 +2436,10 @@
     
     const records = filteredOeeRecords.length ? filteredOeeRecords : localData.oee_records;
     records.forEach(record => {
-      if (record.odt_details && Array.isArray(record.odt_details)) {
-        record.odt_details.forEach(odt => {
-          if (!downtimeMap[odt.nama]) downtimeMap[odt.nama] = 0;
-          downtimeMap[odt.nama] += odt.totalDurasi || 0;
-        });
-      }
+      localData.downtime.forEach(odt => {
+        if (!downtimeMap[odt.nama]) downtimeMap[odt.nama] = 0;
+        downtimeMap[odt.nama] += odt.waktu_standard || 0;
+      });
     });
 
     const sortedData = Object.entries(downtimeMap)
@@ -2869,60 +2761,29 @@
   function renderPackerPerformance() {
     const map = {};
     const recs = filteredOeeRecords.length ? filteredOeeRecords : localData.oee_records;
-    
     recs.forEach(r => {
-      const packerNames = r.packers?.split(', ') || [];
-      packerNames.forEach(p => {
+      (r.packers?.split(', ') || []).forEach(p => {
         if (!p) return;
-        if (!map[p]) {
-          map[p] = { 
-            nama: p, 
-            oeeValues: [], 
-            targetOutput: 0,
-            outputActual: 0,
-            records: 0
-          };
-        }
-        const oee = parseFloat(r.oee_actual) || 0;
-        if (oee > 0) map[p].oeeValues.push(oee);
-        
-        const performance = parseFloat(r.performance) || 0;
-        const outputActual = parseFloat(r.output_actual) || 0;
-        
-        if (performance > 0 && outputActual > 0) {
-          const targetPerRecord = (outputActual * 100) / performance;
-          const targetPerPacker = targetPerRecord / packerNames.length;
-          map[p].targetOutput += targetPerPacker;
-        }
-        
-        const outputPerPacker = outputActual / packerNames.length;
-        map[p].outputActual += outputPerPacker;
+        if (!map[p]) map[p] = { nama: p, oeeValues: [], totalOutput: 0, records: 0 };
+        const v = parseFloat(r.oee_actual) || 0;
+        if (v > 0) map[p].oeeValues.push(v);
+        map[p].totalOutput += parseFloat(r.output_actual) || 0;
         map[p].records++;
       });
     });
-    
     const data = Object.values(map).sort((a,b) => {
       const aa = a.oeeValues.length ? a.oeeValues.reduce((x,y)=>x+y,0)/a.oeeValues.length : 0;
       const bb = b.oeeValues.length ? b.oeeValues.reduce((x,y)=>x+y,0)/b.oeeValues.length : 0;
       return bb - aa;
     });
-    
     const tbody = document.getElementById('table-packer-performance');
     if (!data.length) { 
-      tbody.innerHTML = '<tr><td colspan="6" class="text-center text-gray-400 py-8">BELUM ADA DATA</td></tr>'; 
+      tbody.innerHTML = '<tr><td colspan="5" class="text-center text-gray-400 py-8">BELUM ADA DATA</td></tr>'; 
       return; 
     }
-    
     tbody.innerHTML = data.map((p,i) => {
-      const avgOee = p.oeeValues.length ? p.oeeValues.reduce((a,b)=>a+b,0)/p.oeeValues.length : 0;
-      return `<tr>
-        <td>${i+1}</td>
-        <td>${p.nama}</td>
-        <td>${avgOee.toFixed(1)}%</td>
-        <td>${p.targetOutput.toLocaleString('id-ID', {maximumFractionDigits:1})}</td>
-        <td>${p.outputActual.toLocaleString('id-ID', {maximumFractionDigits:1})}</td>
-        <td>${p.records}</td>
-      </tr>`;
+      const avg = p.oeeValues.length ? p.oeeValues.reduce((a,b)=>a+b,0)/p.oeeValues.length : 0;
+      return `<tr><td>${i+1}</td><td>${p.nama}</td><td>${avg.toFixed(1)}%</td><td>${p.totalOutput.toLocaleString('id-ID',{maximumFractionDigits:1})}</td><td>${p.records}</td></tr>`;
     }).join('');
   }
 
@@ -2930,127 +2791,19 @@
     const tbody = document.getElementById('table-oee-history');
     const recs = filteredOeeRecords.length ? filteredOeeRecords : localData.oee_records;
     if (!recs || !recs.length) { 
-      tbody.innerHTML = '<tr><td colspan="7" class="text-center text-gray-400 py-8">BELUM ADA DATA</td></tr>'; 
+      tbody.innerHTML = '<tr><td colspan="8" class="text-center text-gray-400 py-8">BELUM ADA DATA</td></tr>'; 
       return; 
     }
     tbody.innerHTML = recs.slice(0,50).map(r => `
       <tr>
         <td style="white-space: normal; word-break: break-word;">${r.date || '-'}</td>
         <td style="white-space: normal; word-break: break-word;">${r.shift || '-'}</td>
-        <td style="white-space: normal; word-break: break-word;">${r.packers || '-'}</td>
         <td style="white-space: normal; word-break: break-word;">${r.product || '-'}</td>
         <td style="white-space: normal; word-break: break-word;"><strong>${(parseFloat(r.oee_actual)||0).toFixed(1)}%</strong></td>
         <td style="white-space: normal; word-break: break-word;">${(parseFloat(r.oee_365)||0).toFixed(1)}%</td>
-        <td style="white-space: normal; word-break: break-word;">${r.notes || '-'}</td>
-      </tr>
-    `).join('');
-  }
-
-  function renderLSMDetailTable() {
-    const tbody = document.getElementById('table-lsm-detail');
-    const recs = filteredOeeRecords.length ? filteredOeeRecords : localData.oee_records;
-    if (!recs || !recs.length) {
-      tbody.innerHTML = '<tr><td colspan="7" class="text-center text-gray-400 py-8">BELUM ADA DATA</td></tr>';
-      return;
-    }
-    
-    const rows = [];
-    recs.slice(0,100).forEach(record => {
-      if (record.lsm_details && Array.isArray(record.lsm_details) && record.lsm_details.length > 0) {
-        record.lsm_details.forEach(lsm => {
-          rows.push({
-            date: record.date,
-            shift: record.shift,
-            packers: record.packers,
-            nama: lsm.nama,
-            durasi: lsm.durasi,
-            wr: lsm.wr || '-',
-            action: lsm.action || '-'
-          });
-        });
-      } else if (record.line_stop_mesin) {
-        const matches = record.line_stop_mesin.match(/([^(]+)\s*\((\d+)\s*MIN\)\s*-\s*ACTION:\s*([^-]+)?\s*-\s*WR:\s*(.+)?/);
-        if (matches) {
-          rows.push({
-            date: record.date,
-            shift: record.shift,
-            packers: record.packers,
-            nama: matches[1].trim(),
-            durasi: parseInt(matches[2]) || 0,
-            wr: matches[4]?.trim() || '-',
-            action: matches[3]?.trim() || '-'
-          });
-        }
-      }
-    });
-    
-    if (rows.length === 0) {
-      tbody.innerHTML = '<tr><td colspan="7" class="text-center text-gray-400 py-8">BELUM ADA DATA LINE STOP MESIN</td></tr>';
-      return;
-    }
-    
-    tbody.innerHTML = rows.map(row => `
-      <tr>
-        <td>${row.date}</td>
-        <td>${row.shift}</td>
-        <td>${row.packers || '-'}</td>
-        <td>${row.nama}</td>
-        <td>${row.durasi}</td>
-        <td>${row.wr}</td>
-        <td>${row.action}</td>
-      </tr>
-    `).join('');
-  }
-
-  function renderLSNMDetailTable() {
-    const tbody = document.getElementById('table-lsnm-detail');
-    const recs = filteredOeeRecords.length ? filteredOeeRecords : localData.oee_records;
-    if (!recs || !recs.length) {
-      tbody.innerHTML = '<tr><td colspan="6" class="text-center text-gray-400 py-8">BELUM ADA DATA</td></tr>';
-      return;
-    }
-    
-    const rows = [];
-    recs.slice(0,100).forEach(record => {
-      if (record.lsnm_details && Array.isArray(record.lsnm_details) && record.lsnm_details.length > 0) {
-        record.lsnm_details.forEach(lsnm => {
-          rows.push({
-            date: record.date,
-            shift: record.shift,
-            packers: record.packers,
-            nama: lsnm.nama,
-            durasi: lsnm.durasi,
-            action: lsnm.action || '-'
-          });
-        });
-      } else if (record.line_stop_non_mesin) {
-        const matches = record.line_stop_non_mesin.match(/([^(]+)\s*\((\d+)\s*MIN\)\s*-\s*ACTION:\s*(.+)?/);
-        if (matches) {
-          rows.push({
-            date: record.date,
-            shift: record.shift,
-            packers: record.packers,
-            nama: matches[1].trim(),
-            durasi: parseInt(matches[2]) || 0,
-            action: matches[3]?.trim() || '-'
-          });
-        }
-      }
-    });
-    
-    if (rows.length === 0) {
-      tbody.innerHTML = '<tr><td colspan="6" class="text-center text-gray-400 py-8">BELUM ADA DATA LINE STOP NON-MESIN</td></tr>';
-      return;
-    }
-    
-    tbody.innerHTML = rows.map(row => `
-      <tr>
-        <td>${row.date}</td>
-        <td>${row.shift}</td>
-        <td>${row.packers || '-'}</td>
-        <td>${row.nama}</td>
-        <td>${row.durasi}</td>
-        <td>${row.action}</td>
+        <td style="white-space: normal; word-break: break-word; max-width: 200px;">${r.line_stop_mesin ? (r.line_stop_mesin.length > 40 ? r.line_stop_mesin.substring(0,40)+'...' : r.line_stop_mesin) : '-'}</td>
+        <td style="white-space: normal; word-break: break-word; max-width: 200px;">${r.line_stop_non_mesin ? (r.line_stop_non_mesin.length > 40 ? r.line_stop_non_mesin.substring(0,40)+'...' : r.line_stop_non_mesin) : '-'}</td>
+        <td style="white-space: normal; word-break: break-word; max-width: 200px;">${r.minor_stop ? (r.minor_stop.length > 40 ? r.minor_stop.substring(0,40)+'...' : r.minor_stop) : '-'}</td>
       </tr>
     `).join('');
   }
