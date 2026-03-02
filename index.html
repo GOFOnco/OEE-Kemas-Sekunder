@@ -446,7 +446,7 @@
       align-items: end;
     }
 
-    /* ==================== DOWNTIME ROWS ==================== */
+    /* ==================== DOWNTIME ROWS - DENGAN FREKUENSI ==================== */
     .downtime-row {
       display: grid;
       grid-template-columns: 2fr 0.5fr 1fr;
@@ -1032,7 +1032,7 @@
             <input type="date" id="filter-date-end" class="input-field" onchange="applyDashboardFilters()">
           </div>
           <div class="form-group">
-            <label>SHIFT</label> <!-- FILTER SHIFT BARU -->
+            <label>SHIFT</label>
             <select id="filter-shift" class="input-field" onchange="applyDashboardFilters()">
               <option value="">-- SEMUA SHIFT --</option>
               <option value="Shift 1">SHIFT 1</option>
@@ -1228,7 +1228,7 @@
           </div>
         </div>
 
-        <!-- OPERATIONAL DOWNTIME (ODT) -->
+        <!-- OPERATIONAL DOWNTIME (ODT) - DENGAN FREKUENSI -->
         <div class="form-section">
           <div class="section-title">OPERATIONAL DOWNTIME (ODT)</div>
           <div id="odt-list"></div>
@@ -1240,13 +1240,13 @@
           <div id="line-stop-mesin-list"></div>
         </div>
 
-        <!-- LINE STOP NON-MESIN (TANPA CHECKBOX) -->
+        <!-- LINE STOP NON-MESIN -->
         <div class="form-section">
           <div class="section-title">LINE STOP NON-MESIN</div>
           <div id="line-stop-non-mesin-list"></div>
         </div>
 
-        <!-- MINOR STOP (TANPA CHECKBOX) -->
+        <!-- MINOR STOP -->
         <div class="form-section">
           <div class="section-title">MINOR STOP</div>
           <button type="button" class="btn btn-success w-100" onclick="addMinorStop()">+ TAMBAH MINOR STOP</button>
@@ -1554,6 +1554,7 @@
       return;
     }
     
+    // HITUNG TOTAL ODT DENGAN FREKUENSI
     const totalODT = oeeFormState.downtime.reduce((s, o) => s + ((parseFloat(o.frekuensi) || 1) * (parseFloat(o.durasi) || 0)), 0);
     const totalLSM = oeeFormState.lineStopMesin.reduce((s, l) => s + (parseFloat(l.durasi) || 0), 0);
     const totalLSNM = oeeFormState.lineStopNonMesin.reduce((s, l) => s + (parseFloat(l.durasi) || 0), 0);
@@ -1587,6 +1588,7 @@
       return;
     }
     
+    // HITUNG TOTAL ODT DENGAN FREKUENSI
     const totalODT = oeeFormState.downtime.reduce((s, o) => s + ((parseFloat(o.frekuensi) || 1) * (parseFloat(o.durasi) || 0)), 0);
     const totalLSM = oeeFormState.lineStopMesin.reduce((s, l) => s + (parseFloat(l.durasi) || 0), 0);
     const totalLSNM = oeeFormState.lineStopNonMesin.reduce((s, l) => s + (parseFloat(l.durasi) || 0), 0);
@@ -1754,6 +1756,7 @@
     const warningDiv = document.getElementById('availability-warning');
     if (!warningDiv) return;
     
+    // HITUNG TOTAL ODT DENGAN FREKUENSI
     const totalODT = oeeFormState.downtime.reduce((s, o) => s + ((parseFloat(o.frekuensi) || 1) * (parseFloat(o.durasi) || 0)), 0);
     const totalLSM = oeeFormState.lineStopMesin.reduce((s, l) => s + (parseFloat(l.durasi) || 0), 0);
     const totalLSNM = oeeFormState.lineStopNonMesin.reduce((s, l) => s + (parseFloat(l.durasi) || 0), 0);
@@ -1780,7 +1783,7 @@
     } else warningDiv.style.display = 'none';
   }
 
-  // ==================== ODT ====================
+  // ==================== ODT - DENGAN FREKUENSI ====================
   function renderODTList() {
     const listDiv = document.getElementById('odt-list');
     if (localData.downtime.length === 0) {
@@ -2243,6 +2246,8 @@
       line_stop_non_mesin: lsnmString || null,
       minor_stop: msString || null,
       operational_downtime: odtString || null,
+      odt_details: odtDetails.length > 0 ? JSON.stringify(odtDetails) : null,
+      ms_details: minorStopDetails.length > 0 ? JSON.stringify(minorStopDetails) : null,
       notes: notes || null
     };
 
@@ -2333,21 +2338,19 @@
       opt.textContent = p.nama;
       packerSelect.appendChild(opt);
     });
-    
-    // SHIFT FILTER SUDAH MANUAL DI HTML, TIDAK PERLU POPULATE DARI DATABASE
   }
 
   function applyDashboardFilters() {
     const ds = document.getElementById('filter-date-start').value;
     const de = document.getElementById('filter-date-end').value;
-    const shift = document.getElementById('filter-shift').value; // AMBIL FILTER SHIFT
+    const shift = document.getElementById('filter-shift').value;
     const sp = document.getElementById('filter-product').value;
     const spk = document.getElementById('filter-packer').value;
     
     filteredOeeRecords = localData.oee_records.filter(r => {
       if (ds && r.date < ds) return false;
       if (de && r.date > de) return false;
-      if (shift && r.shift !== shift) return false; // FILTER SHIFT
+      if (shift && r.shift !== shift) return false;
       if (sp && !r.product?.includes(sp)) return false;
       if (spk && !r.packers?.includes(spk)) return false;
       return true;
@@ -2358,7 +2361,7 @@
   function resetDashboardFilters() {
     document.getElementById('filter-date-start').value = '';
     document.getElementById('filter-date-end').value = '';
-    document.getElementById('filter-shift').value = ''; // RESET SHIFT
+    document.getElementById('filter-shift').value = '';
     document.getElementById('filter-product').value = '';
     document.getElementById('filter-packer').value = '';
     filteredOeeRecords = [...localData.oee_records];
@@ -2542,11 +2545,32 @@
     
     const records = filteredOeeRecords.length ? filteredOeeRecords : localData.oee_records;
     records.forEach(record => {
-      if (record.odt_details && Array.isArray(record.odt_details)) {
-        record.odt_details.forEach(odt => {
-          if (!downtimeMap[odt.nama]) downtimeMap[odt.nama] = 0;
-          downtimeMap[odt.nama] += odt.totalDurasi || 0;
-        });
+      if (record.odt_details) {
+        try {
+          const odtDetails = typeof record.odt_details === 'string' ? JSON.parse(record.odt_details) : record.odt_details;
+          if (Array.isArray(odtDetails)) {
+            odtDetails.forEach(odt => {
+              if (!downtimeMap[odt.nama]) downtimeMap[odt.nama] = 0;
+              downtimeMap[odt.nama] += odt.totalDurasi || 0;
+            });
+          }
+        } catch (e) {
+          console.log('Error parsing odt_details:', e);
+        }
+      } 
+      else if (record.operational_downtime) {
+        const matches = record.operational_downtime.match(/([^:]+):\s*(\d+)x\s*(\d+)\s*MIN\s*\(TOTAL:\s*(\d+)\s*MIN\)/g);
+        if (matches) {
+          matches.forEach(match => {
+            const nameMatch = match.match(/([^:]+):\s*(\d+)x\s*(\d+)\s*MIN\s*\(TOTAL:\s*(\d+)\s*MIN\)/);
+            if (nameMatch) {
+              const nama = nameMatch[1].trim();
+              const totalDurasi = parseInt(nameMatch[4]) || 0;
+              if (!downtimeMap[nama]) downtimeMap[nama] = 0;
+              downtimeMap[nama] += totalDurasi;
+            }
+          });
+        }
       }
     });
 
@@ -2665,11 +2689,18 @@
     const records = filteredOeeRecords.length ? filteredOeeRecords : localData.oee_records;
     
     records.forEach(record => {
-      if (record.ms_details && Array.isArray(record.ms_details) && record.ms_details.length > 0) {
-        record.ms_details.forEach(ms => {
-          if (!msMap[ms.nama]) msMap[ms.nama] = 0;
-          msMap[ms.nama] += ms.durasi || 0;
-        });
+      if (record.ms_details) {
+        try {
+          const msDetails = typeof record.ms_details === 'string' ? JSON.parse(record.ms_details) : record.ms_details;
+          if (Array.isArray(msDetails)) {
+            msDetails.forEach(ms => {
+              if (!msMap[ms.nama]) msMap[ms.nama] = 0;
+              msMap[ms.nama] += ms.durasi || 0;
+            });
+          }
+        } catch (e) {
+          console.log('Error parsing ms_details:', e);
+        }
       }
       else if (record.minor_stop) {
         const matches = record.minor_stop.match(/([^(]+)\s*\((\d+)\s*MIN\)/g);
@@ -2866,6 +2897,7 @@
     renderMinorStopTop10Chart();
   }
 
+  // ==================== RENDER PACKER PERFORMANCE ====================
   function renderPackerPerformance() {
     const map = {};
     const recs = filteredOeeRecords.length ? filteredOeeRecords : localData.oee_records;
@@ -2926,6 +2958,7 @@
     }).join('');
   }
 
+  // ==================== RENDER OEE HISTORY ====================
   function renderOEEHistory() {
     const tbody = document.getElementById('table-oee-history');
     const recs = filteredOeeRecords.length ? filteredOeeRecords : localData.oee_records;
@@ -2946,6 +2979,7 @@
     `).join('');
   }
 
+  // ==================== RENDER LSM DETAIL TABLE ====================
   function renderLSMDetailTable() {
     const tbody = document.getElementById('table-lsm-detail');
     const recs = filteredOeeRecords.length ? filteredOeeRecords : localData.oee_records;
@@ -3002,6 +3036,7 @@
     `).join('');
   }
 
+  // ==================== RENDER LSNM DETAIL TABLE ====================
   function renderLSNMDetailTable() {
     const tbody = document.getElementById('table-lsnm-detail');
     const recs = filteredOeeRecords.length ? filteredOeeRecords : localData.oee_records;
