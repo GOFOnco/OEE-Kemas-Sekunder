@@ -54,7 +54,6 @@
       text-transform: uppercase !important;
     }
 
-    /* Placeholder styling */
     input::placeholder, textarea::placeholder {
       text-transform: uppercase !important;
       opacity: 0.7;
@@ -1126,7 +1125,7 @@
         </div>
       </div>
 
-      <!-- OEE HISTORY TABLE -->
+      <!-- OEE HISTORY TABLE (REVISED) -->
       <div class="form-section">
         <div class="section-title">RIWAYAT OEE</div>
         <div class="table-wrapper">
@@ -1135,15 +1134,55 @@
               <tr>
                 <th>TANGGAL</th>
                 <th>SHIFT</th>
+                <th>PACKER</th> <!-- KOLOM PACKER DITAMBAHKAN -->
                 <th>NOMOR BATCH</th>
                 <th>OEE ACTUAL</th>
                 <th>OEE 365</th>
-                <th>LINE STOP MESIN</th>
-                <th>LINE STOP NON-MESIN</th>
-                <th>MINOR STOP</th>
+                <!-- KOLOM LINE STOP MESIN, NON-MESIN, MINOR STOP DIHAPUS -->
               </tr>
             </thead>
             <tbody id="table-oee-history"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- NEW TABLE: LINE STOP MESIN DETAIL -->
+      <div class="form-section">
+        <div class="section-title">DETAIL LINE STOP MESIN</div>
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>TANGGAL</th>
+                <th>SHIFT</th>
+                <th>PACKER</th>
+                <th>LINE STOP MESIN</th>
+                <th>DURASI (MENIT)</th>
+                <th>NO WR</th>
+                <th>ACTION</th>
+              </tr>
+            </thead>
+            <tbody id="table-lsm-detail"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- NEW TABLE: LINE STOP NON-MESIN DETAIL -->
+      <div class="form-section">
+        <div class="section-title">DETAIL LINE STOP NON-MESIN</div>
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>TANGGAL</th>
+                <th>SHIFT</th>
+                <th>PACKER</th>
+                <th>LINE STOP NON-MESIN</th>
+                <th>DURASI (MENIT)</th>
+                <th>ACTION</th>
+              </tr>
+            </thead>
+            <tbody id="table-lsnm-detail"></tbody>
           </table>
         </div>
       </div>
@@ -1171,6 +1210,14 @@
                 <option value="Longshift Malam">LONGSHIFT MALAM (19:00 - 07:00)</option>
               </select>
             </div>
+          </div>
+        </div>
+
+        <!-- NOTES (POINT 2) -->
+        <div class="form-section">
+          <div class="section-title">NOTES</div>
+          <div class="form-group">
+            <textarea id="oee-notes" rows="3" placeholder="TAMBAHKAN CATATAN (OPSIONAL)"></textarea>
           </div>
         </div>
 
@@ -1209,6 +1256,7 @@
         <!-- HASIL PERHITUNGAN OEE -->
         <div class="form-section">
           <div id="availability-warning" style="display: none;"></div>
+          <div id="oee-over100-warning" style="display: none;" class="warning-box"></div> <!-- WARNING OEE >100% -->
           <div class="section-title">HASIL PERHITUNGAN OEE</div>
           <div class="score-cards">
             <div class="score-card">
@@ -1244,7 +1292,7 @@
 
         <!-- ACTION BUTTONS -->
         <div class="form-section" style="display: flex; gap: 12px; flex-wrap: wrap;">
-          <button type="submit" class="btn btn-primary" style="flex: 1;">💾 SIMPAN DATA OEE</button>
+          <button type="submit" class="btn btn-primary" style="flex: 1;" id="submit-oee-btn">💾 SIMPAN DATA OEE</button>
           <button type="button" class="btn btn-secondary" style="flex: 1;" onclick="resetOEEForm()">🔄 RESET FORM</button>
         </div>
       </form>
@@ -1371,7 +1419,8 @@
     lineStopNonMesin: [],
     minorStop: [],
     results: {},
-    odtOverRecords: []
+    odtOverRecords: [],
+    notes: '' // POINT 2: NOTES
   };
 
   let dashboardCharts = {};
@@ -2002,8 +2051,8 @@
     const plannedTime = oeeFormState.shiftMinutes - totalODT;
     const availableTime = plannedTime - totalActualDowntime;
     
-    const availActual = plannedTime > 0 ? (availableTime / plannedTime) * 100 : 0;
-    const avail365 = oeeFormState.shiftMinutes > 0 ? ((oeeFormState.shiftMinutes - totalODT - totalLSM - totalLSNM) / oeeFormState.shiftMinutes) * 100 : 0;
+    let availActual = plannedTime > 0 ? (availableTime / plannedTime) * 100 : 0;
+    let avail365 = oeeFormState.shiftMinutes > 0 ? ((oeeFormState.shiftMinutes - totalODT - totalLSM - totalLSNM) / oeeFormState.shiftMinutes) * 100 : 0;
     
     let totalTarget = 0;
     oeeFormState.packerMeters.forEach(meter => {
@@ -2015,12 +2064,29 @@
       }
     });
     
-    const performance = totalTarget > 0 ? (totalOutput / totalTarget) * 100 : 0;
-    const quality = totalOutput > 0 ? ((totalOutput - totalReject) / totalOutput) * 100 : 0;
+    let performance = totalTarget > 0 ? (totalOutput / totalTarget) * 100 : 0;
+    let quality = totalOutput > 0 ? ((totalOutput - totalReject) / totalOutput) * 100 : 0;
     
-    const oeeActual = (availActual / 100) * (performance / 100) * (quality / 100) * 100;
-    const oee365 = (avail365 / 100) * (performance / 100) * (quality / 100) * 100;
+    // POINT 1: CEK APAKAH ADA KOMPONEN YANG MELEBIHI 100%
+    let oeeActual = (availActual / 100) * (performance / 100) * (quality / 100) * 100;
+    let oee365 = (avail365 / 100) * (performance / 100) * (quality / 100) * 100;
     
+    // PERIKSA KOMPONEN INDIVIDU
+    const hasOver100 = availActual > 100 || avail365 > 100 || performance > 100 || quality > 100;
+    
+    // TAMPILKAN PERINGATAN JIKA ADA KOMPONEN > 100%
+    const over100Warning = document.getElementById('oee-over100-warning');
+    if (hasOver100) {
+      over100Warning.innerHTML = `
+        <p class="warning-title">⚠️ PERINGATAN: KOMPONEN OEE > 100%</p>
+        <p class="warning-text">TERDAPAT KOMPONEN OEE YANG MELEBIHI 100%. CEK KEMBALI DATA ANDA.</p>
+      `;
+      over100Warning.style.display = 'block';
+    } else {
+      over100Warning.style.display = 'none';
+    }
+    
+    // SIMPAN HASIL
     document.getElementById('calc-availability-actual').textContent = `${availActual.toFixed(1)}%`;
     document.getElementById('calc-availability-365').textContent = `${avail365.toFixed(1)}%`;
     document.getElementById('calc-performance').textContent = `${performance.toFixed(1)}%`;
@@ -2042,7 +2108,8 @@
       totalODT,
       totalLSM,
       totalLSNM,
-      totalMinor
+      totalMinor,
+      hasOver100 // TAMBAHKAN FLAG INI
     };
     updateAvailabilityWarning();
   }
@@ -2056,6 +2123,7 @@
     event.preventDefault();
     const date = document.getElementById('oee-date').value;
     const shift = document.getElementById('oee-shift').value;
+    const notes = document.getElementById('oee-notes').value; // POINT 2: AMBIL NOTES
     
     if (!date || !shift || oeeFormState.packerMeters.length === 0) {
       showToast('TANGGAL, SHIFT & PACKER METER WAJIB DIISI', 'error');
@@ -2075,6 +2143,12 @@
     const invalidWR = oeeFormState.lineStopMesin.find(lsm => (parseFloat(lsm.durasi) || 0) >= 180 && !lsm.wr?.trim());
     if (invalidWR) {
       showToast(`NO WR WAJIB UNTUK: ${invalidWR.nama}`, 'error');
+      return;
+    }
+
+    // POINT 1: CEK KOMPONEN OEE > 100%
+    if (oeeFormState.results.hasOver100) {
+      showToast('TERDAPAT KOMPONEN OEE YANG MELEBIHI 100%. CEK KEMBALI DATA ANDA.', 'error');
       return;
     }
 
@@ -2135,7 +2209,7 @@
     const lsnmString = lsnmDetails.map(l => `${l.nama} (${l.durasi} MIN) - ACTION: ${l.action || '-'}`).join(' | ');
     const msString = minorStopDetails.map(m => `${m.nama} (${m.durasi} MIN)`).join(' | ');
 
-    // SAVE TO SUPABASE
+    // SAVE TO SUPABASE (TAMBAHKAN KOLOM NOTES)
     const record = {
       date,
       shift,
@@ -2149,7 +2223,8 @@
       oee_365: parseFloat(oeeFormState.results.oee365),
       line_stop_mesin: lsmString || null,
       line_stop_non_mesin: lsnmString || null,
-      minor_stop: msString || null
+      minor_stop: msString || null,
+      notes: notes || null // POINT 2: SIMPAN NOTES
     };
 
     try {
@@ -2169,7 +2244,7 @@
       
       console.log('✅ Record saved with details:', newRecord);
       
-      await addAuditLog('INPUT OEE', `${produkBatch} - PACKER: ${allPackerNames} | LSM: ${lsmDetails.length} | LSNM: ${lsnmDetails.length} | MS: ${minorStopDetails.length}`);
+      await addAuditLog('INPUT OEE', `${produkBatch} - PACKER: ${allPackerNames} | LSM: ${lsmDetails.length} | LSNM: ${lsnmDetails.length} | MS: ${minorStopDetails.length} | NOTES: ${notes || '-'}`);
       showToast('DATA OEE BERHASIL DISIMPAN ✅', 'success');
       resetOEEForm();
       updateDashboard();
@@ -2182,6 +2257,7 @@
   function resetOEEForm() {
     document.getElementById('form-oee').reset();
     document.getElementById('oee-date').value = new Date().toISOString().split('T')[0];
+    document.getElementById('oee-notes').value = ''; // RESET NOTES
     oeeFormState = { 
       shiftMinutes: 0, 
       packerMeters: [], 
@@ -2190,7 +2266,8 @@
       lineStopNonMesin: [], 
       minorStop: [], 
       results: {},
-      odtOverRecords: []
+      odtOverRecords: [],
+      notes: ''
     };
     document.getElementById('packer-meter-list').innerHTML = '';
     document.getElementById('odt-list').innerHTML = '';
@@ -2205,6 +2282,7 @@
     document.getElementById('calc-oee-365').textContent = '0%';
     document.getElementById('calc-total-output').textContent = '0 DUS';
     document.getElementById('availability-warning').style.display = 'none';
+    document.getElementById('oee-over100-warning').style.display = 'none';
   }
 
   // ==================== DASHBOARD ====================
@@ -2266,6 +2344,8 @@
     renderCharts();
     renderPackerPerformance();
     renderOEEHistory();
+    renderLSMDetailTable();   // TABEL BARU
+    renderLSNMDetailTable();  // TABEL BARU
   }
 
   function updateDashboardData() {
@@ -2787,23 +2867,135 @@
     }).join('');
   }
 
+  // POINT 5 & 6: RIWAYAT OEE DENGAN KOLOM PACKER DAN MENGHAPUS 3 KOLOM DOWNTIME
   function renderOEEHistory() {
     const tbody = document.getElementById('table-oee-history');
     const recs = filteredOeeRecords.length ? filteredOeeRecords : localData.oee_records;
     if (!recs || !recs.length) { 
-      tbody.innerHTML = '<tr><td colspan="8" class="text-center text-gray-400 py-8">BELUM ADA DATA</td></tr>'; 
+      tbody.innerHTML = '<tr><td colspan="6" class="text-center text-gray-400 py-8">BELUM ADA DATA</td></tr>'; 
       return; 
     }
     tbody.innerHTML = recs.slice(0,50).map(r => `
       <tr>
         <td style="white-space: normal; word-break: break-word;">${r.date || '-'}</td>
         <td style="white-space: normal; word-break: break-word;">${r.shift || '-'}</td>
+        <td style="white-space: normal; word-break: break-word;">${r.packers || '-'}</td> <!-- KOLOM PACKER -->
         <td style="white-space: normal; word-break: break-word;">${r.product || '-'}</td>
         <td style="white-space: normal; word-break: break-word;"><strong>${(parseFloat(r.oee_actual)||0).toFixed(1)}%</strong></td>
         <td style="white-space: normal; word-break: break-word;">${(parseFloat(r.oee_365)||0).toFixed(1)}%</td>
-        <td style="white-space: normal; word-break: break-word; max-width: 200px;">${r.line_stop_mesin ? (r.line_stop_mesin.length > 40 ? r.line_stop_mesin.substring(0,40)+'...' : r.line_stop_mesin) : '-'}</td>
-        <td style="white-space: normal; word-break: break-word; max-width: 200px;">${r.line_stop_non_mesin ? (r.line_stop_non_mesin.length > 40 ? r.line_stop_non_mesin.substring(0,40)+'...' : r.line_stop_non_mesin) : '-'}</td>
-        <td style="white-space: normal; word-break: break-word; max-width: 200px;">${r.minor_stop ? (r.minor_stop.length > 40 ? r.minor_stop.substring(0,40)+'...' : r.minor_stop) : '-'}</td>
+        <!-- 3 KOLOM DOWNTIME DIHAPUS -->
+      </tr>
+    `).join('');
+  }
+
+  // POINT 7: TABEL LINE STOP MESIN DETAIL
+  function renderLSMDetailTable() {
+    const tbody = document.getElementById('table-lsm-detail');
+    const recs = filteredOeeRecords.length ? filteredOeeRecords : localData.oee_records;
+    if (!recs || !recs.length) {
+      tbody.innerHTML = '<tr><td colspan="7" class="text-center text-gray-400 py-8">BELUM ADA DATA</td></tr>';
+      return;
+    }
+    
+    const rows = [];
+    recs.slice(0,100).forEach(record => {
+      if (record.lsm_details && Array.isArray(record.lsm_details) && record.lsm_details.length > 0) {
+        record.lsm_details.forEach(lsm => {
+          rows.push({
+            date: record.date,
+            shift: record.shift,
+            packers: record.packers,
+            nama: lsm.nama,
+            durasi: lsm.durasi,
+            wr: lsm.wr || '-',
+            action: lsm.action || '-'
+          });
+        });
+      } else if (record.line_stop_mesin) {
+        // PARSE DARI STRING JIKA DETAIL TIDAK ADA
+        const matches = record.line_stop_mesin.match(/([^(]+)\s*\((\d+)\s*MIN\)\s*-\s*ACTION:\s*([^-]+)?\s*-\s*WR:\s*(.+)?/);
+        if (matches) {
+          rows.push({
+            date: record.date,
+            shift: record.shift,
+            packers: record.packers,
+            nama: matches[1].trim(),
+            durasi: parseInt(matches[2]) || 0,
+            wr: matches[4]?.trim() || '-',
+            action: matches[3]?.trim() || '-'
+          });
+        }
+      }
+    });
+    
+    if (rows.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="7" class="text-center text-gray-400 py-8">BELUM ADA DATA LINE STOP MESIN</td></tr>';
+      return;
+    }
+    
+    tbody.innerHTML = rows.map(row => `
+      <tr>
+        <td>${row.date}</td>
+        <td>${row.shift}</td>
+        <td>${row.packers || '-'}</td>
+        <td>${row.nama}</td>
+        <td>${row.durasi}</td>
+        <td>${row.wr}</td>
+        <td>${row.action}</td>
+      </tr>
+    `).join('');
+  }
+
+  // POINT 8: TABEL LINE STOP NON-MESIN DETAIL
+  function renderLSNMDetailTable() {
+    const tbody = document.getElementById('table-lsnm-detail');
+    const recs = filteredOeeRecords.length ? filteredOeeRecords : localData.oee_records;
+    if (!recs || !recs.length) {
+      tbody.innerHTML = '<tr><td colspan="6" class="text-center text-gray-400 py-8">BELUM ADA DATA</td></tr>';
+      return;
+    }
+    
+    const rows = [];
+    recs.slice(0,100).forEach(record => {
+      if (record.lsnm_details && Array.isArray(record.lsnm_details) && record.lsnm_details.length > 0) {
+        record.lsnm_details.forEach(lsnm => {
+          rows.push({
+            date: record.date,
+            shift: record.shift,
+            packers: record.packers,
+            nama: lsnm.nama,
+            durasi: lsnm.durasi,
+            action: lsnm.action || '-'
+          });
+        });
+      } else if (record.line_stop_non_mesin) {
+        const matches = record.line_stop_non_mesin.match(/([^(]+)\s*\((\d+)\s*MIN\)\s*-\s*ACTION:\s*(.+)?/);
+        if (matches) {
+          rows.push({
+            date: record.date,
+            shift: record.shift,
+            packers: record.packers,
+            nama: matches[1].trim(),
+            durasi: parseInt(matches[2]) || 0,
+            action: matches[3]?.trim() || '-'
+          });
+        }
+      }
+    });
+    
+    if (rows.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="6" class="text-center text-gray-400 py-8">BELUM ADA DATA LINE STOP NON-MESIN</td></tr>';
+      return;
+    }
+    
+    tbody.innerHTML = rows.map(row => `
+      <tr>
+        <td>${row.date}</td>
+        <td>${row.shift}</td>
+        <td>${row.packers || '-'}</td>
+        <td>${row.nama}</td>
+        <td>${row.durasi}</td>
+        <td>${row.action}</td>
       </tr>
     `).join('');
   }
