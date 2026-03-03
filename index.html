@@ -2086,16 +2086,17 @@
     let performance = totalTarget > 0 ? (totalOutput / totalTarget) * 100 : 0;
     let quality = totalOutput > 0 ? ((totalOutput - totalReject) / totalOutput) * 100 : 0;
     
+    // Hanya cek komponen selain performance untuk warning
+    const hasOver100 = availActual > 100 || avail365 > 100 || quality > 100;
+    
     let oeeActual = (availActual / 100) * (performance / 100) * (quality / 100) * 100;
     let oee365 = (avail365 / 100) * (performance / 100) * (quality / 100) * 100;
-    
-    const hasOver100 = availActual > 100 || avail365 > 100 || performance > 100 || quality > 100;
     
     const over100Warning = document.getElementById('oee-over100-warning');
     if (hasOver100) {
       over100Warning.innerHTML = `
-        <p class="warning-title">⚠️ PERINGATAN: KOMPONEN OEE > 100%</p>
-        <p class="warning-text">TERDAPAT KOMPONEN OEE YANG MELEBIHI 100%. CEK KEMBALI DATA ANDA.</p>
+        <p class="warning-title">⚠️ PERINGATAN: AVAILABILITY ATAU QUALITY > 100%</p>
+        <p class="warning-text">TERDAPAT KOMPONEN AVAILABILITY ATAU QUALITY YANG MELEBIHI 100%. CEK KEMBALI DATA ANDA.</p>
       `;
       over100Warning.style.display = 'block';
     } else {
@@ -2161,8 +2162,9 @@
       return;
     }
 
-    if (oeeFormState.results.hasOver100) {
-      showToast('TERDAPAT KOMPONEN OEE YANG MELEBIHI 100%. CEK KEMBALI DATA ANDA.', 'error');
+    // Cek hanya availability dan quality yang >100% (performance diabaikan)
+    if (oeeFormState.results.availabilityActual > 100 || oeeFormState.results.availability365 > 100 || oeeFormState.results.qualityRate > 100) {
+      showToast('AVAILABILITY ATAU QUALITY TIDAK BOLEH MELEBIHI 100%', 'error');
       return;
     }
 
