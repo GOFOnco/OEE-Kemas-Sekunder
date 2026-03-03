@@ -60,6 +60,11 @@
       font-size: 11px;
     }
 
+    /* Chart labels uppercase */
+    .chart-wrapper canvas {
+      text-transform: uppercase !important;
+    }
+
     /* ==================== HEADER ==================== */
     .header {
       background: linear-gradient(135deg, var(--primary) 0%, #d946a6 50%, var(--primary-dark) 100%);
@@ -1129,7 +1134,7 @@
               <tr>
                 <th>NO</th>
                 <th>PACKER</th>
-                <th>AVG OEE ACTUAL</th>
+                <th>AVG PERFORMANCE</th>
                 <th>TARGET OUTPUT</th>
                 <th>OUTPUT ACTUAL</th>
                 <th>RECORDS</th>
@@ -1527,6 +1532,9 @@
       localData.minor_stop = msRes.data || [];
       localData.oee_records = oeeRes.data || [];
       localData.audit_trail = auditRes.data || [];
+      
+      // Update filtered records setelah load data
+      filteredOeeRecords = [...localData.oee_records];
       
       console.log('✅ Data loaded from Supabase. OEE records:', localData.oee_records.length);
     } catch (error) {
@@ -2272,8 +2280,14 @@
       
       await addAuditLog('INPUT OEE', `${produkBatch} - PACKER: ${allPackerNames} | ODT: ${odtDetails.length} | LSM: ${lsmDetails.length} | LSNM: ${lsnmDetails.length} | MS: ${minorStopDetails.length} | NOTES: ${notes || '-'}`);
       showToast('DATA OEE BERHASIL DISIMPAN ✅', 'success');
+      
+      // Reset form dan refresh dashboard
       resetOEEForm();
-      updateDashboard();
+      await loadDataFromSupabase(); // Reload data dari Supabase
+      applyDashboardFilters(); // Apply filters untuk update filtered records
+      updateDashboard(); // Update dashboard UI
+      switchTab('dashboard'); // Pindah ke tab dashboard
+      
     } catch (error) {
       console.error('❌ Error saving OEE:', error);
       showToast('GAGAL MENYIMPAN DATA OEE - ' + (error.message || ''), 'error');
@@ -2401,15 +2415,39 @@
     document.getElementById('score-total-output').textContent = tOut.toLocaleString('id-ID');
   }
 
-  // ==================== CHART FUNCTIONS ====================
+  // ==================== CHART FUNCTIONS WITH TEXT WRAPPING ====================
   function createBarChartWithLabels(canvasId, labels, data, label, backgroundColor) {
     const ctx = document.getElementById(canvasId).getContext('2d');
     if (dashboardCharts[canvasId]) dashboardCharts[canvasId].destroy();
     
+    // Convert labels to uppercase and wrap long text
+    const wrappedLabels = labels.map(l => {
+      const upperLabel = l.toUpperCase();
+      // Wrap text if too long (more than 25 chars)
+      if (upperLabel.length > 25) {
+        const words = upperLabel.split(' ');
+        let lines = [];
+        let currentLine = '';
+        
+        words.forEach(word => {
+          if ((currentLine + ' ' + word).length <= 25) {
+            currentLine = currentLine ? currentLine + ' ' + word : word;
+          } else {
+            if (currentLine) lines.push(currentLine);
+            currentLine = word;
+          }
+        });
+        if (currentLine) lines.push(currentLine);
+        
+        return lines.length > 1 ? lines : upperLabel;
+      }
+      return upperLabel;
+    });
+
     dashboardCharts[canvasId] = new Chart(ctx, {
       type: 'bar',
       data: {
-        labels: labels,
+        labels: wrappedLabels,
         datasets: [{
           label: label,
           data: data,
@@ -2447,16 +2485,36 @@
           y: { 
             grid: { display: false },
             ticks: {
-              font: { size: 11, weight: 'bold' },
+              font: { 
+                size: 10,
+                weight: 'bold'
+              },
+              maxRotation: 45,
+              minRotation: 30,
+              autoSkip: true,
+              autoSkipPadding: 15,
               callback: function(val) {
                 const label = this.getLabelForValue(val);
-                return label.length > 25 ? label.substr(0, 23) + '...' : label;
+                // Handle array of lines (wrapped text)
+                if (Array.isArray(label)) {
+                  return label;
+                }
+                return label;
               }
+            },
+            afterFit: function(scale) {
+              // Increase width for wrapped labels
+              scale.width = 180;
             }
           }
         },
         layout: {
-          padding: { right: 60 }
+          padding: { 
+            left: 20,
+            right: 60,
+            top: 10,
+            bottom: 10
+          }
         }
       },
       plugins: [{
@@ -2475,7 +2533,7 @@
               const barX = element.x;
               const barY = element.y;
               
-              ctx.font = 'bold 11px "Segoe UI", "Trebuchet MS", sans-serif';
+              ctx.font = 'bold 10px "Segoe UI", "Trebuchet MS", sans-serif';
               ctx.textAlign = 'left';
               ctx.textBaseline = 'middle';
               
@@ -2485,7 +2543,7 @@
               
               ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
               const textWidth = ctx.measureText(valueText).width;
-              ctx.fillRect(textX - 4, textY - 10, textWidth + 8, 20);
+              ctx.fillRect(textX - 4, textY - 8, textWidth + 8, 16);
               
               ctx.fillStyle = '#000000';
               ctx.fillText(valueText, textX, textY);
@@ -2502,10 +2560,19 @@
     const ctx = document.getElementById(canvasId).getContext('2d');
     if (dashboardCharts[canvasId]) dashboardCharts[canvasId].destroy();
     
+    // Convert labels to uppercase and wrap if needed
+    const wrappedLabels = labels.map(l => {
+      const upperLabel = l.toUpperCase();
+      if (upperLabel.length > 15) {
+        return upperLabel.substring(0, 13) + '...';
+      }
+      return upperLabel;
+    });
+    
     dashboardCharts[canvasId] = new Chart(ctx, {
       type: 'line',
       data: {
-        labels: labels,
+        labels: wrappedLabels,
         datasets: [{
           label: label,
           data: data,
@@ -2534,7 +2601,16 @@
           },
           x: { 
             grid: { display: false },
-            ticks: { maxRotation: 45, minRotation: 30 }
+            ticks: { 
+              maxRotation: 45, 
+              minRotation: 30,
+              font: { size: 9 }
+            }
+          }
+        },
+        layout: {
+          padding: {
+            bottom: 20
           }
         }
       }
@@ -2843,11 +2919,20 @@
           },
           y: { 
             grid: { display: false },
-            ticks: { font: { size: 11, weight: 'bold' } }
+            ticks: { 
+              font: { size: 11, weight: 'bold' },
+              maxRotation: 30,
+              minRotation: 20
+            }
           }
         },
         layout: {
-          padding: { right: 60 }
+          padding: { 
+            left: 20,
+            right: 60,
+            top: 10,
+            bottom: 10
+          }
         }
       },
       plugins: [{
@@ -2866,7 +2951,7 @@
               const barX = element.x;
               const barY = element.y;
               
-              ctx.font = 'bold 11px "Segoe UI", "Trebuchet MS", sans-serif';
+              ctx.font = 'bold 10px "Segoe UI", "Trebuchet MS", sans-serif';
               ctx.textAlign = 'left';
               ctx.textBaseline = 'middle';
               
@@ -2876,7 +2961,7 @@
               
               ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
               const textWidth = ctx.measureText(valueText).width;
-              ctx.fillRect(textX - 4, textY - 10, textWidth + 8, 20);
+              ctx.fillRect(textX - 4, textY - 8, textWidth + 8, 16);
               
               ctx.fillStyle = '#000000';
               ctx.fillText(valueText, textX, textY);
@@ -2911,16 +2996,15 @@
         if (!map[p]) {
           map[p] = { 
             nama: p, 
-            oeeValues: [], 
+            performanceValues: [],
             targetOutput: 0,
             outputActual: 0,
             records: 0
           };
         }
-        const oee = parseFloat(r.oee_actual) || 0;
-        if (oee > 0) map[p].oeeValues.push(oee);
-        
         const performance = parseFloat(r.performance) || 0;
+        if (performance > 0) map[p].performanceValues.push(performance);
+        
         const outputActual = parseFloat(r.output_actual) || 0;
         
         if (performance > 0 && outputActual > 0) {
@@ -2936,8 +3020,8 @@
     });
     
     const data = Object.values(map).sort((a,b) => {
-      const aa = a.oeeValues.length ? a.oeeValues.reduce((x,y)=>x+y,0)/a.oeeValues.length : 0;
-      const bb = b.oeeValues.length ? b.oeeValues.reduce((x,y)=>x+y,0)/b.oeeValues.length : 0;
+      const aa = a.performanceValues.length ? a.performanceValues.reduce((x,y)=>x+y,0)/a.performanceValues.length : 0;
+      const bb = b.performanceValues.length ? b.performanceValues.reduce((x,y)=>x+y,0)/b.performanceValues.length : 0;
       return bb - aa;
     });
     
@@ -2948,11 +3032,11 @@
     }
     
     tbody.innerHTML = data.map((p,i) => {
-      const avgOee = p.oeeValues.length ? p.oeeValues.reduce((a,b)=>a+b,0)/p.oeeValues.length : 0;
+      const avgPerformance = p.performanceValues.length ? p.performanceValues.reduce((a,b)=>a+b,0)/p.performanceValues.length : 0;
       return `<tr>
         <td>${i+1}</td>
         <td>${p.nama}</td>
-        <td>${avgOee.toFixed(1)}%</td>
+        <td>${avgPerformance.toFixed(1)}%</td>
         <td>${p.targetOutput.toLocaleString('id-ID', {maximumFractionDigits:1})}</td>
         <td>${p.outputActual.toLocaleString('id-ID', {maximumFractionDigits:1})}</td>
         <td>${p.records}</td>
