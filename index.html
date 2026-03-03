@@ -1546,7 +1546,7 @@
   // ==================== SHIFT ====================
   function updateShiftMinutes() {
     const shift = document.getElementById('oee-shift').value;
-    const shiftSchedule = { 'Shift 1': 510, 'Shift 2': 510, 'Shift 3': 510, 'Longshift Pagi': 720, 'Longshift Malam': 720 };
+    const shiftSchedule = { 'Shift 1': 450, 'Shift 2': 390, 'Shift 3': 450, 'Longshift Pagi': 615, 'Longshift Malam': 615 };
     oeeFormState.shiftMinutes = shiftSchedule[shift] || 0;
     renderODTList();
     renderLineStopMesinList();
