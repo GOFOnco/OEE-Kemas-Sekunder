@@ -1,4 +1,4 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="id">
 <head>
   <meta charset="UTF-8">
@@ -39,8 +39,6 @@
       color: var(--text-dark);
       min-height: 100vh;
       line-height: 1.5;
-      -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
     }
 
     #app {
@@ -49,7 +47,7 @@
       min-height: 100vh;
     }
 
-    /* ==================== TYPOGRAPHY - SEMUA UPPERCASE ==================== */
+    /* ==================== TYPOGRAPHY ==================== */
     h1, h2, h3, h4, h5, h6, p, span, div, label, button, input, select, textarea, th, td, option, .btn, .section-title, .chart-title, .score-label, .master-card-name, .master-card-detail, .empty-state-text, .toast, .warning-title, .warning-text, .login-title, .login-label, .login-error {
       text-transform: uppercase !important;
     }
@@ -58,11 +56,6 @@
       text-transform: uppercase !important;
       opacity: 0.7;
       font-size: 11px;
-    }
-
-    /* Chart labels uppercase */
-    .chart-wrapper canvas {
-      text-transform: uppercase !important;
     }
 
     /* ==================== HEADER ==================== */
@@ -84,14 +77,12 @@
     .header-content {
       flex: 1;
       text-align: center;
-      min-width: 180px;
     }
 
     .header h1 {
       margin: 0;
       font-size: clamp(16px, 5vw, 24px);
       font-weight: 700;
-      letter-spacing: 0.5px;
     }
 
     .header p {
@@ -107,7 +98,6 @@
       font-size: clamp(10px, 2vw, 12px);
       font-weight: 600;
       text-align: right;
-      white-space: nowrap;
     }
 
     .header-datetime-time {
@@ -128,7 +118,6 @@
       display: flex;
       align-items: center;
       gap: 6px;
-      white-space: nowrap;
       transition: var(--transition);
     }
 
@@ -137,34 +126,17 @@
       border-color: rgba(255, 255, 255, 0.5);
     }
 
-    .mode-toggle:active {
-      transform: scale(0.98);
-    }
-
     /* ==================== TABS ==================== */
     .tabs-container {
       display: flex;
       background: rgba(255, 255, 255, 0.5);
       backdrop-filter: blur(8px);
-      -webkit-backdrop-filter: blur(8px);
       border-bottom: 2px solid rgba(236, 72, 153, 0.1);
       padding: 0 8px;
       overflow-x: auto;
-      overflow-y: hidden;
-      -webkit-overflow-scrolling: touch;
-      scrollbar-width: thin;
       position: sticky;
       top: 76px;
       z-index: 99;
-    }
-
-    .tabs-container::-webkit-scrollbar {
-      height: 3px;
-    }
-
-    .tabs-container::-webkit-scrollbar-thumb {
-      background: var(--primary);
-      border-radius: 10px;
     }
 
     .tab-btn {
@@ -178,14 +150,9 @@
       border-bottom: 3px solid transparent;
       transition: var(--transition);
       white-space: nowrap;
-      flex-shrink: 0;
     }
 
-    .tab-btn:hover {
-      color: var(--primary);
-    }
-
-    .tab-btn.active {
+    .tab-btn:hover, .tab-btn.active {
       color: var(--primary);
       border-bottom-color: var(--primary);
     }
@@ -195,7 +162,6 @@
       flex: 1;
       overflow-y: auto;
       padding: 12px;
-      -webkit-overflow-scrolling: touch;
     }
 
     .tab-content {
@@ -220,11 +186,6 @@
       margin-bottom: 16px;
       box-shadow: var(--box-shadow);
       border: 1px solid rgba(236, 72, 153, 0.1);
-      transition: var(--transition);
-    }
-
-    .form-section:hover {
-      box-shadow: 0 8px 24px rgba(236, 72, 153, 0.12);
     }
 
     .section-title {
@@ -235,7 +196,6 @@
       display: flex;
       align-items: center;
       gap: 8px;
-      word-break: break-word;
     }
 
     .section-title::before {
@@ -264,7 +224,6 @@
       font-weight: 600;
       color: #6b4c5c;
       margin-bottom: 4px;
-      word-break: break-word;
     }
 
     .form-group input,
@@ -279,17 +238,12 @@
       background: #faf9fb;
       color: var(--text-dark);
       width: 100%;
-      -webkit-appearance: none;
-      appearance: none;
-      word-break: break-word;
     }
 
     .form-group input:focus,
-    .form-group select:focus,
-    .form-group textarea:focus {
+    .form-group select:focus {
       outline: none;
       border-color: var(--primary);
-      background: white;
       box-shadow: 0 0 0 3px rgba(236, 72, 153, 0.1);
     }
 
@@ -313,7 +267,6 @@
       justify-content: center;
       gap: 6px;
       white-space: nowrap;
-      min-width: 80px;
     }
 
     .btn:active {
@@ -323,41 +276,44 @@
     .btn-small {
       padding: 6px 12px;
       font-size: clamp(10px, 1.5vw, 11px);
-      min-width: 60px;
     }
 
     .btn-primary {
       background: linear-gradient(135deg, var(--primary) 0%, #d946a6 100%);
       color: white;
     }
-
     .btn-primary:hover {
       background: linear-gradient(135deg, #d946a6 0%, var(--primary-dark) 100%);
-    }
-
-    .btn-secondary {
-      background: var(--gray);
-      color: white;
-    }
-
-    .btn-secondary:hover {
-      background: #6b7280;
     }
 
     .btn-success {
       background: var(--success);
       color: white;
     }
-
     .btn-success:hover {
       background: #059669;
+    }
+
+    .btn-warning {
+      background: var(--warning);
+      color: white;
+    }
+    .btn-warning:hover {
+      background: #d97706;
+    }
+
+    .btn-secondary {
+      background: var(--gray);
+      color: white;
+    }
+    .btn-secondary:hover {
+      background: #6b7280;
     }
 
     .btn-danger {
       background: var(--danger);
       color: white;
     }
-
     .btn-danger:hover {
       background: #dc2626;
     }
@@ -378,9 +334,6 @@
       box-shadow: var(--box-shadow);
       border: 1px solid rgba(236, 72, 153, 0.1);
       transition: var(--transition);
-      display: flex;
-      flex-direction: column;
-      word-break: break-word;
     }
 
     .score-card:hover {
@@ -393,7 +346,6 @@
       color: #6b4c5c;
       font-weight: 600;
       margin-bottom: 8px;
-      word-break: break-word;
     }
 
     .score-value {
@@ -404,54 +356,85 @@
       -webkit-text-fill-color: transparent;
       background-clip: text;
       line-height: 1.2;
-      word-break: break-word;
     }
 
-    /* ==================== PACKER METER CARDS ==================== */
-    .card {
-      background: white;
-      border-radius: var(--border-radius);
+    /* ==================== PRODUCTION ROW ==================== */
+    .production-row {
+      display: grid;
+      grid-template-columns: 2fr 1.5fr 2fr;
+      gap: 12px;
       padding: 16px;
+      background: #fdf2f8;
+      border-radius: var(--border-radius-sm);
       margin-bottom: 16px;
-      border: 2px solid rgba(236, 72, 153, 0.2);
+      border: 2px solid var(--primary);
+    }
+
+    /* PACKER CHECKBOX GRID - 6 KOLOM */
+    .packer-checkbox-grid {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 8px;
+      background: white;
+      padding: 12px;
+      border-radius: var(--border-radius-sm);
+      border: 1px solid #f3e8f0;
+    }
+
+    .packer-checkbox-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      font-weight: 600;
+      padding: 6px;
+      border-radius: 6px;
+      background: #faf9fb;
+      border: 1px solid #f3e8f0;
       transition: var(--transition);
     }
 
-    .card:hover {
-      border-color: var(--primary);
+    .packer-checkbox-item:hover {
+      background: #fce7f3;
+      border-color: var(--primary-light);
     }
 
-    .card-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 16px;
-      flex-wrap: wrap;
-      gap: 8px;
+    .packer-checkbox-item input[type="checkbox"] {
+      width: 16px;
+      height: 16px;
+      accent-color: var(--primary);
+      cursor: pointer;
     }
 
-    .card-title {
-      margin: 0;
-      font-size: 16px;
-      font-weight: 700;
-      color: var(--primary);
-      word-break: break-word;
-    }
-
-    /* ==================== PACKER ROW ==================== */
-    .packer-row {
+    /* ==================== PERBANTUAN ROW ==================== */
+    .perbantuan-row {
       display: grid;
-      grid-template-columns: 2fr 1fr 1.5fr 1.5fr 0.8fr;
-      gap: 8px;
+      grid-template-columns: 1.5fr 1fr 1fr 0.5fr;
+      gap: 12px;
       padding: 12px;
-      background: #fdf2f8;
+      background: #fff3cd;
       border-radius: var(--border-radius-sm);
       margin-bottom: 8px;
-      border: 1px solid rgba(236, 72, 153, 0.2);
-      align-items: end;
+      border: 1px solid #ffe69c;
     }
 
-    /* ==================== DOWNTIME ROWS - DENGAN FREKUENSI ==================== */
+    .perbantuan-row input {
+      background: #fff9e6;
+    }
+
+    /* ==================== OUTPUT & REJECT ROW ==================== */
+    .output-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      padding: 16px;
+      background: #e6f3ff;
+      border-radius: var(--border-radius-sm);
+      margin-top: 16px;
+      border: 2px solid #3b82f6;
+    }
+
+    /* ==================== DOWNTIME ROWS ==================== */
     .downtime-row {
       display: grid;
       grid-template-columns: 2fr 0.5fr 1fr;
@@ -466,7 +449,7 @@
 
     .lsm-row {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+      grid-template-columns: 2fr 1fr 1.5fr 1.5fr 0.8fr;
       gap: 8px;
       padding: 12px;
       background: #faf5ff;
@@ -478,7 +461,7 @@
 
     .lsnm-row {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+      grid-template-columns: 2fr 1fr 1.5fr 0.8fr;
       gap: 8px;
       padding: 12px;
       background: #f0fdf4;
@@ -490,7 +473,7 @@
 
     .ms-row {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+      grid-template-columns: 2fr 1fr 0.8fr;
       gap: 8px;
       padding: 12px;
       background: #fef3c7;
@@ -500,48 +483,281 @@
       border: 1px solid rgba(217, 119, 6, 0.2);
     }
 
-    /* ==================== TABLES ==================== */
-    .table-wrapper {
-      overflow-x: auto;
-      -webkit-overflow-scrolling: touch;
-      border-radius: var(--border-radius-sm);
-      margin-top: 16px;
-      border: 1px solid rgba(236, 72, 153, 0.1);
+    /* ==================== ACHIEVEMENT TABLE ==================== */
+    .achievement-container {
+      background: white;
+      border-radius: var(--border-radius);
+      padding: 20px;
+      margin-bottom: 20px;
+      box-shadow: var(--box-shadow);
     }
 
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: clamp(11px, 2vw, 12px);
-      min-width: 600px;
+    .achievement-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+      gap: 15px;
     }
 
-    thead {
-      background: rgba(236, 72, 153, 0.08);
+    .achievement-title {
+      display: flex;
+      align-items: center;
+      gap: 10px;
     }
 
-    thead th {
-      padding: 12px 8px;
-      text-align: left;
+    .achievement-title h2 {
+      font-size: 18px;
+      color: var(--primary);
+      margin: 0;
+    }
+
+    .achievement-title span {
+      background: var(--primary-light);
+      color: var(--primary-dark);
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .filter-section {
+      background: #f8fafc;
+      border-radius: 12px;
+      padding: 16px;
+      margin-bottom: 20px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
+      align-items: flex-end;
+      border: 1px solid #e2e8f0;
+    }
+
+    .filter-group {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      min-width: 150px;
+    }
+
+    .filter-group label {
+      font-size: 10px;
+      color: #64748b;
+      font-weight: 600;
+    }
+
+    .filter-group select,
+    .filter-group input {
+      padding: 8px 12px;
+      border: 2px solid #e2e8f0;
+      border-radius: 8px;
+      font-size: 12px;
+      background: white;
+    }
+
+    .filter-group select:focus,
+    .filter-group input:focus {
+      border-color: var(--primary);
+      outline: none;
+    }
+
+    .summary-cards {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 15px;
+      margin-bottom: 20px;
+    }
+
+    .summary-item {
+      background: linear-gradient(135deg, #f8fafc, #f1f5f9);
+      border-radius: 12px;
+      padding: 16px;
+      text-align: center;
+      border: 1px solid #e2e8f0;
+    }
+
+    .summary-label {
+      font-size: 11px;
+      color: #64748b;
+      margin-bottom: 8px;
+    }
+
+    .summary-value {
+      font-size: 24px;
       font-weight: 700;
       color: var(--primary);
-      border-bottom: 2px solid rgba(236, 72, 153, 0.2);
-      white-space: normal;
-      word-break: break-word;
+      margin-bottom: 4px;
     }
 
-    tbody td {
-      padding: 10px 8px;
-      border-bottom: 1px solid rgba(236, 72, 153, 0.1);
-      word-break: break-word;
-      white-space: normal;
+    .status-distribution {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      margin-top: 8px;
     }
 
-    tbody tr:hover {
-      background: rgba(236, 72, 153, 0.05);
+    .status-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
     }
 
-    /* ==================== MASTER DATA GRID ==================== */
+    .status-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+    }
+
+    .dot-green { background: #22c55e; }
+    .dot-yellow { background: #f59e0b; }
+    .dot-red { background: #ef4444; }
+
+    .table-wrapper {
+      overflow-x: auto;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      margin-bottom: 16px;
+    }
+
+    #achievement-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 12px;
+      min-width: 1000px;
+    }
+
+    #achievement-table thead {
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+    }
+
+    #achievement-table thead th {
+      padding: 14px 12px;
+      color: white;
+      font-weight: 600;
+      text-align: left;
+    }
+
+    #achievement-table tbody tr {
+      border-bottom: 1px solid #f1f5f9;
+      transition: var(--transition);
+    }
+
+    #achievement-table tbody tr:hover {
+      background: #fce7f3;
+    }
+
+    #achievement-table tbody td {
+      padding: 12px;
+      color: #334155;
+    }
+
+    .packer-name {
+      font-weight: 700;
+      color: var(--primary-dark);
+    }
+
+    .text-right {
+      text-align: right;
+    }
+
+    .achievement-badge {
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-weight: 600;
+      font-size: 11px;
+      min-width: 80px;
+      text-align: center;
+    }
+
+    .badge-green {
+      background: #22c55e20;
+      color: #16a34a;
+      border: 1px solid #22c55e;
+    }
+
+    .badge-yellow {
+      background: #f59e0b20;
+      color: #b45309;
+      border: 1px solid #f59e0b;
+    }
+
+    .badge-red {
+      background: #ef444420;
+      color: #b91c1c;
+      border: 1px solid #ef4444;
+    }
+
+    .pagination {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 15px;
+    }
+
+    .pagination-info {
+      font-size: 11px;
+      color: #64748b;
+    }
+
+    .pagination-controls {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .pagination-btn {
+      background: white;
+      border: 2px solid #e2e8f0;
+      padding: 6px 14px;
+      border-radius: 8px;
+      font-size: 11px;
+      font-weight: 600;
+      color: #334155;
+      cursor: pointer;
+    }
+
+    .pagination-btn:hover:not(:disabled) {
+      border-color: var(--primary);
+      color: var(--primary);
+    }
+
+    .pagination-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .pagination-page {
+      background: var(--primary);
+      color: white;
+      padding: 6px 16px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 600;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 48px 20px;
+      background: #f8fafc;
+      border-radius: 12px;
+    }
+
+    .empty-icon {
+      font-size: 48px;
+      margin-bottom: 16px;
+    }
+
+    .empty-text {
+      font-size: 14px;
+      color: #64748b;
+      margin-bottom: 8px;
+    }
+
+    /* ==================== MASTER DATA ==================== */
     .master-data-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
@@ -558,7 +774,6 @@
       justify-content: space-between;
       align-items: center;
       gap: 8px;
-      transition: var(--transition);
     }
 
     .master-card:hover {
@@ -567,132 +782,19 @@
 
     .master-card-content {
       flex: 1;
-      min-width: 0;
     }
 
     .master-card-name {
-      font-size: clamp(12px, 2.5vw, 13px);
+      font-size: 13px;
       font-weight: 700;
       color: #d946a6;
       margin: 0 0 4px;
-      word-break: break-word;
-      white-space: normal;
     }
 
     .master-card-detail {
-      font-size: clamp(10px, 2vw, 11px);
+      font-size: 11px;
       color: #b9a2b3;
       margin: 0;
-      word-break: break-word;
-      white-space: normal;
-    }
-
-    .master-card-actions {
-      display: flex;
-      gap: 6px;
-      flex-wrap: wrap;
-    }
-
-    .btn-edit, .btn-delete {
-      padding: 6px 10px;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-      font-size: clamp(9px, 1.5vw, 10px);
-      font-weight: 600;
-      transition: var(--transition);
-      white-space: nowrap;
-    }
-
-    .btn-edit {
-      background: var(--secondary);
-      color: white;
-    }
-
-    .btn-edit:hover {
-      background: #9333ea;
-    }
-
-    .btn-delete {
-      background: var(--danger);
-      color: white;
-    }
-
-    .btn-delete:hover {
-      background: #dc2626;
-    }
-
-    /* ==================== EMPTY STATE ==================== */
-    .empty-state {
-      text-align: center;
-      padding: 32px 16px;
-      color: #b9a2b3;
-    }
-
-    .empty-state-icon {
-      font-size: clamp(32px, 8vw, 48px);
-      margin-bottom: 16px;
-    }
-
-    .empty-state-text {
-      font-size: clamp(11px, 2vw, 13px);
-      font-weight: 600;
-      letter-spacing: 0.5px;
-      word-break: break-word;
-    }
-
-    /* ==================== WARNING ==================== */
-    .warning-box {
-      background: #fef2f2;
-      border: 2px solid var(--danger);
-      border-radius: 10px;
-      padding: 16px;
-      margin-bottom: 16px;
-      color: #dc2626;
-    }
-
-    .warning-title {
-      margin: 0 0 8px;
-      font-weight: 700;
-      font-size: 13px;
-      word-break: break-word;
-    }
-
-    .warning-text {
-      margin: 0;
-      font-size: 12px;
-      word-break: break-word;
-    }
-
-    /* ==================== CHARTS ==================== */
-    .chart-container {
-      background: white;
-      border-radius: var(--border-radius);
-      padding: 16px;
-      margin-bottom: 16px;
-      box-shadow: var(--box-shadow);
-      border: 1px solid rgba(236, 72, 153, 0.1);
-      overflow-x: auto;
-    }
-
-    .chart-title {
-      font-size: clamp(12px, 3vw, 13px);
-      font-weight: 700;
-      color: #d946a6;
-      margin-bottom: 16px;
-      word-break: break-word;
-    }
-
-    .chart-wrapper {
-      position: relative;
-      min-height: 300px;
-      width: 100%;
-    }
-
-    canvas {
-      width: 100% !important;
-      height: auto !important;
-      max-height: 300px;
     }
 
     /* ==================== TOAST ==================== */
@@ -704,8 +806,6 @@
       display: flex;
       flex-direction: column;
       gap: 12px;
-      pointer-events: none;
-      max-width: 90vw;
     }
 
     .toast {
@@ -717,9 +817,7 @@
       font-size: 12px;
       font-weight: 600;
       animation: slideIn 0.3s ease;
-      pointer-events: auto;
       border-left: 4px solid var(--primary);
-      word-break: break-word;
     }
 
     .toast.success {
@@ -737,72 +835,6 @@
       to { transform: translateX(0); opacity: 1; }
     }
 
-    /* ==================== MODAL ==================== */
-    #modal-backdrop, #login-backdrop {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: rgba(0, 0, 0, 0.5);
-      z-index: 9998;
-    }
-
-    #modal, #login-modal {
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      background: white;
-      border-radius: 16px;
-      padding: 24px;
-      z-index: 9999;
-      width: 90%;
-      max-width: 450px;
-      max-height: 90vh;
-      overflow-y: auto;
-      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-    }
-
-    #modal-title, .login-title {
-      margin: 0 0 20px;
-      color: var(--primary);
-      font-size: 18px;
-      font-weight: 700;
-      text-align: center;
-      word-break: break-word;
-    }
-
-    .login-input {
-      width: 100%;
-      padding: 12px;
-      border: 2px solid #f3e8f0;
-      border-radius: var(--border-radius-sm);
-      font-size: 14px;
-      margin-bottom: 16px;
-    }
-
-    .login-input:focus {
-      outline: none;
-      border-color: var(--primary);
-      box-shadow: 0 0 0 3px rgba(236, 72, 153, 0.1);
-    }
-
-    .login-error {
-      color: var(--danger);
-      font-size: 12px;
-      margin-top: -12px;
-      margin-bottom: 16px;
-      text-align: center;
-      font-weight: 600;
-      word-break: break-word;
-    }
-
-    .login-buttons {
-      display: flex;
-      gap: 12px;
-    }
-
     /* ==================== DARK MODE ==================== */
     body.dark-mode {
       background: linear-gradient(135deg, #1f1729 0%, #2d1f35 50%, #3d2640 100%);
@@ -812,190 +844,91 @@
     body.dark-mode .form-section,
     body.dark-mode .score-card,
     body.dark-mode .chart-container,
-    body.dark-mode .card,
-    body.dark-mode .master-card,
-    body.dark-mode #modal,
-    body.dark-mode #login-modal {
+    body.dark-mode .achievement-container,
+    body.dark-mode .filter-section,
+    body.dark-mode .summary-item,
+    body.dark-mode .master-card {
       background: #2d2236;
       border-color: rgba(236, 72, 153, 0.15);
       color: var(--text-light);
     }
 
-    body.dark-mode .form-group label,
-    body.dark-mode .score-label {
-      color: #b9a2b3;
-    }
-
-    body.dark-mode .form-group input,
-    body.dark-mode .form-group select,
-    body.dark-mode .input-field {
+    body.dark-mode .filter-section {
       background: #1f1729;
-      color: var(--text-light);
+    }
+
+    body.dark-mode .filter-group select,
+    body.dark-mode .filter-group input {
+      background: #1f1729;
       border-color: #403050;
-    }
-
-    body.dark-mode .form-group input:focus,
-    body.dark-mode .form-group select:focus,
-    body.dark-mode .input-field:focus {
-      background: #2d2236;
-      border-color: var(--primary);
-    }
-
-    body.dark-mode thead {
-      background: rgba(60, 40, 60, 0.8);
-    }
-
-    body.dark-mode thead th {
-      color: #f472b6;
-    }
-
-    body.dark-mode tbody td {
       color: var(--text-light);
     }
 
-    body.dark-mode .tab-btn {
-      color: #9ca3af;
+    body.dark-mode #achievement-table tbody td {
+      color: #e5e5e5;
     }
 
-    body.dark-mode .tab-btn:hover,
-    body.dark-mode .tab-btn.active {
-      color: #f472b6;
+    body.dark-mode #achievement-table tbody tr:hover {
+      background: #2d2236;
     }
 
-    body.dark-mode .section-title,
-    body.dark-mode .chart-title,
-    body.dark-mode .card-title,
-    body.dark-mode .master-card-name {
-      color: #f472b6;
+    body.dark-mode .pagination-btn {
+      background: #1f1729;
+      border-color: #403050;
+      color: #e5e5e5;
     }
 
-    body.dark-mode .master-card-detail {
-      color: #9ca3af;
+    /* ==================== RESPONSIVE ==================== */
+    @media (max-width: 1200px) {
+      .packer-checkbox-grid {
+        grid-template-columns: repeat(4, 1fr);
+      }
+      .summary-cards {
+        grid-template-columns: repeat(2, 1fr);
+      }
     }
 
-    /* ==================== RESPONSIVE BREAKPOINTS ==================== */
+    @media (max-width: 900px) {
+      .packer-checkbox-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+
+    @media (max-width: 768px) {
+      .production-row {
+        grid-template-columns: 1fr;
+      }
+      .perbantuan-row {
+        grid-template-columns: 1fr;
+      }
+      .output-row {
+        grid-template-columns: 1fr;
+      }
+      .achievement-header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      .filter-section {
+        flex-direction: column;
+      }
+    }
+
     @media (max-width: 640px) {
-      .header {
-        flex-direction: column;
-        text-align: center;
-        padding: 12px;
-      }
-
-      .header-datetime {
-        text-align: center;
-        align-items: center;
-      }
-
-      .score-cards {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 8px;
-      }
-
-      .score-card {
-        padding: 12px 8px;
-      }
-
-      .score-value {
-        font-size: 20px;
-      }
-
-      .packer-row {
-        grid-template-columns: 1fr;
-        gap: 12px;
-      }
-
-      .form-row {
-        grid-template-columns: 1fr;
-      }
-
-      .downtime-row {
-        grid-template-columns: 1fr;
-      }
-      
-      .lsm-row,
-      .lsnm-row,
-      .ms-row {
-        grid-template-columns: 1fr;
-      }
-
-      .btn {
-        width: 100%;
-      }
-
-      .master-card {
-        flex-direction: column;
-        text-align: center;
-      }
-
-      .master-card-actions {
-        width: 100%;
-        justify-content: center;
-      }
-
-      .card-header {
-        flex-direction: column;
-      }
-
-      .card-header button {
-        width: 100%;
-      }
-
-      #modal, #login-modal {
-        width: 95%;
-        padding: 20px;
-      }
-      
-      .chart-wrapper {
-        min-height: 250px;
-      }
-    }
-
-    @media (min-width: 641px) and (max-width: 1024px) {
-      .score-cards {
-        grid-template-columns: repeat(3, 1fr);
-      }
-
-      .packer-row {
-        grid-template-columns: repeat(3, 1fr);
-      }
-
-      .master-data-grid {
+      .packer-checkbox-grid {
         grid-template-columns: repeat(2, 1fr);
       }
-    }
-
-    @media (min-width: 1025px) {
-      .score-cards {
-        grid-template-columns: repeat(7, 1fr);
+      .summary-cards {
+        grid-template-columns: 1fr;
       }
-
-      .master-data-grid {
-        grid-template-columns: repeat(3, 1fr);
-      }
-
-      .content {
-        padding: 24px;
+      .downtime-row, .lsm-row, .lsnm-row, .ms-row {
+        grid-template-columns: 1fr;
       }
     }
-
-    /* ==================== UTILITIES ==================== */
-    .text-center { text-align: center; }
-    .text-right { text-align: right; }
-    .w-100 { width: 100%; }
-    .mt-16 { margin-top: 16px; }
-    .mb-16 { margin-bottom: 16px; }
-    .flex { display: flex; }
-    .flex-col { flex-direction: column; }
-    .gap-8 { gap: 8px; }
-    .gap-12 { gap: 12px; }
-    .word-break { word-break: break-word; }
-    .white-space-normal { white-space: normal; }
   </style>
-  <style>@view-transition { navigation: auto; }</style>
 </head>
 <body>
 <div id="app">
-  <!-- ==================== HEADER ==================== -->
+  <!-- HEADER -->
   <div class="header">
     <div class="header-content">
       <h1>✨ OEE KEMAS SEKUNDER</h1>
@@ -1013,7 +946,7 @@
     </div>
   </div>
 
-  <!-- ==================== TABS ==================== -->
+  <!-- TABS -->
   <div class="tabs-container">
     <button class="tab-btn active" onclick="switchTab('dashboard')">📈 DASHBOARD</button>
     <button class="tab-btn" onclick="switchTab('input')">✏️ INPUT OEE</button>
@@ -1021,12 +954,13 @@
     <button class="tab-btn" onclick="switchTab('audit')">⚙️ AUDIT TRAIL</button>
   </div>
 
-  <!-- ==================== CONTENT ==================== -->
+  <!-- CONTENT -->
   <div class="content">
     <!-- ==================== DASHBOARD TAB ==================== -->
     <div id="dashboard" class="tab-content active">
+      <!-- FILTER SECTION -->
       <div class="form-section">
-        <div class="section-title">FILTER DATA</div>
+        <div class="section-title">FILTER DASHBOARD</div>
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px;">
           <div class="form-group">
             <label>TANGGAL MULAI</label>
@@ -1039,7 +973,7 @@
           <div class="form-group">
             <label>SHIFT</label>
             <select id="filter-shift" class="input-field" onchange="applyDashboardFilters()">
-              <option value="">-- SEMUA SHIFT --</option>
+              <option value="">SEMUA SHIFT</option>
               <option value="Shift 1">SHIFT 1</option>
               <option value="Shift 2">SHIFT 2</option>
               <option value="Shift 3">SHIFT 3</option>
@@ -1050,104 +984,157 @@
           <div class="form-group">
             <label>PRODUK</label>
             <select id="filter-product" class="input-field" onchange="applyDashboardFilters()">
-              <option value="">-- SEMUA PRODUK --</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label>PACKER</label>
-            <select id="filter-packer" class="input-field" onchange="applyDashboardFilters()">
-              <option value="">-- SEMUA PACKER --</option>
+              <option value="">SEMUA PRODUK</option>
             </select>
           </div>
           <div style="display: flex; align-items: flex-end;">
-            <button class="btn btn-secondary w-100" onclick="resetDashboardFilters()">RESET FILTER</button>
+            <button class="btn btn-secondary w-100" onclick="resetDashboardFilters()">RESET</button>
           </div>
         </div>
       </div>
 
-      <!-- SCORE CARDS DASHBOARD -->
+      <!-- SCORE CARDS -->
       <div class="score-cards">
-        <div class="score-card" id="score-card-oee-actual">
+        <div class="score-card">
           <div class="score-label">OEE ACTUAL</div>
           <div class="score-value" id="score-oee-actual">0%</div>
         </div>
-        <div class="score-card" id="score-card-oee-365">
+        <div class="score-card">
           <div class="score-label">OEE 365</div>
           <div class="score-value" id="score-oee-365">0%</div>
         </div>
         <div class="score-card">
           <div class="score-label">TOTAL OUTPUT</div>
-          <div class="score-value" id="score-total-output" style="font-size: 24px;">0</div>
+          <div class="score-value" id="score-total-output">0</div>
         </div>
       </div>
 
       <!-- CHARTS -->
       <div class="chart-container">
-        <div class="chart-title">OEE PER BULAN (12 BULAN)</div>
-        <div class="chart-wrapper">
-          <canvas id="chart-oee-monthly"></canvas>
-        </div>
+        <div class="chart-title">📈 OEE PER BULAN</div>
+        <div class="chart-wrapper"><canvas id="chart-oee-monthly"></canvas></div>
       </div>
       <div class="chart-container">
-        <div class="chart-title">OEE PER HARI (30 HARI TERAKHIR)</div>
-        <div class="chart-wrapper">
-          <canvas id="chart-oee-daily"></canvas>
-        </div>
-      </div>
-      <div class="chart-container">
-        <div class="chart-title">A / P / Q / 365 BREAKDOWN</div>
-        <div class="chart-wrapper">
-          <canvas id="chart-apqa-breakdown"></canvas>
-        </div>
-      </div>
-      <div class="chart-container">
-        <div class="chart-title">TOP 10 ODT (MENIT)</div>
-        <div class="chart-wrapper">
-          <canvas id="chart-odt-top10"></canvas>
-        </div>
-      </div>
-      <div class="chart-container">
-        <div class="chart-title">TOP 10 LINE STOP MESIN (MENIT)</div>
-        <div class="chart-wrapper">
-          <canvas id="chart-lsm-top10"></canvas>
-        </div>
-      </div>
-      <div class="chart-container">
-        <div class="chart-title">TOP 10 LINE STOP NON-MESIN (MENIT)</div>
-        <div class="chart-wrapper">
-          <canvas id="chart-lsnm-top10"></canvas>
-        </div>
-      </div>
-      <div class="chart-container">
-        <div class="chart-title">TOP 10 MINOR STOP (MENIT)</div>
-        <div class="chart-wrapper">
-          <canvas id="chart-ms-top10"></canvas>
-        </div>
+        <div class="chart-title">📊 OEE PER HARI</div>
+        <div class="chart-wrapper"><canvas id="chart-oee-daily"></canvas></div>
       </div>
 
-      <!-- PACKER PERFORMANCE TABLE -->
-      <div class="form-section">
-        <div class="section-title">PERFORMA PACKER</div>
+      <!-- ACHIEVEMENT TABLE -->
+      <div class="achievement-container">
+        <div class="achievement-header">
+          <div class="achievement-title">
+            <h2>🎯 ACHIEVEMENT PER PACKER</h2>
+            <span id="total-records-badge">0 DATA</span>
+          </div>
+          <button class="btn btn-success btn-small" onclick="exportAchievementToExcel()">
+            ⬇️ EXPORT EXCEL
+          </button>
+        </div>
+
+        <!-- FILTER ACHIEVEMENT -->
+        <div class="filter-section">
+          <div class="filter-group">
+            <label>SHIFT</label>
+            <select id="achievement-filter-shift" onchange="filterAchievement()">
+              <option value="">SEMUA SHIFT</option>
+              <option value="Shift 1">SHIFT 1</option>
+              <option value="Shift 2">SHIFT 2</option>
+              <option value="Shift 3">SHIFT 3</option>
+              <option value="Longshift Pagi">LONGSHIFT PAGI</option>
+              <option value="Longshift Malam">LONGSHIFT MALAM</option>
+            </select>
+          </div>
+          <div class="filter-group">
+            <label>TANGGAL</label>
+            <input type="date" id="achievement-filter-date" onchange="filterAchievement()">
+          </div>
+          <div class="filter-group">
+            <label>CARI PACKER</label>
+            <input type="text" id="achievement-search-packer" placeholder="KETIK NAMA..." onkeyup="filterAchievement()">
+          </div>
+          <div class="filter-actions">
+            <button class="btn btn-small btn-secondary" onclick="resetAchievementFilter()">RESET</button>
+          </div>
+        </div>
+
+        <!-- SUMMARY CARDS -->
+        <div class="summary-cards">
+          <div class="summary-item">
+            <div class="summary-label">TOTAL RECORD</div>
+            <div class="summary-value" id="stat-total">0</div>
+          </div>
+          <div class="summary-item">
+            <div class="summary-label">RATA-RATA</div>
+            <div class="summary-value" id="stat-avg">0%</div>
+          </div>
+          <div class="summary-item">
+            <div class="summary-label">TOTAL OUTPUT</div>
+            <div class="summary-value" id="stat-total-output-ach">0</div>
+          </div>
+          <div class="summary-item">
+            <div class="summary-label">STATUS</div>
+            <div class="status-distribution">
+              <div class="status-item">
+                <span class="status-dot dot-green"></span>
+                <span id="stat-green">0</span>
+              </div>
+              <div class="status-item">
+                <span class="status-dot dot-yellow"></span>
+                <span id="stat-yellow">0</span>
+              </div>
+              <div class="status-item">
+                <span class="status-dot dot-red"></span>
+                <span id="stat-red">0</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- TABLE -->
         <div class="table-wrapper">
-          <table>
+          <table id="achievement-table">
             <thead>
               <tr>
                 <th>NO</th>
+                <th>TANGGAL</th>
+                <th>SHIFT</th>
                 <th>PACKER</th>
-                <th>AVG PERFORMANCE</th>
-                <th>TARGET OUTPUT</th>
-                <th>OUTPUT ACTUAL</th>
-                <th>RECORDS</th>
+                <th>PRODUK</th>
+                <th class="text-right">TARGET</th>
+                <th class="text-right">ACTUAL</th>
+                <th class="text-right">ACHIEVEMENT</th>
+                <th>STATUS</th>
               </tr>
             </thead>
-            <tbody id="table-packer-performance"></tbody>
+            <tbody id="achievement-table-body">
+              <tr>
+                <td colspan="9">
+                  <div class="empty-state">
+                    <div class="empty-icon">📊</div>
+                    <div class="empty-text">BELUM ADA DATA</div>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
           </table>
+        </div>
+
+        <!-- PAGINATION -->
+        <div class="pagination">
+          <div class="pagination-info">
+            MENAMPILKAN <span id="pagination-start">0</span> - <span id="pagination-end">0</span> DARI <span id="pagination-total">0</span>
+          </div>
+          <div class="pagination-controls">
+            <button class="pagination-btn" onclick="prevPage()" id="prev-btn" disabled>← PREV</button>
+            <span class="pagination-page" id="page-info">1/1</span>
+            <button class="pagination-btn" onclick="nextPage()" id="next-btn" disabled>NEXT →</button>
+          </div>
         </div>
       </div>
 
-      <!-- OEE HISTORY TABLE -->
+      <!-- OEE HISTORY -->
       <div class="form-section">
-        <div class="section-title">RIWAYAT OEE</div>
+        <div class="section-title">📋 RIWAYAT OEE</div>
         <div class="table-wrapper">
           <table>
             <thead>
@@ -1155,54 +1142,11 @@
                 <th>TANGGAL</th>
                 <th>SHIFT</th>
                 <th>PACKER</th>
-                <th>NOMOR BATCH</th>
-                <th>OEE ACTUAL</th>
-                <th>OEE 365</th>
-                <th>NOTES</th>
+                <th>PRODUK</th>
+                <th class="text-right">OEE</th>
               </tr>
             </thead>
             <tbody id="table-oee-history"></tbody>
-          </table>
-        </div>
-      </div>
-
-      <!-- LINE STOP MESIN DETAIL -->
-      <div class="form-section">
-        <div class="section-title">DETAIL LINE STOP MESIN</div>
-        <div class="table-wrapper">
-          <table>
-            <thead>
-              <tr>
-                <th>TANGGAL</th>
-                <th>SHIFT</th>
-                <th>PACKER</th>
-                <th>LINE STOP MESIN</th>
-                <th>DURASI (MENIT)</th>
-                <th>NO WR</th>
-                <th>ACTION</th>
-              </tr>
-            </thead>
-            <tbody id="table-lsm-detail"></tbody>
-          </table>
-        </div>
-      </div>
-
-      <!-- LINE STOP NON-MESIN DETAIL -->
-      <div class="form-section">
-        <div class="section-title">DETAIL LINE STOP NON-MESIN</div>
-        <div class="table-wrapper">
-          <table>
-            <thead>
-              <tr>
-                <th>TANGGAL</th>
-                <th>SHIFT</th>
-                <th>PACKER</th>
-                <th>LINE STOP NON-MESIN</th>
-                <th>DURASI (MENIT)</th>
-                <th>ACTION</th>
-              </tr>
-            </thead>
-            <tbody id="table-lsnm-detail"></tbody>
           </table>
         </div>
       </div>
@@ -1221,19 +1165,19 @@
             </div>
             <div class="form-group">
               <label>SHIFT</label>
-              <select id="oee-shift" onchange="updateShiftMinutes()">
-                <option value="">-- PILIH SHIFT --</option>
-                <option value="Shift 1">SHIFT 1 (07:00 - 15:30)</option>
-                <option value="Shift 2">SHIFT 2 (15:20 - 22:50)</option>
-                <option value="Shift 3">SHIFT 3 (22:40 - 07:10)</option>
-                <option value="Longshift Pagi">LONGSHIFT PAGI (07:00 - 19:00)</option>
-                <option value="Longshift Malam">LONGSHIFT MALAM (19:00 - 07:00)</option>
+              <select id="oee-shift" onchange="updateShiftMinutes()" required>
+                <option value="">PILIH SHIFT</option>
+                <option value="Shift 1">SHIFT 1 (07:00-14:30) 450 MIN</option>
+                <option value="Shift 2">SHIFT 2 (15:20-21:50) 390 MIN</option>
+                <option value="Shift 3">SHIFT 3 (22:40-06:10) 450 MIN</option>
+                <option value="Longshift Pagi">LONGSHIFT PAGI (07:00-18:15) 615 MIN</option>
+                <option value="Longshift Malam">LONGSHIFT MALAM (19:00-06:15) 615 MIN</option>
               </select>
             </div>
           </div>
         </div>
 
-        <!-- OPERATIONAL DOWNTIME (ODT) - DENGAN FREKUENSI -->
+        <!-- OPERATIONAL DOWNTIME -->
         <div class="form-section">
           <div class="section-title">OPERATIONAL DOWNTIME (ODT)</div>
           <div id="odt-list"></div>
@@ -1242,13 +1186,15 @@
         <!-- LINE STOP MESIN -->
         <div class="form-section">
           <div class="section-title">LINE STOP MESIN</div>
-          <div id="line-stop-mesin-list"></div>
+          <button type="button" class="btn btn-success w-100" onclick="addCustomLineStopMesin()">+ TAMBAH CUSTOM</button>
+          <div id="line-stop-mesin-list" class="mt-16"></div>
         </div>
 
         <!-- LINE STOP NON-MESIN -->
         <div class="form-section">
           <div class="section-title">LINE STOP NON-MESIN</div>
-          <div id="line-stop-non-mesin-list"></div>
+          <button type="button" class="btn btn-success w-100" onclick="addCustomLineStopNonMesin()">+ TAMBAH CUSTOM</button>
+          <div id="line-stop-non-mesin-list" class="mt-16"></div>
         </div>
 
         <!-- MINOR STOP -->
@@ -1258,62 +1204,51 @@
           <div id="minor-stop-list" class="mt-16"></div>
         </div>
 
-        <!-- PACKER METER -->
+        <!-- DATA PRODUKSI -->
         <div class="form-section">
-          <div class="section-title">PACKER METER</div>
-          <button type="button" class="btn btn-success w-100" onclick="addPackerMeter()">+ TAMBAH METER</button>
-          <div id="packer-meter-list" class="mt-16"></div>
+          <div class="section-title">DATA PRODUKSI</div>
+          <div id="production-row-container"></div>
+        </div>
+
+        <!-- PACKER PERBANTUAN -->
+        <div class="form-section">
+          <div class="section-title">PACKER PERBANTUAN (TARGET 50%)</div>
+          <button type="button" class="btn btn-warning w-100" onclick="addPerbantuan()">+ TAMBAH PERBANTUAN</button>
+          <div id="perbantuan-list" class="mt-16"></div>
+        </div>
+
+        <!-- OUTPUT & REJECT -->
+        <div class="form-section">
+          <div class="section-title">OUTPUT & REJECT</div>
+          <div id="output-reject-container"></div>
         </div>
 
         <!-- NOTES -->
         <div class="form-section">
           <div class="section-title">NOTES</div>
-          <div class="form-group">
-            <textarea id="oee-notes" rows="3" placeholder="TAMBAHKAN CATATAN (OPSIONAL)"></textarea>
-          </div>
+          <textarea id="oee-notes" rows="3" placeholder="TAMBAHKAN CATATAN"></textarea>
         </div>
 
-        <!-- HASIL PERHITUNGAN OEE -->
+        <!-- HASIL PERHITUNGAN -->
         <div class="form-section">
-          <div id="availability-warning" style="display: none;"></div>
-          <div id="oee-over100-warning" style="display: none;" class="warning-box"></div>
           <div class="section-title">HASIL PERHITUNGAN OEE</div>
           <div class="score-cards">
-            <div class="score-card">
-              <div class="score-label">AVAILABILITY (ACTUAL)</div>
-              <div class="score-value" id="calc-availability-actual">0%</div>
-            </div>
-            <div class="score-card">
-              <div class="score-label">AVAILABILITY 365</div>
-              <div class="score-value" id="calc-availability-365">0%</div>
-            </div>
-            <div class="score-card">
-              <div class="score-label">PERFORMANCE</div>
-              <div class="score-value" id="calc-performance">0%</div>
-            </div>
-            <div class="score-card">
-              <div class="score-label">QUALITY RATE</div>
-              <div class="score-value" id="calc-quality">0%</div>
-            </div>
-            <div class="score-card">
-              <div class="score-label">OEE (ACTUAL)</div>
-              <div class="score-value" id="calc-oee-actual">0%</div>
-            </div>
-            <div class="score-card">
-              <div class="score-label">OEE 365</div>
-              <div class="score-value" id="calc-oee-365">0%</div>
-            </div>
-            <div class="score-card">
-              <div class="score-label">TOTAL OUTPUT</div>
-              <div class="score-value" id="calc-total-output" style="font-size: 24px;">0 DUS</div>
-            </div>
+            <div class="score-card"><div class="score-label">AVAILABILITY</div><div class="score-value" id="calc-availability-actual">0%</div></div>
+            <div class="score-card"><div class="score-label">AVAILABILITY 365</div><div class="score-value" id="calc-availability-365">0%</div></div>
+            <div class="score-card"><div class="score-label">PERFORMANCE</div><div class="score-value" id="calc-performance">0%</div></div>
+            <div class="score-card"><div class="score-label">QUALITY</div><div class="score-value" id="calc-quality">0%</div></div>
+            <div class="score-card"><div class="score-label">OEE ACTUAL</div><div class="score-value" id="calc-oee-actual">0%</div></div>
+            <div class="score-card"><div class="score-label">OEE 365</div><div class="score-value" id="calc-oee-365">0%</div></div>
+            <div class="score-card"><div class="score-label">TARGET</div><div class="score-value" id="calc-target-output">0 DUS</div></div>
+            <div class="score-card"><div class="score-label">ACTUAL</div><div class="score-value" id="calc-output-actual">0 DUS</div></div>
+            <div class="score-card"><div class="score-label">REJECT</div><div class="score-value" id="calc-reject">0 DUS</div></div>
           </div>
         </div>
 
         <!-- ACTION BUTTONS -->
-        <div class="form-section" style="display: flex; gap: 12px; flex-wrap: wrap;">
-          <button type="submit" class="btn btn-primary" style="flex: 1;" id="submit-oee-btn">💾 SIMPAN DATA OEE</button>
-          <button type="button" class="btn btn-secondary" style="flex: 1;" onclick="resetOEEForm()">🔄 RESET FORM</button>
+        <div style="display: flex; gap: 12px;">
+          <button type="submit" class="btn btn-primary" style="flex: 1;">💾 SIMPAN</button>
+          <button type="button" class="btn btn-secondary" style="flex: 1;" onclick="resetOEEForm()">🔄 RESET</button>
         </div>
       </form>
     </div>
@@ -1321,41 +1256,41 @@
     <!-- ==================== MASTER DATA TAB ==================== -->
     <div id="master" class="tab-content">
       <div class="form-section">
-        <div class="section-title">MASTER PRODUK</div>
+        <div class="section-title">📦 MASTER PRODUK</div>
         <button class="btn btn-primary w-100" onclick="openAddProductModal()">+ PRODUK BARU</button>
         <div id="product-list" class="master-data-grid"></div>
       </div>
       <div class="form-section">
-        <div class="section-title">MASTER PACKER</div>
+        <div class="section-title">👥 MASTER PACKER</div>
         <button class="btn btn-primary w-100" onclick="openAddPackerModal()">+ PACKER BARU</button>
         <div id="packer-list" class="master-data-grid"></div>
       </div>
       <div class="form-section">
-        <div class="section-title">MASTER ODT</div>
+        <div class="section-title">⏱️ MASTER ODT</div>
         <button class="btn btn-primary w-100" onclick="openAddODTModal()">+ ODT BARU</button>
         <div id="odt-master-list" class="master-data-grid"></div>
       </div>
       <div class="form-section">
-        <div class="section-title">MASTER LINE STOP MESIN</div>
-        <button class="btn btn-primary w-100" onclick="openAddLineStopMesinModal()">+ LINE STOP BARU</button>
+        <div class="section-title">⚙️ MASTER LINE STOP MESIN</div>
+        <button class="btn btn-primary w-100" onclick="openAddLineStopMesinModal()">+ LS MESIN</button>
         <div id="line-stop-mesin-master-list" class="master-data-grid"></div>
       </div>
       <div class="form-section">
-        <div class="section-title">MASTER LINE STOP NON-MESIN</div>
-        <button class="btn btn-primary w-100" onclick="openAddLineStopNonMesinModal()">+ LINE STOP BARU</button>
+        <div class="section-title">🔧 MASTER LINE STOP NON-MESIN</div>
+        <button class="btn btn-primary w-100" onclick="openAddLineStopNonMesinModal()">+ LS NON-MESIN</button>
         <div id="line-stop-non-mesin-master-list" class="master-data-grid"></div>
       </div>
       <div class="form-section">
-        <div class="section-title">MASTER MINOR STOP</div>
-        <button class="btn btn-primary w-100" onclick="openAddMinorStopModal()">+ MINOR STOP BARU</button>
+        <div class="section-title">⏸️ MASTER MINOR STOP</div>
+        <button class="btn btn-primary w-100" onclick="openAddMinorStopModal()">+ MINOR STOP</button>
         <div id="minor-stop-master-list" class="master-data-grid"></div>
       </div>
     </div>
 
-    <!-- ==================== AUDIT TRAIL TAB ==================== -->
+    <!-- ==================== AUDIT TAB ==================== -->
     <div id="audit" class="tab-content">
       <div class="form-section">
-        <div class="section-title">RIWAYAT AKTIVITAS</div>
+        <div class="section-title">📜 AUDIT TRAIL</div>
         <div class="table-wrapper">
           <table>
             <thead>
@@ -1373,31 +1308,26 @@
   </div>
 </div>
 
-<!-- ==================== LOGIN MODAL ==================== -->
-<div id="login-backdrop" style="display: none;" onclick="if(event.target === this) closeLoginModal();"></div>
-<div id="login-modal" style="display: none;">
+<!-- MODAL LOGIN -->
+<div id="login-backdrop" style="display: none; position: fixed; top:0; left:0; right:0; bottom:0; background: rgba(0,0,0,0.5); z-index: 9998;" onclick="if(event.target===this) closeLoginModal();"></div>
+<div id="login-modal" style="display: none; position: fixed; top:50%; left:50%; transform: translate(-50%,-50%); background: white; border-radius: 16px; padding: 24px; z-index: 9999; width: 90%; max-width: 400px;">
   <h2 class="login-title">🔐 MASTER DATA ACCESS</h2>
   <form onsubmit="handleLogin(event)">
     <div class="form-group">
-      <label class="login-label">PASSWORD</label>
-      <input type="password" id="login-password" class="login-input" placeholder="MASUKKAN PASSWORD" autocomplete="off">
+      <label>PASSWORD</label>
+      <input type="password" id="login-password" class="input-field" placeholder="MASUKKAN PASSWORD">
     </div>
-    <div id="login-error" class="login-error" style="display: none;">PASSWORD SALAH!</div>
-    <div class="login-buttons">
+    <div id="login-error" style="color: var(--danger); font-size: 12px; margin: 10px 0; display: none;">PASSWORD SALAH!</div>
+    <div style="display: flex; gap: 12px;">
       <button type="submit" class="btn btn-primary" style="flex: 1;">LOGIN</button>
       <button type="button" class="btn btn-secondary" style="flex: 1;" onclick="closeLoginModal()">BATAL</button>
     </div>
   </form>
 </div>
 
-<!-- ==================== TOAST CONTAINER ==================== -->
-<div id="toast-container" class="toast-container"></div>
-
-<!-- ==================== MODAL BACKDROP ==================== -->
-<div id="modal-backdrop" style="display: none;" onclick="if(event.target === this) closeModal();"></div>
-
-<!-- ==================== MODAL ==================== -->
-<div id="modal" style="display: none;">
+<!-- MODAL CRUD -->
+<div id="modal-backdrop" style="display: none; position: fixed; top:0; left:0; right:0; bottom:0; background: rgba(0,0,0,0.5); z-index: 9998;" onclick="if(event.target===this) closeModal();"></div>
+<div id="modal" style="display: none; position: fixed; top:50%; left:50%; transform: translate(-50%,-50%); background: white; border-radius: 16px; padding: 24px; z-index: 9999; width: 90%; max-width: 400px;">
   <h2 id="modal-title">MODAL TITLE</h2>
   <form id="modal-form" onsubmit="submitModalForm(event)">
     <div id="modal-fields"></div>
@@ -1408,18 +1338,19 @@
   </form>
 </div>
 
+<!-- TOAST CONTAINER -->
+<div id="toast-container" class="toast-container"></div>
+
 <script>
   // ==================== SUPABASE CONFIG ====================
   const SUPABASE_URL = 'https://lxtnhdyxrkjbypahdsrf.supabase.co';
   const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imx4dG5oZHl4cmtqYnlwYWhkc3JmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzA3ODI5MDIsImV4cCI6MjA4NjM1ODkwMn0.BtC1iFgNydjy6gWmk7HPXt70UcgnBCsWj8H89WqfRwA';
-  let supabaseClient = null;
-  if (window.supabase) supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  let supabaseClient = window.supabase?.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-  // ==================== MASTER DATA ACCESS ====================
   const MASTER_PASSWORD = 'admin123';
   let isMasterDataUnlocked = false;
 
-  // ==================== LOCAL DATA ====================
+  // LOCAL DATA
   let localData = {
     produk: [],
     packer: [],
@@ -1431,25 +1362,41 @@
     audit_trail: []
   };
 
+  // STATE FORM
   let oeeFormState = {
     shiftMinutes: 0,
-    packerMeters: [],
+    production: {
+      productId: '',
+      batchNumber: '',
+      selectedPackers: []
+    },
+    perbantuan: [],
+    outputActual: 0,
+    reject: 0,
     downtime: [],
     lineStopMesin: [],
     lineStopNonMesin: [],
     minorStop: [],
     results: {},
-    odtOverRecords: [],
-    notes: ''
+    odtOverRecords: []
   };
 
   let dashboardCharts = {};
   let filteredOeeRecords = [];
+  
+  // ACHIEVEMENT TABLE STATE
+  let achievementData = [];
+  let filteredAchievementData = [];
+  let currentPage = 1;
+  const rowsPerPage = 15;
 
   // ==================== INIT APP ====================
   async function initApp() {
     await loadDataFromSupabase();
     loadOEEFormData();
+    renderProductionRow();
+    renderPerbantuanList();
+    renderOutputReject();
     renderMasterDataLists();
     renderAuditTable();
     initDashboardFilters();
@@ -1457,11 +1404,11 @@
     switchTab('dashboard');
   }
 
-  // ==================== SWITCH TAB ====================
   window.switchTab = function(tabName) {
-    document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
-    document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+    document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
     document.getElementById(tabName).classList.add('active');
+    
     document.querySelectorAll('.tab-btn').forEach(btn => {
       if (btn.textContent.includes(tabName === 'dashboard' ? 'DASHBOARD' : 
           tabName === 'input' ? 'INPUT OEE' : 
@@ -1469,18 +1416,25 @@
         btn.classList.add('active');
       }
     });
-    if (tabName !== 'master') isMasterDataUnlocked = false;
-    else if (!isMasterDataUnlocked) showLoginModal();
-    if (tabName === 'dashboard') setTimeout(() => renderCharts(), 100);
+    
+    if (tabName === 'dashboard') {
+      setTimeout(() => {
+        renderCharts();
+        renderAchievementTable();
+      }, 100);
+    }
+    
+    if (tabName === 'master' && !isMasterDataUnlocked) {
+      showLoginModal();
+    }
   };
 
-  // ==================== LOGIN FUNCTIONS ====================
+  // ==================== LOGIN ====================
   function showLoginModal() {
     document.getElementById('login-backdrop').style.display = 'block';
     document.getElementById('login-modal').style.display = 'block';
     document.getElementById('login-error').style.display = 'none';
     document.getElementById('login-password').value = '';
-    document.getElementById('login-password').focus();
   }
 
   function closeLoginModal() {
@@ -1489,12 +1443,13 @@
     document.getElementById('login-modal').style.display = 'none';
   }
 
-  function handleLogin(event) {
-    event.preventDefault();
-    if (document.getElementById('login-password').value === MASTER_PASSWORD) {
+  function handleLogin(e) {
+    e.preventDefault();
+    const password = document.getElementById('login-password').value;
+    if (password === MASTER_PASSWORD) {
       isMasterDataUnlocked = true;
       closeLoginModal();
-      showToast('MASTER DATA ACCESS GRANTED ✅', 'success');
+      showToast('MASTER DATA ACCESS GRANTED', 'success');
       renderMasterDataLists();
     } else {
       document.getElementById('login-error').style.display = 'block';
@@ -1504,14 +1459,14 @@
 
   function checkMasterAccess() {
     if (!isMasterDataUnlocked) {
-      showToast('AKSES MASTER DATA DITOLAK! LOGIN TERLEBIH DAHULU', 'error');
+      showToast('AKSES DITOLAK! LOGIN DULU', 'error');
       showLoginModal();
       return false;
     }
     return true;
   }
 
-  // ==================== LOAD DATA FROM SUPABASE ====================
+  // ==================== LOAD SUPABASE ====================
   async function loadDataFromSupabase() {
     try {
       const [produkRes, packerRes, downtimeRes, lsmRes, lsnmRes, msRes, oeeRes, auditRes] = await Promise.all([
@@ -1524,6 +1479,7 @@
         supabaseClient.from('oee_records').select('*').order('created_at', { ascending: false }),
         supabaseClient.from('audit_trail').select('*').order('timestamp', { ascending: false })
       ]);
+      
       localData.produk = produkRes.data || [];
       localData.packer = packerRes.data || [];
       localData.downtime = downtimeRes.data || [];
@@ -1532,15 +1488,230 @@
       localData.minor_stop = msRes.data || [];
       localData.oee_records = oeeRes.data || [];
       localData.audit_trail = auditRes.data || [];
-      
-      // Update filtered records setelah load data
+
       filteredOeeRecords = [...localData.oee_records];
       
-      console.log('✅ Data loaded from Supabase. OEE records:', localData.oee_records.length);
+      generateAchievementData();
+      populateFilterOptions();
+      
     } catch (error) {
-      console.error('Error loading data:', error);
-      showToast('ERROR LOADING DATA FROM SUPABASE', 'error');
+      console.error('Error:', error);
+      showToast('ERROR LOADING DATA', 'error');
     }
+  }
+
+  // ==================== GENERATE ACHIEVEMENT DATA ====================
+  function generateAchievementData() {
+    achievementData = [];
+    
+    localData.oee_records.forEach(record => {
+      const packers = record.packers ? record.packers.split(',').map(p => p.trim()) : [];
+      const totalOutput = parseFloat(record.output_actual) || 0;
+      const performance = parseFloat(record.performance) || 100;
+      
+      const targetTotal = performance > 0 ? (totalOutput / (performance / 100)) : totalOutput;
+      const targetPerPacker = packers.length > 0 ? targetTotal / packers.length : 0;
+      const outputPerPacker = packers.length > 0 ? totalOutput / packers.length : 0;
+      
+      packers.forEach((packer, index) => {
+        const achievement = targetPerPacker > 0 ? (outputPerPacker / targetPerPacker) * 100 : 0;
+        
+        achievementData.push({
+          id: `${record.id}-${index}`,
+          date: record.date || '-',
+          shift: record.shift || '-',
+          packer: packer,
+          product: record.product ? record.product.split('(')[0].trim() : '-',
+          target: Math.round(targetPerPacker),
+          actual: Math.round(outputPerPacker),
+          achievement: achievement,
+          status: achievement >= 100 ? 'TERCAPAI' : achievement >= 80 ? 'KURANG' : 'RENDAH',
+          statusIcon: achievement >= 100 ? '🟢' : achievement >= 80 ? '🟡' : '🔴',
+          statusClass: achievement >= 100 ? 'badge-green' : achievement >= 80 ? 'badge-yellow' : 'badge-red'
+        });
+      });
+    });
+    
+    achievementData.sort((a, b) => b.date.localeCompare(a.date));
+    filteredAchievementData = [...achievementData];
+    currentPage = 1;
+    
+    document.getElementById('total-records-badge').textContent = achievementData.length + ' DATA';
+  }
+
+  // ==================== FILTER ACHIEVEMENT ====================
+  function filterAchievement() {
+    const shiftFilter = document.getElementById('achievement-filter-shift').value;
+    const dateFilter = document.getElementById('achievement-filter-date').value;
+    const searchFilter = document.getElementById('achievement-search-packer').value.toLowerCase().trim();
+    
+    filteredAchievementData = achievementData.filter(item => {
+      if (shiftFilter && item.shift !== shiftFilter) return false;
+      if (dateFilter && item.date !== dateFilter) return false;
+      if (searchFilter && !item.packer.toLowerCase().includes(searchFilter)) return false;
+      return true;
+    });
+    
+    currentPage = 1;
+    renderAchievementTable();
+  }
+
+  function resetAchievementFilter() {
+    document.getElementById('achievement-filter-shift').value = '';
+    document.getElementById('achievement-filter-date').value = '';
+    document.getElementById('achievement-search-packer').value = '';
+    filteredAchievementData = [...achievementData];
+    currentPage = 1;
+    renderAchievementTable();
+  }
+
+  // ==================== RENDER ACHIEVEMENT TABLE ====================
+  function renderAchievementTable() {
+    const tbody = document.getElementById('achievement-table-body');
+    const totalRecords = filteredAchievementData.length;
+    const start = (currentPage - 1) * rowsPerPage;
+    const end = Math.min(start + rowsPerPage, totalRecords);
+    const pageData = filteredAchievementData.slice(start, end);
+    
+    // Update summary
+    updateSummaryStats(totalRecords);
+    document.getElementById('total-records-badge').textContent = totalRecords + ' DATA';
+    
+    if (pageData.length === 0) {
+      tbody.innerHTML = `
+        <tr>
+          <td colspan="9">
+            <div class="empty-state">
+              <div class="empty-icon">🔍</div>
+              <div class="empty-text">TIDAK ADA DATA</div>
+            </div>
+          </td>
+        </tr>
+      `;
+    } else {
+      tbody.innerHTML = pageData.map((item, index) => `
+        <tr>
+          <td><strong>${start + index + 1}</strong></td>
+          <td>${item.date}</td>
+          <td>${item.shift}</td>
+          <td><span class="packer-name">${item.packer}</span></td>
+          <td>${item.product}</td>
+          <td class="text-right"><strong>${item.target.toLocaleString()}</strong></td>
+          <td class="text-right"><strong>${item.actual.toLocaleString()}</strong></td>
+          <td class="text-right"><strong>${item.achievement.toFixed(1)}%</strong></td>
+          <td>
+            <span class="achievement-badge ${item.statusClass}">
+              ${item.statusIcon} ${item.status}
+            </span>
+          </td>
+        </tr>
+      `).join('');
+    }
+    
+    updatePagination(totalRecords);
+  }
+
+  function updateSummaryStats(total) {
+    if (total === 0) {
+      document.getElementById('stat-total').textContent = '0';
+      document.getElementById('stat-avg').textContent = '0%';
+      document.getElementById('stat-total-output-ach').textContent = '0';
+      document.getElementById('stat-green').textContent = '0';
+      document.getElementById('stat-yellow').textContent = '0';
+      document.getElementById('stat-red').textContent = '0';
+      return;
+    }
+    
+    const totalAchievement = filteredAchievementData.reduce((sum, item) => sum + item.achievement, 0);
+    const avgAchievement = totalAchievement / total;
+    document.getElementById('stat-avg').textContent = avgAchievement.toFixed(1) + '%';
+    
+    const totalOutput = filteredAchievementData.reduce((sum, item) => sum + item.actual, 0);
+    document.getElementById('stat-total-output-ach').textContent = totalOutput.toLocaleString();
+    
+    const green = filteredAchievementData.filter(item => item.achievement >= 100).length;
+    const yellow = filteredAchievementData.filter(item => item.achievement >= 80 && item.achievement < 100).length;
+    const red = filteredAchievementData.filter(item => item.achievement < 80).length;
+    
+    document.getElementById('stat-green').textContent = green;
+    document.getElementById('stat-yellow').textContent = yellow;
+    document.getElementById('stat-red').textContent = red;
+    document.getElementById('stat-total').textContent = total;
+  }
+
+  // ==================== PAGINATION ====================
+  function updatePagination(total) {
+    const totalPages = Math.ceil(total / rowsPerPage);
+    const start = total > 0 ? (currentPage - 1) * rowsPerPage + 1 : 0;
+    const end = Math.min(currentPage * rowsPerPage, total);
+    
+    document.getElementById('pagination-start').textContent = start;
+    document.getElementById('pagination-end').textContent = end;
+    document.getElementById('pagination-total').textContent = total;
+    document.getElementById('page-info').textContent = `${currentPage}/${totalPages || 1}`;
+    
+    document.getElementById('prev-btn').disabled = currentPage === 1;
+    document.getElementById('next-btn').disabled = currentPage === totalPages || totalPages === 0;
+  }
+
+  function prevPage() {
+    if (currentPage > 1) {
+      currentPage--;
+      renderAchievementTable();
+    }
+  }
+
+  function nextPage() {
+    const totalPages = Math.ceil(filteredAchievementData.length / rowsPerPage);
+    if (currentPage < totalPages) {
+      currentPage++;
+      renderAchievementTable();
+    }
+  }
+
+  // ==================== EXPORT EXCEL ====================
+  function exportAchievementToExcel() {
+    if (filteredAchievementData.length === 0) {
+      showToast('TIDAK ADA DATA', 'error');
+      return;
+    }
+    
+    const exportData = filteredAchievementData.map(item => [
+      item.date,
+      item.shift,
+      item.packer,
+      item.product,
+      item.target,
+      item.actual,
+      item.achievement.toFixed(1) + '%',
+      item.status
+    ]);
+    
+    const headers = ['TANGGAL', 'SHIFT', 'PACKER', 'PRODUK', 'TARGET', 'ACTUAL', 'ACHIEVEMENT', 'STATUS'];
+    exportData.unshift(headers);
+    
+    const csvContent = exportData.map(row => 
+      row.map(cell => {
+        if (typeof cell === 'string' && (cell.includes(',') || cell.includes('"'))) {
+          return `"${cell.replace(/"/g, '""')}"`;
+        }
+        return cell;
+      }).join(',')
+    ).join('\n');
+    
+    const blob = new Blob(['\uFEFF' + csvContent], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    const url = URL.createObjectURL(blob);
+    const now = new Date();
+    const filename = `achievement_${now.getFullYear()}${String(now.getMonth()+1).padStart(2,'0')}${String(now.getDate()).padStart(2,'0')}.csv`;
+    
+    link.setAttribute('href', url);
+    link.setAttribute('download', filename);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    
+    showToast(`EXPORT ${filteredAchievementData.length} DATA`, 'success');
   }
 
   // ==================== SHIFT ====================
@@ -1552,422 +1723,308 @@
     renderLineStopMesinList();
     renderLineStopNonMesinList();
     renderMinorStopList();
-    renderPackerMeterList();
+    calculateOEE();
   }
 
-  // ==================== PACKER METER ====================
-  function addPackerMeter() {
-    if (!document.getElementById('oee-shift').value) {
-      showToast('PILIH SHIFT TERLEBIH DAHULU', 'error');
-      return;
-    }
+  // ==================== PRODUCTION ROW ====================
+  function renderProductionRow() {
+    const container = document.getElementById('production-row-container');
+    const prod = oeeFormState.production;
     
-    // HITUNG TOTAL ODT DENGAN FREKUENSI
-    const totalODT = oeeFormState.downtime.reduce((s, o) => s + ((parseFloat(o.frekuensi) || 1) * (parseFloat(o.durasi) || 0)), 0);
-    const totalLSM = oeeFormState.lineStopMesin.reduce((s, l) => s + (parseFloat(l.durasi) || 0), 0);
-    const totalLSNM = oeeFormState.lineStopNonMesin.reduce((s, l) => s + (parseFloat(l.durasi) || 0), 0);
+    const productOptions = '<option value="">-- PILIH PRODUK --</option>' + 
+      localData.produk.map(p => `<option value="${p.id}" ${prod.productId === p.id ? 'selected' : ''}>${p.nama} (TARGET: ${p.target})</option>`).join('');
     
-    let totalMaxDuration = 0;
-    oeeFormState.packerMeters.forEach(meter => {
-      let maxDurInMeter = 0;
-      meter.packers.forEach(packer => {
-        maxDurInMeter = Math.max(maxDurInMeter, packer.duration || 0);
-      });
-      totalMaxDuration += maxDurInMeter;
-    });
+    const sortedPackers = [...localData.packer].sort((a, b) => a.nama.localeCompare(b.nama));
     
-    const remainingTime = Math.max(0, oeeFormState.shiftMinutes - totalODT - totalLSM - totalLSNM - totalMaxDuration);
-    
-    oeeFormState.packerMeters.push({
-      id: 'meter_' + Date.now(),
-      productId: '',
-      batchNumber: '',
-      remainingTime: remainingTime,
-      packers: []
-    });
-    
-    renderPackerMeterList();
-  }
+    const packerCheckboxes = sortedPackers.map(p => `
+      <label class="packer-checkbox-item">
+        <input type="checkbox" value="${p.id}" ${prod.selectedPackers.includes(p.id) ? 'checked' : ''} onchange="togglePacker('${p.id}')"> 
+        <span>${p.nama}</span>
+      </label>
+    `).join('');
 
-  function renderPackerMeterList() {
-    const listDiv = document.getElementById('packer-meter-list');
-    if (oeeFormState.packerMeters.length === 0) {
-      listDiv.innerHTML = '<div class="empty-state"><div class="empty-state-icon">📦</div><div class="empty-state-text">BELUM ADA METER DITAMBAHKAN</div></div>';
-      return;
-    }
-    
-    // HITUNG TOTAL ODT DENGAN FREKUENSI
-    const totalODT = oeeFormState.downtime.reduce((s, o) => s + ((parseFloat(o.frekuensi) || 1) * (parseFloat(o.durasi) || 0)), 0);
-    const totalLSM = oeeFormState.lineStopMesin.reduce((s, l) => s + (parseFloat(l.durasi) || 0), 0);
-    const totalLSNM = oeeFormState.lineStopNonMesin.reduce((s, l) => s + (parseFloat(l.durasi) || 0), 0);
-    
-    listDiv.innerHTML = oeeFormState.packerMeters.map((meter, index) => {
-      let totalMaxPreviousDuration = 0;
-      for (let i = 0; i < index; i++) {
-        const meterPrev = oeeFormState.packerMeters[i];
-        let maxDurInMeter = 0;
-        meterPrev.packers.forEach(p => {
-          maxDurInMeter = Math.max(maxDurInMeter, p.duration || 0);
-        });
-        totalMaxPreviousDuration += maxDurInMeter;
-      }
-      
-      meter.remainingTime = Math.max(0, oeeFormState.shiftMinutes - totalODT - totalLSM - totalLSNM - totalMaxPreviousDuration);
-      
-      return `
-        <div class="card" data-meter-id="${meter.id}">
-          <div class="card-header">
-            <h3 class="card-title">METER ${index + 1}</h3>
-            <button type="button" class="btn btn-danger btn-small" onclick="removePackerMeter('${meter.id}')">HAPUS</button>
-          </div>
-          <div class="form-row">
-            <div class="form-group">
-              <label>PRODUK</label>
-              <select class="meter-product input-field" onchange="updatePackerMeter('${meter.id}', 'product')">
-                <option value="">-- PILIH PRODUK --</option>
-                ${localData.produk.map(p => `<option value="${p.id}" ${meter.productId === p.id ? 'selected' : ''}>${p.nama}</option>`).join('')}
-              </select>
-            </div>
-            <div class="form-group">
-              <label>BATCH NUMBER</label>
-              <input type="text" class="meter-batch input-field" value="${meter.batchNumber}" placeholder="BATCH NUMBER" onchange="updatePackerMeter('${meter.id}', 'batch')">
-            </div>
-            <div class="form-group">
-              <label>SISA WAKTU (MENIT)</label>
-              <input type="number" class="meter-remaining-time input-field" value="${meter.remainingTime.toFixed(0)}" readonly>
-            </div>
-          </div>
-          <div style="margin-top: 16px;">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 8px;">
-              <h4 class="section-title" style="margin: 0; font-size: 14px;">PACKER</h4>
-              <button type="button" class="btn btn-success btn-small" onclick="addPackerToMeter('${meter.id}')">+ TAMBAH PACKER</button>
-            </div>
-            <div id="packers-${meter.id}"></div>
-          </div>
-        </div>
-      `;
-    }).join('');
-    
-    oeeFormState.packerMeters.forEach(meter => renderPackersInMeter(meter));
-    updateAvailabilityWarning();
-  }
-
-  function renderPackersInMeter(meter) {
-    const container = document.getElementById(`packers-${meter.id}`);
-    if (!container) return;
-    if (meter.packers.length === 0) {
-      container.innerHTML = '<div class="empty-state"><div class="empty-state-text" style="font-size: 12px;">BELUM ADA PACKER DITAMBAHKAN</div></div>';
-      return;
-    }
-    container.innerHTML = meter.packers.map(packer => `
-      <div class="packer-row" id="packer-${packer.id}">
+    container.innerHTML = `
+      <div class="production-row">
         <div class="form-group">
-          <label style="font-size: 10px;">PACKER</label>
-          <select class="packer-name input-field" style="font-size: 11px;" onchange="updatePacker('${packer.id}', '${meter.id}')">
-            <option value="">PILIH</option>
-            ${localData.packer.map(p => `<option value="${p.id}|${p.nama}" ${packer.packerId === p.id ? 'selected' : ''}>${p.nama}</option>`).join('')}
+          <label>PRODUK</label>
+          <select id="production-product" class="input-field" onchange="updateProductionField('productId', this.value)">
+            ${productOptions}
           </select>
         </div>
         <div class="form-group">
-          <label style="font-size: 10px;">DURASI (MIN)</label>
-          <input type="number" class="packer-duration input-field" style="font-size: 11px;" value="${packer.duration}" min="0" max="${meter.remainingTime}" placeholder="ACTUAL TIME" onchange="validatePackerDuration(this, '${packer.id}', '${meter.id}')">
+          <label>NOMOR BATCH</label>
+          <input type="text" id="production-batch" class="input-field" value="${prod.batchNumber}" placeholder="BATCH" onchange="updateProductionField('batchNumber', this.value)">
         </div>
         <div class="form-group">
-          <label style="font-size: 10px;">OUTPUT (DUS)</label>
-          <input type="number" class="packer-output input-field" style="font-size: 11px;" value="${packer.output}" placeholder="OUTPUT" onchange="updatePacker('${packer.id}', '${meter.id}')">
+          <label>PACKER (${prod.selectedPackers.length} TERPILIH)</label>
+          <div class="packer-checkbox-grid">
+            ${packerCheckboxes || '<div style="grid-column: span 6;">TIDAK ADA DATA</div>'}
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
+  function updateProductionField(field, value) {
+    if (field === 'productId') oeeFormState.production.productId = value;
+    else if (field === 'batchNumber') oeeFormState.production.batchNumber = value;
+    calculateOEE();
+  }
+
+  function togglePacker(packerId) {
+    const idx = oeeFormState.production.selectedPackers.indexOf(packerId);
+    if (idx === -1) oeeFormState.production.selectedPackers.push(packerId);
+    else oeeFormState.production.selectedPackers.splice(idx, 1);
+    calculateOEE();
+    renderProductionRow();
+  }
+
+  // ==================== PERBANTUAN ====================
+  function addPerbantuan() {
+    oeeFormState.perbantuan.push({
+      id: 'perbantuan_' + Date.now() + '_' + Math.random(),
+      inisial: '',
+      jamStart: '',
+      jamEnd: ''
+    });
+    renderPerbantuanList();
+    calculateOEE();
+  }
+
+  function renderPerbantuanList() {
+    const container = document.getElementById('perbantuan-list');
+    
+    if (oeeFormState.perbantuan.length === 0) {
+      container.innerHTML = '<div class="empty-state"><div class="empty-icon">👥</div><div class="empty-text">BELUM ADA PERBANTUAN</div></div>';
+      return;
+    }
+
+    container.innerHTML = oeeFormState.perbantuan.map(p => `
+      <div class="perbantuan-row">
+        <div class="form-group">
+          <label>INISIAL</label>
+          <input type="text" value="${p.inisial}" placeholder="CONTOH: AB" onchange="updatePerbantuan('${p.id}', 'inisial', this.value)">
         </div>
         <div class="form-group">
-          <label style="font-size: 10px;">REJECT (DUS)</label>
-          <input type="number" class="packer-reject input-field" style="font-size: 11px;" value="${packer.reject}" placeholder="REJECT" onchange="updatePacker('${packer.id}', '${meter.id}')">
+          <label>JAM START</label>
+          <input type="time" value="${p.jamStart}" onchange="updatePerbantuan('${p.id}', 'jamStart', this.value)">
         </div>
-        <div style="display: flex; align-items: flex-end;">
-          <button type="button" class="btn btn-danger btn-small w-100" style="padding: 8px; font-size: 11px;" onclick="removePacker('${packer.id}', '${meter.id}')">HAPUS</button>
+        <div class="form-group">
+          <label>JAM END</label>
+          <input type="time" value="${p.jamEnd}" onchange="updatePerbantuan('${p.id}', 'jamEnd', this.value)">
+        </div>
+        <div>
+          <button type="button" class="btn btn-danger btn-small w-100" onclick="removePerbantuan('${p.id}')">HAPUS</button>
         </div>
       </div>
     `).join('');
   }
 
-  function validatePackerDuration(input, packerId, meterId) {
-    const meter = oeeFormState.packerMeters.find(m => m.id === meterId);
-    if (!meter) return;
-    const packer = meter.packers.find(p => p.id === packerId);
-    if (!packer) return;
-    let duration = parseFloat(input.value) || 0;
-    if (duration > meter.remainingTime) {
-      showToast(`DURASI TIDAK BOLEH MELEBIHI SISA WAKTU (${meter.remainingTime.toFixed(0)} MENIT)`, 'error');
-      duration = meter.remainingTime;
-      input.value = duration;
-    }
-    packer.duration = duration;
-    updatePacker(packerId, meterId);
-  }
-
-  function removePackerMeter(meterId) {
-    oeeFormState.packerMeters = oeeFormState.packerMeters.filter(m => m.id !== meterId);
-    renderPackerMeterList();
-    calculateOEE();
-  }
-
-  function addPackerToMeter(meterId) {
-    const meter = oeeFormState.packerMeters.find(m => m.id === meterId);
-    if (meter) {
-      meter.packers.push({ 
-        id: 'packer_' + Date.now(), 
-        packerId: '', 
-        packerName: '', 
-        duration: 0, 
-        output: 0, 
-        reject: 0 
-      });
-      renderPackersInMeter(meter);
-    }
-  }
-
-  function updatePackerMeter(meterId, field) {
-    const meter = oeeFormState.packerMeters.find(m => m.id === meterId);
-    if (!meter) return;
-    const meterDiv = document.querySelector(`[data-meter-id="${meterId}"]`);
-    if (!meterDiv) return;
-    if (field === 'product') meter.productId = meterDiv.querySelector('.meter-product').value;
-    else if (field === 'batch') meter.batchNumber = meterDiv.querySelector('.meter-batch').value;
-    calculateOEE();
-  }
-
-  function updatePacker(packerId, meterId) {
-    const meter = oeeFormState.packerMeters.find(m => m.id === meterId);
-    if (!meter) return;
-    const packer = meter.packers.find(p => p.id === packerId);
-    if (!packer) return;
-    const packerDiv = document.getElementById(`packer-${packerId}`);
-    if (!packerDiv) return;
-    const [packerId_, packerName] = packerDiv.querySelector('.packer-name').value.split('|') || ['', ''];
-    packer.packerId = packerId_;
-    packer.packerName = packerName;
-    packer.duration = parseFloat(packerDiv.querySelector('.packer-duration').value) || 0;
-    packer.output = parseFloat(packerDiv.querySelector('.packer-output').value) || 0;
-    packer.reject = parseFloat(packerDiv.querySelector('.packer-reject').value) || 0;
-    renderPackerMeterList();
-    calculateOEE();
-  }
-
-  function removePacker(packerId, meterId) {
-    const meter = oeeFormState.packerMeters.find(m => m.id === meterId);
-    if (meter) {
-      meter.packers = meter.packers.filter(p => p.id !== packerId);
-      renderPackersInMeter(meter);
-      renderPackerMeterList();
-    }
-    calculateOEE();
-  }
-
-  function updateAvailabilityWarning() {
-    const warningDiv = document.getElementById('availability-warning');
-    if (!warningDiv) return;
-    
-    // HITUNG TOTAL ODT DENGAN FREKUENSI
-    const totalODT = oeeFormState.downtime.reduce((s, o) => s + ((parseFloat(o.frekuensi) || 1) * (parseFloat(o.durasi) || 0)), 0);
-    const totalLSM = oeeFormState.lineStopMesin.reduce((s, l) => s + (parseFloat(l.durasi) || 0), 0);
-    const totalLSNM = oeeFormState.lineStopNonMesin.reduce((s, l) => s + (parseFloat(l.durasi) || 0), 0);
-    
-    let totalMaxDuration = 0;
-    oeeFormState.packerMeters.forEach(meter => {
-      let maxDurInMeter = 0;
-      meter.packers.forEach(p => {
-        maxDurInMeter = Math.max(maxDurInMeter, p.duration || 0);
-      });
-      totalMaxDuration += maxDurInMeter;
-    });
-    
-    const totalUsedTime = totalODT + totalLSM + totalLSNM + totalMaxDuration;
-    
-    if (totalUsedTime > oeeFormState.shiftMinutes && oeeFormState.shiftMinutes > 0) {
-      warningDiv.innerHTML = `
-        <div class="warning-box">
-          <p class="warning-title">⚠️ WARNING: TOTAL WAKTU MELEBIHI SHIFT</p>
-          <p class="warning-text">TOTAL WAKTU TERPAKAI (${totalUsedTime.toFixed(0)} MENIT) MELEBIHI DURASI SHIFT (${oeeFormState.shiftMinutes} MENIT). PERIKSA KEMBALI DATA ANDA.</p>
-        </div>
-      `;
-      warningDiv.style.display = 'block';
-    } else warningDiv.style.display = 'none';
-  }
-
-  // ==================== ODT - DENGAN FREKUENSI ====================
-  function renderODTList() {
-    const listDiv = document.getElementById('odt-list');
-    if (localData.downtime.length === 0) {
-      listDiv.innerHTML = '<div class="empty-state"><div class="empty-state-text">BELUM ADA DATA ODT</div></div>';
-      return;
-    }
-    if (oeeFormState.downtime.length === 0) {
-      oeeFormState.downtime = localData.downtime.map(d => ({ 
-        id: d.id, 
-        nama: d.nama, 
-        waktu_standard: d.waktu_standard, 
-        frekuensi: 1,
-        durasi: 0 
-      }));
-    }
-    listDiv.innerHTML = oeeFormState.downtime.map(odt => {
-      const totalDurasi = (parseFloat(odt.frekuensi) || 1) * (parseFloat(odt.durasi) || 0);
-      return `
-        <div class="downtime-row">
-          <div>
-            <p style="font-size: 13px; font-weight: 700; color: #3b82f6; margin: 0 0 4px;">${odt.nama}</p>
-            <p style="font-size: 11px; color: #60a5fa; margin: 0;">STD: ${odt.waktu_standard} MENIT</p>
-            <p style="font-size: 11px; color: #ef4444; margin: 4px 0 0;">TOTAL: ${totalDurasi} MENIT</p>
-          </div>
-          <div class="form-group" style="min-width: 60px;">
-            <label style="font-size: 9px;">FREKUENSI</label>
-            <input type="number" class="input-field" value="${odt.frekuensi || 1}" min="1" step="1" placeholder="FREK" onchange="updateODTFrekuensi('${odt.id}', this.value)">
-          </div>
-          <input type="number" class="input-field" value="${odt.durasi}" min="0" placeholder="DURASI" onchange="updateODT('${odt.id}', this.value)">
-        </div>
-      `;
-    }).join('');
-  }
-
-  function updateODTFrekuensi(id, frekuensi) {
-    const odt = oeeFormState.downtime.find(o => o.id === id);
-    if (odt) {
-      odt.frekuensi = parseInt(frekuensi) || 1;
-      if (odt.frekuensi < 1) odt.frekuensi = 1;
-      renderODTList();
+  function updatePerbantuan(id, field, value) {
+    const perbantuan = oeeFormState.perbantuan.find(p => p.id === id);
+    if (perbantuan) {
+      perbantuan[field] = value;
       calculateOEE();
     }
   }
 
-  function updateODT(id, durasi) {
-    const odt = oeeFormState.downtime.find(o => o.id === id);
-    if (!odt) return;
-    
-    const actualDurasi = parseFloat(durasi) || 0;
-    const standar = odt.waktu_standard;
-    const frekuensi = odt.frekuensi || 1;
-    
-    const selisihPerKejadian = Math.max(0, actualDurasi - standar);
-    const totalSelisih = selisihPerKejadian * frekuensi;
-    
-    odt.durasi = actualDurasi;
-    
-    const odtOverName = `ODT OVER ${odt.nama}`;
-    
-    const existingIndex = oeeFormState.lineStopNonMesin.findIndex(l => l.nama === odtOverName);
-    
-    if (totalSelisih > 0) {
-      if (existingIndex >= 0) {
-        oeeFormState.lineStopNonMesin[existingIndex].durasi = totalSelisih;
-      } else {
-        oeeFormState.lineStopNonMesin.push({
-          id: `lsnm_odtover_${odt.id}_${Date.now()}`,
-          nama: odtOverName,
-          durasi: totalSelisih,
-          action: '',
-          isCustom: true
-        });
-      }
-    } else {
-      oeeFormState.lineStopNonMesin = oeeFormState.lineStopNonMesin.filter(l => l.nama !== odtOverName);
-    }
-    
-    renderLineStopNonMesinList();
-    renderODTList();
-    renderPackerMeterList();
+  function removePerbantuan(id) {
+    oeeFormState.perbantuan = oeeFormState.perbantuan.filter(p => p.id !== id);
+    renderPerbantuanList();
     calculateOEE();
   }
 
-  // ==================== LINE STOP MESIN ====================
-  function renderLineStopMesinList() {
-    const listDiv = document.getElementById('line-stop-mesin-list');
-    if (localData.line_stop_mesin.length === 0 && oeeFormState.lineStopMesin.length === 0) {
-      listDiv.innerHTML = '<div class="empty-state"><div class="empty-state-text">BELUM ADA DATA</div></div>';
+  function calculatePerbantuanMinutes() {
+    let totalMinutes = 0;
+    oeeFormState.perbantuan.forEach(p => {
+      if (p.jamStart && p.jamEnd) {
+        const start = p.jamStart.split(':').map(Number);
+        const end = p.jamEnd.split(':').map(Number);
+        if (start.length === 2 && end.length === 2) {
+          const startDate = new Date(2000, 0, 1, start[0], start[1]);
+          const endDate = new Date(2000, 0, 1, end[0], end[1]);
+          const diffMinutes = (endDate - startDate) / (1000 * 60);
+          if (diffMinutes > 0) totalMinutes += diffMinutes;
+        }
+      }
+    });
+    return totalMinutes;
+  }
+
+  // ==================== OUTPUT & REJECT ====================
+  function renderOutputReject() {
+    const container = document.getElementById('output-reject-container');
+    container.innerHTML = `
+      <div class="output-row">
+        <div class="form-group">
+          <label>OUTPUT ACTUAL (DUS)</label>
+          <input type="number" id="output-actual" class="input-field" value="${oeeFormState.outputActual}" min="0" step="0.1" placeholder="OUTPUT" onchange="updateOutputReject('output', this.value)">
+        </div>
+        <div class="form-group">
+          <label>REJECT (DUS)</label>
+          <input type="number" id="reject-actual" class="input-field" value="${oeeFormState.reject}" min="0" step="0.1" placeholder="REJECT" onchange="updateOutputReject('reject', this.value)">
+        </div>
+      </div>
+    `;
+  }
+
+  function updateOutputReject(field, value) {
+    if (field === 'output') {
+      oeeFormState.outputActual = parseFloat(value) || 0;
+    } else if (field === 'reject') {
+      oeeFormState.reject = parseFloat(value) || 0;
+    }
+    calculateOEE();
+  }
+
+  // ==================== ODT ====================
+  function renderODTList() {
+    const listDiv = document.getElementById('odt-list');
+    if (localData.downtime.length === 0) {
+      listDiv.innerHTML = '<div class="empty-state">BELUM ADA DATA ODT</div>';
       return;
     }
-    if (oeeFormState.lineStopMesin.length === 0) {
-      oeeFormState.lineStopMesin = localData.line_stop_mesin.map(m => ({ 
-        id: m.id, 
-        nama: m.nama, 
-        durasi: 0, 
-        action: '', 
-        wr: '', 
-        isCustom: false 
+    if (oeeFormState.downtime.length === 0) {
+      oeeFormState.downtime = localData.downtime.map(d => ({ 
+        id: d.id, nama: d.nama, waktu_standard: d.waktu_standard, frekuensi: 1, durasi: 0 
       }));
     }
-    listDiv.innerHTML = oeeFormState.lineStopMesin.map(lsm => {
-      const wrRequired = (parseFloat(lsm.durasi) || 0) >= 180;
+    listDiv.innerHTML = oeeFormState.downtime.map(odt => {
+      const totalDurasi = (parseFloat(odt.frekuensi)||1) * (parseFloat(odt.durasi)||0);
       return `
-        <div class="lsm-row">
-          <div><p style="font-size: 13px; font-weight: 700; color: #a855f7; margin: 0;">${lsm.nama}</p></div>
-          <input type="number" class="input-field" value="${lsm.durasi}" min="0" placeholder="ACTUAL TIME" onchange="updateLineStopMesin('${lsm.id}', 'durasi', this.value)">
-          <input type="text" class="input-field" value="${lsm.action}" placeholder="ACTION" onchange="updateLineStopMesin('${lsm.id}', 'action', this.value)">
-          <input type="text" class="input-field" style="${wrRequired ? 'border-color: #ef4444;' : ''}" value="${lsm.wr}" placeholder="NO WR${wrRequired ? ' *' : ''}" onchange="updateLineStopMesin('${lsm.id}', 'wr', this.value)">
+        <div class="downtime-row">
+          <div>
+            <p style="font-size:13px; font-weight:700; color:#3b82f6;">${odt.nama}</p>
+            <p style="font-size:11px; color:#60a5fa;">STD: ${odt.waktu_standard} MIN</p>
+          </div>
+          <div class="form-group">
+            <label>FREK</label>
+            <input type="number" value="${odt.frekuensi||1}" min="1" onchange="updateODTFrekuensi('${odt.id}', this.value)">
+          </div>
+          <input type="number" value="${odt.durasi}" min="0" placeholder="DURASI" onchange="updateODT('${odt.id}', this.value)">
         </div>
       `;
     }).join('');
   }
 
-  function updateLineStopMesin(id, field, value) {
-    const lsm = oeeFormState.lineStopMesin.find(l => l.id === id);
-    if (lsm) lsm[field] = value;
-    renderPackerMeterList();
+  function updateODTFrekuensi(id, frek) {
+    const odt = oeeFormState.downtime.find(o => o.id === id);
+    if (odt) { odt.frekuensi = Math.max(1, parseInt(frek)||1); renderODTList(); calculateOEE(); }
+  }
+
+  function updateODT(id, dur) {
+    const odt = oeeFormState.downtime.find(o => o.id === id);
+    if (!odt) return;
+    const actualDurasi = parseFloat(dur)||0;
+    const standar = odt.waktu_standard;
+    const frekuensi = odt.frekuensi||1;
+    const selisih = Math.max(0, actualDurasi - standar) * frekuensi;
+    odt.durasi = actualDurasi;
+
+    const odtOverName = `ODT OVER ${odt.nama}`;
+    const existingIndex = oeeFormState.lineStopNonMesin.findIndex(l => l.nama === odtOverName);
+    if (selisih > 0) {
+      if (existingIndex >= 0) oeeFormState.lineStopNonMesin[existingIndex].durasi = selisih;
+      else oeeFormState.lineStopNonMesin.push({ id: `lsnm_odtover_${odt.id}_${Date.now()}`, nama: odtOverName, durasi: selisih, action: '', isCustom: true });
+    } else {
+      oeeFormState.lineStopNonMesin = oeeFormState.lineStopNonMesin.filter(l => l.nama !== odtOverName);
+    }
+    renderLineStopNonMesinList();
+    renderODTList();
     calculateOEE();
   }
 
-  // ==================== LINE STOP NON-MESIN ====================
-  function renderLineStopNonMesinList() {
-    const listDiv = document.getElementById('line-stop-non-mesin-list');
-    
-    let allLSNM = [];
-    
-    if (localData.line_stop_non_mesin && localData.line_stop_non_mesin.length > 0) {
-      const masterLSNM = localData.line_stop_non_mesin.map(m => ({ 
-        id: m.id, 
-        nama: m.nama, 
-        durasi: 0, 
-        action: '', 
-        isCustom: false 
-      }));
-      allLSNM = [...allLSNM, ...masterLSNM];
-    }
-    
-    if (oeeFormState.lineStopNonMesin && oeeFormState.lineStopNonMesin.length > 0) {
-      const customLSNM = oeeFormState.lineStopNonMesin.filter(l => l.isCustom);
-      allLSNM = [...allLSNM, ...customLSNM];
-    }
-    
-    const uniqueLSNM = [];
-    const ids = new Set();
-    allLSNM.forEach(l => {
-      if (!ids.has(l.id)) {
-        ids.add(l.id);
-        uniqueLSNM.push(l);
-      }
+  // ==================== LINE STOP MESIN ====================
+  function addCustomLineStopMesin() {
+    const nama = prompt('MASUKKAN NAMA CUSTOM LINE STOP MESIN:', '');
+    if (!nama || !nama.trim()) { showToast('NAMA WAJIB DIISI', 'error'); return; }
+    oeeFormState.lineStopMesin.push({ 
+      id: 'lsm_custom_' + Date.now(), 
+      nama: nama.trim().toUpperCase(), 
+      durasi: 0, 
+      action: '', 
+      wr: '', 
+      isCustom: true 
     });
-    
-    oeeFormState.lineStopNonMesin = uniqueLSNM;
+    renderLineStopMesinList();
+  }
 
-    if (oeeFormState.lineStopNonMesin.length === 0) {
-      listDiv.innerHTML = '<div class="empty-state"><div class="empty-state-text">BELUM ADA DATA</div></div>';
-      return;
+  function renderLineStopMesinList() {
+    const listDiv = document.getElementById('line-stop-mesin-list');
+    let allLSM = localData.line_stop_mesin.map(m => ({ id: m.id, nama: m.nama, durasi: 0, action: '', wr: '', isCustom: false }));
+    const customLSM = oeeFormState.lineStopMesin.filter(l => l.isCustom) || [];
+    allLSM = [...allLSM, ...customLSM];
+    
+    const unique = [];
+    const ids = new Set();
+    allLSM.forEach(l => { if (!ids.has(l.id)) { ids.add(l.id); unique.push(l); } });
+    oeeFormState.lineStopMesin = unique;
+
+    if (oeeFormState.lineStopMesin.length === 0) { 
+      listDiv.innerHTML = '<div class="empty-state">BELUM ADA DATA</div>'; 
+      return; 
     }
 
-    listDiv.innerHTML = oeeFormState.lineStopNonMesin.map(lsnm => `
-      <div class="lsnm-row">
-        <div>
-          <p style="font-size: 13px; font-weight: 700; color: #10b981; margin: 0;">${lsnm.nama}</p>
-        </div>
-        <input type="number" class="input-field" value="${lsnm.durasi}" min="0" placeholder="ACTUAL TIME" onchange="updateLineStopNonMesin('${lsnm.id}', 'durasi', this.value)">
-        <input type="text" class="input-field" value="${lsnm.action}" placeholder="ACTION" onchange="updateLineStopNonMesin('${lsnm.id}', 'action', this.value)">
-        ${lsnm.isCustom ? `<button type="button" class="btn btn-danger btn-small" style="padding: 8px;" onclick="removeLineStopNonMesin('${lsnm.id}')">HAPUS</button>` : ''}
+    listDiv.innerHTML = oeeFormState.lineStopMesin.map(lsm => `
+      <div class="lsm-row">
+        <div><p style="font-size:13px; font-weight:700; color:#a855f7;">${lsm.nama}</p></div>
+        <input type="number" value="${lsm.durasi}" min="0" placeholder="DURASI" onchange="updateLineStopMesin('${lsm.id}', 'durasi', this.value)">
+        <input type="text" value="${lsm.action}" placeholder="ACTION" onchange="updateLineStopMesin('${lsm.id}', 'action', this.value)">
+        <input type="text" value="${lsm.wr}" placeholder="NO WR" onchange="updateLineStopMesin('${lsm.id}', 'wr', this.value)">
+        ${lsm.isCustom ? `<button class="btn btn-danger btn-small" onclick="removeLineStopMesin('${lsm.id}')">HAPUS</button>` : '<div></div>'}
       </div>
     `).join('');
   }
 
-  function updateLineStopNonMesin(id, field, value) {
+  function updateLineStopMesin(id, field, val) {
+    const lsm = oeeFormState.lineStopMesin.find(l => l.id === id);
+    if (lsm) lsm[field] = val;
+    calculateOEE();
+  }
+
+  function removeLineStopMesin(id) {
+    oeeFormState.lineStopMesin = oeeFormState.lineStopMesin.filter(l => l.id !== id);
+    renderLineStopMesinList();
+    calculateOEE();
+  }
+
+  // ==================== LINE STOP NON-MESIN ====================
+  function addCustomLineStopNonMesin() {
+    const nama = prompt('MASUKKAN NAMA CUSTOM LINE STOP NON-MESIN:', '');
+    if (!nama || !nama.trim()) { showToast('NAMA WAJIB DIISI', 'error'); return; }
+    oeeFormState.lineStopNonMesin.push({ 
+      id: 'lsnm_custom_' + Date.now(), 
+      nama: nama.trim().toUpperCase(), 
+      durasi: 0, 
+      action: '', 
+      isCustom: true 
+    });
+    renderLineStopNonMesinList();
+  }
+
+  function renderLineStopNonMesinList() {
+    const listDiv = document.getElementById('line-stop-non-mesin-list');
+    let allLSNM = localData.line_stop_non_mesin?.map(m => ({ id: m.id, nama: m.nama, durasi: 0, action: '', isCustom: false })) || [];
+    const customLSNM = oeeFormState.lineStopNonMesin?.filter(l => l.isCustom) || [];
+    allLSNM = [...allLSNM, ...customLSNM];
+    const unique = [];
+    const ids = new Set();
+    allLSNM.forEach(l => { if (!ids.has(l.id)) { ids.add(l.id); unique.push(l); } });
+    oeeFormState.lineStopNonMesin = unique;
+    if (oeeFormState.lineStopNonMesin.length === 0) { listDiv.innerHTML = '<div class="empty-state">BELUM ADA DATA</div>'; return; }
+    listDiv.innerHTML = oeeFormState.lineStopNonMesin.map(lsnm => `
+      <div class="lsnm-row">
+        <div><p style="font-size:13px; font-weight:700; color:#10b981;">${lsnm.nama}</p></div>
+        <input type="number" value="${lsnm.durasi}" min="0" placeholder="DURASI" onchange="updateLineStopNonMesin('${lsnm.id}', 'durasi', this.value)">
+        <input type="text" value="${lsnm.action}" placeholder="ACTION" onchange="updateLineStopNonMesin('${lsnm.id}', 'action', this.value)">
+        ${lsnm.isCustom ? `<button class="btn btn-danger btn-small" onclick="removeLineStopNonMesin('${lsnm.id}')">HAPUS</button>` : '<div></div>'}
+      </div>
+    `).join('');
+  }
+
+  function updateLineStopNonMesin(id, field, val) {
     const lsnm = oeeFormState.lineStopNonMesin.find(l => l.id === id);
-    if (lsnm) {
-      lsnm[field] = value;
-    }
-    renderPackerMeterList();
+    if (lsnm) lsnm[field] = val;
     calculateOEE();
   }
 
@@ -1980,71 +2037,33 @@
   // ==================== MINOR STOP ====================
   function addMinorStop() {
     const nama = prompt('MASUKKAN NAMA MINOR STOP:', '');
-    if (!nama || !nama.trim()) {
-      showToast('NAMA MINOR STOP WAJIB DIISI', 'error');
-      return;
-    }
-    oeeFormState.minorStop.push({ 
-      id: 'ms_' + Date.now(), 
-      nama: nama.trim().toUpperCase(), 
-      durasi: 0, 
-      isCustom: true 
-    });
+    if (!nama || !nama.trim()) { showToast('NAMA WAJIB DIISI', 'error'); return; }
+    oeeFormState.minorStop.push({ id: 'ms_'+Date.now(), nama: nama.trim().toUpperCase(), durasi: 0, isCustom: true });
     renderMinorStopList();
   }
 
   function renderMinorStopList() {
     const listDiv = document.getElementById('minor-stop-list');
-    
-    let allMinorStops = [];
-    
-    if (localData.minor_stop && localData.minor_stop.length > 0) {
-      const masterStops = localData.minor_stop.map(m => ({ 
-        id: m.id, 
-        nama: m.nama, 
-        durasi: 0, 
-        isCustom: false 
-      }));
-      allMinorStops = [...allMinorStops, ...masterStops];
-    }
-    
-    if (oeeFormState.minorStop && oeeFormState.minorStop.length > 0) {
-      const customStops = oeeFormState.minorStop.filter(ms => ms.isCustom);
-      allMinorStops = [...allMinorStops, ...customStops];
-    }
-    
-    const uniqueStops = [];
+    let allMS = localData.minor_stop?.map(m => ({ id: m.id, nama: m.nama, durasi: 0, isCustom: false })) || [];
+    const customMS = oeeFormState.minorStop?.filter(m => m.isCustom) || [];
+    allMS = [...allMS, ...customMS];
+    const unique = [];
     const ids = new Set();
-    allMinorStops.forEach(ms => {
-      if (!ids.has(ms.id)) {
-        ids.add(ms.id);
-        uniqueStops.push(ms);
-      }
-    });
-    
-    oeeFormState.minorStop = uniqueStops;
-
-    if (oeeFormState.minorStop.length === 0) {
-      listDiv.innerHTML = '<div class="empty-state"><div class="empty-state-text">BELUM ADA DATA MINOR STOP</div></div>';
-      return;
-    }
-
+    allMS.forEach(m => { if (!ids.has(m.id)) { ids.add(m.id); unique.push(m); } });
+    oeeFormState.minorStop = unique;
+    if (oeeFormState.minorStop.length === 0) { listDiv.innerHTML = '<div class="empty-state">BELUM ADA DATA</div>'; return; }
     listDiv.innerHTML = oeeFormState.minorStop.map(ms => `
       <div class="ms-row">
-        <div>
-          <p style="font-size: 13px; font-weight: 700; color: #d97706; margin: 0;">${ms.nama}</p>
-        </div>
-        <input type="number" class="input-field" value="${ms.durasi}" min="0" placeholder="ACTUAL TIME" onchange="updateMinorStop('${ms.id}', 'durasi', this.value)">
-        ${ms.isCustom ? `<button type="button" class="btn btn-danger btn-small" style="padding: 8px;" onclick="removeMinorStop('${ms.id}')">HAPUS</button>` : ''}
+        <div><p style="font-size:13px; font-weight:700; color:#d97706;">${ms.nama}</p></div>
+        <input type="number" value="${ms.durasi}" min="0" placeholder="DURASI" onchange="updateMinorStop('${ms.id}', 'durasi', this.value)">
+        ${ms.isCustom ? `<button class="btn btn-danger btn-small" onclick="removeMinorStop('${ms.id}')">HAPUS</button>` : '<div></div>'}
       </div>
     `).join('');
   }
 
-  function updateMinorStop(id, field, value) {
+  function updateMinorStop(id, field, val) {
     const ms = oeeFormState.minorStop.find(m => m.id === id);
-    if (ms) {
-      ms[field] = value;
-    }
+    if (ms) ms[field] = val;
     calculateOEE();
   }
 
@@ -2056,90 +2075,79 @@
 
   // ==================== CALCULATE OEE ====================
   function calculateOEE() {
-    let totalOutput = 0, totalReject = 0;
-    
-    let totalMaxDuration = 0;
-    oeeFormState.packerMeters.forEach(meter => {
-      let maxDurInMeter = 0;
-      meter.packers.forEach(p => {
-        maxDurInMeter = Math.max(maxDurInMeter, p.duration || 0);
-        totalOutput += p.output || 0;
-        totalReject += p.reject || 0;
-      });
-      totalMaxDuration += maxDurInMeter;
-    });
-    
-    const totalODT = oeeFormState.downtime.reduce((s, o) => s + ((parseFloat(o.frekuensi) || 1) * (parseFloat(o.durasi) || 0)), 0);
-    const totalLSM = oeeFormState.lineStopMesin.reduce((s, l) => s + (parseFloat(l.durasi) || 0), 0);
-    const totalLSNM = oeeFormState.lineStopNonMesin.reduce((s, l) => s + (parseFloat(l.durasi) || 0), 0);
-    const totalMinor = oeeFormState.minorStop.reduce((s, m) => s + (parseFloat(m.durasi) || 0), 0);
+    const prod = oeeFormState.production;
+    const selectedProduct = localData.produk.find(p => p.id === prod.productId);
+    const targetPerMinute = selectedProduct ? selectedProduct.target : 0;
+    const jumlahPacker = prod.selectedPackers.length;
+
+    const totalODT = oeeFormState.downtime.reduce((s, o) => s + ((parseFloat(o.frekuensi)||1) * (parseFloat(o.durasi)||0)), 0);
+    const totalLSM = oeeFormState.lineStopMesin.reduce((s, l) => s + (parseFloat(l.durasi)||0), 0);
+    const totalLSNM = oeeFormState.lineStopNonMesin.reduce((s, l) => s + (parseFloat(l.durasi)||0), 0);
+    const totalMinor = oeeFormState.minorStop.reduce((s, m) => s + (parseFloat(m.durasi)||0), 0);
     const totalActualDowntime = totalLSM + totalLSNM + totalMinor;
-    
+
     const plannedTime = oeeFormState.shiftMinutes - totalODT;
     const availableTime = plannedTime - totalActualDowntime;
-    
+
     let availActual = plannedTime > 0 ? (availableTime / plannedTime) * 100 : 0;
     let avail365 = oeeFormState.shiftMinutes > 0 ? ((oeeFormState.shiftMinutes - totalODT - totalLSM - totalLSNM) / oeeFormState.shiftMinutes) * 100 : 0;
+
+    const timeForTarget = oeeFormState.shiftMinutes - totalODT - totalLSM - totalLSNM;
+    let targetNormal = jumlahPacker * Math.max(0, timeForTarget) * targetPerMinute;
     
-    let totalTarget = 0;
-    oeeFormState.packerMeters.forEach(meter => {
-      const product = localData.produk.find(p => p.id === meter.productId);
-      if (product) {
-        meter.packers.forEach(p => {
-          totalTarget += (p.duration || 0) * product.target;
-        });
-      }
-    });
-    
-    let performance = totalTarget > 0 ? (totalOutput / totalTarget) * 100 : 0;
-    let quality = totalOutput > 0 ? ((totalOutput - totalReject) / totalOutput) * 100 : 0;
-    
-    // Hanya cek komponen selain performance untuk warning
-    const hasOver100 = availActual > 100 || avail365 > 100 || quality > 100;
-    
-    let oeeActual = (availActual / 100) * (performance / 100) * (quality / 100) * 100;
-    let oee365 = (avail365 / 100) * (performance / 100) * (quality / 100) * 100;
-    
-    const over100Warning = document.getElementById('oee-over100-warning');
-    if (hasOver100) {
-      over100Warning.innerHTML = `
-        <p class="warning-title">⚠️ PERINGATAN: AVAILABILITY ATAU QUALITY > 100%</p>
-        <p class="warning-text">TERDAPAT KOMPONEN AVAILABILITY ATAU QUALITY YANG MELEBIHI 100%. CEK KEMBALI DATA ANDA.</p>
-      `;
-      over100Warning.style.display = 'block';
-    } else {
-      over100Warning.style.display = 'none';
-    }
-    
-    document.getElementById('calc-availability-actual').textContent = `${availActual.toFixed(1)}%`;
-    document.getElementById('calc-availability-365').textContent = `${avail365.toFixed(1)}%`;
-    document.getElementById('calc-performance').textContent = `${performance.toFixed(1)}%`;
-    document.getElementById('calc-quality').textContent = `${quality.toFixed(1)}%`;
-    document.getElementById('calc-oee-actual').textContent = `${oeeActual.toFixed(1)}%`;
-    document.getElementById('calc-oee-365').textContent = `${oee365.toFixed(1)}%`;
-    document.getElementById('calc-total-output').textContent = `${totalOutput.toFixed(1)} DUS`;
-    
+    const perbantuanMinutes = calculatePerbantuanMinutes();
+    let targetPerbantuan = (perbantuanMinutes / 60) * targetPerMinute * 0.5;
+    let targetOutput = targetNormal + targetPerbantuan;
+
+    let performanceAsli = targetOutput > 0 ? (oeeFormState.outputActual / targetOutput) * 100 : 0;
+    let performanceForOEE = Math.min(100, performanceAsli);
+    let quality = oeeFormState.outputActual > 0 ? ((oeeFormState.outputActual - oeeFormState.reject) / oeeFormState.outputActual) * 100 : 0;
+
+    let oeeActual = (availActual / 100) * (performanceForOEE / 100) * (quality / 100) * 100;
+    let oee365 = (avail365 / 100) * (performanceForOEE / 100) * (quality / 100) * 100;
+
+    document.getElementById('calc-availability-actual').textContent = availActual.toFixed(1) + '%';
+    document.getElementById('calc-availability-365').textContent = avail365.toFixed(1) + '%';
+    document.getElementById('calc-performance').textContent = performanceForOEE.toFixed(1) + '%';
+    document.getElementById('calc-quality').textContent = quality.toFixed(1) + '%';
+    document.getElementById('calc-oee-actual').textContent = oeeActual.toFixed(1) + '%';
+    document.getElementById('calc-oee-365').textContent = oee365.toFixed(1) + '%';
+    document.getElementById('calc-target-output').textContent = targetOutput.toFixed(1) + ' DUS';
+    document.getElementById('calc-output-actual').textContent = oeeFormState.outputActual.toFixed(1) + ' DUS';
+    document.getElementById('calc-reject').textContent = oeeFormState.reject.toFixed(1) + ' DUS';
+
     oeeFormState.results = {
       availabilityActual: availActual.toFixed(1),
       availability365: avail365.toFixed(1),
-      performance: performance.toFixed(1),
+      performance: performanceForOEE.toFixed(1),
+      performanceAsli: performanceAsli,
       qualityRate: quality.toFixed(1),
       oeeActual: oeeActual.toFixed(1),
       oee365: oee365.toFixed(1),
-      totalOutput,
-      totalReject,
-      totalMaxDuration,
-      totalODT,
-      totalLSM,
-      totalLSNM,
-      totalMinor,
-      hasOver100
+      targetOutput,
+      outputActual: oeeFormState.outputActual,
+      reject: oeeFormState.reject,
+      targetNormal,
+      targetPerbantuan,
+      perbantuanMinutes
     };
-    updateAvailabilityWarning();
   }
 
   function loadOEEFormData() {
     document.getElementById('oee-date').value = new Date().toISOString().split('T')[0];
+    oeeFormState = {
+      shiftMinutes: 0,
+      production: { productId: '', batchNumber: '', selectedPackers: [] },
+      perbantuan: [],
+      outputActual: 0,
+      reject: 0,
+      downtime: [],
+      lineStopMesin: [],
+      lineStopNonMesin: [],
+      minorStop: [],
+      results: {},
+      odtOverRecords: []
+    };
   }
 
   // ==================== SUBMIT OEE ====================
@@ -2148,116 +2156,44 @@
     const date = document.getElementById('oee-date').value;
     const shift = document.getElementById('oee-shift').value;
     const notes = document.getElementById('oee-notes').value;
-    
-    if (!date || !shift || oeeFormState.packerMeters.length === 0) {
-      showToast('TANGGAL, SHIFT & PACKER METER WAJIB DIISI', 'error');
-      return;
-    }
-    
-    if (oeeFormState.packerMeters.find(m => !m.productId || !m.batchNumber || m.packers.length === 0)) {
-      showToast('PRODUK, BATCH & MINIMAL 1 PACKER WAJIB DIISI DI SETIAP METER', 'error');
-      return;
-    }
-    
-    if (oeeFormState.packerMeters.flatMap(m => m.packers.filter(p => !p.packerName)).length > 0) {
-      showToast('SEMUA PACKER HARUS DIPILIH', 'error');
-      return;
-    }
-    
-    const invalidWR = oeeFormState.lineStopMesin.find(lsm => (parseFloat(lsm.durasi) || 0) >= 180 && !lsm.wr?.trim());
-    if (invalidWR) {
-      showToast(`NO WR WAJIB UNTUK: ${invalidWR.nama}`, 'error');
-      return;
+    const prod = oeeFormState.production;
+
+    if (!date || !shift) { showToast('TANGGAL & SHIFT WAJIB DIISI', 'error'); return; }
+    if (!prod.productId || !prod.batchNumber || prod.selectedPackers.length === 0) {
+      showToast('PRODUK, BATCH & MINIMAL 1 PACKER WAJIB DIISI', 'error'); return;
     }
 
-    // Cek hanya availability dan quality yang >100% (performance diabaikan)
-    if (oeeFormState.results.availabilityActual > 100 || oeeFormState.results.availability365 > 100 || oeeFormState.results.qualityRate > 100) {
-      showToast('AVAILABILITY ATAU QUALITY TIDAK BOLEH MELEBIHI 100%', 'error');
-      return;
-    }
+    const packerNames = prod.selectedPackers.map(id => localData.packer.find(p => p.id === id)?.nama).filter(Boolean).join(', ');
+    const productName = localData.produk.find(p => p.id === prod.productId)?.nama || '-';
 
-    const totalODT = oeeFormState.downtime.reduce((s, o) => s + ((parseFloat(o.frekuensi) || 1) * (parseFloat(o.durasi) || 0)), 0);
-    const totalLSM = oeeFormState.lineStopMesin.reduce((s, l) => s + (parseFloat(l.durasi) || 0), 0);
-    const totalLSNM = oeeFormState.lineStopNonMesin.reduce((s, l) => s + (parseFloat(l.durasi) || 0), 0);
-    
-    let totalMaxDuration = 0;
-    oeeFormState.packerMeters.forEach(meter => {
-      let maxDurInMeter = 0;
-      meter.packers.forEach(p => {
-        maxDurInMeter = Math.max(maxDurInMeter, p.duration || 0);
-      });
-      totalMaxDuration += maxDurInMeter;
-    });
-    
-    const totalTime = totalODT + totalLSM + totalLSNM + totalMaxDuration;
-    
-    if (totalTime > oeeFormState.shiftMinutes && oeeFormState.shiftMinutes > 0) {
-      showToast(`⚠️ TOTAL WAKTU (${totalTime.toFixed(0)} MENIT) MELEBIHI DURASI SHIFT (${oeeFormState.shiftMinutes} MENIT)!`, 'error');
-      return;
-    }
+    const perbantuanData = oeeFormState.perbantuan.map(p => ({
+      inisial: p.inisial,
+      jamStart: p.jamStart,
+      jamEnd: p.jamEnd
+    }));
 
-    const allPackerNames = oeeFormState.packerMeters.flatMap(m => m.packers.map(p => p.packerName)).join(', ');
-    const produkBatch = oeeFormState.packerMeters.map(m => {
-      const prod = localData.produk.find(p => p.id === m.productId);
-      return `${prod?.nama}(${m.batchNumber})`;
-    }).join(' | ');
-
-    const lsmDetails = oeeFormState.lineStopMesin
-      .filter(lsm => parseFloat(lsm.durasi) > 0)
-      .map(lsm => ({
-        nama: lsm.nama,
-        durasi: parseFloat(lsm.durasi),
-        action: lsm.action || '',
-        wr: lsm.wr || ''
-      }));
-
-    const lsnmDetails = oeeFormState.lineStopNonMesin
-      .filter(lsnm => parseFloat(lsnm.durasi) > 0)
-      .map(lsnm => ({
-        nama: lsnm.nama,
-        durasi: parseFloat(lsnm.durasi),
-        action: lsnm.action || ''
-      }));
-
-    const minorStopDetails = oeeFormState.minorStop
-      .filter(ms => parseFloat(ms.durasi) > 0)
-      .map(ms => ({
-        nama: ms.nama,
-        durasi: parseFloat(ms.durasi)
-      }));
-
-    const odtDetails = oeeFormState.downtime
-      .filter(odt => parseFloat(odt.durasi) > 0)
-      .map(odt => ({
-        nama: odt.nama,
-        frekuensi: odt.frekuensi || 1,
-        durasiPerKejadian: parseFloat(odt.durasi),
-        totalDurasi: (odt.frekuensi || 1) * parseFloat(odt.durasi),
-        waktuStandard: odt.waktu_standard
-      }));
-
-    const lsmString = lsmDetails.map(l => `${l.nama} (${l.durasi} MIN) - ACTION: ${l.action || '-'} - WR: ${l.wr || '-'}`).join(' | ');
-    const lsnmString = lsnmDetails.map(l => `${l.nama} (${l.durasi} MIN) - ACTION: ${l.action || '-'}`).join(' | ');
-    const msString = minorStopDetails.map(m => `${m.nama} (${m.durasi} MIN)`).join(' | ');
-    const odtString = odtDetails.map(o => `${o.nama}: ${o.frekuensi}x ${o.durasiPerKejadian} MIN (TOTAL: ${o.totalDurasi} MIN)`).join(' | ');
+    const lsmDetails = oeeFormState.lineStopMesin.filter(l => parseFloat(l.durasi) > 0).map(l => ({ nama: l.nama, durasi: l.durasi, action: l.action, wr: l.wr }));
+    const lsnmDetails = oeeFormState.lineStopNonMesin.filter(l => parseFloat(l.durasi) > 0).map(l => ({ nama: l.nama, durasi: l.durasi, action: l.action }));
+    const msDetails = oeeFormState.minorStop.filter(m => parseFloat(m.durasi) > 0).map(m => ({ nama: m.nama, durasi: m.durasi }));
+    const odtDetails = oeeFormState.downtime.filter(o => parseFloat(o.durasi) > 0).map(o => ({ nama: o.nama, frekuensi: o.frekuensi, durasiPerKejadian: o.durasi, totalDurasi: (o.frekuensi||1)*o.durasi }));
 
     const record = {
       date,
       shift,
-      product: produkBatch,
-      packers: allPackerNames,
-      output_actual: oeeFormState.results.totalOutput,
+      product: `${productName} (${prod.batchNumber})`,
+      packers: packerNames,
+      perbantuan: perbantuanData.length ? JSON.stringify(perbantuanData) : null,
+      output_actual: oeeFormState.outputActual,
+      reject: oeeFormState.reject,
       availability_actual: parseFloat(oeeFormState.results.availabilityActual),
       performance: parseFloat(oeeFormState.results.performance),
       quality_rate: parseFloat(oeeFormState.results.qualityRate),
       oee_actual: parseFloat(oeeFormState.results.oeeActual),
       oee_365: parseFloat(oeeFormState.results.oee365),
-      line_stop_mesin: lsmString || null,
-      line_stop_non_mesin: lsnmString || null,
-      minor_stop: msString || null,
-      operational_downtime: odtString || null,
-      odt_details: odtDetails.length > 0 ? JSON.stringify(odtDetails) : null,
-      ms_details: minorStopDetails.length > 0 ? JSON.stringify(minorStopDetails) : null,
+      line_stop_mesin: lsmDetails.length ? JSON.stringify(lsmDetails) : null,
+      line_stop_non_mesin: lsnmDetails.length ? JSON.stringify(lsnmDetails) : null,
+      minor_stop: msDetails.length ? JSON.stringify(msDetails) : null,
+      operational_downtime: odtDetails.length ? JSON.stringify(odtDetails) : null,
       notes: notes || null
     };
 
@@ -2265,94 +2201,67 @@
       const { error } = await supabaseClient.from('oee_records').insert([record]);
       if (error) throw error;
       
-      const newRecord = { 
-        ...record, 
-        availability_365: parseFloat(oeeFormState.results.availability365),
-        lsm_details: lsmDetails,
-        lsnm_details: lsnmDetails,
-        ms_details: minorStopDetails,
-        odt_details: odtDetails
-      };
+      localData.oee_records.unshift(record);
+      await addAuditLog('INPUT OEE', `${productName} - ${packerNames}`);
+      showToast('DATA BERHASIL DISIMPAN', 'success');
       
-      localData.oee_records.unshift(newRecord);
-      
-      console.log('✅ Record saved with details:', newRecord);
-      
-      await addAuditLog('INPUT OEE', `${produkBatch} - PACKER: ${allPackerNames} | ODT: ${odtDetails.length} | LSM: ${lsmDetails.length} | LSNM: ${lsnmDetails.length} | MS: ${minorStopDetails.length} | NOTES: ${notes || '-'}`);
-      showToast('DATA OEE BERHASIL DISIMPAN ✅', 'success');
-      
-      // Reset form dan refresh dashboard
       resetOEEForm();
-      await loadDataFromSupabase(); // Reload data dari Supabase
-      applyDashboardFilters(); // Apply filters untuk update filtered records
-      updateDashboard(); // Update dashboard UI
-      switchTab('dashboard'); // Pindah ke tab dashboard
+      await loadDataFromSupabase();
+      applyDashboardFilters();
+      updateDashboard();
+      switchTab('dashboard');
       
     } catch (error) {
-      console.error('❌ Error saving OEE:', error);
-      showToast('GAGAL MENYIMPAN DATA OEE - ' + (error.message || ''), 'error');
+      showToast('GAGAL MENYIMPAN', 'error');
     }
   }
 
   function resetOEEForm() {
     document.getElementById('form-oee').reset();
     document.getElementById('oee-date').value = new Date().toISOString().split('T')[0];
-    document.getElementById('oee-notes').value = '';
-    oeeFormState = { 
-      shiftMinutes: 0, 
-      packerMeters: [], 
-      downtime: [], 
-      lineStopMesin: [], 
-      lineStopNonMesin: [], 
-      minorStop: [], 
+    oeeFormState = {
+      shiftMinutes: 0,
+      production: { productId: '', batchNumber: '', selectedPackers: [] },
+      perbantuan: [],
+      outputActual: 0,
+      reject: 0,
+      downtime: [],
+      lineStopMesin: [],
+      lineStopNonMesin: [],
+      minorStop: [],
       results: {},
-      odtOverRecords: [],
-      notes: ''
+      odtOverRecords: []
     };
-    document.getElementById('packer-meter-list').innerHTML = '';
-    document.getElementById('odt-list').innerHTML = '';
-    document.getElementById('line-stop-mesin-list').innerHTML = '';
-    document.getElementById('line-stop-non-mesin-list').innerHTML = '';
-    document.getElementById('minor-stop-list').innerHTML = '';
-    document.getElementById('calc-availability-actual').textContent = '0%';
-    document.getElementById('calc-availability-365').textContent = '0%';
-    document.getElementById('calc-performance').textContent = '0%';
-    document.getElementById('calc-quality').textContent = '0%';
-    document.getElementById('calc-oee-actual').textContent = '0%';
-    document.getElementById('calc-oee-365').textContent = '0%';
-    document.getElementById('calc-total-output').textContent = '0 DUS';
-    document.getElementById('availability-warning').style.display = 'none';
-    document.getElementById('oee-over100-warning').style.display = 'none';
+    renderProductionRow();
+    renderPerbantuanList();
+    renderOutputReject();
+    renderODTList();
+    renderLineStopMesinList();
+    renderLineStopNonMesinList();
+    renderMinorStopList();
+    calculateOEE();
   }
 
   // ==================== DASHBOARD ====================
   function initDashboardFilters() {
-    populateFilterOptions();
     const today = new Date();
-    const startDate = new Date(today.getFullYear(), today.getMonth(), 1);
-    const endDate = new Date(today.getFullYear(), today.getMonth() + 1, 0);
-    document.getElementById('filter-date-start').value = startDate.toISOString().split('T')[0];
-    document.getElementById('filter-date-end').value = endDate.toISOString().split('T')[0];
+    const start = new Date(today.getFullYear(), today.getMonth(), 1);
+    const end = new Date(today.getFullYear(), today.getMonth() + 1, 0);
+    
+    document.getElementById('filter-date-start').value = start.toISOString().split('T')[0];
+    document.getElementById('filter-date-end').value = end.toISOString().split('T')[0];
+    
     applyDashboardFilters();
   }
 
   function populateFilterOptions() {
-    const productSelect = document.getElementById('filter-product');
-    productSelect.querySelectorAll('option:not(:first-child)').forEach(o => o.remove());
+    const prodSelect = document.getElementById('filter-product');
+    prodSelect.innerHTML = '<option value="">SEMUA PRODUK</option>';
     localData.produk.forEach(p => {
-      const opt = document.createElement('option');
-      opt.value = p.id;
-      opt.textContent = p.nama;
-      productSelect.appendChild(opt);
-    });
-    
-    const packerSelect = document.getElementById('filter-packer');
-    packerSelect.querySelectorAll('option:not(:first-child)').forEach(o => o.remove());
-    localData.packer.forEach(p => {
-      const opt = document.createElement('option');
-      opt.value = p.nama;
-      opt.textContent = p.nama;
-      packerSelect.appendChild(opt);
+      const option = document.createElement('option');
+      option.value = p.nama;
+      option.textContent = p.nama;
+      prodSelect.appendChild(option);
     });
   }
 
@@ -2360,17 +2269,16 @@
     const ds = document.getElementById('filter-date-start').value;
     const de = document.getElementById('filter-date-end').value;
     const shift = document.getElementById('filter-shift').value;
-    const sp = document.getElementById('filter-product').value;
-    const spk = document.getElementById('filter-packer').value;
+    const product = document.getElementById('filter-product').value;
     
     filteredOeeRecords = localData.oee_records.filter(r => {
       if (ds && r.date < ds) return false;
       if (de && r.date > de) return false;
       if (shift && r.shift !== shift) return false;
-      if (sp && !r.product?.includes(sp)) return false;
-      if (spk && !r.packers?.includes(spk)) return false;
+      if (product && !r.product?.includes(product)) return false;
       return true;
     });
+    
     updateDashboard();
   }
 
@@ -2379,7 +2287,6 @@
     document.getElementById('filter-date-end').value = '';
     document.getElementById('filter-shift').value = '';
     document.getElementById('filter-product').value = '';
-    document.getElementById('filter-packer').value = '';
     filteredOeeRecords = [...localData.oee_records];
     updateDashboard();
   }
@@ -2387,796 +2294,151 @@
   function updateDashboard() {
     updateDashboardData();
     renderCharts();
-    renderPackerPerformance();
     renderOEEHistory();
-    renderLSMDetailTable();
-    renderLSNMDetailTable();
+    generateAchievementData();
+    renderAchievementTable();
   }
 
   function updateDashboardData() {
     const recs = filteredOeeRecords.length ? filteredOeeRecords : localData.oee_records;
-    if (!recs || !recs.length) {
-      document.getElementById('score-oee-actual').textContent = '0%';
-      document.getElementById('score-oee-365').textContent = '0%';
-      document.getElementById('score-total-output').textContent = '0';
-      return;
-    }
-    let sActual = 0, cActual = 0, s365 = 0, c365 = 0, tOut = 0;
+    let sumActual = 0, countActual = 0, sum365 = 0, count365 = 0, totalOutput = 0;
+    
     recs.forEach(r => {
-      const a = parseFloat(r.oee_actual) || 0;
-      const b = parseFloat(r.oee_365) || 0;
-      const o = parseFloat(r.output_actual) || 0;
-      if (a > 0) { sActual += a; cActual++; }
-      if (b > 0) { s365 += b; c365++; }
-      tOut += o;
+      const oeeActual = parseFloat(r.oee_actual) || 0;
+      const oee365 = parseFloat(r.oee_365) || 0;
+      const output = parseFloat(r.output_actual) || 0;
+      
+      if (oeeActual > 0) { sumActual += oeeActual; countActual++; }
+      if (oee365 > 0) { sum365 += oee365; count365++; }
+      totalOutput += output;
     });
-    document.getElementById('score-oee-actual').textContent = `${(cActual ? sActual / cActual : 0).toFixed(1)}%`;
-    document.getElementById('score-oee-365').textContent = `${(c365 ? s365 / c365 : 0).toFixed(1)}%`;
-    document.getElementById('score-total-output').textContent = tOut.toLocaleString('id-ID');
+    
+    document.getElementById('score-oee-actual').textContent = (countActual ? (sumActual / countActual).toFixed(1) : '0') + '%';
+    document.getElementById('score-oee-365').textContent = (count365 ? (sum365 / count365).toFixed(1) : '0') + '%';
+    document.getElementById('score-total-output').textContent = totalOutput.toLocaleString();
   }
 
-  // ==================== CHART FUNCTIONS WITH TEXT WRAPPING ====================
-  function createBarChartWithLabels(canvasId, labels, data, label, backgroundColor) {
-    const ctx = document.getElementById(canvasId).getContext('2d');
-    if (dashboardCharts[canvasId]) dashboardCharts[canvasId].destroy();
+  // ==================== CHARTS ====================
+  function createLineChart(canvasId, labels, data, label, color) {
+    const ctx = document.getElementById(canvasId)?.getContext('2d');
+    if (!ctx) return;
     
-    // Convert labels to uppercase and wrap long text
-    const wrappedLabels = labels.map(l => {
-      const upperLabel = l.toUpperCase();
-      // Wrap text if too long (more than 25 chars)
-      if (upperLabel.length > 25) {
-        const words = upperLabel.split(' ');
-        let lines = [];
-        let currentLine = '';
-        
-        words.forEach(word => {
-          if ((currentLine + ' ' + word).length <= 25) {
-            currentLine = currentLine ? currentLine + ' ' + word : word;
-          } else {
-            if (currentLine) lines.push(currentLine);
-            currentLine = word;
-          }
-        });
-        if (currentLine) lines.push(currentLine);
-        
-        return lines.length > 1 ? lines : upperLabel;
-      }
-      return upperLabel;
-    });
-
-    dashboardCharts[canvasId] = new Chart(ctx, {
-      type: 'bar',
-      data: {
-        labels: wrappedLabels,
-        datasets: [{
-          label: label,
-          data: data,
-          backgroundColor: backgroundColor,
-          borderRadius: 8,
-          barPercentage: 0.7,
-          categoryPercentage: 0.8
-        }]
-      },
-      options: {
-        indexAxis: 'y',
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: {
-          legend: { display: false },
-          tooltip: { 
-            enabled: true,
-            callbacks: {
-              label: function(context) {
-                return `${context.raw} MENIT`;
-              }
-            }
-          }
-        },
-        scales: {
-          x: { 
-            beginAtZero: true,
-            grid: { display: true },
-            ticks: {
-              callback: function(value) {
-                return value;
-              }
-            }
-          },
-          y: { 
-            grid: { display: false },
-            ticks: {
-              font: { 
-                size: 10,
-                weight: 'bold'
-              },
-              maxRotation: 45,
-              minRotation: 30,
-              autoSkip: true,
-              autoSkipPadding: 15,
-              callback: function(val) {
-                const label = this.getLabelForValue(val);
-                // Handle array of lines (wrapped text)
-                if (Array.isArray(label)) {
-                  return label;
-                }
-                return label;
-              }
-            },
-            afterFit: function(scale) {
-              // Increase width for wrapped labels
-              scale.width = 180;
-            }
-          }
-        },
-        layout: {
-          padding: { 
-            left: 20,
-            right: 60,
-            top: 10,
-            bottom: 10
-          }
-        }
-      },
-      plugins: [{
-        id: 'valueLabels',
-        afterDatasetsDraw(chart) {
-          const { ctx } = chart;
-          ctx.save();
-          
-          chart.data.datasets.forEach((dataset, datasetIndex) => {
-            const meta = chart.getDatasetMeta(datasetIndex);
-            
-            meta.data.forEach((element, index) => {
-              const value = dataset.data[index];
-              if (value === 0) return;
-              
-              const barX = element.x;
-              const barY = element.y;
-              
-              ctx.font = 'bold 10px "Segoe UI", "Trebuchet MS", sans-serif';
-              ctx.textAlign = 'left';
-              ctx.textBaseline = 'middle';
-              
-              const valueText = value.toFixed(0);
-              const textX = barX + 8;
-              const textY = barY;
-              
-              ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
-              const textWidth = ctx.measureText(valueText).width;
-              ctx.fillRect(textX - 4, textY - 8, textWidth + 8, 16);
-              
-              ctx.fillStyle = '#000000';
-              ctx.fillText(valueText, textX, textY);
-            });
-          });
-          
-          ctx.restore();
-        }
-      }]
-    });
-  }
-
-  function createLineChart(canvasId, labels, data, label, borderColor, backgroundColor) {
-    const ctx = document.getElementById(canvasId).getContext('2d');
     if (dashboardCharts[canvasId]) dashboardCharts[canvasId].destroy();
-    
-    // Convert labels to uppercase and wrap if needed
-    const wrappedLabels = labels.map(l => {
-      const upperLabel = l.toUpperCase();
-      if (upperLabel.length > 15) {
-        return upperLabel.substring(0, 13) + '...';
-      }
-      return upperLabel;
-    });
     
     dashboardCharts[canvasId] = new Chart(ctx, {
       type: 'line',
       data: {
-        labels: wrappedLabels,
+        labels: labels,
         datasets: [{
           label: label,
           data: data,
-          borderColor: borderColor,
-          backgroundColor: backgroundColor,
+          borderColor: color,
+          backgroundColor: color + '20',
           borderWidth: 3,
           tension: 0.4,
           fill: true,
-          pointRadius: 4,
-          pointBackgroundColor: borderColor
+          pointBackgroundColor: color,
+          pointRadius: 4
         }]
       },
       options: {
         responsive: true,
         maintainAspectRatio: false,
-        plugins: {
-          legend: { display: false },
-          tooltip: { enabled: true }
-        },
+        plugins: { legend: { display: false } },
         scales: {
-          y: { 
-            beginAtZero: true, 
-            max: 100, 
-            ticks: { callback: v => v + '%' },
-            grid: { display: true }
-          },
-          x: { 
-            grid: { display: false },
-            ticks: { 
-              maxRotation: 45, 
-              minRotation: 30,
-              font: { size: 9 }
-            }
-          }
-        },
-        layout: {
-          padding: {
-            bottom: 20
-          }
+          y: { beginAtZero: true, max: 100, ticks: { callback: v => v + '%' } }
         }
       }
     });
-  }
-
-  // ==================== DOWNTIME CHARTS ====================
-  function renderODTTop10Chart() {
-    const downtimeMap = {};
-    
-    const records = filteredOeeRecords.length ? filteredOeeRecords : localData.oee_records;
-    records.forEach(record => {
-      if (record.odt_details) {
-        try {
-          const odtDetails = typeof record.odt_details === 'string' ? JSON.parse(record.odt_details) : record.odt_details;
-          if (Array.isArray(odtDetails)) {
-            odtDetails.forEach(odt => {
-              if (!downtimeMap[odt.nama]) downtimeMap[odt.nama] = 0;
-              downtimeMap[odt.nama] += odt.totalDurasi || 0;
-            });
-          }
-        } catch (e) {
-          console.log('Error parsing odt_details:', e);
-        }
-      } 
-      else if (record.operational_downtime) {
-        const matches = record.operational_downtime.match(/([^:]+):\s*(\d+)x\s*(\d+)\s*MIN\s*\(TOTAL:\s*(\d+)\s*MIN\)/g);
-        if (matches) {
-          matches.forEach(match => {
-            const nameMatch = match.match(/([^:]+):\s*(\d+)x\s*(\d+)\s*MIN\s*\(TOTAL:\s*(\d+)\s*MIN\)/);
-            if (nameMatch) {
-              const nama = nameMatch[1].trim();
-              const totalDurasi = parseInt(nameMatch[4]) || 0;
-              if (!downtimeMap[nama]) downtimeMap[nama] = 0;
-              downtimeMap[nama] += totalDurasi;
-            }
-          });
-        }
-      }
-    });
-
-    const sortedData = Object.entries(downtimeMap)
-      .map(([nama, durasi]) => ({ nama, durasi }))
-      .sort((a, b) => b.durasi - a.durasi)
-      .slice(0, 10);
-
-    if (sortedData.length === 0) {
-      createBarChartWithLabels('chart-odt-top10', ['TIDAK ADA DATA'], [0], 'MENIT', '#3b82f6');
-      return;
-    }
-
-    createBarChartWithLabels(
-      'chart-odt-top10',
-      sortedData.map(d => d.nama),
-      sortedData.map(d => d.durasi),
-      'MENIT',
-      '#3b82f6'
-    );
-  }
-
-  function renderLineStopMesinTop10Chart() {
-    const lsmMap = {};
-    
-    const records = filteredOeeRecords.length ? filteredOeeRecords : localData.oee_records;
-    records.forEach(record => {
-      if (record.lsm_details && Array.isArray(record.lsm_details)) {
-        record.lsm_details.forEach(lsm => {
-          if (!lsmMap[lsm.nama]) lsmMap[lsm.nama] = 0;
-          lsmMap[lsm.nama] += lsm.durasi || 0;
-        });
-      } else if (record.line_stop_mesin) {
-        const matches = record.line_stop_mesin.match(/([^(]+)\s*\((\d+)\s*MIN\)/g);
-        if (matches) {
-          matches.forEach(match => {
-            const nameMatch = match.match(/([^(]+)\s*\((\d+)\s*MIN\)/);
-            if (nameMatch) {
-              const nama = nameMatch[1].trim();
-              const durasi = parseInt(nameMatch[2]) || 0;
-              if (!lsmMap[nama]) lsmMap[nama] = 0;
-              lsmMap[nama] += durasi;
-            }
-          });
-        }
-      }
-    });
-
-    const sortedData = Object.entries(lsmMap)
-      .map(([nama, durasi]) => ({ nama, durasi }))
-      .sort((a, b) => b.durasi - a.durasi)
-      .slice(0, 10);
-
-    if (sortedData.length === 0) {
-      createBarChartWithLabels('chart-lsm-top10', ['TIDAK ADA DATA'], [0], 'MENIT', '#8b5cf6');
-      return;
-    }
-
-    createBarChartWithLabels(
-      'chart-lsm-top10',
-      sortedData.map(d => d.nama),
-      sortedData.map(d => d.durasi),
-      'MENIT',
-      '#8b5cf6'
-    );
-  }
-
-  function renderLineStopNonMesinTop10Chart() {
-    const lsnmMap = {};
-    
-    const records = filteredOeeRecords.length ? filteredOeeRecords : localData.oee_records;
-    records.forEach(record => {
-      if (record.lsnm_details && Array.isArray(record.lsnm_details)) {
-        record.lsnm_details.forEach(lsnm => {
-          if (!lsnmMap[lsnm.nama]) lsnmMap[lsnm.nama] = 0;
-          lsnmMap[lsnm.nama] += lsnm.durasi || 0;
-        });
-      } else if (record.line_stop_non_mesin) {
-        const matches = record.line_stop_non_mesin.match(/([^(]+)\s*\((\d+)\s*MIN\)/g);
-        if (matches) {
-          matches.forEach(match => {
-            const nameMatch = match.match(/([^(]+)\s*\((\d+)\s*MIN\)/);
-            if (nameMatch) {
-              const nama = nameMatch[1].trim();
-              const durasi = parseInt(nameMatch[2]) || 0;
-              if (!lsnmMap[nama]) lsnmMap[nama] = 0;
-              lsnmMap[nama] += durasi;
-            }
-          });
-        }
-      }
-    });
-
-    const sortedData = Object.entries(lsnmMap)
-      .map(([nama, durasi]) => ({ nama, durasi }))
-      .sort((a, b) => b.durasi - a.durasi)
-      .slice(0, 10);
-
-    if (sortedData.length === 0) {
-      createBarChartWithLabels('chart-lsnm-top10', ['TIDAK ADA DATA'], [0], 'MENIT', '#10b981');
-      return;
-    }
-
-    createBarChartWithLabels(
-      'chart-lsnm-top10',
-      sortedData.map(d => d.nama),
-      sortedData.map(d => d.durasi),
-      'MENIT',
-      '#10b981'
-    );
-  }
-
-  function renderMinorStopTop10Chart() {
-    const msMap = {};
-    
-    const records = filteredOeeRecords.length ? filteredOeeRecords : localData.oee_records;
-    
-    records.forEach(record => {
-      if (record.ms_details) {
-        try {
-          const msDetails = typeof record.ms_details === 'string' ? JSON.parse(record.ms_details) : record.ms_details;
-          if (Array.isArray(msDetails)) {
-            msDetails.forEach(ms => {
-              if (!msMap[ms.nama]) msMap[ms.nama] = 0;
-              msMap[ms.nama] += ms.durasi || 0;
-            });
-          }
-        } catch (e) {
-          console.log('Error parsing ms_details:', e);
-        }
-      }
-      else if (record.minor_stop) {
-        const matches = record.minor_stop.match(/([^(]+)\s*\((\d+)\s*MIN\)/g);
-        if (matches) {
-          matches.forEach(match => {
-            const nameMatch = match.match(/([^(]+)\s*\((\d+)\s*MIN\)/);
-            if (nameMatch) {
-              const nama = nameMatch[1].trim();
-              const durasi = parseInt(nameMatch[2]) || 0;
-              if (!msMap[nama]) msMap[nama] = 0;
-              msMap[nama] += durasi;
-            }
-          });
-        }
-      }
-    });
-
-    const sortedData = Object.entries(msMap)
-      .map(([nama, durasi]) => ({ nama, durasi }))
-      .sort((a, b) => b.durasi - a.durasi)
-      .slice(0, 10);
-
-    if (sortedData.length === 0) {
-      createBarChartWithLabels('chart-ms-top10', ['TIDAK ADA DATA'], [0], 'MENIT', '#f59e0b');
-      return;
-    }
-
-    createBarChartWithLabels(
-      'chart-ms-top10',
-      sortedData.map(d => d.nama),
-      sortedData.map(d => d.durasi),
-      'MENIT',
-      '#f59e0b'
-    );
   }
 
   function renderOEEMonthlyChart() {
     const monthly = {};
-    for (let m = 1; m <= 12; m++) monthly[`2026-${String(m).padStart(2,'0')}`] = [];
-    const recs = filteredOeeRecords.length ? filteredOeeRecords : localData.oee_records;
-    recs.forEach(r => { 
-      if (monthly[r.date?.substring(0,7)]) { 
-        const v = parseFloat(r.oee_actual) || 0; 
-        if (v > 0) monthly[r.date.substring(0,7)].push(v); 
-      } 
-    });
-    const labels = Object.keys(monthly).map(ym => { 
-      const [y,m] = ym.split('-'); 
-      return new Date(y,m-1).toLocaleDateString('id-ID',{month:'short',year:'2-digit'}); 
-    });
-    const data = Object.values(monthly).map(arr => arr.length ? arr.reduce((a,b)=>a+b,0)/arr.length : 0);
+    const year = new Date().getFullYear();
     
-    createLineChart(
-      'chart-oee-monthly',
-      labels,
-      data,
-      'OEE ACTUAL %',
-      '#ec4899',
-      'rgba(236,72,153,0.1)'
+    for (let m = 1; m <= 12; m++) {
+      monthly[`${year}-${String(m).padStart(2, '0')}`] = [];
+    }
+    
+    const recs = filteredOeeRecords.length ? filteredOeeRecords : localData.oee_records;
+    
+    recs.forEach(r => {
+      const monthKey = r.date?.substring(0, 7);
+      if (monthly[monthKey]) {
+        const val = parseFloat(r.oee_actual) || 0;
+        if (val > 0) monthly[monthKey].push(val);
+      }
+    });
+    
+    const labels = Object.keys(monthly).map(ym => {
+      const [y, m] = ym.split('-');
+      return new Date(y, m - 1).toLocaleDateString('id-ID', { month: 'short' });
+    });
+    
+    const data = Object.values(monthly).map(arr => 
+      arr.length ? arr.reduce((a, b) => a + b, 0) / arr.length : 0
     );
+    
+    createLineChart('chart-oee-monthly', labels, data, 'OEE BULANAN', '#ec4899');
   }
 
   function renderOEEDailyChart() {
     const daily = {};
-    const today = new Date(), year = today.getFullYear(), month = today.getMonth(), last = new Date(year, month + 1, 0).getDate();
-    for (let d = 1; d <= last; d++) daily[`${year}-${String(month+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`] = [];
-    const recs = filteredOeeRecords.length ? filteredOeeRecords : localData.oee_records;
-    recs.forEach(r => { 
-      if (daily[r.date]) { 
-        const v = parseFloat(r.oee_actual) || 0; 
-        if (v > 0) daily[r.date].push(v); 
-      } 
-    });
-    const labels = Object.keys(daily).map(d => new Date(d+'T00:00:00').toLocaleDateString('id-ID',{day:'2-digit',month:'short'}));
-    const data = Object.values(daily).map(arr => arr.length ? arr.reduce((a,b)=>a+b,0)/arr.length : 0);
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = today.getMonth() + 1;
+    const lastDay = new Date(year, month, 0).getDate();
     
-    createLineChart(
-      'chart-oee-daily',
-      labels,
-      data,
-      'OEE ACTUAL %',
-      '#a855f7',
-      'rgba(168,85,247,0.1)'
-    );
-  }
-
-  function renderAPQABreakdownChart() {
-    const recs = filteredOeeRecords.length ? filteredOeeRecords : localData.oee_records;
-    if (!recs || !recs.length) return;
+    for (let d = 1; d <= lastDay; d++) {
+      daily[`${year}-${String(month).padStart(2, '0')}-${String(d).padStart(2, '0')}`] = [];
+    }
     
-    let sAA = 0, cAA = 0, sA365 = 0, cA365 = 0, sPerf = 0, cPerf = 0, sQual = 0, cQual = 0;
+    const recs = filteredOeeRecords.length ? filteredOeeRecords : localData.oee_records;
+    
     recs.forEach(r => {
-      const aa = parseFloat(r.availability_actual) || 0;
-      const perf = parseFloat(r.performance) || 0;
-      const qual = parseFloat(r.quality_rate) || 0;
-      if (aa > 0) { sAA += aa; cAA++; }
-      if (perf > 0) { sPerf += perf; cPerf++; }
-      if (qual > 0) { sQual += qual; cQual++; }
-      const a365 = parseFloat(r.availability_365) || 85;
-      sA365 += a365; cA365++;
+      if (daily[r.date]) {
+        const val = parseFloat(r.oee_actual) || 0;
+        if (val > 0) daily[r.date].push(val);
+      }
     });
-
-    const ctx = document.getElementById('chart-apqa-breakdown').getContext('2d');
-    if (dashboardCharts['chart-apqa-breakdown']) dashboardCharts['chart-apqa-breakdown'].destroy();
     
-    dashboardCharts['chart-apqa-breakdown'] = new Chart(ctx, {
-      type: 'bar',
-      data: {
-        labels: ['AVAILABILITY ACTUAL', 'AVAILABILITY 365', 'PERFORMANCE', 'QUALITY RATE'],
-        datasets: [{
-          label: '%',
-          data: [
-            cAA ? sAA / cAA : 0, 
-            cA365 ? sA365 / cA365 : 0, 
-            cPerf ? sPerf / cPerf : 0, 
-            cQual ? sQual / cQual : 0
-          ],
-          backgroundColor: ['#3b82f6', '#60a5fa', '#8b5cf6', '#10b981'],
-          borderRadius: 8,
-          barPercentage: 0.7,
-          categoryPercentage: 0.8
-        }]
-      },
-      options: {
-        indexAxis: 'y',
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: {
-          legend: { display: false },
-          tooltip: { enabled: true }
-        },
-        scales: {
-          x: { 
-            beginAtZero: true, 
-            max: 100, 
-            ticks: { callback: v => v + '%' },
-            grid: { display: true }
-          },
-          y: { 
-            grid: { display: false },
-            ticks: { 
-              font: { size: 11, weight: 'bold' },
-              maxRotation: 30,
-              minRotation: 20
-            }
-          }
-        },
-        layout: {
-          padding: { 
-            left: 20,
-            right: 60,
-            top: 10,
-            bottom: 10
-          }
-        }
-      },
-      plugins: [{
-        id: 'valueLabels',
-        afterDatasetsDraw(chart) {
-          const { ctx } = chart;
-          ctx.save();
-          
-          chart.data.datasets.forEach((dataset, datasetIndex) => {
-            const meta = chart.getDatasetMeta(datasetIndex);
-            
-            meta.data.forEach((element, index) => {
-              const value = dataset.data[index];
-              if (value === 0) return;
-              
-              const barX = element.x;
-              const barY = element.y;
-              
-              ctx.font = 'bold 10px "Segoe UI", "Trebuchet MS", sans-serif';
-              ctx.textAlign = 'left';
-              ctx.textBaseline = 'middle';
-              
-              const valueText = value.toFixed(1) + '%';
-              const textX = barX + 8;
-              const textY = barY;
-              
-              ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
-              const textWidth = ctx.measureText(valueText).width;
-              ctx.fillRect(textX - 4, textY - 8, textWidth + 8, 16);
-              
-              ctx.fillStyle = '#000000';
-              ctx.fillText(valueText, textX, textY);
-            });
-          });
-          
-          ctx.restore();
-        }
-      }]
+    const labels = Object.keys(daily).map(d => {
+      return new Date(d + 'T00:00').toLocaleDateString('id-ID', { day: '2-digit', month: 'short' });
     });
+    
+    const data = Object.values(daily).map(arr => 
+      arr.length ? arr.reduce((a, b) => a + b, 0) / arr.length : 0
+    );
+    
+    createLineChart('chart-oee-daily', labels, data, 'OEE HARIAN', '#a855f7');
   }
 
   function renderCharts() {
     renderOEEMonthlyChart();
     renderOEEDailyChart();
-    renderAPQABreakdownChart();
-    renderODTTop10Chart();
-    renderLineStopMesinTop10Chart();
-    renderLineStopNonMesinTop10Chart();
-    renderMinorStopTop10Chart();
   }
 
-  // ==================== RENDER PACKER PERFORMANCE ====================
-  function renderPackerPerformance() {
-    const map = {};
-    const recs = filteredOeeRecords.length ? filteredOeeRecords : localData.oee_records;
-    
-    recs.forEach(r => {
-      const packerNames = r.packers?.split(', ') || [];
-      packerNames.forEach(p => {
-        if (!p) return;
-        if (!map[p]) {
-          map[p] = { 
-            nama: p, 
-            performanceValues: [],
-            targetOutput: 0,
-            outputActual: 0,
-            records: 0
-          };
-        }
-        const performance = parseFloat(r.performance) || 0;
-        if (performance > 0) map[p].performanceValues.push(performance);
-        
-        const outputActual = parseFloat(r.output_actual) || 0;
-        
-        if (performance > 0 && outputActual > 0) {
-          const targetPerRecord = (outputActual * 100) / performance;
-          const targetPerPacker = targetPerRecord / packerNames.length;
-          map[p].targetOutput += targetPerPacker;
-        }
-        
-        const outputPerPacker = outputActual / packerNames.length;
-        map[p].outputActual += outputPerPacker;
-        map[p].records++;
-      });
-    });
-    
-    const data = Object.values(map).sort((a,b) => {
-      const aa = a.performanceValues.length ? a.performanceValues.reduce((x,y)=>x+y,0)/a.performanceValues.length : 0;
-      const bb = b.performanceValues.length ? b.performanceValues.reduce((x,y)=>x+y,0)/b.performanceValues.length : 0;
-      return bb - aa;
-    });
-    
-    const tbody = document.getElementById('table-packer-performance');
-    if (!data.length) { 
-      tbody.innerHTML = '<tr><td colspan="6" class="text-center text-gray-400 py-8">BELUM ADA DATA</td></tr>'; 
-      return; 
-    }
-    
-    tbody.innerHTML = data.map((p,i) => {
-      const avgPerformance = p.performanceValues.length ? p.performanceValues.reduce((a,b)=>a+b,0)/p.performanceValues.length : 0;
-      return `<tr>
-        <td>${i+1}</td>
-        <td>${p.nama}</td>
-        <td>${avgPerformance.toFixed(1)}%</td>
-        <td>${p.targetOutput.toLocaleString('id-ID', {maximumFractionDigits:1})}</td>
-        <td>${p.outputActual.toLocaleString('id-ID', {maximumFractionDigits:1})}</td>
-        <td>${p.records}</td>
-      </tr>`;
-    }).join('');
-  }
-
-  // ==================== RENDER OEE HISTORY ====================
   function renderOEEHistory() {
     const tbody = document.getElementById('table-oee-history');
     const recs = filteredOeeRecords.length ? filteredOeeRecords : localData.oee_records;
-    if (!recs || !recs.length) { 
-      tbody.innerHTML = '<tr><td colspan="7" class="text-center text-gray-400 py-8">BELUM ADA DATA</td></tr>'; 
-      return; 
+    
+    if (!recs || recs.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="5" class="empty-state-text">BELUM ADA DATA</td></tr>';
+      return;
     }
-    tbody.innerHTML = recs.slice(0,50).map(r => `
+    
+    tbody.innerHTML = recs.slice(0, 15).map(r => `
       <tr>
-        <td style="white-space: normal; word-break: break-word;">${r.date || '-'}</td>
-        <td style="white-space: normal; word-break: break-word;">${r.shift || '-'}</td>
-        <td style="white-space: normal; word-break: break-word;">${r.packers || '-'}</td>
-        <td style="white-space: normal; word-break: break-word;">${r.product || '-'}</td>
-        <td style="white-space: normal; word-break: break-word;"><strong>${(parseFloat(r.oee_actual)||0).toFixed(1)}%</strong></td>
-        <td style="white-space: normal; word-break: break-word;">${(parseFloat(r.oee_365)||0).toFixed(1)}%</td>
-        <td style="white-space: normal; word-break: break-word;">${r.notes || '-'}</td>
+        <td>${r.date || '-'}</td>
+        <td>${r.shift || '-'}</td>
+        <td>${r.packers || '-'}</td>
+        <td>${r.product ? r.product.substring(0, 20) + '...' : '-'}</td>
+        <td class="text-right"><strong>${(parseFloat(r.oee_actual) || 0).toFixed(1)}%</strong></td>
       </tr>
     `).join('');
   }
 
-  // ==================== RENDER LSM DETAIL TABLE ====================
-  function renderLSMDetailTable() {
-    const tbody = document.getElementById('table-lsm-detail');
-    const recs = filteredOeeRecords.length ? filteredOeeRecords : localData.oee_records;
-    if (!recs || !recs.length) {
-      tbody.innerHTML = '<tr><td colspan="7" class="text-center text-gray-400 py-8">BELUM ADA DATA</td></tr>';
-      return;
-    }
-    
-    const rows = [];
-    recs.slice(0,100).forEach(record => {
-      if (record.lsm_details && Array.isArray(record.lsm_details) && record.lsm_details.length > 0) {
-        record.lsm_details.forEach(lsm => {
-          rows.push({
-            date: record.date,
-            shift: record.shift,
-            packers: record.packers,
-            nama: lsm.nama,
-            durasi: lsm.durasi,
-            wr: lsm.wr || '-',
-            action: lsm.action || '-'
-          });
-        });
-      } else if (record.line_stop_mesin) {
-        const matches = record.line_stop_mesin.match(/([^(]+)\s*\((\d+)\s*MIN\)\s*-\s*ACTION:\s*([^-]+)?\s*-\s*WR:\s*(.+)?/);
-        if (matches) {
-          rows.push({
-            date: record.date,
-            shift: record.shift,
-            packers: record.packers,
-            nama: matches[1].trim(),
-            durasi: parseInt(matches[2]) || 0,
-            wr: matches[4]?.trim() || '-',
-            action: matches[3]?.trim() || '-'
-          });
-        }
-      }
-    });
-    
-    if (rows.length === 0) {
-      tbody.innerHTML = '<tr><td colspan="7" class="text-center text-gray-400 py-8">BELUM ADA DATA LINE STOP MESIN</td></tr>';
-      return;
-    }
-    
-    tbody.innerHTML = rows.map(row => `
-      <tr>
-        <td>${row.date}</td>
-        <td>${row.shift}</td>
-        <td>${row.packers || '-'}</td>
-        <td>${row.nama}</td>
-        <td>${row.durasi}</td>
-        <td>${row.wr}</td>
-        <td>${row.action}</td>
-      </tr>
-    `).join('');
-  }
-
-  // ==================== RENDER LSNM DETAIL TABLE ====================
-  function renderLSNMDetailTable() {
-    const tbody = document.getElementById('table-lsnm-detail');
-    const recs = filteredOeeRecords.length ? filteredOeeRecords : localData.oee_records;
-    if (!recs || !recs.length) {
-      tbody.innerHTML = '<tr><td colspan="6" class="text-center text-gray-400 py-8">BELUM ADA DATA</td></tr>';
-      return;
-    }
-    
-    const rows = [];
-    recs.slice(0,100).forEach(record => {
-      if (record.lsnm_details && Array.isArray(record.lsnm_details) && record.lsnm_details.length > 0) {
-        record.lsnm_details.forEach(lsnm => {
-          rows.push({
-            date: record.date,
-            shift: record.shift,
-            packers: record.packers,
-            nama: lsnm.nama,
-            durasi: lsnm.durasi,
-            action: lsnm.action || '-'
-          });
-        });
-      } else if (record.line_stop_non_mesin) {
-        const matches = record.line_stop_non_mesin.match(/([^(]+)\s*\((\d+)\s*MIN\)\s*-\s*ACTION:\s*(.+)?/);
-        if (matches) {
-          rows.push({
-            date: record.date,
-            shift: record.shift,
-            packers: record.packers,
-            nama: matches[1].trim(),
-            durasi: parseInt(matches[2]) || 0,
-            action: matches[3]?.trim() || '-'
-          });
-        }
-      }
-    });
-    
-    if (rows.length === 0) {
-      tbody.innerHTML = '<tr><td colspan="6" class="text-center text-gray-400 py-8">BELUM ADA DATA LINE STOP NON-MESIN</td></tr>';
-      return;
-    }
-    
-    tbody.innerHTML = rows.map(row => `
-      <tr>
-        <td>${row.date}</td>
-        <td>${row.shift}</td>
-        <td>${row.packers || '-'}</td>
-        <td>${row.nama}</td>
-        <td>${row.durasi}</td>
-        <td>${row.action}</td>
-      </tr>
-    `).join('');
-  }
-
-  // ==================== MASTER DATA RENDER ====================
+  // ==================== MASTER DATA ====================
   function renderMasterDataLists() {
     renderProductList();
     renderPackerList();
@@ -3187,457 +2449,283 @@
   }
 
   function renderProductList() {
-    document.getElementById('product-list').innerHTML = localData.produk.map(p => `
-      <div class="master-card" id="card-prod-${p.id}">
+    const container = document.getElementById('product-list');
+    if (!localData.produk || localData.produk.length === 0) {
+      container.innerHTML = '<div class="empty-state">BELUM ADA DATA</div>';
+      return;
+    }
+    container.innerHTML = localData.produk.map(p => `
+      <div class="master-card">
         <div class="master-card-content">
           <p class="master-card-name">${p.nama}</p>
           <p class="master-card-detail">TARGET: ${p.target} DUS/MENIT</p>
-        </div>
-        <div class="master-card-actions">
-          <button class="btn-edit" onclick="editProduct('${p.id}')">EDIT</button>
-          <button class="btn-delete" onclick="showDeleteConfirm('${p.id}', 'produk', '${p.nama}')">HAPUS</button>
         </div>
       </div>
     `).join('');
   }
 
   function renderPackerList() {
-    document.getElementById('packer-list').innerHTML = localData.packer.map(p => `
-      <div class="master-card" id="card-pack-${p.id}">
-        <div class="master-card-content"><p class="master-card-name">${p.nama}</p></div>
-        <div class="master-card-actions">
-          <button class="btn-edit" onclick="editPacker('${p.id}')">EDIT</button>
-          <button class="btn-delete" onclick="showDeleteConfirm('${p.id}', 'packer', '${p.nama}')">HAPUS</button>
+    const container = document.getElementById('packer-list');
+    if (!localData.packer || localData.packer.length === 0) {
+      container.innerHTML = '<div class="empty-state">BELUM ADA DATA</div>';
+      return;
+    }
+    container.innerHTML = localData.packer.map(p => `
+      <div class="master-card">
+        <div class="master-card-content">
+          <p class="master-card-name">${p.nama}</p>
         </div>
       </div>
     `).join('');
   }
 
   function renderODTList_Master() {
-    document.getElementById('odt-master-list').innerHTML = localData.downtime.map(p => `
-      <div class="master-card" id="card-odt-${p.id}">
+    const container = document.getElementById('odt-master-list');
+    if (!localData.downtime || localData.downtime.length === 0) {
+      container.innerHTML = '<div class="empty-state">BELUM ADA DATA</div>';
+      return;
+    }
+    container.innerHTML = localData.downtime.map(d => `
+      <div class="master-card">
         <div class="master-card-content">
-          <p class="master-card-name">${p.nama}</p>
-          <p class="master-card-detail">STD: ${p.waktu_standard} MENIT</p>
-        </div>
-        <div class="master-card-actions">
-          <button class="btn-edit" onclick="editODT('${p.id}')">EDIT</button>
-          <button class="btn-delete" onclick="showDeleteConfirm('${p.id}', 'odt', '${p.nama}')">HAPUS</button>
+          <p class="master-card-name">${d.nama}</p>
+          <p class="master-card-detail">STD: ${d.waktu_standard} MENIT</p>
         </div>
       </div>
     `).join('');
   }
 
   function renderLineStopMesinMaster() {
-    document.getElementById('line-stop-mesin-master-list').innerHTML = localData.line_stop_mesin.map(p => `
-      <div class="master-card" id="card-lsm-${p.id}">
-        <div class="master-card-content"><p class="master-card-name">${p.nama}</p></div>
-        <div class="master-card-actions">
-          <button class="btn-edit" onclick="editLineStopMesin('${p.id}')">EDIT</button>
-          <button class="btn-delete" onclick="showDeleteConfirm('${p.id}', 'lsm', '${p.nama}')">HAPUS</button>
+    const container = document.getElementById('line-stop-mesin-master-list');
+    if (!localData.line_stop_mesin || localData.line_stop_mesin.length === 0) {
+      container.innerHTML = '<div class="empty-state">BELUM ADA DATA</div>';
+      return;
+    }
+    container.innerHTML = localData.line_stop_mesin.map(l => `
+      <div class="master-card">
+        <div class="master-card-content">
+          <p class="master-card-name">${l.nama}</p>
         </div>
       </div>
     `).join('');
   }
 
   function renderLineStopNonMesinMaster() {
-    document.getElementById('line-stop-non-mesin-master-list').innerHTML = localData.line_stop_non_mesin.map(p => `
-      <div class="master-card" id="card-lsnm-${p.id}">
-        <div class="master-card-content"><p class="master-card-name">${p.nama}</p></div>
-        <div class="master-card-actions">
-          <button class="btn-edit" onclick="editLineStopNonMesin('${p.id}')">EDIT</button>
-          <button class="btn-delete" onclick="showDeleteConfirm('${p.id}', 'lsnm', '${p.nama}')">HAPUS</button>
+    const container = document.getElementById('line-stop-non-mesin-master-list');
+    if (!localData.line_stop_non_mesin || localData.line_stop_non_mesin.length === 0) {
+      container.innerHTML = '<div class="empty-state">BELUM ADA DATA</div>';
+      return;
+    }
+    container.innerHTML = localData.line_stop_non_mesin.map(l => `
+      <div class="master-card">
+        <div class="master-card-content">
+          <p class="master-card-name">${l.nama}</p>
         </div>
       </div>
     `).join('');
   }
 
   function renderMinorStopMaster() {
-    document.getElementById('minor-stop-master-list').innerHTML = localData.minor_stop.map(p => `
-      <div class="master-card" id="card-ms-${p.id}">
-        <div class="master-card-content"><p class="master-card-name">${p.nama}</p></div>
-        <div class="master-card-actions">
-          <button class="btn-edit" onclick="editMinorStop('${p.id}')">EDIT</button>
-          <button class="btn-delete" onclick="showDeleteConfirm('${p.id}', 'minor_stop', '${p.nama}')">HAPUS</button>
+    const container = document.getElementById('minor-stop-master-list');
+    if (!localData.minor_stop || localData.minor_stop.length === 0) {
+      container.innerHTML = '<div class="empty-state">BELUM ADA DATA</div>';
+      return;
+    }
+    container.innerHTML = localData.minor_stop.map(m => `
+      <div class="master-card">
+        <div class="master-card-content">
+          <p class="master-card-name">${m.nama}</p>
         </div>
       </div>
     `).join('');
   }
 
-  // ==================== MODAL MANAGEMENT ====================
+  // ==================== MODAL ====================
   let currentModalAction = null, currentEditId = null;
 
   function openModal(title, fields, onSubmit) {
-    if (title.includes('PRODUK') || title.includes('PACKER') || title.includes('ODT') || title.includes('LINE STOP') || title.includes('MINOR STOP')) {
-      if (!checkMasterAccess()) return;
-    }
+    if (!checkMasterAccess()) return;
     document.getElementById('modal-title').textContent = title;
     document.getElementById('modal-fields').innerHTML = fields.map(f => `
-      <div class="form-group" style="margin-bottom: 16px;">
+      <div class="form-group">
         <label>${f.label}</label>
-        <input type="text" id="modal-field-${f.name}" class="input-field" placeholder="${f.placeholder}" value="${f.value || ''}">
+        <input type="text" id="modal-field-${f.name}" class="input-field" value="${f.value || ''}">
       </div>
     `).join('');
     currentModalAction = onSubmit;
     document.getElementById('modal-backdrop').style.display = 'block';
     document.getElementById('modal').style.display = 'block';
-    document.getElementById(`modal-field-${fields[0].name}`).focus();
   }
 
   function closeModal() {
     document.getElementById('modal-backdrop').style.display = 'none';
     document.getElementById('modal').style.display = 'none';
-    currentModalAction = null; 
+    currentModalAction = null;
     currentEditId = null;
   }
 
   function submitModalForm(e) {
     e.preventDefault();
-    if (currentModalAction) {
-      const vals = {};
-      document.querySelectorAll('#modal-fields input').forEach(i => vals[i.id.replace('modal-field-','')] = i.value);
-      currentModalAction(vals);
-      closeModal();
-    }
+    const vals = {};
+    document.querySelectorAll('#modal-fields input').forEach(i => vals[i.id.replace('modal-field-', '')] = i.value);
+    if (currentModalAction) currentModalAction(vals);
+    closeModal();
   }
 
-  // ==================== MASTER DATA CRUD ====================
+  // ==================== MASTER CRUD ====================
   function openAddProductModal() {
     openModal('TAMBAH PRODUK', [
-      { name: 'nama', label: 'NAMA PRODUK', placeholder: 'MASUKKAN NAMA PRODUK', value: '' },
-      { name: 'target', label: 'TARGET (DUS/MENIT)', placeholder: 'MASUKKAN TARGET', value: '' }
+      { name: 'nama', label: 'NAMA PRODUK' },
+      { name: 'target', label: 'TARGET (DUS/MENIT)' }
     ], async v => {
-      if (!v.nama.trim() || !v.target.trim()) { showToast('SEMUA FIELD WAJIB DIISI', 'error'); return; }
-      try {
-        await supabaseClient.from('produk').insert([{ nama: v.nama.trim(), target: parseFloat(v.target) || 0 }]);
-        await loadDataFromSupabase();
-        renderProductList();
-        await addAuditLog('CREATE PRODUCT', v.nama);
-        showToast('PRODUK BERHASIL DITAMBAHKAN ✅', 'success');
-      } catch (e) { showToast('GAGAL MENAMBAHKAN PRODUK', 'error'); }
-    });
-  }
-
-  function editProduct(id) {
-    const prod = localData.produk.find(p => p.id === id);
-    if (!prod) return;
-    currentEditId = id;
-    openModal('EDIT PRODUK', [
-      { name: 'nama', label: 'NAMA PRODUK', placeholder: 'MASUKKAN NAMA PRODUK', value: prod.nama },
-      { name: 'target', label: 'TARGET (DUS/MENIT)', placeholder: 'MASUKKAN TARGET', value: prod.target }
-    ], async v => {
-      if (!v.nama.trim() || !v.target.trim()) { showToast('SEMUA FIELD WAJIB DIISI', 'error'); return; }
-      try {
-        await supabaseClient.from('produk').update({ nama: v.nama.trim(), target: parseFloat(v.target) || 0 }).eq('id', currentEditId);
-        await loadDataFromSupabase();
-        renderProductList();
-        await addAuditLog('UPDATE PRODUCT', v.nama);
-        showToast('PRODUK BERHASIL DIPERBARUI ✅', 'success');
-      } catch (e) { showToast('GAGAL MEMPERBARUI PRODUK', 'error'); }
+      if (!v.nama || !v.target) { showToast('SEMUA FIELD WAJIB DIISI', 'error'); return; }
+      await supabaseClient.from('produk').insert([{ nama: v.nama, target: parseFloat(v.target) }]);
+      await loadDataFromSupabase();
+      renderMasterDataLists();
+      showToast('PRODUK DITAMBAHKAN', 'success');
     });
   }
 
   function openAddPackerModal() {
-    openModal('TAMBAH PACKER', [{ name: 'nama', label: 'NAMA PACKER', placeholder: 'MASUKKAN NAMA PACKER', value: '' }], async v => {
-      if (!v.nama.trim()) { showToast('NAMA PACKER WAJIB DIISI', 'error'); return; }
-      try {
-        await supabaseClient.from('packer').insert([{ nama: v.nama.trim() }]);
-        await loadDataFromSupabase();
-        renderPackerList();
-        await addAuditLog('CREATE PACKER', v.nama);
-        showToast('PACKER BERHASIL DITAMBAHKAN ✅', 'success');
-      } catch (e) { showToast('GAGAL MENAMBAHKAN PACKER', 'error'); }
-    });
-  }
-
-  function editPacker(id) {
-    const pack = localData.packer.find(p => p.id === id);
-    if (!pack) return;
-    currentEditId = id;
-    openModal('EDIT PACKER', [{ name: 'nama', label: 'NAMA PACKER', placeholder: 'MASUKKAN NAMA PACKER', value: pack.nama }], async v => {
-      if (!v.nama.trim()) { showToast('NAMA PACKER WAJIB DIISI', 'error'); return; }
-      try {
-        await supabaseClient.from('packer').update({ nama: v.nama.trim() }).eq('id', currentEditId);
-        await loadDataFromSupabase();
-        renderPackerList();
-        await addAuditLog('UPDATE PACKER', v.nama);
-        showToast('PACKER BERHASIL DIPERBARUI ✅', 'success');
-      } catch (e) { showToast('GAGAL MEMPERBARUI PACKER', 'error'); }
+    openModal('TAMBAH PACKER', [
+      { name: 'nama', label: 'NAMA PACKER' }
+    ], async v => {
+      if (!v.nama) { showToast('NAMA WAJIB DIISI', 'error'); return; }
+      await supabaseClient.from('packer').insert([{ nama: v.nama }]);
+      await loadDataFromSupabase();
+      renderMasterDataLists();
+      showToast('PACKER DITAMBAHKAN', 'success');
     });
   }
 
   function openAddODTModal() {
     openModal('TAMBAH ODT', [
-      { name: 'nama', label: 'NAMA ODT', placeholder: 'MASUKKAN NAMA ODT', value: '' },
-      { name: 'waktu_standard', label: 'WAKTU STANDARD (MENIT)', placeholder: 'MASUKKAN WAKTU STANDARD', value: '' }
+      { name: 'nama', label: 'NAMA ODT' },
+      { name: 'waktu_standard', label: 'WAKTU STANDARD (MENIT)' }
     ], async v => {
-      if (!v.nama.trim() || !v.waktu_standard.trim()) { showToast('SEMUA FIELD WAJIB DIISI', 'error'); return; }
-      try {
-        await supabaseClient.from('downtime').insert([{ nama: v.nama.trim(), waktu_standard: parseFloat(v.waktu_standard) || 0 }]);
-        await loadDataFromSupabase();
-        renderODTList_Master();
-        await addAuditLog('CREATE ODT', v.nama);
-        showToast('ODT BERHASIL DITAMBAHKAN ✅', 'success');
-      } catch (e) { showToast('GAGAL MENAMBAHKAN ODT', 'error'); }
-    });
-  }
-
-  function editODT(id) {
-    const odt = localData.downtime.find(p => p.id === id);
-    if (!odt) return;
-    currentEditId = id;
-    openModal('EDIT ODT', [
-      { name: 'nama', label: 'NAMA ODT', placeholder: 'MASUKKAN NAMA ODT', value: odt.nama },
-      { name: 'waktu_standard', label: 'WAKTU STANDARD (MENIT)', placeholder: 'MASUKKAN WAKTU STANDARD', value: odt.waktu_standard }
-    ], async v => {
-      if (!v.nama.trim() || !v.waktu_standard.trim()) { showToast('SEMUA FIELD WAJIB DIISI', 'error'); return; }
-      try {
-        await supabaseClient.from('downtime').update({ nama: v.nama.trim(), waktu_standard: parseFloat(v.waktu_standard) || 0 }).eq('id', currentEditId);
-        await loadDataFromSupabase();
-        renderODTList_Master();
-        await addAuditLog('UPDATE ODT', v.nama);
-        showToast('ODT BERHASIL DIPERBARUI ✅', 'success');
-      } catch (e) { showToast('GAGAL MEMPERBARUI ODT', 'error'); }
+      if (!v.nama || !v.waktu_standard) { showToast('SEMUA FIELD WAJIB DIISI', 'error'); return; }
+      await supabaseClient.from('downtime').insert([{ nama: v.nama, waktu_standard: parseFloat(v.waktu_standard) }]);
+      await loadDataFromSupabase();
+      renderMasterDataLists();
+      showToast('ODT DITAMBAHKAN', 'success');
     });
   }
 
   function openAddLineStopMesinModal() {
-    openModal('TAMBAH LINE STOP MESIN', [{ name: 'nama', label: 'NAMA LINE STOP', placeholder: 'MASUKKAN NAMA LINE STOP', value: '' }], async v => {
-      if (!v.nama.trim()) { showToast('NAMA LINE STOP WAJIB DIISI', 'error'); return; }
-      try {
-        await supabaseClient.from('line_stop_mesin').insert([{ nama: v.nama.trim() }]);
-        await loadDataFromSupabase();
-        renderLineStopMesinMaster();
-        await addAuditLog('CREATE LINE STOP MESIN', v.nama);
-        showToast('LINE STOP MESIN BERHASIL DITAMBAHKAN ✅', 'success');
-      } catch (e) { showToast('GAGAL MENAMBAHKAN LINE STOP MESIN', 'error'); }
-    });
-  }
-
-  function editLineStopMesin(id) {
-    const lsm = localData.line_stop_mesin.find(p => p.id === id);
-    if (!lsm) return;
-    currentEditId = id;
-    openModal('EDIT LINE STOP MESIN', [{ name: 'nama', label: 'NAMA LINE STOP', placeholder: 'MASUKKAN NAMA LINE STOP', value: lsm.nama }], async v => {
-      if (!v.nama.trim()) { showToast('NAMA LINE STOP WAJIB DIISI', 'error'); return; }
-      try {
-        await supabaseClient.from('line_stop_mesin').update({ nama: v.nama.trim() }).eq('id', currentEditId);
-        await loadDataFromSupabase();
-        renderLineStopMesinMaster();
-        await addAuditLog('UPDATE LINE STOP MESIN', v.nama);
-        showToast('LINE STOP MESIN BERHASIL DIPERBARUI ✅', 'success');
-      } catch (e) { showToast('GAGAL MEMPERBARUI LINE STOP MESIN', 'error'); }
+    openModal('TAMBAH LINE STOP MESIN', [
+      { name: 'nama', label: 'NAMA LINE STOP' }
+    ], async v => {
+      if (!v.nama) { showToast('NAMA WAJIB DIISI', 'error'); return; }
+      await supabaseClient.from('line_stop_mesin').insert([{ nama: v.nama }]);
+      await loadDataFromSupabase();
+      renderMasterDataLists();
+      showToast('LINE STOP DITAMBAHKAN', 'success');
     });
   }
 
   function openAddLineStopNonMesinModal() {
-    openModal('TAMBAH LINE STOP NON-MESIN', [{ name: 'nama', label: 'NAMA LINE STOP', placeholder: 'MASUKKAN NAMA LINE STOP', value: '' }], async v => {
-      if (!v.nama.trim()) { showToast('NAMA LINE STOP WAJIB DIISI', 'error'); return; }
-      try {
-        await supabaseClient.from('line_stop_non_mesin').insert([{ nama: v.nama.trim() }]);
-        await loadDataFromSupabase();
-        renderLineStopNonMesinMaster();
-        await addAuditLog('CREATE LINE STOP NON-MESIN', v.nama);
-        showToast('LINE STOP NON-MESIN BERHASIL DITAMBAHKAN ✅', 'success');
-      } catch (e) { showToast('GAGAL MENAMBAHKAN LINE STOP NON-MESIN', 'error'); }
-    });
-  }
-
-  function editLineStopNonMesin(id) {
-    const lsnm = localData.line_stop_non_mesin.find(p => p.id === id);
-    if (!lsnm) return;
-    currentEditId = id;
-    openModal('EDIT LINE STOP NON-MESIN', [{ name: 'nama', label: 'NAMA LINE STOP', placeholder: 'MASUKKAN NAMA LINE STOP', value: lsnm.nama }], async v => {
-      if (!v.nama.trim()) { showToast('NAMA LINE STOP WAJIB DIISI', 'error'); return; }
-      try {
-        await supabaseClient.from('line_stop_non_mesin').update({ nama: v.nama.trim() }).eq('id', currentEditId);
-        await loadDataFromSupabase();
-        renderLineStopNonMesinMaster();
-        await addAuditLog('UPDATE LINE STOP NON-MESIN', v.nama);
-        showToast('LINE STOP NON-MESIN BERHASIL DIPERBARUI ✅', 'success');
-      } catch (e) { showToast('GAGAL MEMPERBARUI LINE STOP NON-MESIN', 'error'); }
+    openModal('TAMBAH LINE STOP NON-MESIN', [
+      { name: 'nama', label: 'NAMA LINE STOP' }
+    ], async v => {
+      if (!v.nama) { showToast('NAMA WAJIB DIISI', 'error'); return; }
+      await supabaseClient.from('line_stop_non_mesin').insert([{ nama: v.nama }]);
+      await loadDataFromSupabase();
+      renderMasterDataLists();
+      showToast('LINE STOP DITAMBAHKAN', 'success');
     });
   }
 
   function openAddMinorStopModal() {
-    openModal('TAMBAH MINOR STOP', [{ name: 'nama', label: 'NAMA MINOR STOP', placeholder: 'MASUKKAN NAMA MINOR STOP', value: '' }], async v => {
-      if (!v.nama.trim()) { showToast('NAMA MINOR STOP WAJIB DIISI', 'error'); return; }
-      try {
-        await supabaseClient.from('minor_stop').insert([{ nama: v.nama.trim() }]);
-        await loadDataFromSupabase();
-        renderMinorStopMaster();
-        await addAuditLog('CREATE MINOR STOP', v.nama);
-        showToast('MINOR STOP BERHASIL DITAMBAHKAN ✅', 'success');
-      } catch (e) { showToast('GAGAL MENAMBAHKAN MINOR STOP', 'error'); }
+    openModal('TAMBAH MINOR STOP', [
+      { name: 'nama', label: 'NAMA MINOR STOP' }
+    ], async v => {
+      if (!v.nama) { showToast('NAMA WAJIB DIISI', 'error'); return; }
+      await supabaseClient.from('minor_stop').insert([{ nama: v.nama }]);
+      await loadDataFromSupabase();
+      renderMasterDataLists();
+      showToast('MINOR STOP DITAMBAHKAN', 'success');
     });
   }
 
-  function editMinorStop(id) {
-    const ms = localData.minor_stop.find(p => p.id === id);
-    if (!ms) return;
-    currentEditId = id;
-    openModal('EDIT MINOR STOP', [{ name: 'nama', label: 'NAMA MINOR STOP', placeholder: 'MASUKKAN NAMA MINOR STOP', value: ms.nama }], async v => {
-      if (!v.nama.trim()) { showToast('NAMA MINOR STOP WAJIB DIISI', 'error'); return; }
-      try {
-        await supabaseClient.from('minor_stop').update({ nama: v.nama.trim() }).eq('id', currentEditId);
-        await loadDataFromSupabase();
-        renderMinorStopMaster();
-        await addAuditLog('UPDATE MINOR STOP', v.nama);
-        showToast('MINOR STOP BERHASIL DIPERBARUI ✅', 'success');
-      } catch (e) { showToast('GAGAL MEMPERBARUI MINOR STOP', 'error'); }
-    });
+  // ==================== AUDIT ====================
+  async function addAuditLog(activity, detail) {
+    await supabaseClient.from('audit_trail').insert([{ activity, detail }]);
+    await loadDataFromSupabase();
+    renderAuditTable();
   }
 
-  // ==================== DELETE FUNCTIONS ====================
-  async function deleteProduct(id) { 
-    if (!checkMasterAccess()) return; 
-    try { 
-      await supabaseClient.from('produk').delete().eq('id',id); 
-      await loadDataFromSupabase(); 
-      renderProductList(); 
-      await addAuditLog('DELETE PRODUCT','PRODUK DIHAPUS'); 
-      showToast('PRODUK BERHASIL DIHAPUS','success'); 
-    } catch(e){ showToast('GAGAL MENGHAPUS PRODUK','error'); } 
-  }
-  
-  async function deletePacker(id) { 
-    if (!checkMasterAccess()) return; 
-    try { 
-      await supabaseClient.from('packer').delete().eq('id',id); 
-      await loadDataFromSupabase(); 
-      renderPackerList(); 
-      await addAuditLog('DELETE PACKER','PACKER DIHAPUS'); 
-      showToast('PACKER BERHASIL DIHAPUS','success'); 
-    } catch(e){ showToast('GAGAL MENGHAPUS PACKER','error'); } 
-  }
-  
-  async function deleteODT(id) { 
-    if (!checkMasterAccess()) return; 
-    try { 
-      await supabaseClient.from('downtime').delete().eq('id',id); 
-      await loadDataFromSupabase(); 
-      renderODTList_Master(); 
-      await addAuditLog('DELETE ODT','ODT DIHAPUS'); 
-      showToast('ODT BERHASIL DIHAPUS','success'); 
-    } catch(e){ showToast('GAGAL MENGHAPUS ODT','error'); } 
-  }
-  
-  async function deleteLineStopMesin(id) { 
-    if (!checkMasterAccess()) return; 
-    try { 
-      await supabaseClient.from('line_stop_mesin').delete().eq('id',id); 
-      await loadDataFromSupabase(); 
-      renderLineStopMesinMaster(); 
-      await addAuditLog('DELETE LINE STOP MESIN','LINE STOP DIHAPUS'); 
-      showToast('LINE STOP MESIN BERHASIL DIHAPUS','success'); 
-    } catch(e){ showToast('GAGAL MENGHAPUS LINE STOP MESIN','error'); } 
-  }
-  
-  async function deleteLineStopNonMesin(id) { 
-    if (!checkMasterAccess()) return; 
-    try { 
-      await supabaseClient.from('line_stop_non_mesin').delete().eq('id',id); 
-      await loadDataFromSupabase(); 
-      renderLineStopNonMesinMaster(); 
-      await addAuditLog('DELETE LINE STOP NON-MESIN','LINE STOP DIHAPUS'); 
-      showToast('LINE STOP NON-MESIN BERHASIL DIHAPUS','success'); 
-    } catch(e){ showToast('GAGAL MENGHAPUS LINE STOP NON-MESIN','error'); } 
-  }
-  
-  async function deleteMinorStop(id) { 
-    if (!checkMasterAccess()) return; 
-    try { 
-      await supabaseClient.from('minor_stop').delete().eq('id',id); 
-      await loadDataFromSupabase(); 
-      renderMinorStopMaster(); 
-      await addAuditLog('DELETE MINOR STOP','MINOR STOP DIHAPUS'); 
-      showToast('MINOR STOP BERHASIL DIHAPUS','success'); 
-    } catch(e){ showToast('GAGAL MENGHAPUS MINOR STOP','error'); } 
-  }
-
-  function showDeleteConfirm(id, type, nama) {
-    if (!checkMasterAccess()) return;
-    const box = document.createElement('div');
-    box.style.cssText = 'position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:white;border-radius:16px;padding:32px;z-index:10000;box-shadow:0 20px 60px rgba(0,0,0,0.3);min-width:350px;';
-    box.innerHTML = `
-      <h3 style="margin:0 0 16px;color:#ec4899;font-size:18px;font-weight:700;text-transform:uppercase;">HAPUS DATA?</h3>
-      <p style="margin:0 0 24px;color:#6b4c5c;font-size:14px;text-transform:uppercase;">YAKIN INGIN MENGHAPUS <strong>"${nama}"</strong>? TINDAKAN INI TIDAK BISA DIBATALKAN.</p>
-      <div style="display:flex;gap:12px;">
-        <button class="btn btn-danger" style="flex:1;" onclick="confirmDelete('${id}','${type}'); document.querySelector('[data-confirm-box]').remove();">HAPUS</button>
-        <button class="btn btn-secondary" style="flex:1;" onclick="document.querySelector('[data-confirm-box]').remove();">BATAL</button>
-      </div>
-    `;
-    box.setAttribute('data-confirm-box','true');
-    const backdrop = document.createElement('div');
-    backdrop.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.5);z-index:9999;';
-    backdrop.onclick = () => { box.remove(); backdrop.remove(); };
-    document.body.appendChild(backdrop);
-    document.body.appendChild(box);
-  }
-
-  function confirmDelete(id, type) {
-    if (type === 'produk') deleteProduct(id);
-    else if (type === 'packer') deletePacker(id);
-    else if (type === 'odt') deleteODT(id);
-    else if (type === 'lsm') deleteLineStopMesin(id);
-    else if (type === 'lsnm') deleteLineStopNonMesin(id);
-    else if (type === 'minor_stop') deleteMinorStop(id);
-  }
-
-  // ==================== AUDIT TRAIL ====================
   function renderAuditTable() {
     const tbody = document.getElementById('audit-table');
-    if (localData.audit_trail.length === 0) { 
-      tbody.innerHTML = '<tr><td colspan="3" class="text-center text-gray-400 py-8">BELUM ADA AKTIVITAS</td></tr>'; 
-      return; 
+    if (!localData.audit_trail || localData.audit_trail.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="3" class="empty-state-text">BELUM ADA AKTIVITAS</td></tr>';
+      return;
     }
-    tbody.innerHTML = localData.audit_trail.map(l => `<tr><td>${new Date(l.timestamp).toLocaleString('id-ID')}</td><td>${l.activity}</td><td>${l.detail}</td></tr>`).join('');
-  }
-
-  async function addAuditLog(activity, detail) {
-    try { 
-      await supabaseClient.from('audit_trail').insert([{ activity, detail }]); 
-      await loadDataFromSupabase(); 
-      renderAuditTable(); 
-    } catch(e) { console.error(e); }
+    tbody.innerHTML = localData.audit_trail.slice(0, 30).map(a => `
+      <tr>
+        <td>${new Date(a.timestamp).toLocaleString('id-ID')}</td>
+        <td>${a.activity || '-'}</td>
+        <td>${a.detail || '-'}</td>
+      </tr>
+    `).join('');
   }
 
   // ==================== TOAST ====================
   function showToast(msg, type) {
-    const t = document.createElement('div');
-    t.className = `toast ${type}`;
-    t.textContent = msg;
-    document.getElementById('toast-container').appendChild(t);
-    setTimeout(() => t.remove(), 3000);
+    const toast = document.createElement('div');
+    toast.className = `toast ${type}`;
+    toast.textContent = msg;
+    document.getElementById('toast-container').appendChild(toast);
+    setTimeout(() => toast.remove(), 3000);
   }
 
   // ==================== DARK MODE ====================
   function toggleDarkMode() {
     document.body.classList.toggle('dark-mode');
     localStorage.setItem('darkMode', document.body.classList.contains('dark-mode'));
-    document.getElementById('mode-icon').textContent = document.body.classList.contains('dark-mode') ? '☀️' : '🌙';
-    document.getElementById('mode-text').textContent = document.body.classList.contains('dark-mode') ? 'LIGHT' : 'DARK';
+    const icon = document.getElementById('mode-icon');
+    const text = document.getElementById('mode-text');
+    if (document.body.classList.contains('dark-mode')) {
+      icon.textContent = '☀️';
+      text.textContent = 'LIGHT';
+    } else {
+      icon.textContent = '🌙';
+      text.textContent = 'DARK';
+    }
   }
 
   function initDarkMode() {
-    if (localStorage.getItem('darkMode') === 'true') document.body.classList.add('dark-mode');
-    document.getElementById('mode-icon').textContent = document.body.classList.contains('dark-mode') ? '☀️' : '🌙';
-    document.getElementById('mode-text').textContent = document.body.classList.contains('dark-mode') ? 'LIGHT' : 'DARK';
+    const isDark = localStorage.getItem('darkMode') === 'true';
+    if (isDark) {
+      document.body.classList.add('dark-mode');
+      document.getElementById('mode-icon').textContent = '☀️';
+      document.getElementById('mode-text').textContent = 'LIGHT';
+    }
   }
 
   // ==================== CLOCK ====================
   function updateClock() {
-    const n = new Date();
-    document.getElementById('current-time').textContent = `${String(n.getHours()).padStart(2,'0')}:${String(n.getMinutes()).padStart(2,'0')}:${String(n.getSeconds()).padStart(2,'0')}`;
-    document.getElementById('current-date').textContent = n.toLocaleDateString('id-ID', { weekday:'long', year:'numeric', month:'long', day:'numeric' }).toUpperCase();
+    const now = new Date();
+    const timeStr = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}:${String(now.getSeconds()).padStart(2, '0')}`;
+    const dateStr = now.toLocaleDateString('id-ID', { 
+      weekday: 'long', 
+      year: 'numeric', 
+      month: 'long', 
+      day: 'numeric' 
+    }).toUpperCase();
+    document.getElementById('current-time').textContent = timeStr;
+    document.getElementById('current-date').textContent = dateStr;
   }
 
   // ==================== INIT ====================
   initDarkMode();
   updateClock();
   setInterval(updateClock, 1000);
-  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initApp);
-  else initApp();
+  
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initApp);
+  } else {
+    initApp();
+  }
 </script>
 </body>
 </html>
