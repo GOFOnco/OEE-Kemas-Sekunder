@@ -393,17 +393,21 @@
       word-break: break-word;
     }
 
-    /* ==================== PRODUCTION ROW - FIX TEXT WRAP ==================== */
+    /* ==================== PRODUCTION ROW - URUTAN BARU ==================== */
     .production-row {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: clamp(8px, 2vw, 16px);
-      padding: clamp(12px, 2.5vw, 20px);
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      padding: 20px;
       background: #fdf2f8;
-      border-radius: var(--border-radius-sm);
-      margin-bottom: clamp(12px, 2vw, 20px);
+      border-radius: 12px;
       border: 2px solid var(--primary);
-      align-items: start;
+    }
+
+    .production-fields {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
     }
 
     /* PACKER CHECKBOX GRID - FIX TEXT WRAP */
@@ -416,8 +420,7 @@
       border-radius: 12px;
       border: 2px solid #f3e8f0;
       width: 100%;
-      max-height: none;
-      overflow: visible;
+      margin-top: 8px;
     }
 
     .packer-checkbox-item {
@@ -433,8 +436,8 @@
       transition: var(--transition);
       word-break: break-word;
       white-space: normal;
-      line-height: 1.3;
-      min-height: 44px;
+      line-height: 1.4;
+      min-height: 48px;
     }
 
     .packer-checkbox-item:hover {
@@ -453,7 +456,7 @@
     .packer-checkbox-item span {
       word-break: break-word;
       white-space: normal;
-      line-height: 1.3;
+      line-height: 1.4;
     }
 
     /* ==================== PERBANTUAN ROW ==================== */
@@ -473,7 +476,7 @@
       background: #fff9e6;
     }
 
-    /* ==================== OUTPUT ROW - FIX ==================== */
+    /* ==================== OUTPUT ROW ==================== */
     .output-row {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -726,7 +729,7 @@
     }
 
     @media (max-width: 768px) {
-      .production-row {
+      .production-fields {
         grid-template-columns: 1fr;
       }
       
@@ -959,7 +962,7 @@
           <div class="score-value" id="score-oee-365">0%</div>
         </div>
         <div class="score-card">
-          <div class="score-label">TOTAL OUTPUT</div>
+          <div class="score-label">TOTAL GOOD</div>
           <div class="score-value" id="score-total-output">0</div>
         </div>
       </div>
@@ -1109,7 +1112,7 @@
           <div id="minor-stop-list" class="mt-16"></div>
         </div>
 
-        <!-- DATA PRODUKSI - FIX TEXT WRAP -->
+        <!-- DATA PRODUKSI - URUTAN BARU: PRODUK + BATCH DI ATAS, PACKER DI BAWAH -->
         <div class="form-section">
           <div class="section-title">DATA PRODUKSI</div>
           <div id="production-row-container"></div>
@@ -1122,7 +1125,7 @@
           <div id="perbantuan-list" class="mt-16"></div>
         </div>
 
-        <!-- OUTPUT & REJECT - FIX: GOOD OUTPUT + REJECT -->
+        <!-- OUTPUT & REJECT -->
         <div class="form-section">
           <div class="section-title">OUTPUT & REJECT</div>
           <div id="output-reject-container"></div>
@@ -1269,7 +1272,7 @@
     audit_trail: []
   };
 
-  // STATE FORM - FIX: goodOutput instead of outputActual
+  // STATE FORM
   let oeeFormState = {
     shiftMinutes: 0,
     production: {
@@ -1413,7 +1416,7 @@
     calculateOEE();
   }
 
-  // ==================== PRODUCTION ROW - FIX TEXT WRAP ====================
+  // ==================== PRODUCTION ROW - URUTAN BARU ====================
   function renderProductionRow() {
     const container = document.getElementById('production-row-container');
     const prod = oeeFormState.production;
@@ -1432,16 +1435,19 @@
 
     container.innerHTML = `
       <div class="production-row">
-        <div class="form-group">
-          <label>PRODUK</label>
-          <select id="production-product" class="input-field" onchange="updateProductionField('productId', this.value)">
-            ${productOptions}
-          </select>
+        <div class="production-fields">
+          <div class="form-group">
+            <label>PRODUK</label>
+            <select id="production-product" class="input-field" onchange="updateProductionField('productId', this.value)">
+              ${productOptions}
+            </select>
+          </div>
+          <div class="form-group">
+            <label>NOMOR BATCH</label>
+            <input type="text" id="production-batch" class="input-field" value="${prod.batchNumber}" placeholder="CONTOH: BATCH001" onchange="updateProductionField('batchNumber', this.value)">
+          </div>
         </div>
-        <div class="form-group">
-          <label>NOMOR BATCH</label>
-          <input type="text" id="production-batch" class="input-field" value="${prod.batchNumber}" placeholder="BATCH NUMBER" onchange="updateProductionField('batchNumber', this.value)">
-        </div>
+        
         <div class="form-group">
           <label>PACKER (${prod.selectedPackers.length} TERPILIH)</label>
           <div class="packer-checkbox-grid">
@@ -1538,7 +1544,7 @@
     return totalMinutes;
   }
 
-  // ==================== OUTPUT & REJECT - FIX ====================
+  // ==================== OUTPUT & REJECT ====================
   function renderOutputReject() {
     const container = document.getElementById('output-reject-container');
     container.innerHTML = `
@@ -1762,7 +1768,7 @@
     calculateOEE();
   }
 
-  // ==================== CALCULATE OEE - FIX QUALITY RUMUS ====================
+  // ==================== CALCULATE OEE ====================
   function calculateOEE() {
     const prod = oeeFormState.production;
     const selectedProduct = localData.produk.find(p => p.id === prod.productId);
@@ -2128,7 +2134,7 @@
     renderOEEDailyChart();
   }
 
-  // ==================== RENDER OEE HISTORY - FIX ====================
+  // ==================== RENDER OEE HISTORY ====================
   function renderOEEHistory() {
     const tbody = document.getElementById('table-oee-history');
     const recs = filteredOeeRecords.length ? filteredOeeRecords : localData.oee_records;
@@ -2183,7 +2189,6 @@
             });
           }
         } catch (e) {
-          // Jika bukan JSON, coba parse manual
           if (typeof record.line_stop_mesin === 'string') {
             const match = record.line_stop_mesin.match(/(.+?)\s*\((\d+)\s*MIN\)/);
             if (match) {
