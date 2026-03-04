@@ -1075,11 +1075,11 @@
               <label>SHIFT</label>
               <select id="oee-shift" onchange="updateShiftMinutes()" required>
                 <option value="">PILIH SHIFT</option>
-                <option value="Shift 1">SHIFT 1 (07:00-15:30) 510 MIN</option>
-                <option value="Shift 2">SHIFT 2 (15:20-22:50) 510 MIN</option>
-                <option value="Shift 3">SHIFT 3 (22:40-07:10) 510 MIN</option>
-                <option value="Longshift Pagi">LONGSHIFT PAGI (07:00-19:00) 720 MIN</option>
-                <option value="Longshift Malam">LONGSHIFT MALAM (19:00-07:00) 720 MIN</option>
+                <option value="Shift 1">SHIFT 1 (07:00-15:30)</option>
+                <option value="Shift 2">SHIFT 2 (15:20-22:50)</option>
+                <option value="Shift 3">SHIFT 3 (22:40-07:10)</option>
+                <option value="Longshift Pagi">LONGSHIFT PAGI (07:00-19:00)</option>
+                <option value="Longshift Malam">LONGSHIFT MALAM (19:00-07:00)</option>
               </select>
             </div>
           </div>
@@ -1120,7 +1120,7 @@
 
         <!-- PACKER PERBANTUAN -->
         <div class="form-section">
-          <div class="section-title">PACKER PERBANTUAN (TARGET 50%)</div>
+          <div class="section-title">PACKER PERBANTUAN</div>
           <button type="button" class="btn btn-warning w-100" onclick="addPerbantuan()">+ TAMBAH PERBANTUAN</button>
           <div id="perbantuan-list" class="mt-16"></div>
         </div>
@@ -1407,7 +1407,7 @@
   // ==================== SHIFT ====================
   function updateShiftMinutes() {
     const shift = document.getElementById('oee-shift').value;
-    const shiftSchedule = { 'Shift 1': 510, 'Shift 2': 510, 'Shift 3': 510, 'Longshift Pagi': 720, 'Longshift Malam': 720 };
+    const shiftSchedule = { 'Shift 1': 450, 'Shift 2': 390, 'Shift 3': 450, 'Longshift Pagi': 615, 'Longshift Malam': 615 };
     oeeFormState.shiftMinutes = shiftSchedule[shift] || 0;
     renderODTList();
     renderLineStopMesinList();
