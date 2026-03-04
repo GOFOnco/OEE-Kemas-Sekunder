@@ -62,7 +62,7 @@
       word-break: break-word;
     }
 
-    /* ==================== HEADER RESPONSIF ==================== */
+    /* ==================== HEADER ==================== */
     .header {
       background: linear-gradient(135deg, var(--primary) 0%, #d946a6 50%, var(--primary-dark) 100%);
       color: white;
@@ -129,7 +129,7 @@
       transition: var(--transition);
     }
 
-    /* ==================== TABS RESPONSIF ==================== */
+    /* ==================== TABS ==================== */
     .tabs-container {
       display: flex;
       background: rgba(255, 255, 255, 0.5);
@@ -174,7 +174,7 @@
       border-bottom-color: var(--primary);
     }
 
-    /* ==================== CONTENT RESPONSIF ==================== */
+    /* ==================== CONTENT ==================== */
     .content {
       flex: 1;
       overflow-y: auto;
@@ -227,7 +227,7 @@
       flex-shrink: 0;
     }
 
-    /* ==================== FORM GRID RESPONSIF ==================== */
+    /* ==================== FORM GRID ==================== */
     .form-row {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(min(200px, 100%), 1fr));
@@ -271,13 +271,14 @@
       box-shadow: 0 0 0 3px rgba(236, 72, 153, 0.1);
     }
 
-    .form-group input[readonly] {
-      background: #f3e8f0;
-      color: var(--primary-dark);
-      font-weight: bold;
+    .form-group small {
+      font-size: 9px;
+      color: #64748b;
+      margin-top: 4px;
+      text-transform: none;
     }
 
-    /* ==================== BUTTONS RESPONSIF ==================== */
+    /* ==================== BUTTONS ==================== */
     .btn {
       padding: clamp(8px, 1.8vw, 14px) clamp(12px, 2.5vw, 20px);
       border: none;
@@ -347,7 +348,7 @@
       width: 100%;
     }
 
-    /* ==================== SCORE CARDS RESPONSIF ==================== */
+    /* ==================== SCORE CARDS ==================== */
     .score-cards {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(min(120px, 100%), 1fr));
@@ -392,7 +393,7 @@
       word-break: break-word;
     }
 
-    /* ==================== PRODUCTION ROW RESPONSIF ==================== */
+    /* ==================== PRODUCTION ROW - FIX TEXT WRAP ==================== */
     .production-row {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -405,32 +406,35 @@
       align-items: start;
     }
 
-    /* PACKER CHECKBOX GRID SUPER RESPONSIF */
+    /* PACKER CHECKBOX GRID - FIX TEXT WRAP */
     .packer-checkbox-grid {
       display: grid;
       grid-template-columns: repeat(6, 1fr);
-      gap: 6px;
+      gap: 8px;
       background: white;
-      padding: clamp(8px, 2vw, 16px);
-      border-radius: var(--border-radius-sm);
-      border: 1px solid #f3e8f0;
+      padding: 16px;
+      border-radius: 12px;
+      border: 2px solid #f3e8f0;
       width: 100%;
+      max-height: none;
+      overflow: visible;
     }
 
     .packer-checkbox-item {
       display: flex;
       align-items: center;
-      gap: 4px;
-      font-size: clamp(9px, 1.5vw, 11px);
+      gap: 8px;
+      font-size: 12px;
       font-weight: 600;
-      padding: clamp(4px, 1vw, 8px);
-      border-radius: 6px;
+      padding: 10px 12px;
+      border-radius: 8px;
       background: #faf9fb;
       border: 1px solid #f3e8f0;
       transition: var(--transition);
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
+      word-break: break-word;
+      white-space: normal;
+      line-height: 1.3;
+      min-height: 44px;
     }
 
     .packer-checkbox-item:hover {
@@ -438,21 +442,21 @@
       border-color: var(--primary-light);
     }
 
-    .packer-checkbox-item span {
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-    }
-
     .packer-checkbox-item input[type="checkbox"] {
-      width: clamp(14px, 2vw, 18px);
-      height: clamp(14px, 2vw, 18px);
+      width: 18px;
+      height: 18px;
       accent-color: var(--primary);
       cursor: pointer;
       flex-shrink: 0;
     }
 
-    /* ==================== PERBANTUAN ROW RESPONSIF ==================== */
+    .packer-checkbox-item span {
+      word-break: break-word;
+      white-space: normal;
+      line-height: 1.3;
+    }
+
+    /* ==================== PERBANTUAN ROW ==================== */
     .perbantuan-row {
       display: grid;
       grid-template-columns: 1.5fr 1fr 1fr 0.5fr;
@@ -469,7 +473,7 @@
       background: #fff9e6;
     }
 
-    /* ==================== OUTPUT ROW RESPONSIF ==================== */
+    /* ==================== OUTPUT ROW - FIX ==================== */
     .output-row {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -481,7 +485,7 @@
       border: 2px solid #3b82f6;
     }
 
-    /* ==================== DOWNTIME ROWS RESPONSIF ==================== */
+    /* ==================== DOWNTIME ROWS ==================== */
     .downtime-row {
       display: grid;
       grid-template-columns: 2fr 0.5fr 1fr;
@@ -530,7 +534,7 @@
       border: 1px solid rgba(217, 119, 6, 0.2);
     }
 
-    /* ==================== TABLES RESPONSIF ==================== */
+    /* ==================== TABLES ==================== */
     .table-wrapper {
       overflow-x: auto;
       border-radius: 12px;
@@ -573,31 +577,7 @@
       text-align: right;
     }
 
-    .text-center {
-      text-align: center;
-    }
-
-    /* ==================== DETAIL TABLES ==================== */
-    .detail-section {
-      margin-top: clamp(16px, 3vw, 24px);
-    }
-
-    .detail-title {
-      font-size: clamp(12px, 2.2vw, 14px);
-      font-weight: 700;
-      color: var(--primary-dark);
-      margin: 0 0 clamp(8px, 1.5vw, 12px);
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-
-    .detail-title::before {
-      content: '🔧';
-      font-size: clamp(12px, 2vw, 14px);
-    }
-
-    /* ==================== MASTER DATA GRID RESPONSIF ==================== */
+    /* ==================== MASTER DATA GRID ==================== */
     .master-data-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(min(220px, 100%), 1fr));
@@ -702,7 +682,7 @@
       to { transform: translateX(0); opacity: 1; }
     }
 
-    /* ==================== MODAL RESPONSIF ==================== */
+    /* ==================== MODAL ==================== */
     #modal-backdrop, #login-backdrop {
       position: fixed;
       top: 0;
@@ -726,14 +706,6 @@
       max-width: 450px;
       max-height: 90vh;
       overflow-y: auto;
-    }
-
-    #modal-title, .login-title {
-      margin: 0 0 20px;
-      color: var(--primary);
-      font-size: 18px;
-      font-weight: 700;
-      text-align: center;
     }
 
     /* ==================== RESPONSIVE BREAKPOINTS ==================== */
@@ -795,8 +767,8 @@
       }
       
       .packer-checkbox-item {
-        white-space: normal;
-        text-overflow: clip;
+        min-height: auto;
+        padding: 8px 10px;
       }
       
       .score-cards {
@@ -907,10 +879,6 @@
     body.dark-mode .empty-state {
       background: #1f1729;
     }
-
-    body.dark-mode .empty-text {
-      color: #b9a2b3;
-    }
   </style>
 </head>
 <body>
@@ -1006,7 +974,7 @@
         <div class="chart-wrapper"><canvas id="chart-oee-daily"></canvas></div>
       </div>
 
-      <!-- OEE HISTORY TABLE (DENGAN TARGET & ACTUAL) -->
+      <!-- OEE HISTORY TABLE -->
       <div class="form-section">
         <div class="section-title">📋 RIWAYAT OEE</div>
         <div class="table-wrapper">
@@ -1017,9 +985,9 @@
                 <th>SHIFT</th>
                 <th>PACKER</th>
                 <th>PRODUK</th>
-                <th class="text-right">TARGET</th>
-                <th class="text-right">ACTUAL</th>
+                <th class="text-right">GOOD</th>
                 <th class="text-right">REJECT</th>
+                <th class="text-right">TARGET</th>
                 <th class="text-right">OEE</th>
               </tr>
             </thead>
@@ -1141,7 +1109,7 @@
           <div id="minor-stop-list" class="mt-16"></div>
         </div>
 
-        <!-- DATA PRODUKSI -->
+        <!-- DATA PRODUKSI - FIX TEXT WRAP -->
         <div class="form-section">
           <div class="section-title">DATA PRODUKSI</div>
           <div id="production-row-container"></div>
@@ -1154,7 +1122,7 @@
           <div id="perbantuan-list" class="mt-16"></div>
         </div>
 
-        <!-- OUTPUT & REJECT -->
+        <!-- OUTPUT & REJECT - FIX: GOOD OUTPUT + REJECT -->
         <div class="form-section">
           <div class="section-title">OUTPUT & REJECT</div>
           <div id="output-reject-container"></div>
@@ -1179,7 +1147,7 @@
             <div class="score-card"><div class="score-label">OEE ACTUAL</div><div class="score-value" id="calc-oee-actual">0%</div></div>
             <div class="score-card"><div class="score-label">OEE 365</div><div class="score-value" id="calc-oee-365">0%</div></div>
             <div class="score-card"><div class="score-label">TARGET</div><div class="score-value" id="calc-target-output">0 DUS</div></div>
-            <div class="score-card"><div class="score-label">ACTUAL</div><div class="score-value" id="calc-output-actual">0 DUS</div></div>
+            <div class="score-card"><div class="score-label">GOOD</div><div class="score-value" id="calc-good-output">0 DUS</div></div>
             <div class="score-card"><div class="score-label">REJECT</div><div class="score-value" id="calc-reject">0 DUS</div></div>
           </div>
         </div>
@@ -1301,7 +1269,7 @@
     audit_trail: []
   };
 
-  // STATE FORM
+  // STATE FORM - FIX: goodOutput instead of outputActual
   let oeeFormState = {
     shiftMinutes: 0,
     production: {
@@ -1310,7 +1278,7 @@
       selectedPackers: []
     },
     perbantuan: [],
-    outputActual: 0,
+    goodOutput: 0,
     reject: 0,
     downtime: [],
     lineStopMesin: [],
@@ -1445,13 +1413,13 @@
     calculateOEE();
   }
 
-  // ==================== PRODUCTION ROW ====================
+  // ==================== PRODUCTION ROW - FIX TEXT WRAP ====================
   function renderProductionRow() {
     const container = document.getElementById('production-row-container');
     const prod = oeeFormState.production;
     
     const productOptions = '<option value="">-- PILIH PRODUK --</option>' + 
-      localData.produk.map(p => `<option value="${p.id}" ${prod.productId === p.id ? 'selected' : ''}>${p.nama} (TARGET: ${p.target})</option>`).join('');
+      localData.produk.map(p => `<option value="${p.id}" ${prod.productId === p.id ? 'selected' : ''}>${p.nama} (TARGET: ${p.target} DUS/MENIT)</option>`).join('');
     
     const sortedPackers = [...localData.packer].sort((a, b) => a.nama.localeCompare(b.nama));
     
@@ -1472,12 +1440,12 @@
         </div>
         <div class="form-group">
           <label>NOMOR BATCH</label>
-          <input type="text" id="production-batch" class="input-field" value="${prod.batchNumber}" placeholder="BATCH" onchange="updateProductionField('batchNumber', this.value)">
+          <input type="text" id="production-batch" class="input-field" value="${prod.batchNumber}" placeholder="BATCH NUMBER" onchange="updateProductionField('batchNumber', this.value)">
         </div>
         <div class="form-group">
           <label>PACKER (${prod.selectedPackers.length} TERPILIH)</label>
           <div class="packer-checkbox-grid">
-            ${packerCheckboxes || '<div style="grid-column: span 6;">TIDAK ADA DATA</div>'}
+            ${packerCheckboxes || '<div style="grid-column: span 6; text-align: center; padding: 20px;">BELUM ADA DATA PACKER</div>'}
           </div>
         </div>
       </div>
@@ -1495,7 +1463,7 @@
     if (idx === -1) oeeFormState.production.selectedPackers.push(packerId);
     else oeeFormState.production.selectedPackers.splice(idx, 1);
     calculateOEE();
-    renderProductionRow();
+    renderProductionRow(); // Re-render untuk update counter
   }
 
   // ==================== PERBANTUAN ====================
@@ -1570,26 +1538,28 @@
     return totalMinutes;
   }
 
-  // ==================== OUTPUT & REJECT ====================
+  // ==================== OUTPUT & REJECT - FIX ====================
   function renderOutputReject() {
     const container = document.getElementById('output-reject-container');
     container.innerHTML = `
       <div class="output-row">
         <div class="form-group">
-          <label>OUTPUT ACTUAL (DUS)</label>
-          <input type="number" id="output-actual" class="input-field" value="${oeeFormState.outputActual}" min="0" step="0.1" placeholder="OUTPUT" onchange="updateOutputReject('output', this.value)">
+          <label>GOOD OUTPUT (DUS)</label>
+          <input type="number" id="good-output" class="input-field" value="${oeeFormState.goodOutput}" min="0" step="0.1" placeholder="GOOD OUTPUT" onchange="updateOutputReject('good', this.value)">
+          <small>PRODUK BAIK / LULUS QC</small>
         </div>
         <div class="form-group">
           <label>REJECT (DUS)</label>
-          <input type="number" id="reject-actual" class="input-field" value="${oeeFormState.reject}" min="0" step="0.1" placeholder="REJECT" onchange="updateOutputReject('reject', this.value)">
+          <input type="number" id="reject-output" class="input-field" value="${oeeFormState.reject}" min="0" step="0.1" placeholder="REJECT" onchange="updateOutputReject('reject', this.value)">
+          <small>PRODUK CACAT / GAGAL</small>
         </div>
       </div>
     `;
   }
 
   function updateOutputReject(field, value) {
-    if (field === 'output') {
-      oeeFormState.outputActual = parseFloat(value) || 0;
+    if (field === 'good') {
+      oeeFormState.goodOutput = parseFloat(value) || 0;
     } else if (field === 'reject') {
       oeeFormState.reject = parseFloat(value) || 0;
     }
@@ -1653,7 +1623,7 @@
     calculateOEE();
   }
 
-  // ==================== LINE STOP MESIN (dengan custom) ====================
+  // ==================== LINE STOP MESIN ====================
   function addCustomLineStopMesin() {
     const nama = prompt('MASUKKAN NAMA CUSTOM LINE STOP MESIN:', '');
     if (!nama || !nama.trim()) { showToast('NAMA WAJIB DIISI', 'error'); return; }
@@ -1707,7 +1677,7 @@
     calculateOEE();
   }
 
-  // ==================== LINE STOP NON-MESIN (dengan custom) ====================
+  // ==================== LINE STOP NON-MESIN ====================
   function addCustomLineStopNonMesin() {
     const nama = prompt('MASUKKAN NAMA CUSTOM LINE STOP NON-MESIN:', '');
     if (!nama || !nama.trim()) { showToast('NAMA WAJIB DIISI', 'error'); return; }
@@ -1792,7 +1762,7 @@
     calculateOEE();
   }
 
-  // ==================== CALCULATE OEE ====================
+  // ==================== CALCULATE OEE - FIX QUALITY RUMUS ====================
   function calculateOEE() {
     const prod = oeeFormState.production;
     const selectedProduct = localData.produk.find(p => p.id === prod.productId);
@@ -1818,9 +1788,12 @@
     let targetPerbantuan = (perbantuanMinutes / 60) * targetPerMinute * 0.5;
     let targetOutput = targetNormal + targetPerbantuan;
 
-    let performanceAsli = targetOutput > 0 ? (oeeFormState.outputActual / targetOutput) * 100 : 0;
+    let performanceAsli = targetOutput > 0 ? (oeeFormState.goodOutput / targetOutput) * 100 : 0;
     let performanceForOEE = Math.min(100, performanceAsli);
-    let quality = oeeFormState.outputActual > 0 ? ((oeeFormState.outputActual - oeeFormState.reject) / oeeFormState.outputActual) * 100 : 0;
+    
+    // QUALITY RUMUS: Good / (Good + Reject) * 100%
+    let totalProduksi = oeeFormState.goodOutput + oeeFormState.reject;
+    let quality = totalProduksi > 0 ? (oeeFormState.goodOutput / totalProduksi) * 100 : 0;
 
     const hasOver100 = availActual > 100 || avail365 > 100 || quality > 100;
     
@@ -1840,7 +1813,7 @@
     document.getElementById('calc-oee-actual').textContent = oeeActual.toFixed(1) + '%';
     document.getElementById('calc-oee-365').textContent = oee365.toFixed(1) + '%';
     document.getElementById('calc-target-output').textContent = targetOutput.toFixed(1) + ' DUS';
-    document.getElementById('calc-output-actual').textContent = oeeFormState.outputActual.toFixed(1) + ' DUS';
+    document.getElementById('calc-good-output').textContent = oeeFormState.goodOutput.toFixed(1) + ' DUS';
     document.getElementById('calc-reject').textContent = oeeFormState.reject.toFixed(1) + ' DUS';
 
     oeeFormState.results = {
@@ -1852,7 +1825,7 @@
       oeeActual: oeeActual.toFixed(1),
       oee365: oee365.toFixed(1),
       targetOutput,
-      outputActual: oeeFormState.outputActual,
+      goodOutput: oeeFormState.goodOutput,
       reject: oeeFormState.reject,
       targetNormal,
       targetPerbantuan,
@@ -1867,7 +1840,7 @@
       shiftMinutes: 0,
       production: { productId: '', batchNumber: '', selectedPackers: [] },
       perbantuan: [],
-      outputActual: 0,
+      goodOutput: 0,
       reject: 0,
       downtime: [],
       lineStopMesin: [],
@@ -1918,7 +1891,7 @@
       product: `${productName} (${prod.batchNumber})`,
       packers: packerNames,
       perbantuan: perbantuanData.length ? JSON.stringify(perbantuanData) : null,
-      output_actual: oeeFormState.outputActual,
+      good_output: oeeFormState.goodOutput,
       reject: oeeFormState.reject,
       availability_actual: parseFloat(oeeFormState.results.availabilityActual),
       performance: parseFloat(oeeFormState.results.performance),
@@ -1938,7 +1911,7 @@
       if (error) throw error;
       
       localData.oee_records.unshift(record);
-      await addAuditLog('INPUT OEE', `${productName} - ${packerNames}`);
+      await addAuditLog('INPUT OEE', `${productName} - ${packerNames} | GOOD: ${oeeFormState.goodOutput} | REJECT: ${oeeFormState.reject}`);
       showToast('DATA BERHASIL DISIMPAN', 'success');
       
       resetOEEForm();
@@ -1959,7 +1932,7 @@
       shiftMinutes: 0,
       production: { productId: '', batchNumber: '', selectedPackers: [] },
       perbantuan: [],
-      outputActual: 0,
+      goodOutput: 0,
       reject: 0,
       downtime: [],
       lineStopMesin: [],
@@ -2038,21 +2011,21 @@
 
   function updateDashboardData() {
     const recs = filteredOeeRecords.length ? filteredOeeRecords : localData.oee_records;
-    let sumActual = 0, countActual = 0, sum365 = 0, count365 = 0, totalOutput = 0;
+    let sumActual = 0, countActual = 0, sum365 = 0, count365 = 0, totalGood = 0;
     
     recs.forEach(r => {
       const oeeActual = parseFloat(r.oee_actual) || 0;
       const oee365 = parseFloat(r.oee_365) || 0;
-      const output = parseFloat(r.output_actual) || 0;
+      const good = parseFloat(r.good_output) || 0;
       
       if (oeeActual > 0) { sumActual += oeeActual; countActual++; }
       if (oee365 > 0) { sum365 += oee365; count365++; }
-      totalOutput += output;
+      totalGood += good;
     });
     
     document.getElementById('score-oee-actual').textContent = (countActual ? (sumActual / countActual).toFixed(1) : '0') + '%';
     document.getElementById('score-oee-365').textContent = (count365 ? (sum365 / count365).toFixed(1) : '0') + '%';
-    document.getElementById('score-total-output').textContent = totalOutput.toLocaleString();
+    document.getElementById('score-total-output').textContent = totalGood.toLocaleString();
   }
 
   // ==================== CHARTS ====================
@@ -2155,7 +2128,7 @@
     renderOEEDailyChart();
   }
 
-  // ==================== RENDER OEE HISTORY ====================
+  // ==================== RENDER OEE HISTORY - FIX ====================
   function renderOEEHistory() {
     const tbody = document.getElementById('table-oee-history');
     const recs = filteredOeeRecords.length ? filteredOeeRecords : localData.oee_records;
@@ -2166,9 +2139,9 @@
     }
     
     tbody.innerHTML = recs.slice(0, 20).map(r => {
-      const target = parseFloat(r.target_output) || 0;
-      const actual = parseFloat(r.output_actual) || 0;
+      const good = parseFloat(r.good_output) || 0;
       const reject = parseFloat(r.reject) || 0;
+      const target = parseFloat(r.target_output) || 0;
       const oee = parseFloat(r.oee_actual) || 0;
       
       return `
@@ -2177,9 +2150,9 @@
           <td>${r.shift || '-'}</td>
           <td>${r.packers || '-'}</td>
           <td>${r.product ? r.product.substring(0, 30) + '...' : '-'}</td>
-          <td class="text-right"><strong>${target.toLocaleString()}</strong></td>
-          <td class="text-right"><strong>${actual.toLocaleString()}</strong></td>
+          <td class="text-right"><strong>${good.toLocaleString()}</strong></td>
           <td class="text-right">${reject.toLocaleString()}</td>
+          <td class="text-right">${target.toLocaleString()}</td>
           <td class="text-right"><strong>${oee.toFixed(1)}%</strong></td>
         </tr>
       `;
@@ -2210,7 +2183,21 @@
             });
           }
         } catch (e) {
-          console.log('Error parsing LSM:', e);
+          // Jika bukan JSON, coba parse manual
+          if (typeof record.line_stop_mesin === 'string') {
+            const match = record.line_stop_mesin.match(/(.+?)\s*\((\d+)\s*MIN\)/);
+            if (match) {
+              rows.push({
+                date: record.date,
+                shift: record.shift,
+                packers: record.packers,
+                nama: match[1].trim(),
+                durasi: parseInt(match[2]) || 0,
+                action: '-',
+                wr: '-'
+              });
+            }
+          }
         }
       }
     });
@@ -2256,7 +2243,19 @@
             });
           }
         } catch (e) {
-          console.log('Error parsing LSNM:', e);
+          if (typeof record.line_stop_non_mesin === 'string') {
+            const match = record.line_stop_non_mesin.match(/(.+?)\s*\((\d+)\s*MIN\)/);
+            if (match) {
+              rows.push({
+                date: record.date,
+                shift: record.shift,
+                packers: record.packers,
+                nama: match[1].trim(),
+                durasi: parseInt(match[2]) || 0,
+                action: '-'
+              });
+            }
+          }
         }
       }
     });
@@ -2300,7 +2299,18 @@
             });
           }
         } catch (e) {
-          console.log('Error parsing MS:', e);
+          if (typeof record.minor_stop === 'string') {
+            const match = record.minor_stop.match(/(.+?)\s*\((\d+)\s*MIN\)/);
+            if (match) {
+              rows.push({
+                date: record.date,
+                shift: record.shift,
+                packers: record.packers,
+                nama: match[1].trim(),
+                durasi: parseInt(match[2]) || 0
+              });
+            }
+          }
         }
       }
     });
