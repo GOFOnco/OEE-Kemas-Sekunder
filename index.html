@@ -48,7 +48,7 @@
       min-height: 100vh;
     }
 
-    /* ==================== TYPOGRAPHY - DENGAN WORD BREAK ==================== */
+    /* ==================== TYPOGRAPHY ==================== */
     h1, h2, h3, h4, h5, h6, p, span, div, label, button, input, select, textarea, th, td, option, .btn, .section-title, .chart-title, .score-label, .master-card-name, .master-card-detail, .empty-state-text, .toast, .warning-title, .warning-text, .login-title, .login-label, .login-error {
       text-transform: uppercase !important;
       word-break: break-word;
@@ -169,6 +169,11 @@
       flex-shrink: 0;
     }
 
+    .tab-btn:hover, .tab-btn.active {
+      color: var(--primary);
+      border-bottom-color: var(--primary);
+    }
+
     /* ==================== CONTENT RESPONSIF ==================== */
     .content {
       flex: 1;
@@ -259,6 +264,19 @@
       min-width: 0;
     }
 
+    .form-group input:focus,
+    .form-group select:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(236, 72, 153, 0.1);
+    }
+
+    .form-group input[readonly] {
+      background: #f3e8f0;
+      color: var(--primary-dark);
+      font-weight: bold;
+    }
+
     /* ==================== BUTTONS RESPONSIF ==================== */
     .btn {
       padding: clamp(8px, 1.8vw, 14px) clamp(12px, 2.5vw, 20px);
@@ -276,9 +294,53 @@
       min-width: min(80px, 100%);
     }
 
+    .btn:active {
+      transform: scale(0.97);
+    }
+
     .btn-small {
       padding: clamp(4px, 1.2vw, 8px) clamp(8px, 1.5vw, 14px);
       font-size: clamp(9px, 1.6vw, 11px);
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--primary) 0%, #d946a6 100%);
+      color: white;
+    }
+    .btn-primary:hover {
+      background: linear-gradient(135deg, #d946a6 0%, var(--primary-dark) 100%);
+    }
+
+    .btn-success {
+      background: var(--success);
+      color: white;
+    }
+    .btn-success:hover {
+      background: #059669;
+    }
+
+    .btn-warning {
+      background: var(--warning);
+      color: white;
+    }
+    .btn-warning:hover {
+      background: #d97706;
+    }
+
+    .btn-secondary {
+      background: var(--gray);
+      color: white;
+    }
+    .btn-secondary:hover {
+      background: #6b7280;
+    }
+
+    .btn-danger {
+      background: var(--danger);
+      color: white;
+    }
+    .btn-danger:hover {
+      background: #dc2626;
     }
 
     .btn.w-100 {
@@ -304,6 +366,11 @@
       display: flex;
       flex-direction: column;
       min-width: 0;
+    }
+
+    .score-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 24px rgba(236, 72, 153, 0.15);
     }
 
     .score-label {
@@ -335,6 +402,7 @@
       border-radius: var(--border-radius-sm);
       margin-bottom: clamp(12px, 2vw, 20px);
       border: 2px solid var(--primary);
+      align-items: start;
     }
 
     /* PACKER CHECKBOX GRID SUPER RESPONSIF */
@@ -365,6 +433,11 @@
       text-overflow: ellipsis;
     }
 
+    .packer-checkbox-item:hover {
+      background: #fce7f3;
+      border-color: var(--primary-light);
+    }
+
     .packer-checkbox-item span {
       overflow: hidden;
       text-overflow: ellipsis;
@@ -389,6 +462,11 @@
       border-radius: var(--border-radius-sm);
       margin-bottom: 8px;
       border: 1px solid #ffe69c;
+      align-items: center;
+    }
+
+    .perbantuan-row input {
+      background: #fff9e6;
     }
 
     /* ==================== OUTPUT ROW RESPONSIF ==================== */
@@ -452,136 +530,7 @@
       border: 1px solid rgba(217, 119, 6, 0.2);
     }
 
-    /* ==================== ACHIEVEMENT TABLE SUPER RESPONSIF ==================== */
-    .achievement-container {
-      background: white;
-      border-radius: var(--border-radius);
-      padding: clamp(12px, 3vw, 24px);
-      margin-bottom: clamp(16px, 3vw, 24px);
-      box-shadow: var(--box-shadow);
-      width: 100%;
-    }
-
-    .achievement-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: clamp(12px, 2.5vw, 24px);
-      flex-wrap: wrap;
-      gap: clamp(8px, 1.5vw, 16px);
-    }
-
-    .achievement-title {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      flex-wrap: wrap;
-    }
-
-    .achievement-title h2 {
-      font-size: clamp(14px, 2.5vw, 20px);
-      color: var(--primary);
-      margin: 0;
-      word-break: break-word;
-    }
-
-    .achievement-title span {
-      background: var(--primary-light);
-      color: var(--primary-dark);
-      padding: 4px 10px;
-      border-radius: 20px;
-      font-size: clamp(10px, 1.8vw, 12px);
-      font-weight: 600;
-      white-space: nowrap;
-    }
-
-    .filter-section {
-      background: #f8fafc;
-      border-radius: 12px;
-      padding: clamp(12px, 2.5vw, 20px);
-      margin-bottom: clamp(16px, 3vw, 24px);
-      display: flex;
-      flex-wrap: wrap;
-      gap: clamp(8px, 1.5vw, 16px);
-      align-items: flex-end;
-      border: 1px solid #e2e8f0;
-    }
-
-    .filter-group {
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-      min-width: min(150px, 100%);
-      flex: 1 1 auto;
-    }
-
-    .filter-group label {
-      font-size: clamp(9px, 1.6vw, 11px);
-      color: #64748b;
-      font-weight: 600;
-    }
-
-    .filter-group select,
-    .filter-group input {
-      padding: clamp(6px, 1.5vw, 10px) clamp(8px, 1.8vw, 14px);
-      border: 2px solid #e2e8f0;
-      border-radius: 8px;
-      font-size: clamp(11px, 2vw, 13px);
-      width: 100%;
-      min-width: 0;
-    }
-
-    .filter-actions {
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-    }
-
-    .summary-cards {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(min(160px, 100%), 1fr));
-      gap: clamp(8px, 1.5vw, 16px);
-      margin-bottom: clamp(16px, 3vw, 24px);
-    }
-
-    .summary-item {
-      background: linear-gradient(135deg, #f8fafc, #f1f5f9);
-      border-radius: 12px;
-      padding: clamp(12px, 2vw, 20px);
-      text-align: center;
-      border: 1px solid #e2e8f0;
-    }
-
-    .summary-label {
-      font-size: clamp(9px, 1.6vw, 11px);
-      color: #64748b;
-      margin-bottom: 8px;
-    }
-
-    .summary-value {
-      font-size: clamp(18px, 4vw, 28px);
-      font-weight: 700;
-      color: var(--primary);
-      margin-bottom: 4px;
-      word-break: break-word;
-    }
-
-    .status-distribution {
-      display: flex;
-      justify-content: center;
-      gap: clamp(8px, 2vw, 20px);
-      margin-top: 8px;
-      flex-wrap: wrap;
-    }
-
-    .status-item {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      font-size: clamp(10px, 1.8vw, 12px);
-    }
-
-    /* ==================== TABLE SUPER RESPONSIF ==================== */
+    /* ==================== TABLES RESPONSIF ==================== */
     .table-wrapper {
       overflow-x: auto;
       border-radius: 12px;
@@ -591,18 +540,18 @@
       -webkit-overflow-scrolling: touch;
     }
 
-    #achievement-table {
+    table {
       width: 100%;
       border-collapse: collapse;
       font-size: clamp(10px, 1.8vw, 12px);
       min-width: 800px;
     }
 
-    #achievement-table thead {
+    thead {
       background: linear-gradient(135deg, var(--primary), var(--primary-dark));
     }
 
-    #achievement-table thead th {
+    thead th {
       padding: clamp(8px, 1.5vw, 14px) clamp(6px, 1.2vw, 12px);
       color: white;
       font-weight: 600;
@@ -610,64 +559,42 @@
       white-space: nowrap;
     }
 
-    #achievement-table tbody td {
+    tbody td {
       padding: clamp(8px, 1.5vw, 14px) clamp(6px, 1.2vw, 12px);
       border-bottom: 1px solid #f1f5f9;
       word-break: break-word;
     }
 
-    .achievement-badge {
-      display: inline-block;
-      padding: 4px 8px;
-      border-radius: 20px;
-      font-weight: 600;
-      font-size: clamp(9px, 1.5vw, 11px);
-      min-width: 70px;
+    tbody tr:hover {
+      background: #fce7f3;
+    }
+
+    .text-right {
+      text-align: right;
+    }
+
+    .text-center {
       text-align: center;
-      white-space: nowrap;
     }
 
-    /* ==================== PAGINATION RESPONSIF ==================== */
-    .pagination {
+    /* ==================== DETAIL TABLES ==================== */
+    .detail-section {
+      margin-top: clamp(16px, 3vw, 24px);
+    }
+
+    .detail-title {
+      font-size: clamp(12px, 2.2vw, 14px);
+      font-weight: 700;
+      color: var(--primary-dark);
+      margin: 0 0 clamp(8px, 1.5vw, 12px);
       display: flex;
-      justify-content: space-between;
       align-items: center;
-      flex-wrap: wrap;
-      gap: 12px;
+      gap: 6px;
     }
 
-    .pagination-info {
-      font-size: clamp(10px, 1.8vw, 12px);
-      color: #64748b;
-      word-break: break-word;
-    }
-
-    .pagination-controls {
-      display: flex;
-      gap: 8px;
-      align-items: center;
-      flex-wrap: wrap;
-    }
-
-    .pagination-btn {
-      background: white;
-      border: 2px solid #e2e8f0;
-      padding: 6px 12px;
-      border-radius: 8px;
-      font-size: clamp(10px, 1.8vw, 12px);
-      font-weight: 600;
-      cursor: pointer;
-      white-space: nowrap;
-    }
-
-    .pagination-page {
-      background: var(--primary);
-      color: white;
-      padding: 6px 16px;
-      border-radius: 20px;
-      font-size: clamp(10px, 1.8vw, 12px);
-      font-weight: 600;
-      white-space: nowrap;
+    .detail-title::before {
+      content: '🔧';
+      font-size: clamp(12px, 2vw, 14px);
     }
 
     /* ==================== MASTER DATA GRID RESPONSIF ==================== */
@@ -689,6 +616,10 @@
       gap: 8px;
       transition: var(--transition);
       min-width: 0;
+    }
+
+    .master-card:hover {
+      border-color: var(--primary);
     }
 
     .master-card-content {
@@ -756,7 +687,32 @@
       word-break: break-word;
     }
 
+    .toast.success {
+      border-left-color: var(--success);
+      background: linear-gradient(135deg, #f0fdf4 0%, #f9fce8 100%);
+    }
+
+    .toast.error {
+      border-left-color: var(--danger);
+      background: linear-gradient(135deg, #fef2f2 0%, #fff5f5 100%);
+    }
+
+    @keyframes slideIn {
+      from { transform: translateX(100%); opacity: 0; }
+      to { transform: translateX(0); opacity: 1; }
+    }
+
     /* ==================== MODAL RESPONSIF ==================== */
+    #modal-backdrop, #login-backdrop {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 9998;
+    }
+
     #modal, #login-modal {
       position: fixed;
       top: 50%;
@@ -770,6 +726,14 @@
       max-width: 450px;
       max-height: 90vh;
       overflow-y: auto;
+    }
+
+    #modal-title, .login-title {
+      margin: 0 0 20px;
+      color: var(--primary);
+      font-size: 18px;
+      font-weight: 700;
+      text-align: center;
     }
 
     /* ==================== RESPONSIVE BREAKPOINTS ==================== */
@@ -809,10 +773,6 @@
       .output-row {
         grid-template-columns: 1fr;
       }
-      
-      .summary-cards {
-        grid-template-columns: repeat(2, 1fr);
-      }
     }
 
     @media (max-width: 640px) {
@@ -824,44 +784,8 @@
         grid-template-columns: 1fr;
       }
       
-      .filter-section {
-        flex-direction: column;
-        align-items: stretch;
-      }
-      
-      .filter-actions {
-        width: 100%;
-      }
-      
-      .filter-actions button {
-        flex: 1;
-      }
-      
-      .achievement-header {
-        flex-direction: column;
-        align-items: flex-start;
-      }
-      
-      .export-btn {
-        width: 100%;
-      }
-      
       .score-cards {
         grid-template-columns: repeat(2, 1fr);
-      }
-      
-      .summary-cards {
-        grid-template-columns: 1fr;
-      }
-      
-      .pagination {
-        flex-direction: column;
-        align-items: flex-start;
-      }
-      
-      .pagination-controls {
-        width: 100%;
-        justify-content: space-between;
       }
     }
 
@@ -902,9 +826,6 @@
     body.dark-mode .form-section,
     body.dark-mode .score-card,
     body.dark-mode .chart-container,
-    body.dark-mode .achievement-container,
-    body.dark-mode .filter-section,
-    body.dark-mode .summary-item,
     body.dark-mode .master-card,
     body.dark-mode #modal,
     body.dark-mode #login-modal {
@@ -913,39 +834,82 @@
       color: var(--text-light);
     }
 
-    body.dark-mode .filter-section {
-      background: #1f1729;
+    body.dark-mode .form-group label,
+    body.dark-mode .score-label {
+      color: #b9a2b3;
     }
 
-    body.dark-mode .filter-group select,
-    body.dark-mode .filter-group input {
+    body.dark-mode .form-group input,
+    body.dark-mode .form-group select,
+    body.dark-mode .input-field {
       background: #1f1729;
-      border-color: #403050;
       color: var(--text-light);
+      border-color: #403050;
     }
 
-    body.dark-mode #achievement-table tbody td {
+    body.dark-mode .form-group input:focus,
+    body.dark-mode .form-group select:focus {
+      background: #2d2236;
+      border-color: var(--primary);
+    }
+
+    body.dark-mode thead {
+      background: rgba(60, 40, 60, 0.8);
+    }
+
+    body.dark-mode thead th {
+      color: #f472b6;
+    }
+
+    body.dark-mode tbody td {
       color: #e5e5e5;
     }
 
-    body.dark-mode #achievement-table tbody tr:hover {
+    body.dark-mode tbody tr:hover {
       background: #2d2236;
     }
 
-    body.dark-mode .pagination-btn {
-      background: #1f1729;
-      border-color: #403050;
-      color: #e5e5e5;
+    body.dark-mode .tab-btn {
+      color: #9ca3af;
     }
 
-    body.dark-mode .empty-state {
-      background: #1f1729;
+    body.dark-mode .tab-btn:hover,
+    body.dark-mode .tab-btn.active {
+      color: #f472b6;
     }
 
     body.dark-mode .packer-checkbox-item {
       background: #1f1729;
       border-color: #403050;
       color: var(--text-light);
+    }
+
+    body.dark-mode .packer-checkbox-item:hover {
+      background: #2d2236;
+      border-color: var(--primary);
+    }
+
+    body.dark-mode .perbantuan-row {
+      background: #2d2519;
+      border-color: #8b6f3c;
+    }
+
+    body.dark-mode .perbantuan-row input {
+      background: #1f1729;
+      color: var(--text-light);
+    }
+
+    body.dark-mode .output-row {
+      background: #1a2a3a;
+      border-color: #3b82f6;
+    }
+
+    body.dark-mode .empty-state {
+      background: #1f1729;
+    }
+
+    body.dark-mode .empty-text {
+      color: #b9a2b3;
     }
   </style>
 </head>
@@ -1042,120 +1006,7 @@
         <div class="chart-wrapper"><canvas id="chart-oee-daily"></canvas></div>
       </div>
 
-      <!-- ACHIEVEMENT TABLE -->
-      <div class="achievement-container">
-        <div class="achievement-header">
-          <div class="achievement-title">
-            <h2>🎯 ACHIEVEMENT PER PACKER</h2>
-            <span id="total-records-badge">0 DATA</span>
-          </div>
-          <button class="btn btn-success" onclick="exportAchievementToExcel()" style="white-space: nowrap;">
-            ⬇️ EXPORT EXCEL
-          </button>
-        </div>
-
-        <!-- FILTER ACHIEVEMENT -->
-        <div class="filter-section">
-          <div class="filter-group">
-            <label>SHIFT</label>
-            <select id="achievement-filter-shift" onchange="filterAchievement()">
-              <option value="">SEMUA SHIFT</option>
-              <option value="Shift 1">SHIFT 1</option>
-              <option value="Shift 2">SHIFT 2</option>
-              <option value="Shift 3">SHIFT 3</option>
-              <option value="Longshift Pagi">LONGSHIFT PAGI</option>
-              <option value="Longshift Malam">LONGSHIFT MALAM</option>
-            </select>
-          </div>
-          <div class="filter-group">
-            <label>TANGGAL</label>
-            <input type="date" id="achievement-filter-date" onchange="filterAchievement()">
-          </div>
-          <div class="filter-group">
-            <label>CARI PACKER</label>
-            <input type="text" id="achievement-search-packer" placeholder="KETIK NAMA..." onkeyup="filterAchievement()">
-          </div>
-          <div class="filter-actions">
-            <button class="btn btn-small btn-secondary" onclick="resetAchievementFilter()">RESET</button>
-          </div>
-        </div>
-
-        <!-- SUMMARY CARDS -->
-        <div class="summary-cards">
-          <div class="summary-item">
-            <div class="summary-label">TOTAL RECORD</div>
-            <div class="summary-value" id="stat-total">0</div>
-          </div>
-          <div class="summary-item">
-            <div class="summary-label">RATA-RATA</div>
-            <div class="summary-value" id="stat-avg">0%</div>
-          </div>
-          <div class="summary-item">
-            <div class="summary-label">TOTAL OUTPUT</div>
-            <div class="summary-value" id="stat-total-output-ach">0</div>
-          </div>
-          <div class="summary-item">
-            <div class="summary-label">STATUS</div>
-            <div class="status-distribution">
-              <div class="status-item">
-                <span class="status-dot dot-green"></span>
-                <span id="stat-green">0</span>
-              </div>
-              <div class="status-item">
-                <span class="status-dot dot-yellow"></span>
-                <span id="stat-yellow">0</span>
-              </div>
-              <div class="status-item">
-                <span class="status-dot dot-red"></span>
-                <span id="stat-red">0</span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- TABLE -->
-        <div class="table-wrapper">
-          <table id="achievement-table">
-            <thead>
-              <tr>
-                <th>NO</th>
-                <th>TANGGAL</th>
-                <th>SHIFT</th>
-                <th>PACKER</th>
-                <th>PRODUK</th>
-                <th class="text-right">TARGET</th>
-                <th class="text-right">ACTUAL</th>
-                <th class="text-right">ACHIEVEMENT</th>
-                <th>STATUS</th>
-              </tr>
-            </thead>
-            <tbody id="achievement-table-body">
-              <tr>
-                <td colspan="9">
-                  <div class="empty-state">
-                    <div class="empty-icon">📊</div>
-                    <div class="empty-text">BELUM ADA DATA</div>
-                  </div>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-
-        <!-- PAGINATION -->
-        <div class="pagination">
-          <div class="pagination-info">
-            MENAMPILKAN <span id="pagination-start">0</span> - <span id="pagination-end">0</span> DARI <span id="pagination-total">0</span>
-          </div>
-          <div class="pagination-controls">
-            <button class="pagination-btn" onclick="prevPage()" id="prev-btn" disabled>← PREV</button>
-            <span class="pagination-page" id="page-info">1/1</span>
-            <button class="pagination-btn" onclick="nextPage()" id="next-btn" disabled>NEXT →</button>
-          </div>
-        </div>
-      </div>
-
-      <!-- OEE HISTORY -->
+      <!-- OEE HISTORY TABLE (DENGAN TARGET & ACTUAL) -->
       <div class="form-section">
         <div class="section-title">📋 RIWAYAT OEE</div>
         <div class="table-wrapper">
@@ -1166,10 +1017,73 @@
                 <th>SHIFT</th>
                 <th>PACKER</th>
                 <th>PRODUK</th>
+                <th class="text-right">TARGET</th>
+                <th class="text-right">ACTUAL</th>
+                <th class="text-right">REJECT</th>
                 <th class="text-right">OEE</th>
               </tr>
             </thead>
             <tbody id="table-oee-history"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- DETAIL LINE STOP MESIN -->
+      <div class="form-section">
+        <div class="section-title">🔧 DETAIL LINE STOP MESIN</div>
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>TANGGAL</th>
+                <th>SHIFT</th>
+                <th>PACKER</th>
+                <th>LINE STOP</th>
+                <th class="text-right">DURASI</th>
+                <th>ACTION</th>
+                <th>NO WR</th>
+              </tr>
+            </thead>
+            <tbody id="table-lsm-detail"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- DETAIL LINE STOP NON MESIN -->
+      <div class="form-section">
+        <div class="section-title">🔧 DETAIL LINE STOP NON MESIN</div>
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>TANGGAL</th>
+                <th>SHIFT</th>
+                <th>PACKER</th>
+                <th>LINE STOP</th>
+                <th class="text-right">DURASI</th>
+                <th>ACTION</th>
+              </tr>
+            </thead>
+            <tbody id="table-lsnm-detail"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- DETAIL MINOR STOP -->
+      <div class="form-section">
+        <div class="section-title">⏸️ DETAIL MINOR STOP</div>
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>TANGGAL</th>
+                <th>SHIFT</th>
+                <th>PACKER</th>
+                <th>MINOR STOP</th>
+                <th class="text-right">DURASI</th>
+              </tr>
+            </thead>
+            <tbody id="table-ms-detail"></tbody>
           </table>
         </div>
       </div>
@@ -1190,17 +1104,17 @@
               <label>SHIFT</label>
               <select id="oee-shift" onchange="updateShiftMinutes()" required>
                 <option value="">PILIH SHIFT</option>
-                <option value="Shift 1">SHIFT 1 (07:00-15:30)</option>
-                <option value="Shift 2">SHIFT 2 (15:20-22:50)</option>
-                <option value="Shift 3">SHIFT 3 (22:40-07:10)</option>
-                <option value="Longshift Pagi">LONGSHIFT PAGI (07:00-19:00)</option>
-                <option value="Longshift Malam">LONGSHIFT MALAM (19:00-07.00)</option>
+                <option value="Shift 1">SHIFT 1 (07:00-15:30) 510 MIN</option>
+                <option value="Shift 2">SHIFT 2 (15:20-22:50) 510 MIN</option>
+                <option value="Shift 3">SHIFT 3 (22:40-07:10) 510 MIN</option>
+                <option value="Longshift Pagi">LONGSHIFT PAGI (07:00-19:00) 720 MIN</option>
+                <option value="Longshift Malam">LONGSHIFT MALAM (19:00-07:00) 720 MIN</option>
               </select>
             </div>
           </div>
         </div>
 
-        <!-- OPERATIONAL DOWNTIME -->
+        <!-- OPERATIONAL DOWNTIME (ODT) -->
         <div class="form-section">
           <div class="section-title">OPERATIONAL DOWNTIME (ODT)</div>
           <div id="odt-list"></div>
@@ -1209,14 +1123,14 @@
         <!-- LINE STOP MESIN -->
         <div class="form-section">
           <div class="section-title">LINE STOP MESIN</div>
-          <button type="button" class="btn btn-success w-100" onclick="addCustomLineStopMesin()">+ TAMBAH CUSTOM</button>
+          <button type="button" class="btn btn-success w-100" onclick="addCustomLineStopMesin()">+ TAMBAH CUSTOM LINE STOP MESIN</button>
           <div id="line-stop-mesin-list" class="mt-16"></div>
         </div>
 
         <!-- LINE STOP NON-MESIN -->
         <div class="form-section">
           <div class="section-title">LINE STOP NON-MESIN</div>
-          <button type="button" class="btn btn-success w-100" onclick="addCustomLineStopNonMesin()">+ TAMBAH CUSTOM</button>
+          <button type="button" class="btn btn-success w-100" onclick="addCustomLineStopNonMesin()">+ TAMBAH CUSTOM LINE STOP NON-MESIN</button>
           <div id="line-stop-non-mesin-list" class="mt-16"></div>
         </div>
 
@@ -1254,6 +1168,8 @@
 
         <!-- HASIL PERHITUNGAN -->
         <div class="form-section">
+          <div id="availability-warning" style="display: none;"></div>
+          <div id="oee-over100-warning" style="display: none;" class="warning-box"></div>
           <div class="section-title">HASIL PERHITUNGAN OEE</div>
           <div class="score-cards">
             <div class="score-card"><div class="score-label">AVAILABILITY</div><div class="score-value" id="calc-availability-actual">0%</div></div>
@@ -1332,7 +1248,7 @@
 </div>
 
 <!-- MODAL LOGIN -->
-<div id="login-backdrop" style="display: none; position: fixed; top:0; left:0; right:0; bottom:0; background: rgba(0,0,0,0.5); z-index: 9998;" onclick="if(event.target===this) closeLoginModal();"></div>
+<div id="login-backdrop" style="display: none;" onclick="if(event.target===this) closeLoginModal();"></div>
 <div id="login-modal" style="display: none;">
   <h2 class="login-title">🔐 MASTER DATA ACCESS</h2>
   <form onsubmit="handleLogin(event)">
@@ -1349,7 +1265,7 @@
 </div>
 
 <!-- MODAL CRUD -->
-<div id="modal-backdrop" style="display: none; position: fixed; top:0; left:0; right:0; bottom:0; background: rgba(0,0,0,0.5); z-index: 9998;" onclick="if(event.target===this) closeModal();"></div>
+<div id="modal-backdrop" style="display: none;" onclick="if(event.target===this) closeModal();"></div>
 <div id="modal" style="display: none;">
   <h2 id="modal-title">MODAL TITLE</h2>
   <form id="modal-form" onsubmit="submitModalForm(event)">
@@ -1406,12 +1322,6 @@
 
   let dashboardCharts = {};
   let filteredOeeRecords = [];
-  
-  // ACHIEVEMENT TABLE STATE
-  let achievementData = [];
-  let filteredAchievementData = [];
-  let currentPage = 1;
-  const rowsPerPage = 15;
 
   // ==================== INIT APP ====================
   async function initApp() {
@@ -1443,7 +1353,9 @@
     if (tabName === 'dashboard') {
       setTimeout(() => {
         renderCharts();
-        renderAchievementTable();
+        renderLSMDetailTable();
+        renderLSNMDetailTable();
+        renderMSDetailTable();
       }, 100);
     }
     
@@ -1513,8 +1425,6 @@
       localData.audit_trail = auditRes.data || [];
 
       filteredOeeRecords = [...localData.oee_records];
-      
-      generateAchievementData();
       populateFilterOptions();
       
     } catch (error) {
@@ -1523,224 +1433,10 @@
     }
   }
 
-  // ==================== GENERATE ACHIEVEMENT DATA ====================
-  function generateAchievementData() {
-    achievementData = [];
-    
-    localData.oee_records.forEach(record => {
-      const packers = record.packers ? record.packers.split(',').map(p => p.trim()) : [];
-      const totalOutput = parseFloat(record.output_actual) || 0;
-      const performance = parseFloat(record.performance) || 100;
-      
-      const targetTotal = performance > 0 ? (totalOutput / (performance / 100)) : totalOutput;
-      const targetPerPacker = packers.length > 0 ? targetTotal / packers.length : 0;
-      const outputPerPacker = packers.length > 0 ? totalOutput / packers.length : 0;
-      
-      packers.forEach((packer, index) => {
-        const achievement = targetPerPacker > 0 ? (outputPerPacker / targetPerPacker) * 100 : 0;
-        
-        achievementData.push({
-          id: `${record.id}-${index}`,
-          date: record.date || '-',
-          shift: record.shift || '-',
-          packer: packer,
-          product: record.product ? record.product.split('(')[0].trim() : '-',
-          target: Math.round(targetPerPacker),
-          actual: Math.round(outputPerPacker),
-          achievement: achievement,
-          status: achievement >= 100 ? 'TERCAPAI' : achievement >= 80 ? 'KURANG' : 'RENDAH',
-          statusIcon: achievement >= 100 ? '🟢' : achievement >= 80 ? '🟡' : '🔴',
-          statusClass: achievement >= 100 ? 'badge-green' : achievement >= 80 ? 'badge-yellow' : 'badge-red'
-        });
-      });
-    });
-    
-    achievementData.sort((a, b) => b.date.localeCompare(a.date));
-    filteredAchievementData = [...achievementData];
-    currentPage = 1;
-    
-    document.getElementById('total-records-badge').textContent = achievementData.length + ' DATA';
-  }
-
-  // ==================== FILTER ACHIEVEMENT ====================
-  function filterAchievement() {
-    const shiftFilter = document.getElementById('achievement-filter-shift').value;
-    const dateFilter = document.getElementById('achievement-filter-date').value;
-    const searchFilter = document.getElementById('achievement-search-packer').value.toLowerCase().trim();
-    
-    filteredAchievementData = achievementData.filter(item => {
-      if (shiftFilter && item.shift !== shiftFilter) return false;
-      if (dateFilter && item.date !== dateFilter) return false;
-      if (searchFilter && !item.packer.toLowerCase().includes(searchFilter)) return false;
-      return true;
-    });
-    
-    currentPage = 1;
-    renderAchievementTable();
-  }
-
-  function resetAchievementFilter() {
-    document.getElementById('achievement-filter-shift').value = '';
-    document.getElementById('achievement-filter-date').value = '';
-    document.getElementById('achievement-search-packer').value = '';
-    filteredAchievementData = [...achievementData];
-    currentPage = 1;
-    renderAchievementTable();
-  }
-
-  // ==================== RENDER ACHIEVEMENT TABLE ====================
-  function renderAchievementTable() {
-    const tbody = document.getElementById('achievement-table-body');
-    const totalRecords = filteredAchievementData.length;
-    const start = (currentPage - 1) * rowsPerPage;
-    const end = Math.min(start + rowsPerPage, totalRecords);
-    const pageData = filteredAchievementData.slice(start, end);
-    
-    // Update summary
-    updateSummaryStats(totalRecords);
-    document.getElementById('total-records-badge').textContent = totalRecords + ' DATA';
-    
-    if (pageData.length === 0) {
-      tbody.innerHTML = `
-        <tr>
-          <td colspan="9">
-            <div class="empty-state">
-              <div class="empty-icon">🔍</div>
-              <div class="empty-text">TIDAK ADA DATA</div>
-            </div>
-          </td>
-        </tr>
-      `;
-    } else {
-      tbody.innerHTML = pageData.map((item, index) => `
-        <tr>
-          <td><strong>${start + index + 1}</strong></td>
-          <td>${item.date}</td>
-          <td>${item.shift}</td>
-          <td><span class="packer-name">${item.packer}</span></td>
-          <td>${item.product}</td>
-          <td class="text-right"><strong>${item.target.toLocaleString()}</strong></td>
-          <td class="text-right"><strong>${item.actual.toLocaleString()}</strong></td>
-          <td class="text-right"><strong>${item.achievement.toFixed(1)}%</strong></td>
-          <td>
-            <span class="achievement-badge ${item.statusClass}">
-              ${item.statusIcon} ${item.status}
-            </span>
-          </td>
-        </tr>
-      `).join('');
-    }
-    
-    updatePagination(totalRecords);
-  }
-
-  function updateSummaryStats(total) {
-    if (total === 0) {
-      document.getElementById('stat-total').textContent = '0';
-      document.getElementById('stat-avg').textContent = '0%';
-      document.getElementById('stat-total-output-ach').textContent = '0';
-      document.getElementById('stat-green').textContent = '0';
-      document.getElementById('stat-yellow').textContent = '0';
-      document.getElementById('stat-red').textContent = '0';
-      return;
-    }
-    
-    const totalAchievement = filteredAchievementData.reduce((sum, item) => sum + item.achievement, 0);
-    const avgAchievement = totalAchievement / total;
-    document.getElementById('stat-avg').textContent = avgAchievement.toFixed(1) + '%';
-    
-    const totalOutput = filteredAchievementData.reduce((sum, item) => sum + item.actual, 0);
-    document.getElementById('stat-total-output-ach').textContent = totalOutput.toLocaleString();
-    
-    const green = filteredAchievementData.filter(item => item.achievement >= 100).length;
-    const yellow = filteredAchievementData.filter(item => item.achievement >= 80 && item.achievement < 100).length;
-    const red = filteredAchievementData.filter(item => item.achievement < 80).length;
-    
-    document.getElementById('stat-green').textContent = green;
-    document.getElementById('stat-yellow').textContent = yellow;
-    document.getElementById('stat-red').textContent = red;
-    document.getElementById('stat-total').textContent = total;
-  }
-
-  // ==================== PAGINATION ====================
-  function updatePagination(total) {
-    const totalPages = Math.ceil(total / rowsPerPage);
-    const start = total > 0 ? (currentPage - 1) * rowsPerPage + 1 : 0;
-    const end = Math.min(currentPage * rowsPerPage, total);
-    
-    document.getElementById('pagination-start').textContent = start;
-    document.getElementById('pagination-end').textContent = end;
-    document.getElementById('pagination-total').textContent = total;
-    document.getElementById('page-info').textContent = `${currentPage}/${totalPages || 1}`;
-    
-    document.getElementById('prev-btn').disabled = currentPage === 1;
-    document.getElementById('next-btn').disabled = currentPage === totalPages || totalPages === 0;
-  }
-
-  function prevPage() {
-    if (currentPage > 1) {
-      currentPage--;
-      renderAchievementTable();
-    }
-  }
-
-  function nextPage() {
-    const totalPages = Math.ceil(filteredAchievementData.length / rowsPerPage);
-    if (currentPage < totalPages) {
-      currentPage++;
-      renderAchievementTable();
-    }
-  }
-
-  // ==================== EXPORT EXCEL ====================
-  function exportAchievementToExcel() {
-    if (filteredAchievementData.length === 0) {
-      showToast('TIDAK ADA DATA', 'error');
-      return;
-    }
-    
-    const exportData = filteredAchievementData.map(item => [
-      item.date,
-      item.shift,
-      item.packer,
-      item.product,
-      item.target,
-      item.actual,
-      item.achievement.toFixed(1) + '%',
-      item.status
-    ]);
-    
-    const headers = ['TANGGAL', 'SHIFT', 'PACKER', 'PRODUK', 'TARGET', 'ACTUAL', 'ACHIEVEMENT', 'STATUS'];
-    exportData.unshift(headers);
-    
-    const csvContent = exportData.map(row => 
-      row.map(cell => {
-        if (typeof cell === 'string' && (cell.includes(',') || cell.includes('"'))) {
-          return `"${cell.replace(/"/g, '""')}"`;
-        }
-        return cell;
-      }).join(',')
-    ).join('\n');
-    
-    const blob = new Blob(['\uFEFF' + csvContent], { type: 'text/csv;charset=utf-8;' });
-    const link = document.createElement('a');
-    const url = URL.createObjectURL(blob);
-    const now = new Date();
-    const filename = `achievement_${now.getFullYear()}${String(now.getMonth()+1).padStart(2,'0')}${String(now.getDate()).padStart(2,'0')}.csv`;
-    
-    link.setAttribute('href', url);
-    link.setAttribute('download', filename);
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    
-    showToast(`EXPORT ${filteredAchievementData.length} DATA`, 'success');
-  }
-
   // ==================== SHIFT ====================
   function updateShiftMinutes() {
     const shift = document.getElementById('oee-shift').value;
-    const shiftSchedule = { 'Shift 1': 450, 'Shift 2': 390, 'Shift 3': 450, 'Longshift Pagi': 615, 'Longshift Malam': 615 };
+    const shiftSchedule = { 'Shift 1': 510, 'Shift 2': 510, 'Shift 3': 510, 'Longshift Pagi': 720, 'Longshift Malam': 720 };
     oeeFormState.shiftMinutes = shiftSchedule[shift] || 0;
     renderODTList();
     renderLineStopMesinList();
@@ -1917,11 +1613,11 @@
       return `
         <div class="downtime-row">
           <div>
-            <p style="font-size:13px; font-weight:700; color:#3b82f6;">${odt.nama}</p>
+            <p style="font-size:13px; font-weight:700; color:#3b82f6; margin:0;">${odt.nama}</p>
             <p style="font-size:11px; color:#60a5fa;">STD: ${odt.waktu_standard} MIN | TOTAL: ${totalDurasi} MIN</p>
           </div>
-          <div class="form-group">
-            <label>FREK</label>
+          <div class="form-group" style="min-width:60px;">
+            <label style="font-size:9px;">FREK</label>
             <input type="number" value="${odt.frekuensi||1}" min="1" onchange="updateODTFrekuensi('${odt.id}', this.value)">
           </div>
           <input type="number" value="${odt.durasi}" min="0" placeholder="DURASI" onchange="updateODT('${odt.id}', this.value)">
@@ -1957,7 +1653,7 @@
     calculateOEE();
   }
 
-  // ==================== LINE STOP MESIN ====================
+  // ==================== LINE STOP MESIN (dengan custom) ====================
   function addCustomLineStopMesin() {
     const nama = prompt('MASUKKAN NAMA CUSTOM LINE STOP MESIN:', '');
     if (!nama || !nama.trim()) { showToast('NAMA WAJIB DIISI', 'error'); return; }
@@ -2011,7 +1707,7 @@
     calculateOEE();
   }
 
-  // ==================== LINE STOP NON-MESIN ====================
+  // ==================== LINE STOP NON-MESIN (dengan custom) ====================
   function addCustomLineStopNonMesin() {
     const nama = prompt('MASUKKAN NAMA CUSTOM LINE STOP NON-MESIN:', '');
     if (!nama || !nama.trim()) { showToast('NAMA WAJIB DIISI', 'error'); return; }
@@ -2126,8 +1822,16 @@
     let performanceForOEE = Math.min(100, performanceAsli);
     let quality = oeeFormState.outputActual > 0 ? ((oeeFormState.outputActual - oeeFormState.reject) / oeeFormState.outputActual) * 100 : 0;
 
+    const hasOver100 = availActual > 100 || avail365 > 100 || quality > 100;
+    
     let oeeActual = (availActual / 100) * (performanceForOEE / 100) * (quality / 100) * 100;
     let oee365 = (avail365 / 100) * (performanceForOEE / 100) * (quality / 100) * 100;
+
+    const over100Warning = document.getElementById('oee-over100-warning');
+    if (hasOver100) {
+      over100Warning.innerHTML = `<p class="warning-title">⚠️ AVAILABILITY ATAU QUALITY > 100%</p>`;
+      over100Warning.style.display = 'block';
+    } else over100Warning.style.display = 'none';
 
     document.getElementById('calc-availability-actual').textContent = availActual.toFixed(1) + '%';
     document.getElementById('calc-availability-365').textContent = avail365.toFixed(1) + '%';
@@ -2152,7 +1856,8 @@
       reject: oeeFormState.reject,
       targetNormal,
       targetPerbantuan,
-      perbantuanMinutes
+      perbantuanMinutes,
+      hasOver100
     };
   }
 
@@ -2185,6 +1890,13 @@
     if (!prod.productId || !prod.batchNumber || prod.selectedPackers.length === 0) {
       showToast('PRODUK, BATCH & MINIMAL 1 PACKER WAJIB DIISI', 'error'); return;
     }
+    const invalidWR = oeeFormState.lineStopMesin.find(lsm => (parseFloat(lsm.durasi)||0) >= 180 && !lsm.wr?.trim());
+    if (invalidWR) { showToast(`NO WR WAJIB UNTUK: ${invalidWR.nama}`, 'error'); return; }
+
+    if (oeeFormState.results.hasOver100) {
+      showToast('AVAILABILITY ATAU QUALITY TIDAK BOLEH > 100%', 'error');
+      return;
+    }
 
     const packerNames = prod.selectedPackers.map(id => localData.packer.find(p => p.id === id)?.nama).filter(Boolean).join(', ');
     const productName = localData.produk.find(p => p.id === prod.productId)?.nama || '-';
@@ -2213,6 +1925,7 @@
       quality_rate: parseFloat(oeeFormState.results.qualityRate),
       oee_actual: parseFloat(oeeFormState.results.oeeActual),
       oee_365: parseFloat(oeeFormState.results.oee365),
+      target_output: parseFloat(oeeFormState.results.targetOutput),
       line_stop_mesin: lsmDetails.length ? JSON.stringify(lsmDetails) : null,
       line_stop_non_mesin: lsnmDetails.length ? JSON.stringify(lsnmDetails) : null,
       minor_stop: msDetails.length ? JSON.stringify(msDetails) : null,
@@ -2318,8 +2031,9 @@
     updateDashboardData();
     renderCharts();
     renderOEEHistory();
-    generateAchievementData();
-    renderAchievementTable();
+    renderLSMDetailTable();
+    renderLSNMDetailTable();
+    renderMSDetailTable();
   }
 
   function updateDashboardData() {
@@ -2441,22 +2155,168 @@
     renderOEEDailyChart();
   }
 
+  // ==================== RENDER OEE HISTORY ====================
   function renderOEEHistory() {
     const tbody = document.getElementById('table-oee-history');
     const recs = filteredOeeRecords.length ? filteredOeeRecords : localData.oee_records;
     
     if (!recs || recs.length === 0) {
-      tbody.innerHTML = '<tr><td colspan="5" class="empty-state-text">BELUM ADA DATA</td></tr>';
+      tbody.innerHTML = '<tr><td colspan="8" class="text-center">BELUM ADA DATA</td></tr>';
       return;
     }
     
-    tbody.innerHTML = recs.slice(0, 15).map(r => `
+    tbody.innerHTML = recs.slice(0, 20).map(r => {
+      const target = parseFloat(r.target_output) || 0;
+      const actual = parseFloat(r.output_actual) || 0;
+      const reject = parseFloat(r.reject) || 0;
+      const oee = parseFloat(r.oee_actual) || 0;
+      
+      return `
+        <tr>
+          <td>${r.date || '-'}</td>
+          <td>${r.shift || '-'}</td>
+          <td>${r.packers || '-'}</td>
+          <td>${r.product ? r.product.substring(0, 30) + '...' : '-'}</td>
+          <td class="text-right"><strong>${target.toLocaleString()}</strong></td>
+          <td class="text-right"><strong>${actual.toLocaleString()}</strong></td>
+          <td class="text-right">${reject.toLocaleString()}</td>
+          <td class="text-right"><strong>${oee.toFixed(1)}%</strong></td>
+        </tr>
+      `;
+    }).join('');
+  }
+
+  // ==================== RENDER LSM DETAIL ====================
+  function renderLSMDetailTable() {
+    const tbody = document.getElementById('table-lsm-detail');
+    const recs = filteredOeeRecords.length ? filteredOeeRecords : localData.oee_records;
+    const rows = [];
+    
+    recs.slice(0, 50).forEach(record => {
+      if (record.line_stop_mesin) {
+        try {
+          const lsmDetails = JSON.parse(record.line_stop_mesin);
+          if (Array.isArray(lsmDetails)) {
+            lsmDetails.forEach(lsm => {
+              rows.push({
+                date: record.date,
+                shift: record.shift,
+                packers: record.packers,
+                nama: lsm.nama,
+                durasi: lsm.durasi,
+                action: lsm.action || '-',
+                wr: lsm.wr || '-'
+              });
+            });
+          }
+        } catch (e) {
+          console.log('Error parsing LSM:', e);
+        }
+      }
+    });
+    
+    if (rows.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="7" class="text-center">BELUM ADA DATA LINE STOP MESIN</td></tr>';
+      return;
+    }
+    
+    tbody.innerHTML = rows.map(row => `
       <tr>
-        <td>${r.date || '-'}</td>
-        <td>${r.shift || '-'}</td>
-        <td>${r.packers || '-'}</td>
-        <td>${r.product ? r.product.substring(0, 20) + '...' : '-'}</td>
-        <td class="text-right"><strong>${(parseFloat(r.oee_actual) || 0).toFixed(1)}%</strong></td>
+        <td>${row.date}</td>
+        <td>${row.shift}</td>
+        <td>${row.packers || '-'}</td>
+        <td>${row.nama}</td>
+        <td class="text-right">${row.durasi}</td>
+        <td>${row.action}</td>
+        <td>${row.wr}</td>
+      </tr>
+    `).join('');
+  }
+
+  // ==================== RENDER LSNM DETAIL ====================
+  function renderLSNMDetailTable() {
+    const tbody = document.getElementById('table-lsnm-detail');
+    const recs = filteredOeeRecords.length ? filteredOeeRecords : localData.oee_records;
+    const rows = [];
+    
+    recs.slice(0, 50).forEach(record => {
+      if (record.line_stop_non_mesin) {
+        try {
+          const lsnmDetails = JSON.parse(record.line_stop_non_mesin);
+          if (Array.isArray(lsnmDetails)) {
+            lsnmDetails.forEach(lsnm => {
+              rows.push({
+                date: record.date,
+                shift: record.shift,
+                packers: record.packers,
+                nama: lsnm.nama,
+                durasi: lsnm.durasi,
+                action: lsnm.action || '-'
+              });
+            });
+          }
+        } catch (e) {
+          console.log('Error parsing LSNM:', e);
+        }
+      }
+    });
+    
+    if (rows.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="6" class="text-center">BELUM ADA DATA LINE STOP NON MESIN</td></tr>';
+      return;
+    }
+    
+    tbody.innerHTML = rows.map(row => `
+      <tr>
+        <td>${row.date}</td>
+        <td>${row.shift}</td>
+        <td>${row.packers || '-'}</td>
+        <td>${row.nama}</td>
+        <td class="text-right">${row.durasi}</td>
+        <td>${row.action}</td>
+      </tr>
+    `).join('');
+  }
+
+  // ==================== RENDER MINOR STOP DETAIL ====================
+  function renderMSDetailTable() {
+    const tbody = document.getElementById('table-ms-detail');
+    const recs = filteredOeeRecords.length ? filteredOeeRecords : localData.oee_records;
+    const rows = [];
+    
+    recs.slice(0, 50).forEach(record => {
+      if (record.minor_stop) {
+        try {
+          const msDetails = JSON.parse(record.minor_stop);
+          if (Array.isArray(msDetails)) {
+            msDetails.forEach(ms => {
+              rows.push({
+                date: record.date,
+                shift: record.shift,
+                packers: record.packers,
+                nama: ms.nama,
+                durasi: ms.durasi
+              });
+            });
+          }
+        } catch (e) {
+          console.log('Error parsing MS:', e);
+        }
+      }
+    });
+    
+    if (rows.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="5" class="text-center">BELUM ADA DATA MINOR STOP</td></tr>';
+      return;
+    }
+    
+    tbody.innerHTML = rows.map(row => `
+      <tr>
+        <td>${row.date}</td>
+        <td>${row.shift}</td>
+        <td>${row.packers || '-'}</td>
+        <td>${row.nama}</td>
+        <td class="text-right">${row.durasi}</td>
       </tr>
     `).join('');
   }
@@ -2680,10 +2540,10 @@
   function renderAuditTable() {
     const tbody = document.getElementById('audit-table');
     if (!localData.audit_trail || localData.audit_trail.length === 0) {
-      tbody.innerHTML = '<tr><td colspan="3" class="empty-state-text">BELUM ADA AKTIVITAS</td></tr>';
+      tbody.innerHTML = '<tr><td colspan="3" class="text-center">BELUM ADA AKTIVITAS</td></tr>';
       return;
     }
-    tbody.innerHTML = localData.audit_trail.slice(0, 30).map(a => `
+    tbody.innerHTML = localData.audit_trail.slice(0, 50).map(a => `
       <tr>
         <td>${new Date(a.timestamp).toLocaleString('id-ID')}</td>
         <td>${a.activity || '-'}</td>
