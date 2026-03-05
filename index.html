@@ -551,7 +551,7 @@
       width: 100%;
       border-collapse: collapse;
       font-size: clamp(10px, 1.8vw, 12px);
-      min-width: 800px;
+      min-width: 900px; /* Sedikit lebih lebar untuk produk yang panjang */
     }
 
     thead {
@@ -570,6 +570,16 @@
       padding: clamp(8px, 1.5vw, 14px) clamp(6px, 1.2vw, 12px);
       border-bottom: 1px solid #f1f5f9;
       word-break: break-word;
+      white-space: normal; /* Pastikan teks bisa wrap */
+    }
+
+    /* Kolom PRODUK - khusus agar tidak terpotong */
+    td:nth-child(4) {
+      max-width: 250px;
+      min-width: 180px;
+      word-break: break-word;
+      white-space: normal;
+      line-height: 1.4;
     }
 
     tbody tr:hover {
@@ -789,6 +799,12 @@
       
       .tabs-container {
         top: clamp(90px, 15vw, 110px);
+      }
+      
+      /* Responsif untuk tabel di layar kecil */
+      td:nth-child(4) {
+        max-width: 150px;
+        min-width: 120px;
       }
     }
 
@@ -2148,12 +2164,15 @@
       const target = parseFloat(r.target_output) || 0;
       const oee = parseFloat(r.oee_actual) || 0;
       
+      // PERBAIKAN: Tampilkan produk tanpa memotong teks
+      const productDisplay = r.product || '-';
+      
       return `
         <tr>
           <td>${r.date || '-'}</td>
           <td>${r.shift || '-'}</td>
           <td>${r.packers || '-'}</td>
-          <td>${r.product ? r.product.substring(0, 30) + '...' : '-'}</td>
+          <td>${productDisplay}</td> <!-- Tidak dipotong lagi -->
           <td class="text-right"><strong>${good.toLocaleString()}</strong></td>
           <td class="text-right">${reject.toLocaleString()}</td>
           <td class="text-right">${target.toLocaleString()}</td>
