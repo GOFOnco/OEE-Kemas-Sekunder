@@ -2044,7 +2044,7 @@
     
     document.getElementById('score-oee-actual').textContent = (countActual ? (sumActual / countActual).toFixed(1) : '0') + '%';
     document.getElementById('score-oee-365').textContent = (count365 ? (sum365 / count365).toFixed(1) : '0') + '%';
-    document.getElementById('score-total-output').textContent = totalGood.toLocaleString();
+    document.getElementById('score-total-output').textContent = Math.round(totalGood);
   }
 
   // ==================== CHARTS ====================
@@ -2158,9 +2158,9 @@
     }
     
     tbody.innerHTML = recs.slice(0, 20).map(r => {
-      const target = parseFloat(r.target_output) || 0;
-      const good = parseFloat(r.good_output) || 0;
-      const reject = parseFloat(r.reject) || 0;
+      const target = Math.round(parseFloat(r.target_output) || 0); // Dibulatkan
+      const good = Math.round(parseFloat(r.good_output) || 0); // Dibulatkan
+      const reject = Math.round(parseFloat(r.reject) || 0); // Dibulatkan
       
       // Hitung PE (Performance Efficiency) = (Good / Target) * 100%
       const pe = target > 0 ? ((good / target) * 100).toFixed(1) : '0.0';
@@ -2173,9 +2173,9 @@
           <td>${r.shift || '-'}</td>
           <td>${r.packers || '-'}</td>
           <td>${productDisplay}</td>
-          <td class="text-right"><strong>${target.toLocaleString()}</strong></td>
-          <td class="text-right"><strong>${good.toLocaleString()}</strong></td>
-          <td class="text-right">${reject.toLocaleString()}</td>
+          <td class="text-right"><strong>${target}</strong></td>
+          <td class="text-right"><strong>${good}</strong></td>
+          <td class="text-right">${reject}</td>
           <td class="text-right"><strong>${pe}%</strong></td>
         </tr>
       `;
