@@ -393,34 +393,77 @@
       word-break: break-word;
     }
 
-    /* ==================== PRODUCTION ROW - URUTAN BARU ==================== */
-    .production-row {
+    /* ==================== PRODUCTION SECTION - DENGAN PACKER INTI & CUSTOM ==================== */
+    .production-container {
       display: flex;
       flex-direction: column;
-      gap: 16px;
-      padding: 20px;
-      background: #fdf2f8;
-      border-radius: 12px;
-      border: 2px solid var(--primary);
+      gap: 20px;
     }
 
-    .production-fields {
+    /* PRODUK ROW */
+    .produk-row {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 16px;
+      padding: 16px;
+      background: #fdf2f8;
+      border-radius: 12px;
+      border: 2px solid var(--primary);
+      position: relative;
     }
 
-    /* PACKER CHECKBOX GRID - FIX TEXT WRAP */
+    .remove-produk-btn {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: var(--danger);
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 30px;
+      height: 30px;
+      font-size: 18px;
+      font-weight: bold;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .remove-produk-btn:hover {
+      background: #dc2626;
+      transform: scale(1.1);
+    }
+
+    /* PACKER INTI - CHECKBOX GRID */
+    .packer-inti-section {
+      background: white;
+      border-radius: 12px;
+      padding: 16px;
+      border: 2px solid #f3e8f0;
+      margin-top: 8px;
+    }
+
+    .packer-inti-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--primary);
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .packer-inti-title::before {
+      content: '👥';
+      font-size: 16px;
+    }
+
     .packer-checkbox-grid {
       display: grid;
       grid-template-columns: repeat(6, 1fr);
       gap: 8px;
-      background: white;
-      padding: 16px;
-      border-radius: 12px;
-      border: 2px solid #f3e8f0;
       width: 100%;
-      margin-top: 8px;
     }
 
     .packer-checkbox-item {
@@ -453,10 +496,54 @@
       flex-shrink: 0;
     }
 
-    .packer-checkbox-item span {
-      word-break: break-word;
-      white-space: normal;
-      line-height: 1.4;
+    /* PACKER CUSTOM ROW (DALAM SECTION DATA PRODUKSI) */
+    .packer-custom-section {
+      background: #e0f2fe;
+      border-radius: 12px;
+      padding: 16px;
+      border: 2px solid #38bdf8;
+      margin-top: 16px;
+    }
+
+    .packer-custom-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: #0369a1;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .packer-custom-title::before {
+      content: '👤';
+      font-size: 16px;
+    }
+
+    .packer-custom-row {
+      display: grid;
+      grid-template-columns: 1.5fr 1fr 1fr 0.5fr;
+      gap: clamp(8px, 1.5vw, 16px);
+      padding: clamp(10px, 2vw, 16px);
+      background: #f0f9ff;
+      border-radius: var(--border-radius-sm);
+      margin-bottom: 8px;
+      border: 1px solid #38bdf8;
+      align-items: center;
+    }
+
+    .packer-custom-row input {
+      background: white;
+    }
+
+    .btn-add-packer-custom {
+      background: #0ea5e9;
+      color: white;
+      margin-top: 12px;
+    }
+
+    .btn-add-packer-custom:hover {
+      background: #0284c7;
     }
 
     /* ==================== PERBANTUAN ROW ==================== */
@@ -571,6 +658,33 @@
       border-bottom: 1px solid #f1f5f9;
       word-break: break-word;
       white-space: normal;
+      transition: var(--transition);
+    }
+
+    /* Style untuk baris yang bisa diklik */
+    tbody tr {
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    tbody tr:hover {
+      background: #fce7f3 !important;
+      transform: scale(1.01);
+      box-shadow: 0 4px 12px rgba(236, 72, 153, 0.2);
+    }
+
+    /* Style untuk baris yang sedang aktif/dipilih */
+    tbody tr.selected-row {
+      background: #fbcfe8 !important;
+      border-left: 4px solid var(--primary);
+      box-shadow: 0 4px 12px rgba(236, 72, 153, 0.3);
+    }
+
+    /* Style untuk PE merah (tanpa blinking) */
+    .pe-low {
+      color: #ef4444 !important;
+      font-weight: 800 !important;
+      text-shadow: 0 0 8px rgba(239, 68, 68, 0.3);
     }
 
     /* Kolom PRODUK - khusus agar tidak terpotong */
@@ -580,10 +694,6 @@
       word-break: break-word;
       white-space: normal;
       line-height: 1.4;
-    }
-
-    tbody tr:hover {
-      background: #fce7f3;
     }
 
     .text-right {
@@ -739,11 +849,15 @@
     }
 
     @media (max-width: 768px) {
-      .production-fields {
+      .produk-row {
         grid-template-columns: 1fr;
       }
       
       .perbantuan-row {
+        grid-template-columns: 1fr 1fr 1fr 0.5fr;
+      }
+      
+      .packer-custom-row {
         grid-template-columns: 1fr 1fr 1fr 0.5fr;
       }
       
@@ -766,6 +880,10 @@
       }
       
       .perbantuan-row {
+        grid-template-columns: 1fr;
+      }
+      
+      .packer-custom-row {
         grid-template-columns: 1fr;
       }
       
@@ -843,6 +961,31 @@
       border-color: var(--primary);
     }
 
+    body.dark-mode .produk-row {
+      background: #2d1a28;
+      border-color: #ec4899;
+    }
+
+    body.dark-mode .packer-inti-section {
+      background: #1f1729;
+      border-color: #403050;
+    }
+
+    body.dark-mode .packer-custom-section {
+      background: #1a2a3a;
+      border-color: #38bdf8;
+    }
+
+    body.dark-mode .packer-custom-row {
+      background: #1f1729;
+      border-color: #38bdf8;
+    }
+
+    body.dark-mode .packer-custom-row input {
+      background: #1f1729;
+      color: var(--text-light);
+    }
+
     body.dark-mode thead {
       background: rgba(60, 40, 60, 0.8);
     }
@@ -856,7 +999,17 @@
     }
 
     body.dark-mode tbody tr:hover {
-      background: #2d2236;
+      background: #2d2236 !important;
+    }
+
+    body.dark-mode tbody tr.selected-row {
+      background: #3d2a3a !important;
+      border-left-color: #f472b6;
+    }
+
+    body.dark-mode .pe-low {
+      color: #ff6b6b !important;
+      text-shadow: 0 0 8px rgba(255, 107, 107, 0.3);
     }
 
     body.dark-mode .tab-btn {
@@ -992,7 +1145,7 @@
         <div class="chart-wrapper"><canvas id="chart-oee-daily"></canvas></div>
       </div>
 
-      <!-- OEE HISTORY TABLE - URUTAN BARU: TANGGAL, SHIFT, PACKER, PRODUK, TARGET, GOOD, REJECT, PE -->
+      <!-- OEE HISTORY TABLE -->
       <div class="form-section">
         <div class="section-title">📋 RIWAYAT OEE</div>
         <div class="table-wrapper">
@@ -1127,10 +1280,27 @@
           <div id="minor-stop-list" class="mt-16"></div>
         </div>
 
-        <!-- DATA PRODUKSI - URUTAN BARU: PRODUK + BATCH DI ATAS, PACKER DI BAWAH -->
+        <!-- DATA PRODUKSI - DENGAN PACKER INTI & CUSTOM -->
         <div class="form-section">
           <div class="section-title">DATA PRODUKSI</div>
-          <div id="production-row-container"></div>
+          <div class="production-container">
+            <!-- PRODUK ROWS -->
+            <div id="produk-rows-container"></div>
+            <button type="button" class="btn btn-primary w-100" onclick="addProdukRow()">+ TAMBAH PRODUK + BATCH</button>
+            
+            <!-- PACKER INTI (CHECKBOX) -->
+            <div class="packer-inti-section">
+              <div class="packer-inti-title">PACKER INTI (DARI MASTER DATA)</div>
+              <div id="packer-inti-checkbox"></div>
+            </div>
+            
+            <!-- PACKER CUSTOM (DALAM SECTION DATA PRODUKSI) -->
+            <div class="packer-custom-section">
+              <div class="packer-custom-title">PACKER CUSTOM (TAMBAHAN)</div>
+              <div id="packer-custom-list"></div>
+              <button type="button" class="btn btn-add-packer-custom w-100" onclick="addPackerCustom()">+ TAMBAH PACKER CUSTOM</button>
+            </div>
+          </div>
         </div>
 
         <!-- PACKER PERBANTUAN -->
@@ -1287,14 +1457,18 @@
     audit_trail: []
   };
 
-  // STATE FORM
+  // STATE FORM - STRUKTUR BARU
   let oeeFormState = {
     shiftMinutes: 0,
-    production: {
-      productId: '',
-      batchNumber: '',
-      selectedPackers: []
-    },
+    produkRows: [ // Array untuk multiple produk
+      {
+        id: 'produk_' + Date.now() + '_0',
+        productId: '',
+        batchNumber: ''
+      }
+    ],
+    packerInti: [], // Array ID packer yang dipilih dari master
+    packerCustom: [], // Array untuk packer custom dengan waktu
     perbantuan: [],
     goodOutput: 0,
     reject: 0,
@@ -1308,12 +1482,15 @@
 
   let dashboardCharts = {};
   let filteredOeeRecords = [];
+  let selectedRecordIndex = -1;
 
   // ==================== INIT APP ====================
   async function initApp() {
     await loadDataFromSupabase();
     loadOEEFormData();
-    renderProductionRow();
+    renderProdukRows();
+    renderPackerIntiCheckbox();
+    renderPackerCustomList();
     renderPerbantuanList();
     renderOutputReject();
     renderMasterDataLists();
@@ -1431,60 +1608,149 @@
     calculateOEE();
   }
 
-  // ==================== PRODUCTION ROW - URUTAN BARU ====================
-  function renderProductionRow() {
-    const container = document.getElementById('production-row-container');
-    const prod = oeeFormState.production;
+  // ==================== PRODUK ROWS - MULTIPLE PRODUK ====================
+  function addProdukRow() {
+    oeeFormState.produkRows.push({
+      id: 'produk_' + Date.now() + '_' + Math.random(),
+      productId: '',
+      batchNumber: ''
+    });
+    renderProdukRows();
+  }
+
+  function removeProdukRow(id) {
+    if (oeeFormState.produkRows.length > 1) {
+      oeeFormState.produkRows = oeeFormState.produkRows.filter(p => p.id !== id);
+    } else {
+      showToast('MINIMAL 1 PRODUK HARUS ADA', 'error');
+    }
+    renderProdukRows();
+    calculateOEE();
+  }
+
+  function updateProdukRow(id, field, value) {
+    const prod = oeeFormState.produkRows.find(p => p.id === id);
+    if (prod) {
+      prod[field] = value;
+    }
+    calculateOEE();
+  }
+
+  function renderProdukRows() {
+    const container = document.getElementById('produk-rows-container');
     
     const productOptions = '<option value="">-- PILIH PRODUK --</option>' + 
-      localData.produk.map(p => `<option value="${p.id}" ${prod.productId === p.id ? 'selected' : ''}>${p.nama} (TARGET: ${p.target} DUS/MENIT)</option>`).join('');
+      localData.produk.map(p => `<option value="${p.id}">${p.nama} (TARGET: ${p.target} DUS/MENIT)</option>`).join('');
+    
+    container.innerHTML = oeeFormState.produkRows.map((prod, index) => `
+      <div class="produk-row">
+        ${oeeFormState.produkRows.length > 1 ? `
+          <button type="button" class="remove-produk-btn" onclick="removeProdukRow('${prod.id}')">×</button>
+        ` : ''}
+        <div class="form-group">
+          <label>PRODUK ${index + 1}</label>
+          <select class="input-field" onchange="updateProdukRow('${prod.id}', 'productId', this.value)">
+            ${productOptions.replace(`value="${prod.productId}"`, `value="${prod.productId}" selected`)}
+          </select>
+        </div>
+        <div class="form-group">
+          <label>NOMOR BATCH ${index + 1}</label>
+          <input type="text" class="input-field" value="${prod.batchNumber}" placeholder="CONTOH: BATCH001" onchange="updateProdukRow('${prod.id}', 'batchNumber', this.value)">
+        </div>
+      </div>
+    `).join('');
+  }
+
+  // ==================== PACKER INTI (CHECKBOX) ====================
+  function togglePackerInti(packerId) {
+    const idx = oeeFormState.packerInti.indexOf(packerId);
+    if (idx === -1) {
+      oeeFormState.packerInti.push(packerId);
+    } else {
+      oeeFormState.packerInti.splice(idx, 1);
+    }
+    renderPackerIntiCheckbox();
+    calculateOEE();
+  }
+
+  function renderPackerIntiCheckbox() {
+    const container = document.getElementById('packer-inti-checkbox');
+    
+    if (!localData.packer || localData.packer.length === 0) {
+      container.innerHTML = '<div class="empty-state" style="padding: 20px;">BELUM ADA DATA PACKER</div>';
+      return;
+    }
     
     const sortedPackers = [...localData.packer].sort((a, b) => a.nama.localeCompare(b.nama));
     
-    const packerCheckboxes = sortedPackers.map(p => `
-      <label class="packer-checkbox-item">
-        <input type="checkbox" value="${p.id}" ${prod.selectedPackers.includes(p.id) ? 'checked' : ''} onchange="togglePacker('${p.id}')"> 
-        <span>${p.nama}</span>
-      </label>
-    `).join('');
-
     container.innerHTML = `
-      <div class="production-row">
-        <div class="production-fields">
-          <div class="form-group">
-            <label>PRODUK</label>
-            <select id="production-product" class="input-field" onchange="updateProductionField('productId', this.value)">
-              ${productOptions}
-            </select>
-          </div>
-          <div class="form-group">
-            <label>NOMOR BATCH</label>
-            <input type="text" id="production-batch" class="input-field" value="${prod.batchNumber}" placeholder="CONTOH: BATCH001" onchange="updateProductionField('batchNumber', this.value)">
-          </div>
-        </div>
-        
-        <div class="form-group">
-          <label>PACKER (${prod.selectedPackers.length} TERPILIH)</label>
-          <div class="packer-checkbox-grid">
-            ${packerCheckboxes || '<div style="grid-column: span 6; text-align: center; padding: 20px;">BELUM ADA DATA PACKER</div>'}
-          </div>
-        </div>
+      <div class="packer-checkbox-grid">
+        ${sortedPackers.map(p => `
+          <label class="packer-checkbox-item">
+            <input type="checkbox" value="${p.id}" ${oeeFormState.packerInti.includes(p.id) ? 'checked' : ''} onchange="togglePackerInti('${p.id}')"> 
+            <span>${p.nama}</span>
+          </label>
+        `).join('')}
+      </div>
+      <div style="margin-top: 8px; font-size: 11px; color: #6b4c5c;">
+        TERPILIH: ${oeeFormState.packerInti.length} PACKER
       </div>
     `;
   }
 
-  function updateProductionField(field, value) {
-    if (field === 'productId') oeeFormState.production.productId = value;
-    else if (field === 'batchNumber') oeeFormState.production.batchNumber = value;
+  // ==================== PACKER CUSTOM (DALAM SECTION DATA PRODUKSI) ====================
+  function addPackerCustom() {
+    oeeFormState.packerCustom.push({
+      id: 'packer_custom_' + Date.now() + '_' + Math.random(),
+      inisial: '',
+      jamStart: '',
+      jamEnd: ''
+    });
+    renderPackerCustomList();
     calculateOEE();
   }
 
-  function togglePacker(packerId) {
-    const idx = oeeFormState.production.selectedPackers.indexOf(packerId);
-    if (idx === -1) oeeFormState.production.selectedPackers.push(packerId);
-    else oeeFormState.production.selectedPackers.splice(idx, 1);
+  function renderPackerCustomList() {
+    const container = document.getElementById('packer-custom-list');
+    
+    if (oeeFormState.packerCustom.length === 0) {
+      container.innerHTML = '<div class="empty-state" style="padding: 20px;">BELUM ADA PACKER CUSTOM</div>';
+      return;
+    }
+
+    container.innerHTML = oeeFormState.packerCustom.map(p => `
+      <div class="packer-custom-row">
+        <div class="form-group">
+          <label>INISIAL PACKER</label>
+          <input type="text" value="${p.inisial}" placeholder="CONTOH: AB" onchange="updatePackerCustom('${p.id}', 'inisial', this.value)">
+        </div>
+        <div class="form-group">
+          <label>JAM START</label>
+          <input type="time" value="${p.jamStart}" onchange="updatePackerCustom('${p.id}', 'jamStart', this.value)">
+        </div>
+        <div class="form-group">
+          <label>JAM END</label>
+          <input type="time" value="${p.jamEnd}" onchange="updatePackerCustom('${p.id}', 'jamEnd', this.value)">
+        </div>
+        <div>
+          <button type="button" class="btn btn-danger btn-small w-100" onclick="removePackerCustom('${p.id}')">HAPUS</button>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  function updatePackerCustom(id, field, value) {
+    const packer = oeeFormState.packerCustom.find(p => p.id === id);
+    if (packer) {
+      packer[field] = value;
+      calculateOEE();
+    }
+  }
+
+  function removePackerCustom(id) {
+    oeeFormState.packerCustom = oeeFormState.packerCustom.filter(p => p.id !== id);
+    renderPackerCustomList();
     calculateOEE();
-    renderProductionRow(); // Re-render untuk update counter
   }
 
   // ==================== PERBANTUAN ====================
@@ -1542,23 +1808,6 @@
     calculateOEE();
   }
 
-  function calculatePerbantuanMinutes() {
-    let totalMinutes = 0;
-    oeeFormState.perbantuan.forEach(p => {
-      if (p.jamStart && p.jamEnd) {
-        const start = p.jamStart.split(':').map(Number);
-        const end = p.jamEnd.split(':').map(Number);
-        if (start.length === 2 && end.length === 2) {
-          const startDate = new Date(2000, 0, 1, start[0], start[1]);
-          const endDate = new Date(2000, 0, 1, end[0], end[1]);
-          const diffMinutes = (endDate - startDate) / (1000 * 60);
-          if (diffMinutes > 0) totalMinutes += diffMinutes;
-        }
-      }
-    });
-    return totalMinutes;
-  }
-
   // ==================== OUTPUT & REJECT ====================
   function renderOutputReject() {
     const container = document.getElementById('output-reject-container');
@@ -1583,6 +1832,78 @@
       oeeFormState.reject = parseFloat(value) || 0;
     }
     calculateOEE();
+  }
+
+  // ==================== HITUNG TOTAL PACKER MINUTES ====================
+  function calculateTotalPackerMinutes() {
+    let totalMinutes = 0;
+    
+    // Hitung dari packer custom (dengan waktu)
+    oeeFormState.packerCustom.forEach(p => {
+      if (p.jamStart && p.jamEnd) {
+        const start = p.jamStart.split(':').map(Number);
+        const end = p.jamEnd.split(':').map(Number);
+        if (start.length === 2 && end.length === 2) {
+          const startDate = new Date(2000, 0, 1, start[0], start[1]);
+          const endDate = new Date(2000, 0, 1, end[0], end[1]);
+          const diffMinutes = (endDate - startDate) / (1000 * 60);
+          if (diffMinutes > 0) totalMinutes += diffMinutes;
+        }
+      }
+    });
+    
+    return totalMinutes;
+  }
+
+  function calculatePerbantuanMinutes() {
+    let totalMinutes = 0;
+    oeeFormState.perbantuan.forEach(p => {
+      if (p.jamStart && p.jamEnd) {
+        const start = p.jamStart.split(':').map(Number);
+        const end = p.jamEnd.split(':').map(Number);
+        if (start.length === 2 && end.length === 2) {
+          const startDate = new Date(2000, 0, 1, start[0], start[1]);
+          const endDate = new Date(2000, 0, 1, end[0], end[1]);
+          const diffMinutes = (endDate - startDate) / (1000 * 60);
+          if (diffMinutes > 0) totalMinutes += diffMinutes;
+        }
+      }
+    });
+    return totalMinutes;
+  }
+
+  // ==================== HITUNG TOTAL TARGET ====================
+  function calculateTotalTarget() {
+    // Hitung total target per menit dari semua produk yang dipilih
+    let totalTargetPerMinute = 0;
+    oeeFormState.produkRows.forEach(prod => {
+      if (prod.productId) {
+        const selectedProduct = localData.produk.find(p => p.id === prod.productId);
+        if (selectedProduct) {
+          totalTargetPerMinute += selectedProduct.target;
+        }
+      }
+    });
+    
+    // Waktu yang tersedia untuk produksi
+    const timeForTarget = oeeFormState.shiftMinutes - 
+      oeeFormState.downtime.reduce((s, o) => s + ((parseFloat(o.frekuensi)||1) * (parseFloat(o.durasi)||0)), 0) -
+      oeeFormState.lineStopMesin.reduce((s, l) => s + (parseFloat(l.durasi)||0), 0) -
+      oeeFormState.lineStopNonMesin.reduce((s, l) => s + (parseFloat(l.durasi)||0), 0);
+    
+    // Target normal = jumlah packer inti * waktu * target per menit
+    const jumlahPackerInti = oeeFormState.packerInti.length;
+    let targetNormal = jumlahPackerInti * Math.max(0, timeForTarget) * totalTargetPerMinute;
+    
+    // Tambah target dari packer custom
+    const packerCustomMinutes = calculateTotalPackerMinutes();
+    let targetPackerCustom = (packerCustomMinutes / 60) * totalTargetPerMinute;
+    
+    // Tambah target dari perbantuan (50% efficiency)
+    const perbantuanMinutes = calculatePerbantuanMinutes();
+    let targetPerbantuan = (perbantuanMinutes / 60) * totalTargetPerMinute * 0.5;
+    
+    return targetNormal + targetPackerCustom + targetPerbantuan;
   }
 
   // ==================== ODT ====================
@@ -1783,11 +2104,7 @@
 
   // ==================== CALCULATE OEE ====================
   function calculateOEE() {
-    const prod = oeeFormState.production;
-    const selectedProduct = localData.produk.find(p => p.id === prod.productId);
-    const targetPerMinute = selectedProduct ? selectedProduct.target : 0;
-    const jumlahPacker = prod.selectedPackers.length;
-
+    // Hitung total downtime
     const totalODT = oeeFormState.downtime.reduce((s, o) => s + ((parseFloat(o.frekuensi)||1) * (parseFloat(o.durasi)||0)), 0);
     const totalLSM = oeeFormState.lineStopMesin.reduce((s, l) => s + (parseFloat(l.durasi)||0), 0);
     const totalLSNM = oeeFormState.lineStopNonMesin.reduce((s, l) => s + (parseFloat(l.durasi)||0), 0);
@@ -1800,17 +2117,14 @@
     let availActual = plannedTime > 0 ? (availableTime / plannedTime) * 100 : 0;
     let avail365 = oeeFormState.shiftMinutes > 0 ? ((oeeFormState.shiftMinutes - totalODT - totalLSM - totalLSNM) / oeeFormState.shiftMinutes) * 100 : 0;
 
-    const timeForTarget = oeeFormState.shiftMinutes - totalODT - totalLSM - totalLSNM;
-    let targetNormal = jumlahPacker * Math.max(0, timeForTarget) * targetPerMinute;
+    // Hitung total target
+    let targetOutput = calculateTotalTarget();
     
-    const perbantuanMinutes = calculatePerbantuanMinutes();
-    let targetPerbantuan = (perbantuanMinutes / 60) * targetPerMinute * 0.5;
-    let targetOutput = targetNormal + targetPerbantuan;
-
+    // Hitung performance
     let performanceAsli = targetOutput > 0 ? (oeeFormState.goodOutput / targetOutput) * 100 : 0;
     let performanceForOEE = Math.min(100, performanceAsli);
     
-    // QUALITY RUMUS: Good / (Good + Reject) * 100%
+    // QUALITY
     let totalProduksi = oeeFormState.goodOutput + oeeFormState.reject;
     let quality = totalProduksi > 0 ? (oeeFormState.goodOutput / totalProduksi) * 100 : 0;
 
@@ -1846,9 +2160,6 @@
       targetOutput,
       goodOutput: oeeFormState.goodOutput,
       reject: oeeFormState.reject,
-      targetNormal,
-      targetPerbantuan,
-      perbantuanMinutes,
       hasOver100
     };
   }
@@ -1857,7 +2168,15 @@
     document.getElementById('oee-date').value = new Date().toISOString().split('T')[0];
     oeeFormState = {
       shiftMinutes: 0,
-      production: { productId: '', batchNumber: '', selectedPackers: [] },
+      produkRows: [
+        {
+          id: 'produk_' + Date.now() + '_0',
+          productId: '',
+          batchNumber: ''
+        }
+      ],
+      packerInti: [],
+      packerCustom: [],
       perbantuan: [],
       goodOutput: 0,
       reject: 0,
@@ -1876,12 +2195,16 @@
     const date = document.getElementById('oee-date').value;
     const shift = document.getElementById('oee-shift').value;
     const notes = document.getElementById('oee-notes').value;
-    const prod = oeeFormState.production;
+
+    // Validasi: minimal 1 produk terisi
+    const validProductions = oeeFormState.produkRows.filter(p => p.productId && p.batchNumber);
+    if (validProductions.length === 0) {
+      showToast('MINIMAL 1 PRODUK & BATCH HARUS DIISI', 'error');
+      return;
+    }
 
     if (!date || !shift) { showToast('TANGGAL & SHIFT WAJIB DIISI', 'error'); return; }
-    if (!prod.productId || !prod.batchNumber || prod.selectedPackers.length === 0) {
-      showToast('PRODUK, BATCH & MINIMAL 1 PACKER WAJIB DIISI', 'error'); return;
-    }
+    
     const invalidWR = oeeFormState.lineStopMesin.find(lsm => (parseFloat(lsm.durasi)||0) >= 180 && !lsm.wr?.trim());
     if (invalidWR) { showToast(`NO WR WAJIB UNTUK: ${invalidWR.nama}`, 'error'); return; }
 
@@ -1890,8 +2213,33 @@
       return;
     }
 
-    const packerNames = prod.selectedPackers.map(id => localData.packer.find(p => p.id === id)?.nama).filter(Boolean).join(', ');
-    const productName = localData.produk.find(p => p.id === prod.productId)?.nama || '-';
+    // Format produk untuk disimpan
+    const produkList = validProductions.map(p => {
+      const product = localData.produk.find(pr => pr.id === p.productId);
+      return `${product?.nama || '-'} (${p.batchNumber})`;
+    }).join(' | ');
+
+    // Format packer inti
+    const packerIntiNames = oeeFormState.packerInti.map(id => {
+      const packer = localData.packer.find(p => p.id === id);
+      return packer?.nama || '';
+    }).filter(Boolean).join(', ');
+
+    // Format packer custom
+    const packerCustomData = oeeFormState.packerCustom.map(p => ({
+      inisial: p.inisial,
+      jamStart: p.jamStart,
+      jamEnd: p.jamEnd
+    }));
+
+    // Gabungkan semua packer untuk display
+    let allPackers = [];
+    if (packerIntiNames) allPackers.push(packerIntiNames);
+    if (packerCustomData.length > 0) {
+      const customNames = packerCustomData.map(p => p.inisial).filter(Boolean).join(', ');
+      if (customNames) allPackers.push(customNames);
+    }
+    const packerDisplay = allPackers.join(' | ');
 
     const perbantuanData = oeeFormState.perbantuan.map(p => ({
       inisial: p.inisial,
@@ -1907,8 +2255,8 @@
     const record = {
       date,
       shift,
-      product: `${productName} (${prod.batchNumber})`,
-      packers: packerNames,
+      product: produkList,
+      packers: packerDisplay || JSON.stringify(packerCustomData), // Simpan packer custom sebagai JSON jika ada
       perbantuan: perbantuanData.length ? JSON.stringify(perbantuanData) : null,
       good_output: oeeFormState.goodOutput,
       reject: oeeFormState.reject,
@@ -1930,7 +2278,7 @@
       if (error) throw error;
       
       localData.oee_records.unshift(record);
-      await addAuditLog('INPUT OEE', `${productName} - ${packerNames} | GOOD: ${oeeFormState.goodOutput} | REJECT: ${oeeFormState.reject}`);
+      await addAuditLog('INPUT OEE', `${produkList} | GOOD: ${oeeFormState.goodOutput} | REJECT: ${oeeFormState.reject}`);
       showToast('DATA BERHASIL DISIMPAN', 'success');
       
       resetOEEForm();
@@ -1949,7 +2297,15 @@
     document.getElementById('oee-date').value = new Date().toISOString().split('T')[0];
     oeeFormState = {
       shiftMinutes: 0,
-      production: { productId: '', batchNumber: '', selectedPackers: [] },
+      produkRows: [
+        {
+          id: 'produk_' + Date.now() + '_0',
+          productId: '',
+          batchNumber: ''
+        }
+      ],
+      packerInti: [],
+      packerCustom: [],
       perbantuan: [],
       goodOutput: 0,
       reject: 0,
@@ -1960,7 +2316,9 @@
       results: {},
       odtOverRecords: []
     };
-    renderProductionRow();
+    renderProdukRows();
+    renderPackerIntiCheckbox();
+    renderPackerCustomList();
     renderPerbantuanList();
     renderOutputReject();
     renderODTList();
@@ -2007,6 +2365,7 @@
       return true;
     });
     
+    selectedRecordIndex = -1;
     updateDashboard();
   }
 
@@ -2016,6 +2375,7 @@
     document.getElementById('filter-shift').value = '';
     document.getElementById('filter-product').value = '';
     filteredOeeRecords = [...localData.oee_records];
+    selectedRecordIndex = -1;
     updateDashboard();
   }
 
@@ -2045,6 +2405,23 @@
     document.getElementById('score-oee-actual').textContent = (countActual ? (sumActual / countActual).toFixed(1) : '0') + '%';
     document.getElementById('score-oee-365').textContent = (count365 ? (sum365 / count365).toFixed(1) : '0') + '%';
     document.getElementById('score-total-output').textContent = Math.round(totalGood);
+  }
+
+  function selectRecord(index) {
+    selectedRecordIndex = index;
+    renderOEEHistory();
+    renderLSMDetailTable();
+    renderLSNMDetailTable();
+    renderMSDetailTable();
+    
+    setTimeout(() => {
+      const lsmSection = document.querySelector('#table-lsm-detail');
+      if (lsmSection) {
+        lsmSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }, 100);
+    
+    showToast(`MENAMPILKAN DATA: ${filteredOeeRecords[index]?.date || ''} - ${filteredOeeRecords[index]?.product || ''}`, 'success');
   }
 
   // ==================== CHARTS ====================
@@ -2147,7 +2524,7 @@
     renderOEEDailyChart();
   }
 
-  // ==================== RENDER OEE HISTORY - MODIFIKASI SESUAI PERMINTAAN ====================
+  // ==================== RENDER OEE HISTORY ====================
   function renderOEEHistory() {
     const tbody = document.getElementById('table-oee-history');
     const recs = filteredOeeRecords.length ? filteredOeeRecords : localData.oee_records;
@@ -2157,26 +2534,39 @@
       return;
     }
     
-    tbody.innerHTML = recs.slice(0, 20).map(r => {
-      const target = Math.round(parseFloat(r.target_output) || 0); // Dibulatkan
-      const good = Math.round(parseFloat(r.good_output) || 0); // Dibulatkan
-      const reject = Math.round(parseFloat(r.reject) || 0); // Dibulatkan
+    tbody.innerHTML = recs.slice(0, 20).map((r, index) => {
+      const target = Math.round(parseFloat(r.target_output) || 0);
+      const good = Math.round(parseFloat(r.good_output) || 0);
+      const reject = Math.round(parseFloat(r.reject) || 0);
       
-      // Hitung PE (Performance Efficiency) = (Good / Target) * 100%
       const pe = target > 0 ? ((good / target) * 100).toFixed(1) : '0.0';
+      const peValue = parseFloat(pe);
+      
+      // Parse packers jika disimpan sebagai JSON
+      let packerDisplay = r.packers || '-';
+      try {
+        const packers = JSON.parse(r.packers);
+        if (Array.isArray(packers)) {
+          packerDisplay = packers.map(p => p.inisial).filter(Boolean).join(', ');
+        }
+      } catch (e) {
+        // Jika bukan JSON, tampilkan apa adanya
+      }
       
       const productDisplay = r.product || '-';
+      const peClass = peValue < 100 ? 'pe-low' : '';
+      const rowClass = index === selectedRecordIndex ? 'selected-row' : '';
       
       return `
-        <tr>
+        <tr class="${rowClass}" onclick="selectRecord(${index})">
           <td>${r.date || '-'}</td>
           <td>${r.shift || '-'}</td>
-          <td>${r.packers || '-'}</td>
+          <td>${packerDisplay}</td>
           <td>${productDisplay}</td>
           <td class="text-right"><strong>${target}</strong></td>
           <td class="text-right"><strong>${good}</strong></td>
           <td class="text-right">${reject}</td>
-          <td class="text-right"><strong>${pe}%</strong></td>
+          <td class="text-right ${peClass}"><strong>${pe}%</strong></td>
         </tr>
       `;
     }).join('');
@@ -2185,10 +2575,18 @@
   // ==================== RENDER LSM DETAIL ====================
   function renderLSMDetailTable() {
     const tbody = document.getElementById('table-lsm-detail');
-    const recs = filteredOeeRecords.length ? filteredOeeRecords : localData.oee_records;
+    
+    let recs = [];
+    if (selectedRecordIndex >= 0 && selectedRecordIndex < filteredOeeRecords.length) {
+      recs = [filteredOeeRecords[selectedRecordIndex]];
+    } else {
+      recs = filteredOeeRecords.length ? filteredOeeRecords : localData.oee_records;
+      recs = recs.slice(0, 50);
+    }
+    
     const rows = [];
     
-    recs.slice(0, 50).forEach(record => {
+    recs.forEach(record => {
       if (record.line_stop_mesin) {
         try {
           const lsmDetails = JSON.parse(record.line_stop_mesin);
@@ -2206,20 +2604,7 @@
             });
           }
         } catch (e) {
-          if (typeof record.line_stop_mesin === 'string') {
-            const match = record.line_stop_mesin.match(/(.+?)\s*\((\d+)\s*MIN\)/);
-            if (match) {
-              rows.push({
-                date: record.date,
-                shift: record.shift,
-                packers: record.packers,
-                nama: match[1].trim(),
-                durasi: parseInt(match[2]) || 0,
-                action: '-',
-                wr: '-'
-              });
-            }
-          }
+          // Handle format lama jika ada
         }
       }
     });
@@ -2245,10 +2630,18 @@
   // ==================== RENDER LSNM DETAIL ====================
   function renderLSNMDetailTable() {
     const tbody = document.getElementById('table-lsnm-detail');
-    const recs = filteredOeeRecords.length ? filteredOeeRecords : localData.oee_records;
+    
+    let recs = [];
+    if (selectedRecordIndex >= 0 && selectedRecordIndex < filteredOeeRecords.length) {
+      recs = [filteredOeeRecords[selectedRecordIndex]];
+    } else {
+      recs = filteredOeeRecords.length ? filteredOeeRecords : localData.oee_records;
+      recs = recs.slice(0, 50);
+    }
+    
     const rows = [];
     
-    recs.slice(0, 50).forEach(record => {
+    recs.forEach(record => {
       if (record.line_stop_non_mesin) {
         try {
           const lsnmDetails = JSON.parse(record.line_stop_non_mesin);
@@ -2265,19 +2658,7 @@
             });
           }
         } catch (e) {
-          if (typeof record.line_stop_non_mesin === 'string') {
-            const match = record.line_stop_non_mesin.match(/(.+?)\s*\((\d+)\s*MIN\)/);
-            if (match) {
-              rows.push({
-                date: record.date,
-                shift: record.shift,
-                packers: record.packers,
-                nama: match[1].trim(),
-                durasi: parseInt(match[2]) || 0,
-                action: '-'
-              });
-            }
-          }
+          // Handle format lama jika ada
         }
       }
     });
@@ -2302,10 +2683,18 @@
   // ==================== RENDER MINOR STOP DETAIL ====================
   function renderMSDetailTable() {
     const tbody = document.getElementById('table-ms-detail');
-    const recs = filteredOeeRecords.length ? filteredOeeRecords : localData.oee_records;
+    
+    let recs = [];
+    if (selectedRecordIndex >= 0 && selectedRecordIndex < filteredOeeRecords.length) {
+      recs = [filteredOeeRecords[selectedRecordIndex]];
+    } else {
+      recs = filteredOeeRecords.length ? filteredOeeRecords : localData.oee_records;
+      recs = recs.slice(0, 50);
+    }
+    
     const rows = [];
     
-    recs.slice(0, 50).forEach(record => {
+    recs.forEach(record => {
       if (record.minor_stop) {
         try {
           const msDetails = JSON.parse(record.minor_stop);
@@ -2321,18 +2710,7 @@
             });
           }
         } catch (e) {
-          if (typeof record.minor_stop === 'string') {
-            const match = record.minor_stop.match(/(.+?)\s*\((\d+)\s*MIN\)/);
-            if (match) {
-              rows.push({
-                date: record.date,
-                shift: record.shift,
-                packers: record.packers,
-                nama: match[1].trim(),
-                durasi: parseInt(match[2]) || 0
-              });
-            }
-          }
+          // Handle format lama jika ada
         }
       }
     });
