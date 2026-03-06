@@ -551,7 +551,7 @@
       width: 100%;
       border-collapse: collapse;
       font-size: clamp(10px, 1.8vw, 12px);
-      min-width: 900px; /* Sedikit lebih lebar untuk produk yang panjang */
+      min-width: 900px;
     }
 
     thead {
@@ -570,7 +570,7 @@
       padding: clamp(8px, 1.5vw, 14px) clamp(6px, 1.2vw, 12px);
       border-bottom: 1px solid #f1f5f9;
       word-break: break-word;
-      white-space: normal; /* Pastikan teks bisa wrap */
+      white-space: normal;
     }
 
     /* Kolom PRODUK - khusus agar tidak terpotong */
@@ -801,7 +801,6 @@
         top: clamp(90px, 15vw, 110px);
       }
       
-      /* Responsif untuk tabel di layar kecil */
       td:nth-child(4) {
         max-width: 150px;
         min-width: 120px;
@@ -993,7 +992,7 @@
         <div class="chart-wrapper"><canvas id="chart-oee-daily"></canvas></div>
       </div>
 
-      <!-- OEE HISTORY TABLE -->
+      <!-- OEE HISTORY TABLE - URUTAN BARU: TANGGAL, SHIFT, PACKER, PRODUK, TARGET, GOOD, REJECT, PE -->
       <div class="form-section">
         <div class="section-title">📋 RIWAYAT OEE</div>
         <div class="table-wrapper">
@@ -1004,10 +1003,10 @@
                 <th>SHIFT</th>
                 <th>PACKER</th>
                 <th>PRODUK</th>
+                <th class="text-right">TARGET</th>
                 <th class="text-right">GOOD</th>
                 <th class="text-right">REJECT</th>
-                <th class="text-right">TARGET</th>
-                <th class="text-right">OEE</th>
+                <th class="text-right">PE</th>
               </tr>
             </thead>
             <tbody id="table-oee-history"></tbody>
@@ -2148,7 +2147,7 @@
     renderOEEDailyChart();
   }
 
-  // ==================== RENDER OEE HISTORY ====================
+  // ==================== RENDER OEE HISTORY - MODIFIKASI SESUAI PERMINTAAN ====================
   function renderOEEHistory() {
     const tbody = document.getElementById('table-oee-history');
     const recs = filteredOeeRecords.length ? filteredOeeRecords : localData.oee_records;
@@ -2159,12 +2158,13 @@
     }
     
     tbody.innerHTML = recs.slice(0, 20).map(r => {
+      const target = parseFloat(r.target_output) || 0;
       const good = parseFloat(r.good_output) || 0;
       const reject = parseFloat(r.reject) || 0;
-      const target = parseFloat(r.target_output) || 0;
-      const oee = parseFloat(r.oee_actual) || 0;
       
-      // PERBAIKAN: Tampilkan produk tanpa memotong teks
+      // Hitung PE (Performance Efficiency) = (Good / Target) * 100%
+      const pe = target > 0 ? ((good / target) * 100).toFixed(1) : '0.0';
+      
       const productDisplay = r.product || '-';
       
       return `
@@ -2172,11 +2172,11 @@
           <td>${r.date || '-'}</td>
           <td>${r.shift || '-'}</td>
           <td>${r.packers || '-'}</td>
-          <td>${productDisplay}</td> <!-- Tidak dipotong lagi -->
+          <td>${productDisplay}</td>
+          <td class="text-right"><strong>${target.toLocaleString()}</strong></td>
           <td class="text-right"><strong>${good.toLocaleString()}</strong></td>
           <td class="text-right">${reject.toLocaleString()}</td>
-          <td class="text-right">${target.toLocaleString()}</td>
-          <td class="text-right"><strong>${oee.toFixed(1)}%</strong></td>
+          <td class="text-right"><strong>${pe}%</strong></td>
         </tr>
       `;
     }).join('');
