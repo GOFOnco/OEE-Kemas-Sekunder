@@ -668,7 +668,7 @@
       width: 100%;
       border-collapse: collapse;
       font-size: clamp(10px, 1.8vw, 12px);
-      min-width: 1200px;
+      min-width: 1000px;
     }
 
     thead {
@@ -1355,7 +1355,7 @@
         <div class="chart-wrapper"><canvas id="chart-oee-daily"></canvas></div>
       </div>
 
-      <!-- OEE HISTORY TABLE - MACHINE DIHAPUS -->
+      <!-- OEE HISTORY TABLE - OUTPUT & REJECT DIHAPUS -->
       <div class="form-section">
         <div class="section-title">📋 OEE HISTORY</div>
         <div class="table-wrapper">
@@ -1366,8 +1366,6 @@
                 <th>SHIFT</th>
                 <th>PIC</th>
                 <th>BATCH</th>
-                <th class="text-right">OUTPUT</th>
-                <th class="text-right">REJECT</th>
                 <th class="text-right">A%</th>
                 <th class="text-right">P%</th>
                 <th class="text-right">Q%</th>
@@ -2608,9 +2606,26 @@
     document.getElementById('score-total-output').textContent = Math.round(totalGood);
   }
 
+  // ==================== FUNGSI SELECT RECORD - BENER2 FILTER SEMUA DATA ====================
   function selectRecord(index) {
+    const selectedRecord = filteredOeeRecords[index];
+    if (!selectedRecord) return;
+    
     selectedRecordIndex = index;
     
+    // SET FILTER FORM sesuai record yang dipilih
+    document.getElementById('filter-date-start').value = selectedRecord.date;
+    document.getElementById('filter-date-end').value = selectedRecord.date;
+    document.getElementById('filter-shift').value = selectedRecord.shift;
+    
+    // Filter ulang data berdasarkan tanggal dan shift yang dipilih
+    filteredOeeRecords = localData.oee_records.filter(r => {
+      return r.date === selectedRecord.date && r.shift === selectedRecord.shift;
+    });
+    
+    // Render ulang semua komponen
+    updateDashboardData();
+    renderCharts();
     renderOEEHistory();
     renderOEEHistoryOral();
     renderOEEHistorySteril();
@@ -2618,6 +2633,7 @@
     renderLSMDetailTable();
     renderLSNMDetailTable();
     
+    // Scroll ke detail tables
     setTimeout(() => {
       const lsmSection = document.querySelector('#table-lsm-detail');
       if (lsmSection) {
@@ -2625,25 +2641,20 @@
       }
     }, 100);
     
-    const selectedRecord = filteredOeeRecords[index];
-    if (selectedRecord) {
-      showToast(`MENAMPILKAN DATA: ${selectedRecord.date} - ${selectedRecord.product}`, 'success');
-    }
+    showToast(`MENAMPILKAN DATA SHIFT: ${selectedRecord.date} - ${selectedRecord.shift}`, 'success');
   }
 
-  // ==================== RENDER OEE HISTORY ====================
+  // ==================== RENDER OEE HISTORY - OUTPUT & REJECT DIHAPUS ====================
   function renderOEEHistory() {
     const tbody = document.getElementById('table-oee-history');
     const recs = filteredOeeRecords.length ? filteredOeeRecords : localData.oee_records;
     
     if (!recs || recs.length === 0) {
-      tbody.innerHTML = '<tr><td colspan="11" class="text-center">BELUM ADA DATA</td></tr>';
+      tbody.innerHTML = '<tr><td colspan="9" class="text-center">BELUM ADA DATA</td></tr>';
       return;
     }
     
     tbody.innerHTML = recs.slice(0, 20).map((r, index) => {
-      const output = Math.round(parseFloat(r.good_output) || 0);
-      const reject = Math.round(parseFloat(r.reject) || 0);
       const avail = parseFloat(r.availability_actual) || 0;
       const perf = parseFloat(r.performance) || 0;
       const qual = parseFloat(r.quality_rate) || 0;
@@ -2668,8 +2679,6 @@
           <td>${r.shift || '-'}</td>
           <td>${packerDisplay}</td>
           <td>${batchDisplay}</td>
-          <td class="text-right"><strong>${output}</strong></td>
-          <td class="text-right">${reject}</td>
           <td class="text-right">${avail.toFixed(1)}%</td>
           <td class="text-right">${perf.toFixed(1)}%</td>
           <td class="text-right">${qual.toFixed(1)}%</td>
@@ -3220,7 +3229,10 @@
             align: 'top',
             offset: 10,
             font: { weight: 'bold', size: 11 },
-            formatter: (value) => value ? value.toFixed(1) + '%' : '0%'
+            formatter: (value) => {
+              // Hanya tampilkan jika value > 0
+              return value && value > 0 ? value.toFixed(1) + '%' : '';
+            }
           }
         },
         scales: {
