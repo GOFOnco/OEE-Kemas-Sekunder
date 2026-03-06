@@ -23,6 +23,8 @@
       --danger: #ef4444;
       --warning: #f59e0b;
       --gray: #9ca3af;
+      --oral: #10b981; /* Hijau untuk Oral */
+      --steril: #3b82f6; /* Biru untuk Steril */
       --dark: #1f1729;
       --light: #fef3f8;
       --text-dark: #4a3f47;
@@ -227,6 +229,45 @@
       flex-shrink: 0;
     }
 
+    /* Title khusus untuk Oral dan Steril */
+    .section-title-oral {
+      font-size: clamp(12px, 2.5vw, 16px);
+      font-weight: 700;
+      color: var(--oral);
+      margin: 0 0 clamp(12px, 2vw, 20px);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .section-title-oral::before {
+      content: '';
+      width: 4px;
+      height: clamp(14px, 3vw, 20px);
+      background: var(--oral);
+      border-radius: 2px;
+      flex-shrink: 0;
+    }
+
+    .section-title-steril {
+      font-size: clamp(12px, 2.5vw, 16px);
+      font-weight: 700;
+      color: var(--steril);
+      margin: 0 0 clamp(12px, 2vw, 20px);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .section-title-steril::before {
+      content: '';
+      width: 4px;
+      height: clamp(14px, 3vw, 20px);
+      background: var(--steril);
+      border-radius: 2px;
+      flex-shrink: 0;
+    }
+
     /* ==================== FORM GRID ==================== */
     .form-row {
       display: grid;
@@ -393,23 +434,23 @@
       word-break: break-word;
     }
 
-    /* ==================== PRODUCTION SECTION - DENGAN PACKER INTI & CUSTOM ==================== */
+    /* ==================== PRODUCTION SECTION ==================== */
     .production-container {
       display: flex;
       flex-direction: column;
       gap: 20px;
     }
 
-    /* PRODUK ROW */
     .produk-row {
       display: grid;
-      grid-template-columns: 1fr 1fr;
+      grid-template-columns: 2fr 1fr 1fr;
       gap: 16px;
       padding: 16px;
       background: #fdf2f8;
       border-radius: 12px;
       border: 2px solid var(--primary);
       position: relative;
+      align-items: center;
     }
 
     .remove-produk-btn {
@@ -496,7 +537,7 @@
       flex-shrink: 0;
     }
 
-    /* PACKER CUSTOM ROW (DALAM SECTION DATA PRODUKSI) */
+    /* PACKER CUSTOM ROW */
     .packer-custom-section {
       background: #e0f2fe;
       border-radius: 12px;
@@ -638,7 +679,7 @@
       width: 100%;
       border-collapse: collapse;
       font-size: clamp(10px, 1.8vw, 12px);
-      min-width: 900px;
+      min-width: 800px;
     }
 
     thead {
@@ -651,6 +692,16 @@
       font-weight: 600;
       text-align: left;
       white-space: nowrap;
+    }
+
+    /* Table khusus Oral */
+    .oral-table thead {
+      background: linear-gradient(135deg, var(--oral), #059669);
+    }
+
+    /* Table khusus Steril */
+    .steril-table thead {
+      background: linear-gradient(135deg, var(--steril), #1d4ed8);
     }
 
     tbody td {
@@ -685,15 +736,6 @@
       color: #ef4444 !important;
       font-weight: 800 !important;
       text-shadow: 0 0 8px rgba(239, 68, 68, 0.3);
-    }
-
-    /* Kolom PRODUK - khusus agar tidak terpotong */
-    td:nth-child(4) {
-      max-width: 250px;
-      min-width: 180px;
-      word-break: break-word;
-      white-space: normal;
-      line-height: 1.4;
     }
 
     .text-right {
@@ -846,13 +888,13 @@
       .lsm-row {
         grid-template-columns: 2fr 1fr 1fr 1fr 0.8fr;
       }
-    }
-
-    @media (max-width: 768px) {
+      
       .produk-row {
         grid-template-columns: 1fr;
       }
-      
+    }
+
+    @media (max-width: 768px) {
       .perbantuan-row {
         grid-template-columns: 1fr 1fr 1fr 0.5fr;
       }
@@ -917,11 +959,6 @@
       
       .tabs-container {
         top: clamp(90px, 15vw, 110px);
-      }
-      
-      td:nth-child(4) {
-        max-width: 150px;
-        min-width: 120px;
       }
     }
 
@@ -988,6 +1025,14 @@
 
     body.dark-mode thead {
       background: rgba(60, 40, 60, 0.8);
+    }
+
+    body.dark-mode .oral-table thead {
+      background: rgba(16, 185, 129, 0.3);
+    }
+
+    body.dark-mode .steril-table thead {
+      background: rgba(59, 130, 246, 0.3);
     }
 
     body.dark-mode thead th {
@@ -1145,24 +1190,46 @@
         <div class="chart-wrapper"><canvas id="chart-oee-daily"></canvas></div>
       </div>
 
-      <!-- OEE HISTORY TABLE -->
+      <!-- RIWAYAT ORAL -->
       <div class="form-section">
-        <div class="section-title">📋 RIWAYAT OEE</div>
+        <div class="section-title-oral">💊 RIWAYAT ORAL</div>
         <div class="table-wrapper">
-          <table>
+          <table class="oral-table">
             <thead>
               <tr>
                 <th>TANGGAL</th>
                 <th>SHIFT</th>
                 <th>PACKER</th>
-                <th>PRODUK</th>
+                <th>BATCH</th>
                 <th class="text-right">TARGET</th>
                 <th class="text-right">GOOD</th>
                 <th class="text-right">REJECT</th>
                 <th class="text-right">PE</th>
               </tr>
             </thead>
-            <tbody id="table-oee-history"></tbody>
+            <tbody id="table-oee-oral"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- RIWAYAT STERIL -->
+      <div class="form-section">
+        <div class="section-title-steril">🧪 RIWAYAT STERIL</div>
+        <div class="table-wrapper">
+          <table class="steril-table">
+            <thead>
+              <tr>
+                <th>TANGGAL</th>
+                <th>SHIFT</th>
+                <th>PACKER</th>
+                <th>BATCH</th>
+                <th class="text-right">TARGET</th>
+                <th class="text-right">GOOD</th>
+                <th class="text-right">REJECT</th>
+                <th class="text-right">PE</th>
+              </tr>
+            </thead>
+            <tbody id="table-oee-steril"></tbody>
           </table>
         </div>
       </div>
@@ -1303,9 +1370,9 @@
           </div>
         </div>
 
-        <!-- PERBANTUAN NON KEMAS -->
+        <!-- PACKER PERBANTUAN -->
         <div class="form-section">
-          <div class="section-title">PERBANTUAN NON KEMAS</div>
+          <div class="section-title">PACKER PERBANTUAN</div>
           <button type="button" class="btn btn-warning w-100" onclick="addPerbantuan()">+ TAMBAH PERBANTUAN</button>
           <div id="perbantuan-list" class="mt-16"></div>
         </div>
@@ -1457,7 +1524,7 @@
     audit_trail: []
   };
 
-  // STATE FORM - STRUKTUR BARU
+  // STATE FORM
   let oeeFormState = {
     shiftMinutes: 0,
     produkRows: [ // Array untuk multiple produk
@@ -1642,23 +1709,41 @@
     const productOptions = '<option value="">-- PILIH PRODUK --</option>' + 
       localData.produk.map(p => `<option value="${p.id}">${p.nama} (TARGET: ${p.target} DUS/MENIT)</option>`).join('');
     
-    container.innerHTML = oeeFormState.produkRows.map((prod, index) => `
-      <div class="produk-row">
-        ${oeeFormState.produkRows.length > 1 ? `
-          <button type="button" class="remove-produk-btn" onclick="removeProdukRow('${prod.id}')">×</button>
-        ` : ''}
-        <div class="form-group">
-          <label>PRODUK ${index + 1}</label>
-          <select class="input-field" onchange="updateProdukRow('${prod.id}', 'productId', this.value)">
-            ${productOptions.replace(`value="${prod.productId}"`, `value="${prod.productId}" selected`)}
-          </select>
+    container.innerHTML = oeeFormState.produkRows.map((prod, index) => {
+      // Tentukan warna border berdasarkan jenis produk (oral hijau, steril biru)
+      let borderColor = 'var(--primary)';
+      if (prod.productId) {
+        const product = localData.produk.find(p => p.id === prod.productId);
+        if (product) {
+          // Asumsikan ada field jenis produk di master (oral/steril)
+          // Untuk sementara kita tentukan berdasarkan ID atau nama
+          if (product.nama?.toLowerCase().includes('oral')) {
+            borderColor = 'var(--oral)';
+          } else if (product.nama?.toLowerCase().includes('steril')) {
+            borderColor = 'var(--steril)';
+          }
+        }
+      }
+      
+      return `
+        <div class="produk-row" style="border-color: ${borderColor};">
+          ${oeeFormState.produkRows.length > 1 ? `
+            <button type="button" class="remove-produk-btn" onclick="removeProdukRow('${prod.id}')">×</button>
+          ` : ''}
+          <div class="form-group">
+            <label>PRODUK ${index + 1}</label>
+            <select class="input-field" onchange="updateProdukRow('${prod.id}', 'productId', this.value)">
+              ${productOptions.replace(`value="${prod.productId}"`, `value="${prod.productId}" selected`)}
+            </select>
+          </div>
+          <div class="form-group">
+            <label>NOMOR BATCH ${index + 1}</label>
+            <input type="text" class="input-field" value="${prod.batchNumber}" placeholder="CONTOH: BATCH001" onchange="updateProdukRow('${prod.id}', 'batchNumber', this.value)">
+          </div>
+          
         </div>
-        <div class="form-group">
-          <label>NOMOR BATCH ${index + 1}</label>
-          <input type="text" class="input-field" value="${prod.batchNumber}" placeholder="CONTOH: BATCH001" onchange="updateProdukRow('${prod.id}', 'batchNumber', this.value)">
-        </div>
-      </div>
-    `).join('');
+      `;
+    }).join('');
   }
 
   // ==================== PACKER INTI (CHECKBOX) ====================
@@ -1698,7 +1783,7 @@
     `;
   }
 
-  // ==================== PACKER CUSTOM (DALAM SECTION DATA PRODUKSI) ====================
+  // ==================== PACKER CUSTOM ====================
   function addPackerCustom() {
     oeeFormState.packerCustom.push({
       id: 'packer_custom_' + Date.now() + '_' + Math.random(),
@@ -2213,10 +2298,10 @@
       return;
     }
 
-    // Format produk untuk disimpan
-    const produkList = validProductions.map(p => {
+    // Format batch list untuk disimpan
+    const batchList = validProductions.map(p => {
       const product = localData.produk.find(pr => pr.id === p.productId);
-      return `${product?.nama || '-'} (${p.batchNumber})`;
+      return `${p.batchNumber} (${product?.nama || '-'})`;
     }).join(' | ');
 
     // Format packer inti
@@ -2255,8 +2340,8 @@
     const record = {
       date,
       shift,
-      product: produkList,
-      packers: packerDisplay || JSON.stringify(packerCustomData), // Simpan packer custom sebagai JSON jika ada
+      product: batchList, // Sekarang berisi batch + produk
+      packers: packerDisplay || JSON.stringify(packerCustomData),
       perbantuan: perbantuanData.length ? JSON.stringify(perbantuanData) : null,
       good_output: oeeFormState.goodOutput,
       reject: oeeFormState.reject,
@@ -2278,7 +2363,7 @@
       if (error) throw error;
       
       localData.oee_records.unshift(record);
-      await addAuditLog('INPUT OEE', `${produkList} | GOOD: ${oeeFormState.goodOutput} | REJECT: ${oeeFormState.reject}`);
+      await addAuditLog('INPUT OEE', `${batchList} | GOOD: ${oeeFormState.goodOutput} | REJECT: ${oeeFormState.reject}`);
       showToast('DATA BERHASIL DISIMPAN', 'success');
       
       resetOEEForm();
@@ -2382,7 +2467,8 @@
   function updateDashboard() {
     updateDashboardData();
     renderCharts();
-    renderOEEHistory();
+    renderOEEHistoryOral();
+    renderOEEHistorySteril();
     renderLSMDetailTable();
     renderLSNMDetailTable();
     renderMSDetailTable();
@@ -2407,9 +2493,11 @@
     document.getElementById('score-total-output').textContent = Math.round(totalGood);
   }
 
-  function selectRecord(index) {
+  function selectRecord(index, jenis) {
     selectedRecordIndex = index;
-    renderOEEHistory();
+    // Bisa ditambahkan logika untuk highlight di kedua tabel
+    renderOEEHistoryOral();
+    renderOEEHistorySteril();
     renderLSMDetailTable();
     renderLSNMDetailTable();
     renderMSDetailTable();
@@ -2424,117 +2512,27 @@
     showToast(`MENAMPILKAN DATA: ${filteredOeeRecords[index]?.date || ''} - ${filteredOeeRecords[index]?.product || ''}`, 'success');
   }
 
-  // ==================== CHARTS ====================
-  function createLineChart(canvasId, labels, data, label, color) {
-    const ctx = document.getElementById(canvasId)?.getContext('2d');
-    if (!ctx) return;
-    
-    if (dashboardCharts[canvasId]) dashboardCharts[canvasId].destroy();
-    
-    dashboardCharts[canvasId] = new Chart(ctx, {
-      type: 'line',
-      data: {
-        labels: labels,
-        datasets: [{
-          label: label,
-          data: data,
-          borderColor: color,
-          backgroundColor: color + '20',
-          borderWidth: 3,
-          tension: 0.4,
-          fill: true,
-          pointBackgroundColor: color,
-          pointRadius: 4
-        }]
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: { legend: { display: false } },
-        scales: {
-          y: { beginAtZero: true, max: 100, ticks: { callback: v => v + '%' } }
-        }
-      }
-    });
-  }
-
-  function renderOEEMonthlyChart() {
-    const monthly = {};
-    const year = new Date().getFullYear();
-    
-    for (let m = 1; m <= 12; m++) {
-      monthly[`${year}-${String(m).padStart(2, '0')}`] = [];
-    }
-    
+  // ==================== RENDER OEE HISTORY ORAL ====================
+  function renderOEEHistoryOral() {
+    const tbody = document.getElementById('table-oee-oral');
     const recs = filteredOeeRecords.length ? filteredOeeRecords : localData.oee_records;
     
-    recs.forEach(r => {
-      const monthKey = r.date?.substring(0, 7);
-      if (monthly[monthKey]) {
-        const val = parseFloat(r.oee_actual) || 0;
-        if (val > 0) monthly[monthKey].push(val);
-      }
+    // Filter hanya record yang mengandung produk ORAL
+    const oralRecs = recs.filter(r => {
+      if (!r.product) return false;
+      // Cek apakah ada produk oral dalam batch list
+      return r.product.toLowerCase().includes('oral');
     });
     
-    const labels = Object.keys(monthly).map(ym => {
-      const [y, m] = ym.split('-');
-      return new Date(y, m - 1).toLocaleDateString('id-ID', { month: 'short' });
-    });
-    
-    const data = Object.values(monthly).map(arr => 
-      arr.length ? arr.reduce((a, b) => a + b, 0) / arr.length : 0
-    );
-    
-    createLineChart('chart-oee-monthly', labels, data, 'OEE BULANAN', '#ec4899');
-  }
-
-  function renderOEEDailyChart() {
-    const daily = {};
-    const today = new Date();
-    const year = today.getFullYear();
-    const month = today.getMonth() + 1;
-    const lastDay = new Date(year, month, 0).getDate();
-    
-    for (let d = 1; d <= lastDay; d++) {
-      daily[`${year}-${String(month).padStart(2, '0')}-${String(d).padStart(2, '0')}`] = [];
-    }
-    
-    const recs = filteredOeeRecords.length ? filteredOeeRecords : localData.oee_records;
-    
-    recs.forEach(r => {
-      if (daily[r.date]) {
-        const val = parseFloat(r.oee_actual) || 0;
-        if (val > 0) daily[r.date].push(val);
-      }
-    });
-    
-    const labels = Object.keys(daily).map(d => {
-      return new Date(d + 'T00:00').toLocaleDateString('id-ID', { day: '2-digit', month: 'short' });
-    });
-    
-    const data = Object.values(daily).map(arr => 
-      arr.length ? arr.reduce((a, b) => a + b, 0) / arr.length : 0
-    );
-    
-    createLineChart('chart-oee-daily', labels, data, 'OEE HARIAN', '#a855f7');
-  }
-
-  function renderCharts() {
-    renderOEEMonthlyChart();
-    renderOEEDailyChart();
-  }
-
-  // ==================== RENDER OEE HISTORY ====================
-  function renderOEEHistory() {
-    const tbody = document.getElementById('table-oee-history');
-    const recs = filteredOeeRecords.length ? filteredOeeRecords : localData.oee_records;
-    
-    if (!recs || recs.length === 0) {
-      tbody.innerHTML = '<tr><td colspan="8" class="text-center">BELUM ADA DATA</td></tr>';
+    if (!oralRecs || oralRecs.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="8" class="text-center">BELUM ADA DATA ORAL</td></tr>';
       return;
     }
     
-    tbody.innerHTML = recs.slice(0, 20).map((r, index) => {
+    tbody.innerHTML = oralRecs.slice(0, 20).map((r, idx) => {
+      // Cari index asli di filteredOeeRecords
+      const originalIndex = filteredOeeRecords.findIndex(rec => rec === r);
+      
       const target = Math.round(parseFloat(r.target_output) || 0);
       const good = Math.round(parseFloat(r.good_output) || 0);
       const reject = Math.round(parseFloat(r.reject) || 0);
@@ -2542,27 +2540,85 @@
       const pe = target > 0 ? ((good / target) * 100).toFixed(1) : '0.0';
       const peValue = parseFloat(pe);
       
-      // Parse packers jika disimpan sebagai JSON
+      // Parse packers
       let packerDisplay = r.packers || '-';
       try {
         const packers = JSON.parse(r.packers);
         if (Array.isArray(packers)) {
           packerDisplay = packers.map(p => p.inisial).filter(Boolean).join(', ');
         }
-      } catch (e) {
-        // Jika bukan JSON, tampilkan apa adanya
-      }
+      } catch (e) {}
       
-      const productDisplay = r.product || '-';
+      // Ambil batch number dari product field
+      const batchDisplay = r.product || '-';
+      
       const peClass = peValue < 100 ? 'pe-low' : '';
-      const rowClass = index === selectedRecordIndex ? 'selected-row' : '';
+      const rowClass = originalIndex === selectedRecordIndex ? 'selected-row' : '';
       
       return `
-        <tr class="${rowClass}" onclick="selectRecord(${index})">
+        <tr class="${rowClass}" onclick="selectRecord(${originalIndex}, 'oral')">
           <td>${r.date || '-'}</td>
           <td>${r.shift || '-'}</td>
           <td>${packerDisplay}</td>
-          <td>${productDisplay}</td>
+          <td>${batchDisplay}</td>
+          <td class="text-right"><strong>${target}</strong></td>
+          <td class="text-right"><strong>${good}</strong></td>
+          <td class="text-right">${reject}</td>
+          <td class="text-right ${peClass}"><strong>${pe}%</strong></td>
+        </tr>
+      `;
+    }).join('');
+  }
+
+  // ==================== RENDER OEE HISTORY STERIL ====================
+  function renderOEEHistorySteril() {
+    const tbody = document.getElementById('table-oee-steril');
+    const recs = filteredOeeRecords.length ? filteredOeeRecords : localData.oee_records;
+    
+    // Filter hanya record yang mengandung produk STERIL
+    const sterilRecs = recs.filter(r => {
+      if (!r.product) return false;
+      // Cek apakah ada produk steril dalam batch list
+      return r.product.toLowerCase().includes('steril');
+    });
+    
+    if (!sterilRecs || sterilRecs.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="8" class="text-center">BELUM ADA DATA STERIL</td></tr>';
+      return;
+    }
+    
+    tbody.innerHTML = sterilRecs.slice(0, 20).map((r, idx) => {
+      // Cari index asli di filteredOeeRecords
+      const originalIndex = filteredOeeRecords.findIndex(rec => rec === r);
+      
+      const target = Math.round(parseFloat(r.target_output) || 0);
+      const good = Math.round(parseFloat(r.good_output) || 0);
+      const reject = Math.round(parseFloat(r.reject) || 0);
+      
+      const pe = target > 0 ? ((good / target) * 100).toFixed(1) : '0.0';
+      const peValue = parseFloat(pe);
+      
+      // Parse packers
+      let packerDisplay = r.packers || '-';
+      try {
+        const packers = JSON.parse(r.packers);
+        if (Array.isArray(packers)) {
+          packerDisplay = packers.map(p => p.inisial).filter(Boolean).join(', ');
+        }
+      } catch (e) {}
+      
+      // Ambil batch number dari product field
+      const batchDisplay = r.product || '-';
+      
+      const peClass = peValue < 100 ? 'pe-low' : '';
+      const rowClass = originalIndex === selectedRecordIndex ? 'selected-row' : '';
+      
+      return `
+        <tr class="${rowClass}" onclick="selectRecord(${originalIndex}, 'steril')">
+          <td>${r.date || '-'}</td>
+          <td>${r.shift || '-'}</td>
+          <td>${packerDisplay}</td>
+          <td>${batchDisplay}</td>
           <td class="text-right"><strong>${target}</strong></td>
           <td class="text-right"><strong>${good}</strong></td>
           <td class="text-right">${reject}</td>
@@ -2603,9 +2659,7 @@
               });
             });
           }
-        } catch (e) {
-          // Handle format lama jika ada
-        }
+        } catch (e) {}
       }
     });
     
@@ -2657,9 +2711,7 @@
               });
             });
           }
-        } catch (e) {
-          // Handle format lama jika ada
-        }
+        } catch (e) {}
       }
     });
     
@@ -2709,9 +2761,7 @@
               });
             });
           }
-        } catch (e) {
-          // Handle format lama jika ada
-        }
+        } catch (e) {}
       }
     });
     
@@ -2960,6 +3010,106 @@
         <td>${a.detail || '-'}</td>
       </tr>
     `).join('');
+  }
+
+  // ==================== CHARTS ====================
+  function createLineChart(canvasId, labels, data, label, color) {
+    const ctx = document.getElementById(canvasId)?.getContext('2d');
+    if (!ctx) return;
+    
+    if (dashboardCharts[canvasId]) dashboardCharts[canvasId].destroy();
+    
+    dashboardCharts[canvasId] = new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: labels,
+        datasets: [{
+          label: label,
+          data: data,
+          borderColor: color,
+          backgroundColor: color + '20',
+          borderWidth: 3,
+          tension: 0.4,
+          fill: true,
+          pointBackgroundColor: color,
+          pointRadius: 4
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: { legend: { display: false } },
+        scales: {
+          y: { beginAtZero: true, max: 100, ticks: { callback: v => v + '%' } }
+        }
+      }
+    });
+  }
+
+  function renderOEEMonthlyChart() {
+    const monthly = {};
+    const year = new Date().getFullYear();
+    
+    for (let m = 1; m <= 12; m++) {
+      monthly[`${year}-${String(m).padStart(2, '0')}`] = [];
+    }
+    
+    const recs = filteredOeeRecords.length ? filteredOeeRecords : localData.oee_records;
+    
+    recs.forEach(r => {
+      const monthKey = r.date?.substring(0, 7);
+      if (monthly[monthKey]) {
+        const val = parseFloat(r.oee_actual) || 0;
+        if (val > 0) monthly[monthKey].push(val);
+      }
+    });
+    
+    const labels = Object.keys(monthly).map(ym => {
+      const [y, m] = ym.split('-');
+      return new Date(y, m - 1).toLocaleDateString('id-ID', { month: 'short' });
+    });
+    
+    const data = Object.values(monthly).map(arr => 
+      arr.length ? arr.reduce((a, b) => a + b, 0) / arr.length : 0
+    );
+    
+    createLineChart('chart-oee-monthly', labels, data, 'OEE BULANAN', '#ec4899');
+  }
+
+  function renderOEEDailyChart() {
+    const daily = {};
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = today.getMonth() + 1;
+    const lastDay = new Date(year, month, 0).getDate();
+    
+    for (let d = 1; d <= lastDay; d++) {
+      daily[`${year}-${String(month).padStart(2, '0')}-${String(d).padStart(2, '0')}`] = [];
+    }
+    
+    const recs = filteredOeeRecords.length ? filteredOeeRecords : localData.oee_records;
+    
+    recs.forEach(r => {
+      if (daily[r.date]) {
+        const val = parseFloat(r.oee_actual) || 0;
+        if (val > 0) daily[r.date].push(val);
+      }
+    });
+    
+    const labels = Object.keys(daily).map(d => {
+      return new Date(d + 'T00:00').toLocaleDateString('id-ID', { day: '2-digit', month: 'short' });
+    });
+    
+    const data = Object.values(daily).map(arr => 
+      arr.length ? arr.reduce((a, b) => a + b, 0) / arr.length : 0
+    );
+    
+    createLineChart('chart-oee-daily', labels, data, 'OEE HARIAN', '#a855f7');
+  }
+
+  function renderCharts() {
+    renderOEEMonthlyChart();
+    renderOEEDailyChart();
   }
 
   // ==================== TOAST ====================
