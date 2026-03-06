@@ -6,6 +6,7 @@
   <title>OEE KEMAS SEKUNDER SYSTEM</title>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
   <style>
     /* ==================== RESET & VARIABLES ==================== */
     * {
@@ -23,8 +24,8 @@
       --danger: #ef4444;
       --warning: #f59e0b;
       --gray: #9ca3af;
-      --oral: #10b981; /* Hijau untuk Oral */
-      --steril: #3b82f6; /* Biru untuk Steril */
+      --oral: #10b981;
+      --steril: #3b82f6;
       --dark: #1f1729;
       --light: #fef3f8;
       --text-dark: #4a3f47;
@@ -653,18 +654,6 @@
       border: 1px solid rgba(16, 185, 129, 0.2);
     }
 
-    .ms-row {
-      display: grid;
-      grid-template-columns: 2fr 1fr 0.8fr;
-      gap: clamp(6px, 1.2vw, 12px);
-      padding: clamp(10px, 2vw, 16px);
-      background: #fef3c7;
-      border-radius: var(--border-radius-sm);
-      align-items: center;
-      margin-bottom: 8px;
-      border: 1px solid rgba(217, 119, 6, 0.2);
-    }
-
     /* ==================== TABLES ==================== */
     .table-wrapper {
       overflow-x: auto;
@@ -679,7 +668,7 @@
       width: 100%;
       border-collapse: collapse;
       font-size: clamp(10px, 1.8vw, 12px);
-      min-width: 800px;
+      min-width: 1200px;
     }
 
     thead {
@@ -731,15 +720,152 @@
       box-shadow: 0 4px 12px rgba(236, 72, 153, 0.3);
     }
 
-    /* Style untuk PE merah (tanpa blinking) */
+    /* Style untuk PE merah */
     .pe-low {
       color: #ef4444 !important;
       font-weight: 800 !important;
-      text-shadow: 0 0 8px rgba(239, 68, 68, 0.3);
     }
 
     .text-right {
       text-align: right;
+    }
+
+    /* ==================== CHART CONTAINER ==================== */
+    .chart-container {
+      background: white;
+      border-radius: var(--border-radius);
+      padding: clamp(12px, 3vw, 20px);
+      margin-bottom: clamp(12px, 2vw, 20px);
+      box-shadow: var(--box-shadow);
+      border: 1px solid rgba(236, 72, 153, 0.1);
+      width: 100%;
+    }
+
+    .chart-title {
+      font-size: clamp(12px, 2.5vw, 16px);
+      font-weight: 700;
+      color: var(--primary);
+      margin-bottom: clamp(12px, 2vw, 20px);
+    }
+
+    .chart-wrapper {
+      position: relative;
+      height: 350px;
+      width: 100%;
+    }
+
+    /* ==================== HORIZONTAL BAR CHART ==================== */
+    .horizontal-bar-container {
+      background: white;
+      border-radius: var(--border-radius);
+      padding: clamp(16px, 3vw, 24px);
+      margin-bottom: clamp(16px, 2vw, 24px);
+      box-shadow: var(--box-shadow);
+      border: 1px solid rgba(236, 72, 153, 0.15);
+    }
+
+    .bar-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      padding-bottom: 12px;
+      border-bottom: 2px solid rgba(236, 72, 153, 0.2);
+    }
+
+    .bar-title {
+      font-size: clamp(14px, 2vw, 18px);
+      font-weight: 700;
+      background: linear-gradient(135deg, var(--primary), #a855f7);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .bar-total {
+      background: linear-gradient(135deg, var(--primary), #a855f7);
+      color: white;
+      padding: 8px 16px;
+      border-radius: 30px;
+      font-size: 13px;
+      font-weight: 600;
+      box-shadow: 0 4px 10px rgba(236, 72, 153, 0.3);
+    }
+
+    .bar-list {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .bar-item {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      padding: 5px 0;
+      border-bottom: 1px dashed rgba(0,0,0,0.05);
+    }
+
+    .bar-label {
+      width: 200px;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text-dark);
+      word-break: break-word;
+      text-transform: uppercase;
+    }
+
+    .bar-wrapper {
+      flex: 1;
+      height: 36px;
+      background: #f0f0f0;
+      border-radius: 18px;
+      overflow: hidden;
+      position: relative;
+      box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    .bar-fill-lsm {
+      height: 100%;
+      background: linear-gradient(90deg, #a855f7, #ec4899);
+      border-radius: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      padding-right: 15px;
+      color: white;
+      font-size: 12px;
+      font-weight: 700;
+      text-shadow: 0 1px 2px rgba(0,0,0,0.2);
+      transition: width 0.4s ease;
+      box-shadow: 0 0 10px rgba(236, 72, 153, 0.5);
+    }
+
+    .bar-fill-lsnm {
+      height: 100%;
+      background: linear-gradient(90deg, #3b82f6, #10b981);
+      border-radius: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      padding-right: 15px;
+      color: white;
+      font-size: 12px;
+      font-weight: 700;
+      text-shadow: 0 1px 2px rgba(0,0,0,0.2);
+      transition: width 0.4s ease;
+      box-shadow: 0 0 10px rgba(59, 130, 246, 0.5);
+    }
+
+    .bar-value {
+      min-width: 90px;
+      text-align: right;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--primary-dark);
+      background: rgba(236, 72, 153, 0.1);
+      padding: 5px 10px;
+      border-radius: 20px;
     }
 
     /* ==================== MASTER DATA GRID ==================== */
@@ -907,12 +1033,22 @@
         grid-template-columns: 1fr;
       }
       
-      .lsm-row, .lsnm-row, .ms-row {
+      .lsm-row, .lsnm-row {
         grid-template-columns: 1fr;
       }
       
       .output-row {
         grid-template-columns: 1fr;
+      }
+      
+      .bar-label {
+        width: 120px;
+        font-size: 10px;
+      }
+      
+      .bar-value {
+        min-width: 70px;
+        font-size: 11px;
       }
     }
 
@@ -931,6 +1067,25 @@
       
       .score-cards {
         grid-template-columns: repeat(2, 1fr);
+      }
+      
+      .bar-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 5px;
+      }
+      
+      .bar-label {
+        width: 100%;
+        margin-bottom: 5px;
+      }
+      
+      .bar-wrapper {
+        width: 100%;
+      }
+      
+      .bar-value {
+        align-self: flex-end;
       }
     }
 
@@ -971,6 +1126,7 @@
     body.dark-mode .form-section,
     body.dark-mode .score-card,
     body.dark-mode .chart-container,
+    body.dark-mode .horizontal-bar-container,
     body.dark-mode .master-card,
     body.dark-mode #modal,
     body.dark-mode #login-modal {
@@ -980,7 +1136,8 @@
     }
 
     body.dark-mode .form-group label,
-    body.dark-mode .score-label {
+    body.dark-mode .score-label,
+    body.dark-mode .bar-label {
       color: #b9a2b3;
     }
 
@@ -1054,7 +1211,15 @@
 
     body.dark-mode .pe-low {
       color: #ff6b6b !important;
-      text-shadow: 0 0 8px rgba(255, 107, 107, 0.3);
+    }
+
+    body.dark-mode .bar-wrapper {
+      background: #3a2a3a;
+    }
+
+    body.dark-mode .bar-value {
+      color: #f472b6;
+      background: rgba(236, 72, 153, 0.2);
     }
 
     body.dark-mode .tab-btn {
@@ -1190,6 +1355,31 @@
         <div class="chart-wrapper"><canvas id="chart-oee-daily"></canvas></div>
       </div>
 
+      <!-- OEE HISTORY TABLE - MACHINE DIHAPUS -->
+      <div class="form-section">
+        <div class="section-title">📋 OEE HISTORY</div>
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>DATE</th>
+                <th>SHIFT</th>
+                <th>PIC</th>
+                <th>BATCH</th>
+                <th class="text-right">OUTPUT</th>
+                <th class="text-right">REJECT</th>
+                <th class="text-right">A%</th>
+                <th class="text-right">P%</th>
+                <th class="text-right">Q%</th>
+                <th class="text-right">OEE ACTUAL</th>
+                <th>NOTES</th>
+              </tr>
+            </thead>
+            <tbody id="table-oee-history"></tbody>
+          </table>
+        </div>
+      </div>
+
       <!-- RIWAYAT ORAL -->
       <div class="form-section">
         <div class="section-title-oral">💊 RIWAYAT ORAL</div>
@@ -1234,6 +1424,24 @@
         </div>
       </div>
 
+      <!-- HORIZONTAL BAR CHART - LINE STOP MESIN -->
+      <div class="horizontal-bar-container">
+        <div class="bar-header">
+          <div class="bar-title">⚡ LINE STOP MESIN</div>
+          <div class="bar-total" id="lsm-total">TOTAL: 0 MIN</div>
+        </div>
+        <div id="lsm-bar-list" class="bar-list"></div>
+      </div>
+
+      <!-- HORIZONTAL BAR CHART - LINE STOP NON MESIN -->
+      <div class="horizontal-bar-container">
+        <div class="bar-header">
+          <div class="bar-title">🔧 LINE STOP NON MESIN</div>
+          <div class="bar-total" id="lsnm-total">TOTAL: 0 MIN</div>
+        </div>
+        <div id="lsnm-bar-list" class="bar-list"></div>
+      </div>
+
       <!-- DETAIL LINE STOP MESIN -->
       <div class="form-section">
         <div class="section-title">🔧 DETAIL LINE STOP MESIN</div>
@@ -1271,25 +1479,6 @@
               </tr>
             </thead>
             <tbody id="table-lsnm-detail"></tbody>
-          </table>
-        </div>
-      </div>
-
-      <!-- DETAIL MINOR STOP -->
-      <div class="form-section">
-        <div class="section-title">⏸️ DETAIL MINOR STOP</div>
-        <div class="table-wrapper">
-          <table>
-            <thead>
-              <tr>
-                <th>TANGGAL</th>
-                <th>SHIFT</th>
-                <th>PACKER</th>
-                <th>MINOR STOP</th>
-                <th class="text-right">DURASI</th>
-              </tr>
-            </thead>
-            <tbody id="table-ms-detail"></tbody>
           </table>
         </div>
       </div>
@@ -1340,14 +1529,7 @@
           <div id="line-stop-non-mesin-list" class="mt-16"></div>
         </div>
 
-        <!-- MINOR STOP -->
-        <div class="form-section">
-          <div class="section-title">MINOR STOP</div>
-          <button type="button" class="btn btn-success w-100" onclick="addMinorStop()">+ TAMBAH MINOR STOP</button>
-          <div id="minor-stop-list" class="mt-16"></div>
-        </div>
-
-        <!-- DATA PRODUKSI - DENGAN PACKER INTI & CUSTOM -->
+        <!-- DATA PRODUKSI -->
         <div class="form-section">
           <div class="section-title">DATA PRODUKSI</div>
           <div class="production-container">
@@ -1361,7 +1543,7 @@
               <div id="packer-inti-checkbox"></div>
             </div>
             
-            <!-- PACKER CUSTOM (DALAM SECTION DATA PRODUKSI) -->
+            <!-- PACKER CUSTOM -->
             <div class="packer-custom-section">
               <div class="packer-custom-title">PACKER CUSTOM (TAMBAHAN)</div>
               <div id="packer-custom-list"></div>
@@ -1409,7 +1591,7 @@
 
         <!-- ACTION BUTTONS -->
         <div style="display: flex; gap: 12px; flex-wrap: wrap;">
-          <button type="submit" class="btn btn-primary" style="flex: 1;">💾 SIMPAN</button>
+          <button type="submit" class="btn btn-primary" style="flex: 1;" id="submit-btn">💾 SIMPAN</button>
           <button type="button" class="btn btn-secondary" style="flex: 1;" onclick="resetOEEForm()">🔄 RESET</button>
         </div>
       </form>
@@ -1441,11 +1623,6 @@
         <div class="section-title">🔧 MASTER LINE STOP NON-MESIN</div>
         <button class="btn btn-primary w-100" onclick="openAddLineStopNonMesinModal()">+ LS NON-MESIN</button>
         <div id="line-stop-non-mesin-master-list" class="master-data-grid"></div>
-      </div>
-      <div class="form-section">
-        <div class="section-title">⏸️ MASTER MINOR STOP</div>
-        <button class="btn btn-primary w-100" onclick="openAddMinorStopModal()">+ MINOR STOP</button>
-        <div id="minor-stop-master-list" class="master-data-grid"></div>
       </div>
     </div>
 
@@ -1511,6 +1688,7 @@
 
   const MASTER_PASSWORD = 'admin123';
   let isMasterDataUnlocked = false;
+  let isSubmitting = false;
 
   // LOCAL DATA
   let localData = {
@@ -1519,7 +1697,6 @@
     downtime: [],
     line_stop_mesin: [],
     line_stop_non_mesin: [],
-    minor_stop: [],
     oee_records: [],
     audit_trail: []
   };
@@ -1542,7 +1719,6 @@
     downtime: [],
     lineStopMesin: [],
     lineStopNonMesin: [],
-    minorStop: [],
     results: {},
     odtOverRecords: []
   };
@@ -1583,9 +1759,9 @@
     if (tabName === 'dashboard') {
       setTimeout(() => {
         renderCharts();
+        renderHorizontalBars();
         renderLSMDetailTable();
         renderLSNMDetailTable();
-        renderMSDetailTable();
       }, 100);
     }
     
@@ -1634,13 +1810,12 @@
   // ==================== LOAD SUPABASE ====================
   async function loadDataFromSupabase() {
     try {
-      const [produkRes, packerRes, downtimeRes, lsmRes, lsnmRes, msRes, oeeRes, auditRes] = await Promise.all([
+      const [produkRes, packerRes, downtimeRes, lsmRes, lsnmRes, oeeRes, auditRes] = await Promise.all([
         supabaseClient.from('produk').select('*'),
         supabaseClient.from('packer').select('*'),
         supabaseClient.from('downtime').select('*'),
         supabaseClient.from('line_stop_mesin').select('*'),
         supabaseClient.from('line_stop_non_mesin').select('*'),
-        supabaseClient.from('minor_stop').select('*'),
         supabaseClient.from('oee_records').select('*').order('created_at', { ascending: false }),
         supabaseClient.from('audit_trail').select('*').order('timestamp', { ascending: false })
       ]);
@@ -1650,7 +1825,6 @@
       localData.downtime = downtimeRes.data || [];
       localData.line_stop_mesin = lsmRes.data || [];
       localData.line_stop_non_mesin = lsnmRes.data || [];
-      localData.minor_stop = msRes.data || [];
       localData.oee_records = oeeRes.data || [];
       localData.audit_trail = auditRes.data || [];
 
@@ -1671,11 +1845,10 @@
     renderODTList();
     renderLineStopMesinList();
     renderLineStopNonMesinList();
-    renderMinorStopList();
     calculateOEE();
   }
 
-  // ==================== PRODUK ROWS - MULTIPLE PRODUK ====================
+  // ==================== PRODUK ROWS ====================
   function addProdukRow() {
     oeeFormState.produkRows.push({
       id: 'produk_' + Date.now() + '_' + Math.random(),
@@ -1710,23 +1883,8 @@
       localData.produk.map(p => `<option value="${p.id}">${p.nama} (TARGET: ${p.target} DUS/MENIT)</option>`).join('');
     
     container.innerHTML = oeeFormState.produkRows.map((prod, index) => {
-      // Tentukan warna border berdasarkan jenis produk (oral hijau, steril biru)
-      let borderColor = 'var(--primary)';
-      if (prod.productId) {
-        const product = localData.produk.find(p => p.id === prod.productId);
-        if (product) {
-          // Asumsikan ada field jenis produk di master (oral/steril)
-          // Untuk sementara kita tentukan berdasarkan ID atau nama
-          if (product.nama?.toLowerCase().includes('oral')) {
-            borderColor = 'var(--oral)';
-          } else if (product.nama?.toLowerCase().includes('steril')) {
-            borderColor = 'var(--steril)';
-          }
-        }
-      }
-      
       return `
-        <div class="produk-row" style="border-color: ${borderColor};">
+        <div class="produk-row">
           ${oeeFormState.produkRows.length > 1 ? `
             <button type="button" class="remove-produk-btn" onclick="removeProdukRow('${prod.id}')">×</button>
           ` : ''}
@@ -1740,13 +1898,12 @@
             <label>NOMOR BATCH ${index + 1}</label>
             <input type="text" class="input-field" value="${prod.batchNumber}" placeholder="CONTOH: BATCH001" onchange="updateProdukRow('${prod.id}', 'batchNumber', this.value)">
           </div>
-          
         </div>
       `;
     }).join('');
   }
 
-  // ==================== PACKER INTI (CHECKBOX) ====================
+  // ==================== PACKER INTI ====================
   function togglePackerInti(packerId) {
     const idx = oeeFormState.packerInti.indexOf(packerId);
     if (idx === -1) {
@@ -1923,7 +2080,6 @@
   function calculateTotalPackerMinutes() {
     let totalMinutes = 0;
     
-    // Hitung dari packer custom (dengan waktu)
     oeeFormState.packerCustom.forEach(p => {
       if (p.jamStart && p.jamEnd) {
         const start = p.jamStart.split(':').map(Number);
@@ -1959,7 +2115,6 @@
 
   // ==================== HITUNG TOTAL TARGET ====================
   function calculateTotalTarget() {
-    // Hitung total target per menit dari semua produk yang dipilih
     let totalTargetPerMinute = 0;
     oeeFormState.produkRows.forEach(prod => {
       if (prod.productId) {
@@ -1970,21 +2125,17 @@
       }
     });
     
-    // Waktu yang tersedia untuk produksi
     const timeForTarget = oeeFormState.shiftMinutes - 
       oeeFormState.downtime.reduce((s, o) => s + ((parseFloat(o.frekuensi)||1) * (parseFloat(o.durasi)||0)), 0) -
       oeeFormState.lineStopMesin.reduce((s, l) => s + (parseFloat(l.durasi)||0), 0) -
       oeeFormState.lineStopNonMesin.reduce((s, l) => s + (parseFloat(l.durasi)||0), 0);
     
-    // Target normal = jumlah packer inti * waktu * target per menit
     const jumlahPackerInti = oeeFormState.packerInti.length;
     let targetNormal = jumlahPackerInti * Math.max(0, timeForTarget) * totalTargetPerMinute;
     
-    // Tambah target dari packer custom
     const packerCustomMinutes = calculateTotalPackerMinutes();
     let targetPackerCustom = (packerCustomMinutes / 60) * totalTargetPerMinute;
     
-    // Tambah target dari perbantuan (50% efficiency)
     const perbantuanMinutes = calculatePerbantuanMinutes();
     let targetPerbantuan = (perbantuanMinutes / 60) * totalTargetPerMinute * 0.5;
     
@@ -2148,53 +2299,12 @@
     calculateOEE();
   }
 
-  // ==================== MINOR STOP ====================
-  function addMinorStop() {
-    const nama = prompt('MASUKKAN NAMA MINOR STOP:', '');
-    if (!nama || !nama.trim()) { showToast('NAMA WAJIB DIISI', 'error'); return; }
-    oeeFormState.minorStop.push({ id: 'ms_'+Date.now(), nama: nama.trim().toUpperCase(), durasi: 0, isCustom: true });
-    renderMinorStopList();
-  }
-
-  function renderMinorStopList() {
-    const listDiv = document.getElementById('minor-stop-list');
-    let allMS = localData.minor_stop?.map(m => ({ id: m.id, nama: m.nama, durasi: 0, isCustom: false })) || [];
-    const customMS = oeeFormState.minorStop?.filter(m => m.isCustom) || [];
-    allMS = [...allMS, ...customMS];
-    const unique = [];
-    const ids = new Set();
-    allMS.forEach(m => { if (!ids.has(m.id)) { ids.add(m.id); unique.push(m); } });
-    oeeFormState.minorStop = unique;
-    if (oeeFormState.minorStop.length === 0) { listDiv.innerHTML = '<div class="empty-state">BELUM ADA DATA</div>'; return; }
-    listDiv.innerHTML = oeeFormState.minorStop.map(ms => `
-      <div class="ms-row">
-        <div><p style="font-size:13px; font-weight:700; color:#d97706;">${ms.nama}</p></div>
-        <input type="number" value="${ms.durasi}" min="0" placeholder="DURASI" onchange="updateMinorStop('${ms.id}', 'durasi', this.value)">
-        ${ms.isCustom ? `<button class="btn btn-danger btn-small" onclick="removeMinorStop('${ms.id}')">HAPUS</button>` : '<div></div>'}
-      </div>
-    `).join('');
-  }
-
-  function updateMinorStop(id, field, val) {
-    const ms = oeeFormState.minorStop.find(m => m.id === id);
-    if (ms) ms[field] = val;
-    calculateOEE();
-  }
-
-  function removeMinorStop(id) {
-    oeeFormState.minorStop = oeeFormState.minorStop.filter(m => m.id !== id);
-    renderMinorStopList();
-    calculateOEE();
-  }
-
   // ==================== CALCULATE OEE ====================
   function calculateOEE() {
-    // Hitung total downtime
     const totalODT = oeeFormState.downtime.reduce((s, o) => s + ((parseFloat(o.frekuensi)||1) * (parseFloat(o.durasi)||0)), 0);
     const totalLSM = oeeFormState.lineStopMesin.reduce((s, l) => s + (parseFloat(l.durasi)||0), 0);
     const totalLSNM = oeeFormState.lineStopNonMesin.reduce((s, l) => s + (parseFloat(l.durasi)||0), 0);
-    const totalMinor = oeeFormState.minorStop.reduce((s, m) => s + (parseFloat(m.durasi)||0), 0);
-    const totalActualDowntime = totalLSM + totalLSNM + totalMinor;
+    const totalActualDowntime = totalLSM + totalLSNM;
 
     const plannedTime = oeeFormState.shiftMinutes - totalODT;
     const availableTime = plannedTime - totalActualDowntime;
@@ -2202,14 +2312,11 @@
     let availActual = plannedTime > 0 ? (availableTime / plannedTime) * 100 : 0;
     let avail365 = oeeFormState.shiftMinutes > 0 ? ((oeeFormState.shiftMinutes - totalODT - totalLSM - totalLSNM) / oeeFormState.shiftMinutes) * 100 : 0;
 
-    // Hitung total target
     let targetOutput = calculateTotalTarget();
     
-    // Hitung performance
     let performanceAsli = targetOutput > 0 ? (oeeFormState.goodOutput / targetOutput) * 100 : 0;
     let performanceForOEE = Math.min(100, performanceAsli);
     
-    // QUALITY
     let totalProduksi = oeeFormState.goodOutput + oeeFormState.reject;
     let quality = totalProduksi > 0 ? (oeeFormState.goodOutput / totalProduksi) * 100 : 0;
 
@@ -2268,7 +2375,6 @@
       downtime: [],
       lineStopMesin: [],
       lineStopNonMesin: [],
-      minorStop: [],
       results: {},
       odtOverRecords: []
     };
@@ -2277,11 +2383,16 @@
   // ==================== SUBMIT OEE ====================
   async function submitOEE(event) {
     event.preventDefault();
+    
+    if (isSubmitting) {
+      showToast('TUNGGU PROSES SIMPAN SELESAI!', 'error');
+      return;
+    }
+    
     const date = document.getElementById('oee-date').value;
     const shift = document.getElementById('oee-shift').value;
     const notes = document.getElementById('oee-notes').value;
 
-    // Validasi: minimal 1 produk terisi
     const validProductions = oeeFormState.produkRows.filter(p => p.productId && p.batchNumber);
     if (validProductions.length === 0) {
       showToast('MINIMAL 1 PRODUK & BATCH HARUS DIISI', 'error');
@@ -2298,26 +2409,29 @@
       return;
     }
 
-    // Format batch list untuk disimpan
+    isSubmitting = true;
+    
+    const submitBtn = document.getElementById('submit-btn');
+    const originalText = submitBtn.textContent;
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'MENYIMPAN...';
+
     const batchList = validProductions.map(p => {
       const product = localData.produk.find(pr => pr.id === p.productId);
       return `${p.batchNumber} (${product?.nama || '-'})`;
     }).join(' | ');
 
-    // Format packer inti
     const packerIntiNames = oeeFormState.packerInti.map(id => {
       const packer = localData.packer.find(p => p.id === id);
       return packer?.nama || '';
     }).filter(Boolean).join(', ');
 
-    // Format packer custom
     const packerCustomData = oeeFormState.packerCustom.map(p => ({
       inisial: p.inisial,
       jamStart: p.jamStart,
       jamEnd: p.jamEnd
     }));
 
-    // Gabungkan semua packer untuk display
     let allPackers = [];
     if (packerIntiNames) allPackers.push(packerIntiNames);
     if (packerCustomData.length > 0) {
@@ -2334,13 +2448,12 @@
 
     const lsmDetails = oeeFormState.lineStopMesin.filter(l => parseFloat(l.durasi) > 0).map(l => ({ nama: l.nama, durasi: l.durasi, action: l.action, wr: l.wr }));
     const lsnmDetails = oeeFormState.lineStopNonMesin.filter(l => parseFloat(l.durasi) > 0).map(l => ({ nama: l.nama, durasi: l.durasi, action: l.action }));
-    const msDetails = oeeFormState.minorStop.filter(m => parseFloat(m.durasi) > 0).map(m => ({ nama: m.nama, durasi: m.durasi }));
     const odtDetails = oeeFormState.downtime.filter(o => parseFloat(o.durasi) > 0).map(o => ({ nama: o.nama, frekuensi: o.frekuensi, durasiPerKejadian: o.durasi, totalDurasi: (o.frekuensi||1)*o.durasi }));
 
     const record = {
       date,
       shift,
-      product: batchList, // Sekarang berisi batch + produk
+      product: batchList,
       packers: packerDisplay || JSON.stringify(packerCustomData),
       perbantuan: perbantuanData.length ? JSON.stringify(perbantuanData) : null,
       good_output: oeeFormState.goodOutput,
@@ -2353,7 +2466,6 @@
       target_output: parseFloat(oeeFormState.results.targetOutput),
       line_stop_mesin: lsmDetails.length ? JSON.stringify(lsmDetails) : null,
       line_stop_non_mesin: lsnmDetails.length ? JSON.stringify(lsnmDetails) : null,
-      minor_stop: msDetails.length ? JSON.stringify(msDetails) : null,
       operational_downtime: odtDetails.length ? JSON.stringify(odtDetails) : null,
       notes: notes || null
     };
@@ -2374,6 +2486,10 @@
       
     } catch (error) {
       showToast('GAGAL MENYIMPAN', 'error');
+    } finally {
+      isSubmitting = false;
+      submitBtn.disabled = false;
+      submitBtn.textContent = originalText;
     }
   }
 
@@ -2397,7 +2513,6 @@
       downtime: [],
       lineStopMesin: [],
       lineStopNonMesin: [],
-      minorStop: [],
       results: {},
       odtOverRecords: []
     };
@@ -2409,7 +2524,6 @@
     renderODTList();
     renderLineStopMesinList();
     renderLineStopNonMesinList();
-    renderMinorStopList();
     calculateOEE();
   }
 
@@ -2467,11 +2581,12 @@
   function updateDashboard() {
     updateDashboardData();
     renderCharts();
+    renderOEEHistory();
     renderOEEHistoryOral();
     renderOEEHistorySteril();
+    renderHorizontalBars();
     renderLSMDetailTable();
     renderLSNMDetailTable();
-    renderMSDetailTable();
   }
 
   function updateDashboardData() {
@@ -2493,14 +2608,15 @@
     document.getElementById('score-total-output').textContent = Math.round(totalGood);
   }
 
-  function selectRecord(index, jenis) {
+  function selectRecord(index) {
     selectedRecordIndex = index;
-    // Bisa ditambahkan logika untuk highlight di kedua tabel
+    
+    renderOEEHistory();
     renderOEEHistoryOral();
     renderOEEHistorySteril();
+    renderHorizontalBars();
     renderLSMDetailTable();
     renderLSNMDetailTable();
-    renderMSDetailTable();
     
     setTimeout(() => {
       const lsmSection = document.querySelector('#table-lsm-detail');
@@ -2509,7 +2625,59 @@
       }
     }, 100);
     
-    showToast(`MENAMPILKAN DATA: ${filteredOeeRecords[index]?.date || ''} - ${filteredOeeRecords[index]?.product || ''}`, 'success');
+    const selectedRecord = filteredOeeRecords[index];
+    if (selectedRecord) {
+      showToast(`MENAMPILKAN DATA: ${selectedRecord.date} - ${selectedRecord.product}`, 'success');
+    }
+  }
+
+  // ==================== RENDER OEE HISTORY ====================
+  function renderOEEHistory() {
+    const tbody = document.getElementById('table-oee-history');
+    const recs = filteredOeeRecords.length ? filteredOeeRecords : localData.oee_records;
+    
+    if (!recs || recs.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="11" class="text-center">BELUM ADA DATA</td></tr>';
+      return;
+    }
+    
+    tbody.innerHTML = recs.slice(0, 20).map((r, index) => {
+      const output = Math.round(parseFloat(r.good_output) || 0);
+      const reject = Math.round(parseFloat(r.reject) || 0);
+      const avail = parseFloat(r.availability_actual) || 0;
+      const perf = parseFloat(r.performance) || 0;
+      const qual = parseFloat(r.quality_rate) || 0;
+      const oeeActual = parseFloat(r.oee_actual) || 0;
+      
+      let packerDisplay = r.packers || '-';
+      try {
+        const packers = JSON.parse(r.packers);
+        if (Array.isArray(packers)) {
+          packerDisplay = packers.map(p => p.inisial).filter(Boolean).join(', ');
+        }
+      } catch (e) {}
+      
+      const batchDisplay = r.product || '-';
+      const notesDisplay = r.notes || '-';
+      
+      const rowClass = index === selectedRecordIndex ? 'selected-row' : '';
+      
+      return `
+        <tr class="${rowClass}" onclick="selectRecord(${index})">
+          <td>${r.date || '-'}</td>
+          <td>${r.shift || '-'}</td>
+          <td>${packerDisplay}</td>
+          <td>${batchDisplay}</td>
+          <td class="text-right"><strong>${output}</strong></td>
+          <td class="text-right">${reject}</td>
+          <td class="text-right">${avail.toFixed(1)}%</td>
+          <td class="text-right">${perf.toFixed(1)}%</td>
+          <td class="text-right">${qual.toFixed(1)}%</td>
+          <td class="text-right"><strong>${oeeActual.toFixed(1)}%</strong></td>
+          <td>${notesDisplay}</td>
+        </tr>
+      `;
+    }).join('');
   }
 
   // ==================== RENDER OEE HISTORY ORAL ====================
@@ -2517,10 +2685,8 @@
     const tbody = document.getElementById('table-oee-oral');
     const recs = filteredOeeRecords.length ? filteredOeeRecords : localData.oee_records;
     
-    // Filter hanya record yang mengandung produk ORAL
     const oralRecs = recs.filter(r => {
       if (!r.product) return false;
-      // Cek apakah ada produk oral dalam batch list
       return r.product.toLowerCase().includes('oral');
     });
     
@@ -2530,8 +2696,7 @@
     }
     
     tbody.innerHTML = oralRecs.slice(0, 20).map((r, idx) => {
-      // Cari index asli di filteredOeeRecords
-      const originalIndex = filteredOeeRecords.findIndex(rec => rec === r);
+      const originalIndex = recs.findIndex(rec => rec === r);
       
       const target = Math.round(parseFloat(r.target_output) || 0);
       const good = Math.round(parseFloat(r.good_output) || 0);
@@ -2540,7 +2705,6 @@
       const pe = target > 0 ? ((good / target) * 100).toFixed(1) : '0.0';
       const peValue = parseFloat(pe);
       
-      // Parse packers
       let packerDisplay = r.packers || '-';
       try {
         const packers = JSON.parse(r.packers);
@@ -2549,14 +2713,13 @@
         }
       } catch (e) {}
       
-      // Ambil batch number dari product field
       const batchDisplay = r.product || '-';
       
       const peClass = peValue < 100 ? 'pe-low' : '';
       const rowClass = originalIndex === selectedRecordIndex ? 'selected-row' : '';
       
       return `
-        <tr class="${rowClass}" onclick="selectRecord(${originalIndex}, 'oral')">
+        <tr class="${rowClass}" onclick="selectRecord(${originalIndex})">
           <td>${r.date || '-'}</td>
           <td>${r.shift || '-'}</td>
           <td>${packerDisplay}</td>
@@ -2575,10 +2738,8 @@
     const tbody = document.getElementById('table-oee-steril');
     const recs = filteredOeeRecords.length ? filteredOeeRecords : localData.oee_records;
     
-    // Filter hanya record yang mengandung produk STERIL
     const sterilRecs = recs.filter(r => {
       if (!r.product) return false;
-      // Cek apakah ada produk steril dalam batch list
       return r.product.toLowerCase().includes('steril');
     });
     
@@ -2588,8 +2749,7 @@
     }
     
     tbody.innerHTML = sterilRecs.slice(0, 20).map((r, idx) => {
-      // Cari index asli di filteredOeeRecords
-      const originalIndex = filteredOeeRecords.findIndex(rec => rec === r);
+      const originalIndex = recs.findIndex(rec => rec === r);
       
       const target = Math.round(parseFloat(r.target_output) || 0);
       const good = Math.round(parseFloat(r.good_output) || 0);
@@ -2598,7 +2758,6 @@
       const pe = target > 0 ? ((good / target) * 100).toFixed(1) : '0.0';
       const peValue = parseFloat(pe);
       
-      // Parse packers
       let packerDisplay = r.packers || '-';
       try {
         const packers = JSON.parse(r.packers);
@@ -2607,14 +2766,13 @@
         }
       } catch (e) {}
       
-      // Ambil batch number dari product field
       const batchDisplay = r.product || '-';
       
       const peClass = peValue < 100 ? 'pe-low' : '';
       const rowClass = originalIndex === selectedRecordIndex ? 'selected-row' : '';
       
       return `
-        <tr class="${rowClass}" onclick="selectRecord(${originalIndex}, 'steril')">
+        <tr class="${rowClass}" onclick="selectRecord(${originalIndex})">
           <td>${r.date || '-'}</td>
           <td>${r.shift || '-'}</td>
           <td>${packerDisplay}</td>
@@ -2624,6 +2782,97 @@
           <td class="text-right">${reject}</td>
           <td class="text-right ${peClass}"><strong>${pe}%</strong></td>
         </tr>
+      `;
+    }).join('');
+  }
+
+  // ==================== RENDER HORIZONTAL BARS ====================
+  function renderHorizontalBars() {
+    let recs = [];
+    if (selectedRecordIndex >= 0 && selectedRecordIndex < filteredOeeRecords.length) {
+      recs = [filteredOeeRecords[selectedRecordIndex]];
+    } else {
+      recs = filteredOeeRecords.length ? filteredOeeRecords : localData.oee_records;
+      recs = recs.slice(0, 50);
+    }
+    
+    // LSM
+    const lsmMap = new Map();
+    let totalLSM = 0;
+    
+    recs.forEach(record => {
+      if (record.line_stop_mesin) {
+        try {
+          const lsmDetails = JSON.parse(record.line_stop_mesin);
+          if (Array.isArray(lsmDetails)) {
+            lsmDetails.forEach(lsm => {
+              const durasi = parseFloat(lsm.durasi) || 0;
+              if (durasi > 0) {
+                const key = lsm.nama;
+                lsmMap.set(key, (lsmMap.get(key) || 0) + durasi);
+                totalLSM += durasi;
+              }
+            });
+          }
+        } catch (e) {}
+      }
+    });
+    
+    renderBarList('lsm-bar-list', lsmMap, totalLSM, 'lsm');
+    document.getElementById('lsm-total').textContent = `TOTAL: ${Math.round(totalLSM)} MIN`;
+    
+    // LSNM
+    const lsnmMap = new Map();
+    let totalLSNM = 0;
+    
+    recs.forEach(record => {
+      if (record.line_stop_non_mesin) {
+        try {
+          const lsnmDetails = JSON.parse(record.line_stop_non_mesin);
+          if (Array.isArray(lsnmDetails)) {
+            lsnmDetails.forEach(lsnm => {
+              const durasi = parseFloat(lsnm.durasi) || 0;
+              if (durasi > 0) {
+                const key = lsnm.nama;
+                lsnmMap.set(key, (lsnmMap.get(key) || 0) + durasi);
+                totalLSNM += durasi;
+              }
+            });
+          }
+        } catch (e) {}
+      }
+    });
+    
+    renderBarList('lsnm-bar-list', lsnmMap, totalLSNM, 'lsnm');
+    document.getElementById('lsnm-total').textContent = `TOTAL: ${Math.round(totalLSNM)} MIN`;
+  }
+
+  function renderBarList(containerId, dataMap, total, type) {
+    const container = document.getElementById(containerId);
+    
+    if (dataMap.size === 0) {
+      container.innerHTML = '<div class="empty-state">BELUM ADA DATA</div>';
+      return;
+    }
+    
+    const sorted = Array.from(dataMap.entries()).sort((a, b) => b[1] - a[1]);
+    const topItems = sorted.slice(0, 10);
+    const barClass = type === 'lsm' ? 'bar-fill-lsm' : 'bar-fill-lsnm';
+    
+    container.innerHTML = topItems.map(([nama, durasi]) => {
+      const percentage = total > 0 ? (durasi / total) * 100 : 0;
+      const displayValue = percentage > 8 ? Math.round(durasi) + ' min' : '';
+      
+      return `
+        <div class="bar-item">
+          <div class="bar-label">${nama}</div>
+          <div class="bar-wrapper">
+            <div class="${barClass}" style="width: ${percentage}%;">
+              ${displayValue}
+            </div>
+          </div>
+          <div class="bar-value">${Math.round(durasi)} min (${percentage.toFixed(1)}%)</div>
+        </div>
       `;
     }).join('');
   }
@@ -2732,55 +2981,6 @@
     `).join('');
   }
 
-  // ==================== RENDER MINOR STOP DETAIL ====================
-  function renderMSDetailTable() {
-    const tbody = document.getElementById('table-ms-detail');
-    
-    let recs = [];
-    if (selectedRecordIndex >= 0 && selectedRecordIndex < filteredOeeRecords.length) {
-      recs = [filteredOeeRecords[selectedRecordIndex]];
-    } else {
-      recs = filteredOeeRecords.length ? filteredOeeRecords : localData.oee_records;
-      recs = recs.slice(0, 50);
-    }
-    
-    const rows = [];
-    
-    recs.forEach(record => {
-      if (record.minor_stop) {
-        try {
-          const msDetails = JSON.parse(record.minor_stop);
-          if (Array.isArray(msDetails)) {
-            msDetails.forEach(ms => {
-              rows.push({
-                date: record.date,
-                shift: record.shift,
-                packers: record.packers,
-                nama: ms.nama,
-                durasi: ms.durasi
-              });
-            });
-          }
-        } catch (e) {}
-      }
-    });
-    
-    if (rows.length === 0) {
-      tbody.innerHTML = '<tr><td colspan="5" class="text-center">BELUM ADA DATA MINOR STOP</td></tr>';
-      return;
-    }
-    
-    tbody.innerHTML = rows.map(row => `
-      <tr>
-        <td>${row.date}</td>
-        <td>${row.shift}</td>
-        <td>${row.packers || '-'}</td>
-        <td>${row.nama}</td>
-        <td class="text-right">${row.durasi}</td>
-      </tr>
-    `).join('');
-  }
-
   // ==================== MASTER DATA ====================
   function renderMasterDataLists() {
     renderProductList();
@@ -2788,7 +2988,6 @@
     renderODTList_Master();
     renderLineStopMesinMaster();
     renderLineStopNonMesinMaster();
-    renderMinorStopMaster();
   }
 
   function renderProductList() {
@@ -2863,21 +3062,6 @@
       <div class="master-card">
         <div class="master-card-content">
           <p class="master-card-name">${l.nama}</p>
-        </div>
-      </div>
-    `).join('');
-  }
-
-  function renderMinorStopMaster() {
-    const container = document.getElementById('minor-stop-master-list');
-    if (!localData.minor_stop || localData.minor_stop.length === 0) {
-      container.innerHTML = '<div class="empty-state">BELUM ADA DATA</div>';
-      return;
-    }
-    container.innerHTML = localData.minor_stop.map(m => `
-      <div class="master-card">
-        <div class="master-card-content">
-          <p class="master-card-name">${m.nama}</p>
         </div>
       </div>
     `).join('');
@@ -2978,18 +3162,6 @@
     });
   }
 
-  function openAddMinorStopModal() {
-    openModal('TAMBAH MINOR STOP', [
-      { name: 'nama', label: 'NAMA MINOR STOP' }
-    ], async v => {
-      if (!v.nama) { showToast('NAMA WAJIB DIISI', 'error'); return; }
-      await supabaseClient.from('minor_stop').insert([{ nama: v.nama }]);
-      await loadDataFromSupabase();
-      renderMasterDataLists();
-      showToast('MINOR STOP DITAMBAHKAN', 'success');
-    });
-  }
-
   // ==================== AUDIT ====================
   async function addAuditLog(activity, detail) {
     await supabaseClient.from('audit_trail').insert([{ activity, detail }]);
@@ -3032,17 +3204,41 @@
           tension: 0.4,
           fill: true,
           pointBackgroundColor: color,
-          pointRadius: 4
+          pointRadius: 5,
+          pointHoverRadius: 8
         }]
       },
       options: {
         responsive: true,
         maintainAspectRatio: false,
-        plugins: { legend: { display: false } },
+        plugins: {
+          legend: { display: true, position: 'top' },
+          tooltip: { enabled: true },
+          datalabels: {
+            display: true,
+            color: '#333',
+            align: 'top',
+            offset: 10,
+            font: { weight: 'bold', size: 11 },
+            formatter: (value) => value ? value.toFixed(1) + '%' : '0%'
+          }
+        },
         scales: {
-          y: { beginAtZero: true, max: 100, ticks: { callback: v => v + '%' } }
+          y: { 
+            beginAtZero: true, 
+            max: 100,
+            title: { display: true, text: 'OEE %' },
+            ticks: { callback: v => v + '%' }
+          },
+          x: {
+            ticks: { maxRotation: 45, minRotation: 30 }
+          }
+        },
+        layout: {
+          padding: { top: 25, bottom: 20 }
         }
-      }
+      },
+      plugins: [ChartDataLabels]
     });
   }
 
@@ -3066,14 +3262,14 @@
     
     const labels = Object.keys(monthly).map(ym => {
       const [y, m] = ym.split('-');
-      return new Date(y, m - 1).toLocaleDateString('id-ID', { month: 'short' });
+      return new Date(y, m - 1).toLocaleDateString('id-ID', { month: 'short', year: 'numeric' });
     });
     
     const data = Object.values(monthly).map(arr => 
       arr.length ? arr.reduce((a, b) => a + b, 0) / arr.length : 0
     );
     
-    createLineChart('chart-oee-monthly', labels, data, 'OEE BULANAN', '#ec4899');
+    createLineChart('chart-oee-monthly', labels, data, 'RATA-RATA OEE BULANAN', '#ec4899');
   }
 
   function renderOEEDailyChart() {
@@ -3104,7 +3300,7 @@
       arr.length ? arr.reduce((a, b) => a + b, 0) / arr.length : 0
     );
     
-    createLineChart('chart-oee-daily', labels, data, 'OEE HARIAN', '#a855f7');
+    createLineChart('chart-oee-daily', labels, data, 'RATA-RATA OEE HARIAN', '#a855f7');
   }
 
   function renderCharts() {
