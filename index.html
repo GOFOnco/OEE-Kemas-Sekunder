@@ -7,6 +7,9 @@
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
   <style>
     /* ==================== RESET & VARIABLES ==================== */
     * {
@@ -384,6 +387,14 @@
     }
     .btn-danger:hover {
       background: #dc2626;
+    }
+
+    .btn-info {
+      background: #3b82f6;
+      color: white;
+    }
+    .btn-info:hover {
+      background: #2563eb;
     }
 
     .btn.w-100 {
@@ -984,7 +995,7 @@
       z-index: 9998;
     }
 
-    #modal, #login-modal {
+    #modal, #login-modal, #download-modal {
       position: fixed;
       top: 50%;
       left: 50%;
@@ -997,6 +1008,70 @@
       max-width: 450px;
       max-height: 90vh;
       overflow-y: auto;
+    }
+
+    /* ==================== DOWNLOAD BUTTONS ==================== */
+    .download-buttons {
+      display: flex;
+      gap: 12px;
+      margin: 20px 0;
+      flex-wrap: wrap;
+    }
+
+    .download-btn {
+      flex: 1;
+      min-width: 120px;
+      padding: 12px;
+      border: none;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: var(--transition);
+    }
+
+    .download-btn-pdf {
+      background: #dc2626;
+      color: white;
+    }
+
+    .download-btn-pdf:hover {
+      background: #b91c1c;
+    }
+
+    .download-btn-excel {
+      background: #059669;
+      color: white;
+    }
+
+    .download-btn-excel:hover {
+      background: #047857;
+    }
+
+    .download-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    /* ==================== PROGRESS BAR ==================== */
+    .progress-bar {
+      width: 100%;
+      height: 8px;
+      background: #e5e7eb;
+      border-radius: 4px;
+      overflow: hidden;
+      margin: 16px 0;
+      display: none;
+    }
+
+    .progress-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--primary), #a855f7);
+      width: 0%;
+      transition: width 0.3s ease;
     }
 
     /* ==================== RESPONSIVE BREAKPOINTS ==================== */
@@ -1129,7 +1204,8 @@
     body.dark-mode .horizontal-bar-container,
     body.dark-mode .master-card,
     body.dark-mode #modal,
-    body.dark-mode #login-modal {
+    body.dark-mode #login-modal,
+    body.dark-mode #download-modal {
       background: #2d2236;
       border-color: rgba(236, 72, 153, 0.15);
       color: var(--text-light);
@@ -1260,6 +1336,10 @@
     body.dark-mode .empty-state {
       background: #1f1729;
     }
+
+    body.dark-mode .progress-bar {
+      background: #403050;
+    }
   </style>
 </head>
 <body>
@@ -1287,14 +1367,14 @@
     <button class="tab-btn active" onclick="switchTab('dashboard')">📈 DASHBOARD</button>
     <button class="tab-btn" onclick="switchTab('input')">✏️ INPUT OEE</button>
     <button class="tab-btn" onclick="switchTab('master')">💾 MASTER DATA</button>
-    <button class="tab-btn" onclick="switchTab('audit')">⚙️ AUDIT TRAIL</button>
+    <button class="tab-btn" onclick="switchTab('audit')">⚙️ AUDIT & DOWNLOAD</button>
   </div>
 
   <!-- CONTENT -->
   <div class="content">
     <!-- ==================== DASHBOARD TAB ==================== -->
     <div id="dashboard" class="tab-content active">
-      <!-- FILTER SECTION -->
+      <!-- FILTER DASHBOARD -->
       <div class="form-section">
         <div class="section-title">FILTER DASHBOARD</div>
         <div class="form-row">
@@ -1355,29 +1435,6 @@
         <div class="chart-wrapper"><canvas id="chart-oee-daily"></canvas></div>
       </div>
 
-      <!-- OEE HISTORY TABLE - OUTPUT & REJECT DIHAPUS -->
-      <div class="form-section">
-        <div class="section-title">📋 OEE HISTORY</div>
-        <div class="table-wrapper">
-          <table>
-            <thead>
-              <tr>
-                <th>DATE</th>
-                <th>SHIFT</th>
-                <th>PIC</th>
-                <th>BATCH</th>
-                <th class="text-right">A%</th>
-                <th class="text-right">P%</th>
-                <th class="text-right">Q%</th>
-                <th class="text-right">OEE ACTUAL</th>
-                <th>NOTES</th>
-              </tr>
-            </thead>
-            <tbody id="table-oee-history"></tbody>
-          </table>
-        </div>
-      </div>
-
       <!-- OUTPUT ORAL -->
       <div class="form-section">
         <div class="section-title-oral">💊 OUTPUT ORAL</div>
@@ -1418,6 +1475,29 @@
               </tr>
             </thead>
             <tbody id="table-oee-steril"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- OEE HISTORY -->
+      <div class="form-section">
+        <div class="section-title">📋 OEE HISTORY</div>
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>DATE</th>
+                <th>SHIFT</th>
+                <th>PIC</th>
+                <th>BATCH</th>
+                <th class="text-right">A%</th>
+                <th class="text-right">P%</th>
+                <th class="text-right">Q%</th>
+                <th class="text-right">OEE ACTUAL</th>
+                <th>NOTES</th>
+              </tr>
+            </thead>
+            <tbody id="table-oee-history"></tbody>
           </table>
         </div>
       </div>
@@ -1624,8 +1704,61 @@
       </div>
     </div>
 
-    <!-- ==================== AUDIT TAB ==================== -->
+    <!-- ==================== AUDIT & DOWNLOAD TAB ==================== -->
     <div id="audit" class="tab-content">
+      <!-- FILTER SECTION UNTUK DOWNLOAD -->
+      <div class="form-section">
+        <div class="section-title">📊 FILTER DATA UNTUK DOWNLOAD</div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>TANGGAL MULAI</label>
+            <input type="date" id="download-date-start" class="input-field">
+          </div>
+          <div class="form-group">
+            <label>TANGGAL AKHIR</label>
+            <input type="date" id="download-date-end" class="input-field">
+          </div>
+          <div class="form-group">
+            <label>SHIFT</label>
+            <select id="download-shift" class="input-field">
+              <option value="">SEMUA SHIFT</option>
+              <option value="Shift 1">SHIFT 1</option>
+              <option value="Shift 2">SHIFT 2</option>
+              <option value="Shift 3">SHIFT 3</option>
+              <option value="Longshift Pagi">LONGSHIFT PAGI</option>
+              <option value="Longshift Malam">LONGSHIFT MALAM</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>PRODUK</label>
+            <select id="download-product" class="input-field">
+              <option value="">SEMUA PRODUK</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- PROGRESS BAR -->
+        <div class="progress-bar" id="download-progress">
+          <div class="progress-bar-fill" id="download-progress-fill"></div>
+        </div>
+
+        <!-- DOWNLOAD BUTTONS -->
+        <div class="download-buttons">
+          <button class="download-btn download-btn-pdf" onclick="downloadDashboard('pdf')" id="download-pdf-btn">
+            <span>📄</span> DOWNLOAD PDF
+          </button>
+          <button class="download-btn download-btn-excel" onclick="downloadDashboard('excel')" id="download-excel-btn">
+            <span>📊</span> DOWNLOAD EXCEL
+          </button>
+        </div>
+
+        <div style="margin-top: 16px; font-size: 12px; color: #666; text-align: center;">
+          <p>⚠️ PDF akan mendownload semua tampilan dashboard (termasuk chart)</p>
+          <p>⚠️ Excel akan mendownload semua data dalam format tabel</p>
+        </div>
+      </div>
+
+      <!-- AUDIT TRAIL TABLE -->
       <div class="form-section">
         <div class="section-title">📜 AUDIT TRAIL</div>
         <div class="table-wrapper">
@@ -1749,7 +1882,7 @@
     document.querySelectorAll('.tab-btn').forEach(btn => {
       if (btn.textContent.includes(tabName === 'dashboard' ? 'DASHBOARD' : 
           tabName === 'input' ? 'INPUT OEE' : 
-          tabName === 'master' ? 'MASTER DATA' : 'AUDIT TRAIL')) {
+          tabName === 'master' ? 'MASTER DATA' : 'AUDIT')) {
         btn.classList.add('active');
       }
     });
@@ -1765,6 +1898,10 @@
     
     if (tabName === 'master' && !isMasterDataUnlocked) {
       showLoginModal();
+    }
+
+    if (tabName === 'audit') {
+      populateDownloadFilterOptions();
     }
   };
 
@@ -1828,6 +1965,7 @@
 
       filteredOeeRecords = [...localData.oee_records];
       populateFilterOptions();
+      populateDownloadFilterOptions();
       
     } catch (error) {
       console.error('Error:', error);
@@ -2548,6 +2686,17 @@
     });
   }
 
+  function populateDownloadFilterOptions() {
+    const prodSelect = document.getElementById('download-product');
+    prodSelect.innerHTML = '<option value="">SEMUA PRODUK</option>';
+    localData.produk.forEach(p => {
+      const option = document.createElement('option');
+      option.value = p.nama;
+      option.textContent = p.nama;
+      prodSelect.appendChild(option);
+    });
+  }
+
   function applyDashboardFilters() {
     const ds = document.getElementById('filter-date-start').value;
     const de = document.getElementById('filter-date-end').value;
@@ -2606,7 +2755,7 @@
     document.getElementById('score-total-output').textContent = Math.round(totalGood);
   }
 
-  // ==================== FUNGSI SELECT RECORD - BENER2 FILTER SEMUA DATA ====================
+  // ==================== FUNGSI SELECT RECORD ====================
   function selectRecord(index) {
     const selectedRecord = filteredOeeRecords[index];
     if (!selectedRecord) return;
@@ -2644,7 +2793,7 @@
     showToast(`MENAMPILKAN DATA SHIFT: ${selectedRecord.date} - ${selectedRecord.shift}`, 'success');
   }
 
-  // ==================== RENDER OEE HISTORY - OUTPUT & REJECT DIHAPUS ====================
+  // ==================== RENDER OEE HISTORY ====================
   function renderOEEHistory() {
     const tbody = document.getElementById('table-oee-history');
     const recs = filteredOeeRecords.length ? filteredOeeRecords : localData.oee_records;
@@ -3191,6 +3340,236 @@
         <td>${a.detail || '-'}</td>
       </tr>
     `).join('');
+  }
+
+  // ==================== DOWNLOAD FUNCTIONS ====================
+  function getFilteredDataForDownload() {
+    const startDate = document.getElementById('download-date-start').value;
+    const endDate = document.getElementById('download-date-end').value;
+    const shift = document.getElementById('download-shift').value;
+    const product = document.getElementById('download-product').value;
+    
+    return localData.oee_records.filter(r => {
+      if (startDate && r.date < startDate) return false;
+      if (endDate && r.date > endDate) return false;
+      if (shift && r.shift !== shift) return false;
+      if (product && !r.product?.includes(product)) return false;
+      return true;
+    });
+  }
+
+  function updateProgress(percent) {
+    const progressBar = document.getElementById('download-progress');
+    const progressFill = document.getElementById('download-progress-fill');
+    progressBar.style.display = 'block';
+    progressFill.style.width = percent + '%';
+  }
+
+  function hideProgress() {
+    setTimeout(() => {
+      document.getElementById('download-progress').style.display = 'none';
+      document.getElementById('download-progress-fill').style.width = '0%';
+    }, 1000);
+  }
+
+  async function downloadDashboard(type) {
+    const pdfBtn = document.getElementById('download-pdf-btn');
+    const excelBtn = document.getElementById('download-excel-btn');
+    
+    pdfBtn.disabled = true;
+    excelBtn.disabled = true;
+    
+    try {
+      if (type === 'pdf') {
+        await downloadPDF();
+      } else if (type === 'excel') {
+        await downloadExcel();
+      }
+    } catch (error) {
+      console.error('Download error:', error);
+      showToast('GAGAL DOWNLOAD: ' + error.message, 'error');
+    } finally {
+      pdfBtn.disabled = false;
+      excelBtn.disabled = false;
+      hideProgress();
+    }
+  }
+
+  async function downloadPDF() {
+    showToast('MEMPROSES PDF... MOHON TUNGGU', 'success');
+    updateProgress(10);
+    
+    // Pindah ke tab dashboard untuk capture
+    switchTab('dashboard');
+    await new Promise(r => setTimeout(r, 1000));
+    updateProgress(30);
+    
+    // Capture semua section
+    const dashboardEl = document.getElementById('dashboard');
+    const sections = dashboardEl.querySelectorAll('.form-section, .chart-container, .horizontal-bar-container');
+    
+    const { jsPDF } = window.jspdf;
+    const pdf = new jsPDF('p', 'mm', 'a4');
+    let isFirstPage = true;
+    
+    for (let i = 0; i < sections.length; i++) {
+      const section = sections[i];
+      updateProgress(30 + ((i + 1) / sections.length) * 60);
+      
+      try {
+        const canvas = await html2canvas(section, {
+          scale: 1.5,
+          backgroundColor: document.body.classList.contains('dark-mode') ? '#2d2236' : '#ffffff',
+          logging: false,
+          allowTaint: true,
+          useCORS: true
+        });
+        
+        const imgData = canvas.toDataURL('image/png');
+        const imgWidth = 210;
+        const imgHeight = (canvas.height * imgWidth) / canvas.width;
+        
+        if (!isFirstPage) {
+          pdf.addPage();
+        }
+        
+        pdf.addImage(imgData, 'PNG', 0, 0, imgWidth, imgHeight, undefined, 'FAST');
+        isFirstPage = false;
+        
+      } catch (err) {
+        console.warn('Error capturing section:', err);
+      }
+    }
+    
+    // Tambah halaman untuk audit trail
+    pdf.addPage();
+    pdf.setFontSize(16);
+    pdf.setTextColor(236, 72, 153);
+    pdf.text('AUDIT TRAIL', 105, 20, { align: 'center' });
+    
+    const auditData = localData.audit_trail.slice(0, 30);
+    let yPos = 40;
+    pdf.setFontSize(10);
+    pdf.setTextColor(0, 0, 0);
+    
+    auditData.forEach((audit, index) => {
+      if (yPos > 270) {
+        pdf.addPage();
+        yPos = 20;
+      }
+      
+      pdf.setFontSize(9);
+      pdf.text(new Date(audit.timestamp).toLocaleString('id-ID'), 20, yPos);
+      pdf.text(audit.activity || '-', 70, yPos);
+      
+      // Wrap detail text
+      const detail = audit.detail || '-';
+      const splitDetail = pdf.splitTextToSize(detail, 120);
+      pdf.text(splitDetail, 120, yPos);
+      
+      yPos += 10;
+    });
+    
+    // Download PDF
+    pdf.save(`OEE_DASHBOARD_${new Date().toISOString().split('T')[0]}.pdf`);
+    showToast('PDF BERHASIL DIDOWNLOAD', 'success');
+    
+    await addAuditLog('DOWNLOAD PDF', `Download PDF dashboard dengan filter`);
+  }
+
+  async function downloadExcel() {
+    showToast('MEMPROSES EXCEL... MOHON TUNGGU', 'success');
+    updateProgress(20);
+    
+    const filteredData = getFilteredDataForDownload();
+    
+    // Siapkan workbook
+    const wb = XLSX.utils.book_new();
+    
+    // Sheet 1: OEE History
+    const oeeData = filteredData.map(r => ({
+      Tanggal: r.date,
+      Shift: r.shift,
+      Packer: typeof r.packers === 'string' ? r.packers : JSON.stringify(r.packers),
+      Batch: r.product,
+      'Target Output': r.target_output || 0,
+      'Good Output': r.good_output || 0,
+      Reject: r.reject || 0,
+      'Availability %': (r.availability_actual || 0).toFixed(1),
+      'Performance %': (r.performance || 0).toFixed(1),
+      'Quality %': (r.quality_rate || 0).toFixed(1),
+      'OEE Actual %': (r.oee_actual || 0).toFixed(1),
+      'OEE 365 %': (r.oee_365 || 0).toFixed(1),
+      Notes: r.notes || ''
+    }));
+    
+    const oeeSheet = XLSX.utils.json_to_sheet(oeeData);
+    XLSX.utils.book_append_sheet(wb, oeeSheet, 'OEE HISTORY');
+    updateProgress(40);
+    
+    // Sheet 2: Line Stop Mesin
+    const lsmData = [];
+    filteredData.forEach(r => {
+      if (r.line_stop_mesin) {
+        try {
+          const details = JSON.parse(r.line_stop_mesin);
+          details.forEach(d => {
+            lsmData.push({
+              Tanggal: r.date,
+              Shift: r.shift,
+              'Line Stop': d.nama,
+              Durasi: d.durasi,
+              Action: d.action || '-',
+              'No WR': d.wr || '-'
+            });
+          });
+        } catch (e) {}
+      }
+    });
+    
+    const lsmSheet = XLSX.utils.json_to_sheet(lsmData);
+    XLSX.utils.book_append_sheet(wb, lsmSheet, 'LINE STOP MESIN');
+    updateProgress(60);
+    
+    // Sheet 3: Line Stop Non Mesin
+    const lsnmData = [];
+    filteredData.forEach(r => {
+      if (r.line_stop_non_mesin) {
+        try {
+          const details = JSON.parse(r.line_stop_non_mesin);
+          details.forEach(d => {
+            lsnmData.push({
+              Tanggal: r.date,
+              Shift: r.shift,
+              'Line Stop': d.nama,
+              Durasi: d.durasi,
+              Action: d.action || '-'
+            });
+          });
+        } catch (e) {}
+      }
+    });
+    
+    const lsnmSheet = XLSX.utils.json_to_sheet(lsnmData);
+    XLSX.utils.book_append_sheet(wb, lsnmSheet, 'LINE STOP NON MESIN');
+    updateProgress(80);
+    
+    // Sheet 4: Audit Trail
+    const auditData = localData.audit_trail.map(a => ({
+      Waktu: new Date(a.timestamp).toLocaleString('id-ID'),
+      Aktivitas: a.activity || '-',
+      Detail: a.detail || '-'
+    }));
+    
+    const auditSheet = XLSX.utils.json_to_sheet(auditData);
+    XLSX.utils.book_append_sheet(wb, auditSheet, 'AUDIT TRAIL');
+    
+    // Download Excel
+    XLSX.writeFile(wb, `OEE_DATA_${new Date().toISOString().split('T')[0]}.xlsx`);
+    updateProgress(100);
+    
+    showToast('EXCEL BERHASIL DIDOWNLOAD', 'success');
+    await addAuditLog('DOWNLOAD EXCEL', `Download Excel data dengan ${filteredData.length} records`);
   }
 
   // ==================== CHARTS ====================
