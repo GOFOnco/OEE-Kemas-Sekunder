@@ -11,7 +11,6 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
   <style>
-    /* ==================== RESET & VARIABLES ==================== */
     * {
       margin: 0;
       padding: 0;
@@ -54,7 +53,6 @@
       min-height: 100vh;
     }
 
-    /* ==================== TYPOGRAPHY ==================== */
     h1, h2, h3, h4, h5, h6, p, span, div, label, button, input, select, textarea, th, td, option, .btn, .section-title, .chart-title, .score-label, .master-card-name, .master-card-detail, .empty-state-text, .toast, .warning-title, .warning-text, .login-title, .login-label, .login-error {
       text-transform: uppercase !important;
       word-break: break-word;
@@ -68,7 +66,6 @@
       word-break: break-word;
     }
 
-    /* ==================== HEADER ==================== */
     .header {
       background: linear-gradient(135deg, var(--primary) 0%, #d946a6 50%, var(--primary-dark) 100%);
       color: white;
@@ -135,7 +132,6 @@
       transition: var(--transition);
     }
 
-    /* ==================== TABS ==================== */
     .tabs-container {
       display: flex;
       background: rgba(255, 255, 255, 0.5);
@@ -180,7 +176,6 @@
       border-bottom-color: var(--primary);
     }
 
-    /* ==================== CONTENT ==================== */
     .content {
       flex: 1;
       overflow-y: auto;
@@ -202,7 +197,6 @@
       to { opacity: 1; transform: translateY(0); }
     }
 
-    /* ==================== FORM SECTIONS ==================== */
     .form-section {
       background: white;
       border-radius: var(--border-radius);
@@ -233,7 +227,6 @@
       flex-shrink: 0;
     }
 
-    /* Title khusus untuk Oral dan Steril */
     .section-title-oral {
       font-size: clamp(12px, 2.5vw, 16px);
       font-weight: 700;
@@ -272,7 +265,6 @@
       flex-shrink: 0;
     }
 
-    /* ==================== FORM GRID ==================== */
     .form-row {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(min(200px, 100%), 1fr));
@@ -323,7 +315,6 @@
       text-transform: none;
     }
 
-    /* ==================== BUTTONS ==================== */
     .btn {
       padding: clamp(8px, 1.8vw, 14px) clamp(12px, 2.5vw, 20px);
       border: none;
@@ -401,7 +392,6 @@
       width: 100%;
     }
 
-    /* ==================== SCORE CARDS ==================== */
     .score-cards {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(min(120px, 100%), 1fr));
@@ -446,7 +436,6 @@
       word-break: break-word;
     }
 
-    /* ==================== PRODUCTION SECTION ==================== */
     .production-container {
       display: flex;
       flex-direction: column;
@@ -455,7 +444,7 @@
 
     .produk-row {
       display: grid;
-      grid-template-columns: 2fr 1fr 1fr;
+      grid-template-columns: 2fr 1fr;
       gap: 16px;
       padding: 16px;
       background: #fdf2f8;
@@ -488,7 +477,6 @@
       transform: scale(1.1);
     }
 
-    /* PACKER INTI - CHECKBOX GRID */
     .packer-inti-section {
       background: white;
       border-radius: 12px;
@@ -549,7 +537,6 @@
       flex-shrink: 0;
     }
 
-    /* PACKER CUSTOM ROW */
     .packer-custom-section {
       background: #e0f2fe;
       border-radius: 12px;
@@ -585,6 +572,7 @@
       align-items: center;
     }
 
+    .packer-custom-row select,
     .packer-custom-row input {
       background: white;
     }
@@ -599,7 +587,6 @@
       background: #0284c7;
     }
 
-    /* ==================== PERBANTUAN ROW ==================== */
     .perbantuan-row {
       display: grid;
       grid-template-columns: 1.5fr 1fr 1fr 0.5fr;
@@ -612,11 +599,11 @@
       align-items: center;
     }
 
+    .perbantuan-row select,
     .perbantuan-row input {
       background: #fff9e6;
     }
 
-    /* ==================== OUTPUT ROW ==================== */
     .output-row {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -628,12 +615,11 @@
       border: 2px solid #3b82f6;
     }
 
-    /* ==================== DOWNTIME ROWS ==================== */
     .downtime-row {
       display: grid;
       grid-template-columns: 2fr 0.5fr 1fr;
-      gap: clamp(8px, 1.5vw, 16px);
-      padding: clamp(10px, 2vw, 16px);
+      gap: 12px;
+      padding: 12px;
       background: #f0f9ff;
       border-radius: var(--border-radius-sm);
       align-items: center;
@@ -643,9 +629,9 @@
 
     .lsm-row {
       display: grid;
-      grid-template-columns: 2fr 1fr 1.5fr 1.5fr 0.8fr;
-      gap: clamp(6px, 1.2vw, 12px);
-      padding: clamp(10px, 2vw, 16px);
+      grid-template-columns: 1.5fr 0.8fr 1.2fr 1.2fr 0.5fr;
+      gap: 10px;
+      padding: 12px;
       background: #faf5ff;
       border-radius: var(--border-radius-sm);
       align-items: center;
@@ -653,11 +639,27 @@
       border: 1px solid rgba(168, 85, 247, 0.2);
     }
 
+    .lsm-row input, .lsm-row button {
+      width: 100%;
+      min-width: 0;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .lsm-row > div:first-child p {
+      font-size: 13px;
+      font-weight: 700;
+      color: #a855f7;
+      margin: 0;
+      white-space: nowrap;
+    }
+
     .lsnm-row {
       display: grid;
-      grid-template-columns: 2fr 1fr 1.5fr 0.8fr;
-      gap: clamp(6px, 1.2vw, 12px);
-      padding: clamp(10px, 2vw, 16px);
+      grid-template-columns: 1.5fr 0.8fr 1.2fr 0.5fr;
+      gap: 10px;
+      padding: 12px;
       background: #f0fdf4;
       border-radius: var(--border-radius-sm);
       align-items: center;
@@ -665,7 +667,59 @@
       border: 1px solid rgba(16, 185, 129, 0.2);
     }
 
-    /* ==================== TABLES ==================== */
+    .lsnm-row input, .lsnm-row button {
+      width: 100%;
+      min-width: 0;
+    }
+
+    .lsnm-row > div:first-child p {
+      font-size: 13px;
+      font-weight: 700;
+      color: #10b981;
+      margin: 0;
+      white-space: nowrap;
+    }
+
+    @media (max-width: 992px) {
+      .lsm-row {
+        grid-template-columns: 1.2fr 0.6fr 1fr 1fr 0.4fr;
+        gap: 6px;
+        font-size: 11px;
+      }
+      
+      .lsnm-row {
+        grid-template-columns: 1.2fr 0.6fr 1fr 0.4fr;
+        gap: 6px;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .lsm-row {
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+      }
+      
+      .lsm-row > div:first-child {
+        grid-column: 1 / -1;
+      }
+      
+      .lsnm-row {
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+      }
+      
+      .lsnm-row > div:first-child {
+        grid-column: 1 / -1;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .lsm-row, .lsnm-row {
+        grid-template-columns: 1fr;
+        gap: 8px;
+      }
+    }
+
     .table-wrapper {
       overflow-x: auto;
       border-radius: 12px;
@@ -694,12 +748,10 @@
       white-space: nowrap;
     }
 
-    /* Table khusus Oral */
     .oral-table thead {
       background: linear-gradient(135deg, var(--oral), #059669);
     }
 
-    /* Table khusus Steril */
     .steril-table thead {
       background: linear-gradient(135deg, var(--steril), #1d4ed8);
     }
@@ -712,7 +764,6 @@
       transition: var(--transition);
     }
 
-    /* Style untuk baris yang bisa diklik */
     tbody tr {
       cursor: pointer;
       transition: var(--transition);
@@ -724,14 +775,12 @@
       box-shadow: 0 4px 12px rgba(236, 72, 153, 0.2);
     }
 
-    /* Style untuk baris yang sedang aktif/dipilih */
     tbody tr.selected-row {
       background: #fbcfe8 !important;
       border-left: 4px solid var(--primary);
       box-shadow: 0 4px 12px rgba(236, 72, 153, 0.3);
     }
 
-    /* Style untuk PE merah */
     .pe-low {
       color: #ef4444 !important;
       font-weight: 800 !important;
@@ -741,7 +790,6 @@
       text-align: right;
     }
 
-    /* ==================== CHART CONTAINER ==================== */
     .chart-container {
       background: white;
       border-radius: var(--border-radius);
@@ -765,7 +813,6 @@
       width: 100%;
     }
 
-    /* ==================== HORIZONTAL BAR CHART ==================== */
     .horizontal-bar-container {
       background: white;
       border-radius: var(--border-radius);
@@ -879,7 +926,6 @@
       border-radius: 20px;
     }
 
-    /* ==================== MASTER DATA GRID ==================== */
     .master-data-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(min(220px, 100%), 1fr));
@@ -924,7 +970,6 @@
       word-break: break-word;
     }
 
-    /* ==================== EMPTY STATE ==================== */
     .empty-state {
       text-align: center;
       padding: clamp(24px, 5vw, 48px) clamp(16px, 3vw, 32px);
@@ -944,7 +989,6 @@
       word-break: break-word;
     }
 
-    /* ==================== TOAST ==================== */
     .toast-container {
       position: fixed;
       top: 20px;
@@ -984,8 +1028,7 @@
       to { transform: translateX(0); opacity: 1; }
     }
 
-    /* ==================== MODAL ==================== */
-    #modal-backdrop, #login-backdrop {
+    #modal-backdrop, #login-backdrop, #detail-backdrop {
       position: fixed;
       top: 0;
       left: 0;
@@ -995,7 +1038,7 @@
       z-index: 9998;
     }
 
-    #modal, #login-modal, #download-modal {
+    #modal, #login-modal, #download-modal, #detail-modal {
       position: fixed;
       top: 50%;
       left: 50%;
@@ -1005,12 +1048,235 @@
       padding: clamp(16px, 4vw, 24px);
       z-index: 9999;
       width: 90%;
-      max-width: 450px;
+      max-width: 600px;
       max-height: 90vh;
       overflow-y: auto;
     }
 
-    /* ==================== DOWNLOAD BUTTONS ==================== */
+    .detail-header {
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      color: white;
+      padding: 15px;
+      border-radius: 12px;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    .detail-header h2 {
+      margin: 0;
+      font-size: 18px;
+    }
+
+    .detail-header p {
+      margin: 5px 0 0;
+      font-size: 14px;
+      opacity: 0.9;
+    }
+
+    .detail-section {
+      margin-bottom: 20px;
+      padding: 15px;
+      background: #f8fafc;
+      border-radius: 12px;
+      border-left: 4px solid var(--primary);
+    }
+
+    .detail-section-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--primary-dark);
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .production-summary {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+      margin-bottom: 15px;
+    }
+
+    .summary-item {
+      background: white;
+      padding: 10px;
+      border-radius: 8px;
+      text-align: center;
+    }
+
+    .summary-label {
+      font-size: 11px;
+      color: #64748b;
+      margin-bottom: 5px;
+    }
+
+    .summary-value {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--primary);
+    }
+
+    .summary-value.pe-value {
+      color: var(--success);
+    }
+
+    .packer-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .packer-list li {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px;
+      border-bottom: 1px solid #e2e8f0;
+    }
+
+    .packer-list li:last-child {
+      border-bottom: none;
+    }
+
+    .packer-info {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .packer-inisial {
+      width: 36px;
+      height: 36px;
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 14px;
+    }
+
+    .packer-name {
+      font-weight: 600;
+      font-size: 13px;
+    }
+
+    .packer-role {
+      font-size: 10px;
+      padding: 2px 6px;
+      border-radius: 4px;
+      background: #f1f5f9;
+      color: #475569;
+    }
+
+    .packer-role.inti {
+      background: #dbeafe;
+      color: #1e40af;
+    }
+
+    .packer-role.custom {
+      background: #e0f2fe;
+      color: #0369a1;
+    }
+
+    .packer-role.perbantuan {
+      background: #fef3c7;
+      color: #92400e;
+    }
+
+    .packer-time {
+      text-align: right;
+    }
+
+    .time-range {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-dark);
+    }
+
+    .duration {
+      font-size: 11px;
+      color: #64748b;
+    }
+
+    .edit-section {
+      background: linear-gradient(135deg, #fff5f5 0%, #fff0f5 100%);
+      border: 2px solid var(--primary);
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 20px;
+    }
+
+    .edit-section-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--primary-dark);
+      margin-bottom: 15px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .edit-section-title::before {
+      content: '✏️';
+      font-size: 20px;
+    }
+
+    .search-filters {
+      display: grid;
+      grid-template-columns: 1fr 1fr auto;
+      gap: 15px;
+      align-items: end;
+      margin-bottom: 20px;
+    }
+
+    .edit-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .edit-table th {
+      background: var(--primary-light);
+      color: var(--primary-dark);
+      padding: 12px;
+      font-size: 12px;
+      text-align: left;
+    }
+
+    .edit-table td {
+      padding: 10px 12px;
+      border-bottom: 1px solid #f1f5f9;
+    }
+
+    .edit-table tr:hover {
+      background: #fce7f3;
+    }
+
+    .btn-edit-small {
+      padding: 6px 12px;
+      background: #3b82f6;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-right: 5px;
+    }
+
+    .btn-delete-small {
+      padding: 6px 12px;
+      background: #ef4444;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
     .download-buttons {
       display: flex;
       gap: 12px;
@@ -1056,7 +1322,6 @@
       cursor: not-allowed;
     }
 
-    /* ==================== PROGRESS BAR ==================== */
     .progress-bar {
       width: 100%;
       height: 8px;
@@ -1074,125 +1339,6 @@
       transition: width 0.3s ease;
     }
 
-    /* ==================== RESPONSIVE BREAKPOINTS ==================== */
-    @media (max-width: 1200px) {
-      .packer-checkbox-grid {
-        grid-template-columns: repeat(4, 1fr);
-      }
-    }
-
-    @media (max-width: 992px) {
-      .packer-checkbox-grid {
-        grid-template-columns: repeat(3, 1fr);
-      }
-      
-      .lsm-row {
-        grid-template-columns: 2fr 1fr 1fr 1fr 0.8fr;
-      }
-      
-      .produk-row {
-        grid-template-columns: 1fr;
-      }
-    }
-
-    @media (max-width: 768px) {
-      .perbantuan-row {
-        grid-template-columns: 1fr 1fr 1fr 0.5fr;
-      }
-      
-      .packer-custom-row {
-        grid-template-columns: 1fr 1fr 1fr 0.5fr;
-      }
-      
-      .downtime-row {
-        grid-template-columns: 1fr;
-      }
-      
-      .lsm-row, .lsnm-row {
-        grid-template-columns: 1fr;
-      }
-      
-      .output-row {
-        grid-template-columns: 1fr;
-      }
-      
-      .bar-label {
-        width: 120px;
-        font-size: 10px;
-      }
-      
-      .bar-value {
-        min-width: 70px;
-        font-size: 11px;
-      }
-    }
-
-    @media (max-width: 640px) {
-      .packer-checkbox-grid {
-        grid-template-columns: repeat(2, 1fr);
-      }
-      
-      .perbantuan-row {
-        grid-template-columns: 1fr;
-      }
-      
-      .packer-custom-row {
-        grid-template-columns: 1fr;
-      }
-      
-      .score-cards {
-        grid-template-columns: repeat(2, 1fr);
-      }
-      
-      .bar-item {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 5px;
-      }
-      
-      .bar-label {
-        width: 100%;
-        margin-bottom: 5px;
-      }
-      
-      .bar-wrapper {
-        width: 100%;
-      }
-      
-      .bar-value {
-        align-self: flex-end;
-      }
-    }
-
-    @media (max-width: 480px) {
-      .packer-checkbox-grid {
-        grid-template-columns: 1fr;
-      }
-      
-      .packer-checkbox-item {
-        min-height: auto;
-        padding: 8px 10px;
-      }
-      
-      .score-cards {
-        grid-template-columns: 1fr;
-      }
-      
-      .header {
-        flex-direction: column;
-        text-align: center;
-      }
-      
-      .header-datetime {
-        text-align: center;
-      }
-      
-      .tabs-container {
-        top: clamp(90px, 15vw, 110px);
-      }
-    }
-
-    /* ==================== DARK MODE ==================== */
     body.dark-mode {
       background: linear-gradient(135deg, #1f1729 0%, #2d1f35 50%, #3d2640 100%);
       color: var(--text-light);
@@ -1205,146 +1351,106 @@
     body.dark-mode .master-card,
     body.dark-mode #modal,
     body.dark-mode #login-modal,
-    body.dark-mode #download-modal {
+    body.dark-mode #download-modal,
+    body.dark-mode #detail-modal {
       background: #2d2236;
       border-color: rgba(236, 72, 153, 0.15);
       color: var(--text-light);
     }
 
-    body.dark-mode .form-group label,
-    body.dark-mode .score-label,
-    body.dark-mode .bar-label {
-      color: #b9a2b3;
-    }
-
-    body.dark-mode .form-group input,
-    body.dark-mode .form-group select,
-    body.dark-mode .input-field {
-      background: #1f1729;
-      color: var(--text-light);
-      border-color: #403050;
-    }
-
-    body.dark-mode .form-group input:focus,
-    body.dark-mode .form-group select:focus {
-      background: #2d2236;
+    body.dark-mode .edit-section {
+      background: #2d1f35;
       border-color: var(--primary);
     }
 
-    body.dark-mode .produk-row {
-      background: #2d1a28;
-      border-color: #ec4899;
-    }
-
-    body.dark-mode .packer-inti-section {
+    body.dark-mode .detail-section {
       background: #1f1729;
-      border-color: #403050;
     }
 
-    body.dark-mode .packer-custom-section {
-      background: #1a2a3a;
-      border-color: #38bdf8;
+    body.dark-mode .summary-item {
+      background: #2d2236;
     }
 
-    body.dark-mode .packer-custom-row {
-      background: #1f1729;
-      border-color: #38bdf8;
+    body.dark-mode .packer-list li {
+      border-bottom-color: #403050;
     }
 
-    body.dark-mode .packer-custom-row input {
-      background: #1f1729;
-      color: var(--text-light);
-    }
-
-    body.dark-mode thead {
-      background: rgba(60, 40, 60, 0.8);
-    }
-
-    body.dark-mode .oral-table thead {
-      background: rgba(16, 185, 129, 0.3);
-    }
-
-    body.dark-mode .steril-table thead {
-      background: rgba(59, 130, 246, 0.3);
-    }
-
-    body.dark-mode thead th {
-      color: #f472b6;
-    }
-
-    body.dark-mode tbody td {
+    body.dark-mode .packer-role {
+      background: #403050;
       color: #e5e5e5;
     }
 
-    body.dark-mode tbody tr:hover {
-      background: #2d2236 !important;
+    body.dark-mode .packer-role.inti {
+      background: #1e3a5f;
+      color: #93c5fd;
     }
 
-    body.dark-mode tbody tr.selected-row {
-      background: #3d2a3a !important;
-      border-left-color: #f472b6;
+    body.dark-mode .packer-role.custom {
+      background: #1a3a4a;
+      color: #7dd3fc;
     }
 
-    body.dark-mode .pe-low {
-      color: #ff6b6b !important;
+    body.dark-mode .packer-role.perbantuan {
+      background: #4a3a1a;
+      color: #fcd34d;
     }
 
-    body.dark-mode .bar-wrapper {
-      background: #3a2a3a;
-    }
-
-    body.dark-mode .bar-value {
-      color: #f472b6;
-      background: rgba(236, 72, 153, 0.2);
-    }
-
-    body.dark-mode .tab-btn {
-      color: #9ca3af;
-    }
-
-    body.dark-mode .tab-btn:hover,
-    body.dark-mode .tab-btn.active {
-      color: #f472b6;
-    }
-
-    body.dark-mode .packer-checkbox-item {
-      background: #1f1729;
-      border-color: #403050;
+    body.dark-mode .time-range {
       color: var(--text-light);
     }
 
-    body.dark-mode .packer-checkbox-item:hover {
+    body.dark-mode .duration {
+      color: #b9a2b3;
+    }
+
+    body.dark-mode .edit-table th {
+      background: #2d1f35;
+      color: #f472b6;
+    }
+
+    body.dark-mode .edit-table td {
+      border-bottom-color: #403050;
+    }
+
+    body.dark-mode .edit-table tr:hover {
       background: #2d2236;
-      border-color: var(--primary);
     }
 
-    body.dark-mode .perbantuan-row {
-      background: #2d2519;
-      border-color: #8b6f3c;
+    body.dark-mode .btn-edit-small {
+      background: #3b82f6;
     }
 
-    body.dark-mode .perbantuan-row input {
-      background: #1f1729;
-      color: var(--text-light);
+    body.dark-mode .btn-delete-small {
+      background: #ef4444;
     }
 
-    body.dark-mode .output-row {
-      background: #1a2a3a;
-      border-color: #3b82f6;
+    body.dark-mode .lsm-row {
+      background: #2d1f35;
+      border-color: rgba(168, 85, 247, 0.3);
     }
 
-    body.dark-mode .empty-state {
-      background: #1f1729;
+    body.dark-mode .lsnm-row {
+      background: #1f2d25;
+      border-color: rgba(16, 185, 129, 0.3);
     }
 
-    body.dark-mode .progress-bar {
-      background: #403050;
+    body.dark-mode .lsm-row > div:first-child p {
+      color: #c084fc;
+    }
+
+    body.dark-mode .lsnm-row > div:first-child p {
+      color: #34d399;
+    }
+
+    @media (max-width: 768px) {
+      .search-filters {
+        grid-template-columns: 1fr;
+      }
     }
   </style>
 </head>
 <body>
 <div id="app">
-  <!-- HEADER -->
   <div class="header">
     <div class="header-content">
       <h1>✨ OEE KEMAS SEKUNDER</h1>
@@ -1362,7 +1468,6 @@
     </div>
   </div>
 
-  <!-- TABS -->
   <div class="tabs-container">
     <button class="tab-btn active" onclick="switchTab('dashboard')">📈 DASHBOARD</button>
     <button class="tab-btn" onclick="switchTab('input')">✏️ INPUT OEE</button>
@@ -1370,11 +1475,8 @@
     <button class="tab-btn" onclick="switchTab('audit')">⚙️ AUDIT & DOWNLOAD</button>
   </div>
 
-  <!-- CONTENT -->
   <div class="content">
-    <!-- ==================== DASHBOARD TAB ==================== -->
     <div id="dashboard" class="tab-content active">
-      <!-- FILTER DASHBOARD -->
       <div class="form-section">
         <div class="section-title">FILTER DASHBOARD</div>
         <div class="form-row">
@@ -1409,7 +1511,6 @@
         </div>
       </div>
 
-      <!-- SCORE CARDS -->
       <div class="score-cards">
         <div class="score-card">
           <div class="score-label">OEE ACTUAL</div>
@@ -1425,7 +1526,6 @@
         </div>
       </div>
 
-      <!-- CHARTS -->
       <div class="chart-container">
         <div class="chart-title">📈 OEE PER BULAN</div>
         <div class="chart-wrapper"><canvas id="chart-oee-monthly"></canvas></div>
@@ -1435,9 +1535,8 @@
         <div class="chart-wrapper"><canvas id="chart-oee-daily"></canvas></div>
       </div>
 
-      <!-- OUTPUT ORAL -->
       <div class="form-section">
-        <div class="section-title-oral">💊 OUTPUT ORAL</div>
+        <div class="section-title-oral">💊 OUTPUT ORAL (KLIK BARIS UNTUK DETAIL)</div>
         <div class="table-wrapper">
           <table class="oral-table">
             <thead>
@@ -1457,9 +1556,8 @@
         </div>
       </div>
 
-      <!-- OUTPUT STERIL -->
       <div class="form-section">
-        <div class="section-title-steril">🧪 OUTPUT STERIL</div>
+        <div class="section-title-steril">🧪 OUTPUT STERIL (KLIK BARIS UNTUK DETAIL)</div>
         <div class="table-wrapper">
           <table class="steril-table">
             <thead>
@@ -1479,7 +1577,6 @@
         </div>
       </div>
 
-      <!-- OEE HISTORY -->
       <div class="form-section">
         <div class="section-title">📋 OEE HISTORY</div>
         <div class="table-wrapper">
@@ -1502,7 +1599,6 @@
         </div>
       </div>
 
-      <!-- HORIZONTAL BAR CHART - LINE STOP MESIN -->
       <div class="horizontal-bar-container">
         <div class="bar-header">
           <div class="bar-title">⚡ LINE STOP MESIN</div>
@@ -1511,7 +1607,6 @@
         <div id="lsm-bar-list" class="bar-list"></div>
       </div>
 
-      <!-- HORIZONTAL BAR CHART - LINE STOP NON MESIN -->
       <div class="horizontal-bar-container">
         <div class="bar-header">
           <div class="bar-title">🔧 LINE STOP NON MESIN</div>
@@ -1520,7 +1615,6 @@
         <div id="lsnm-bar-list" class="bar-list"></div>
       </div>
 
-      <!-- DETAIL LINE STOP MESIN -->
       <div class="form-section">
         <div class="section-title">🔧 DETAIL LINE STOP MESIN</div>
         <div class="table-wrapper">
@@ -1541,7 +1635,6 @@
         </div>
       </div>
 
-      <!-- DETAIL LINE STOP NON MESIN -->
       <div class="form-section">
         <div class="section-title">🔧 DETAIL LINE STOP NON MESIN</div>
         <div class="table-wrapper">
@@ -1562,10 +1655,8 @@
       </div>
     </div>
 
-    <!-- ==================== INPUT OEE TAB ==================== -->
     <div id="input" class="tab-content">
       <form id="form-oee" onsubmit="submitOEE(event)">
-        <!-- INFORMASI SHIFT -->
         <div class="form-section">
           <div class="section-title">INFORMASI SHIFT</div>
           <div class="form-row">
@@ -1587,41 +1678,34 @@
           </div>
         </div>
 
-        <!-- OPERATIONAL DOWNTIME (ODT) -->
         <div class="form-section">
           <div class="section-title">OPERATIONAL DOWNTIME (ODT)</div>
           <div id="odt-list"></div>
         </div>
 
-        <!-- LINE STOP MESIN -->
         <div class="form-section">
           <div class="section-title">LINE STOP MESIN</div>
           <button type="button" class="btn btn-success w-100" onclick="addCustomLineStopMesin()">+ TAMBAH CUSTOM LINE STOP MESIN</button>
           <div id="line-stop-mesin-list" class="mt-16"></div>
         </div>
 
-        <!-- LINE STOP NON-MESIN -->
         <div class="form-section">
           <div class="section-title">LINE STOP NON-MESIN</div>
           <button type="button" class="btn btn-success w-100" onclick="addCustomLineStopNonMesin()">+ TAMBAH CUSTOM LINE STOP NON-MESIN</button>
           <div id="line-stop-non-mesin-list" class="mt-16"></div>
         </div>
 
-        <!-- DATA PRODUKSI -->
         <div class="form-section">
           <div class="section-title">DATA PRODUKSI</div>
           <div class="production-container">
-            <!-- PRODUK ROWS -->
             <div id="produk-rows-container"></div>
-            <button type="button" class="btn btn-primary w-100" onclick="addProdukRow()">+ TAMBAH PRODUK + BATCH</button>
+            <button type="button" class="btn btn-primary w-100" onclick="addProdukRow()">+ TAMBAH PRODUK / BATCH</button>
             
-            <!-- PACKER INTI (CHECKBOX) -->
             <div class="packer-inti-section">
               <div class="packer-inti-title">PACKER INTI (DARI MASTER DATA)</div>
               <div id="packer-inti-checkbox"></div>
             </div>
             
-            <!-- PACKER CUSTOM -->
             <div class="packer-custom-section">
               <div class="packer-custom-title">PACKER CUSTOM (TAMBAHAN)</div>
               <div id="packer-custom-list"></div>
@@ -1630,26 +1714,22 @@
           </div>
         </div>
 
-        <!-- PACKER PERBANTUAN -->
         <div class="form-section">
           <div class="section-title">PACKER PERBANTUAN</div>
           <button type="button" class="btn btn-warning w-100" onclick="addPerbantuan()">+ TAMBAH PERBANTUAN</button>
           <div id="perbantuan-list" class="mt-16"></div>
         </div>
 
-        <!-- OUTPUT & REJECT -->
         <div class="form-section">
           <div class="section-title">OUTPUT & REJECT</div>
           <div id="output-reject-container"></div>
         </div>
 
-        <!-- NOTES -->
         <div class="form-section">
           <div class="section-title">NOTES</div>
           <textarea id="oee-notes" rows="3" placeholder="TAMBAHKAN CATATAN" style="width: 100%;"></textarea>
         </div>
 
-        <!-- HASIL PERHITUNGAN -->
         <div class="form-section">
           <div id="availability-warning" style="display: none;"></div>
           <div id="oee-over100-warning" style="display: none;" class="warning-box"></div>
@@ -1667,7 +1747,6 @@
           </div>
         </div>
 
-        <!-- ACTION BUTTONS -->
         <div style="display: flex; gap: 12px; flex-wrap: wrap;">
           <button type="submit" class="btn btn-primary" style="flex: 1;" id="submit-btn">💾 SIMPAN</button>
           <button type="button" class="btn btn-secondary" style="flex: 1;" onclick="resetOEEForm()">🔄 RESET</button>
@@ -1675,8 +1754,48 @@
       </form>
     </div>
 
-    <!-- ==================== MASTER DATA TAB ==================== -->
     <div id="master" class="tab-content">
+      <div class="edit-section">
+        <div class="edit-section-title">✏️ EDIT / DELETE DATA OEE</div>
+        <div class="search-filters">
+          <div class="form-group">
+            <label>TANGGAL</label>
+            <input type="date" id="edit-date" class="input-field">
+          </div>
+          <div class="form-group">
+            <label>SHIFT</label>
+            <select id="edit-shift" class="input-field">
+              <option value="">PILIH SHIFT</option>
+              <option value="Shift 1">SHIFT 1</option>
+              <option value="Shift 2">SHIFT 2</option>
+              <option value="Shift 3">SHIFT 3</option>
+              <option value="Longshift Pagi">LONGSHIFT PAGI</option>
+              <option value="Longshift Malam">LONGSHIFT MALAM</option>
+            </select>
+          </div>
+          <button class="btn btn-primary" onclick="searchOeeData()">CARI DATA</button>
+        </div>
+        <div id="edit-data-container">
+          <table class="edit-table">
+            <thead>
+              <tr>
+                <th>WAKTU</th>
+                <th>PRODUK/BATCH</th>
+                <th>PACKER</th>
+                <th class="text-right">GOOD</th>
+                <th class="text-right">OEE</th>
+                <th>AKSI</th>
+              </tr>
+            </thead>
+            <tbody id="edit-data-table">
+              <tr>
+                <td colspan="6" class="text-center">MASUKKAN TANGGAL & SHIFT UNTUK MENCARI DATA</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
       <div class="form-section">
         <div class="section-title">📦 MASTER PRODUK</div>
         <button class="btn btn-primary w-100" onclick="openAddProductModal()">+ PRODUK BARU</button>
@@ -1704,9 +1823,7 @@
       </div>
     </div>
 
-    <!-- ==================== AUDIT & DOWNLOAD TAB ==================== -->
     <div id="audit" class="tab-content">
-      <!-- FILTER SECTION UNTUK DOWNLOAD -->
       <div class="form-section">
         <div class="section-title">📊 FILTER DATA UNTUK DOWNLOAD</div>
         <div class="form-row">
@@ -1737,12 +1854,10 @@
           </div>
         </div>
 
-        <!-- PROGRESS BAR -->
         <div class="progress-bar" id="download-progress">
           <div class="progress-bar-fill" id="download-progress-fill"></div>
         </div>
 
-        <!-- DOWNLOAD BUTTONS -->
         <div class="download-buttons">
           <button class="download-btn download-btn-pdf" onclick="downloadDashboard('pdf')" id="download-pdf-btn">
             <span>📄</span> DOWNLOAD PDF
@@ -1758,7 +1873,6 @@
         </div>
       </div>
 
-      <!-- AUDIT TRAIL TABLE -->
       <div class="form-section">
         <div class="section-title">📜 AUDIT TRAIL</div>
         <div class="table-wrapper">
@@ -1778,7 +1892,6 @@
   </div>
 </div>
 
-<!-- MODAL LOGIN -->
 <div id="login-backdrop" style="display: none;" onclick="if(event.target===this) closeLoginModal();"></div>
 <div id="login-modal" style="display: none;">
   <h2 class="login-title">🔐 MASTER DATA ACCESS</h2>
@@ -1795,7 +1908,6 @@
   </form>
 </div>
 
-<!-- MODAL CRUD -->
 <div id="modal-backdrop" style="display: none;" onclick="if(event.target===this) closeModal();"></div>
 <div id="modal" style="display: none;">
   <h2 id="modal-title">MODAL TITLE</h2>
@@ -1808,11 +1920,17 @@
   </form>
 </div>
 
-<!-- TOAST CONTAINER -->
+<div id="detail-backdrop" style="display: none;" onclick="if(event.target===this) closeDetailModal();"></div>
+<div id="detail-modal" style="display: none;">
+  <div id="detail-content"></div>
+  <div style="margin-top: 20px; text-align: right;">
+    <button class="btn btn-secondary" onclick="closeDetailModal()">TUTUP</button>
+  </div>
+</div>
+
 <div id="toast-container" class="toast-container"></div>
 
 <script>
-  // ==================== SUPABASE CONFIG ====================
   const SUPABASE_URL = 'https://lxtnhdyxrkjbypahdsrf.supabase.co';
   const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imx4dG5oZHl4cmtqYnlwYWhkc3JmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzA3ODI5MDIsImV4cCI6MjA4NjM1ODkwMn0.BtC1iFgNydjy6gWmk7HPXt70UcgnBCsWj8H89WqfRwA';
   let supabaseClient = window.supabase?.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
@@ -1821,7 +1939,6 @@
   let isMasterDataUnlocked = false;
   let isSubmitting = false;
 
-  // LOCAL DATA
   let localData = {
     produk: [],
     packer: [],
@@ -1832,18 +1949,17 @@
     audit_trail: []
   };
 
-  // STATE FORM
   let oeeFormState = {
     shiftMinutes: 0,
-    produkRows: [ // Array untuk multiple produk
+    produkRows: [
       {
         id: 'produk_' + Date.now() + '_0',
         productId: '',
         batchNumber: ''
       }
     ],
-    packerInti: [], // Array ID packer yang dipilih dari master
-    packerCustom: [], // Array untuk packer custom dengan waktu
+    packerInti: [],
+    packerCustom: [],
     perbantuan: [],
     goodOutput: 0,
     reject: 0,
@@ -1858,7 +1974,14 @@
   let filteredOeeRecords = [];
   let selectedRecordIndex = -1;
 
-  // ==================== INIT APP ====================
+  const SHIFT_SCHEDULE = {
+    'Shift 1': { start: '07:00', end: '15:30', minutes: 510 },
+    'Shift 2': { start: '15:20', end: '22:50', minutes: 450 },
+    'Shift 3': { start: '22:40', end: '07:10', minutes: 510 },
+    'Longshift Pagi': { start: '07:00', end: '19:00', minutes: 720 },
+    'Longshift Malam': { start: '19:00', end: '07:00', minutes: 720 }
+  };
+
   async function initApp() {
     await loadDataFromSupabase();
     loadOEEFormData();
@@ -1905,7 +2028,6 @@
     }
   };
 
-  // ==================== LOGIN ====================
   function showLoginModal() {
     document.getElementById('login-backdrop').style.display = 'block';
     document.getElementById('login-modal').style.display = 'block';
@@ -1942,7 +2064,6 @@
     return true;
   }
 
-  // ==================== LOAD SUPABASE ====================
   async function loadDataFromSupabase() {
     try {
       const [produkRes, packerRes, downtimeRes, lsmRes, lsnmRes, oeeRes, auditRes] = await Promise.all([
@@ -1973,18 +2094,19 @@
     }
   }
 
-  // ==================== SHIFT ====================
   function updateShiftMinutes() {
     const shift = document.getElementById('oee-shift').value;
-    const shiftSchedule = { 'Shift 1': 450, 'Shift 2': 390, 'Shift 3': 450, 'Longshift Pagi': 615, 'Longshift Malam': 615 };
-    oeeFormState.shiftMinutes = shiftSchedule[shift] || 0;
+    oeeFormState.shiftMinutes = SHIFT_SCHEDULE[shift]?.minutes || 0;
     renderODTList();
     renderLineStopMesinList();
     renderLineStopNonMesinList();
     calculateOEE();
   }
 
-  // ==================== PRODUK ROWS ====================
+  function getShiftTimeRange(shift) {
+    return SHIFT_SCHEDULE[shift] || { start: '-', end: '-', minutes: 0 };
+  }
+
   function addProdukRow() {
     oeeFormState.produkRows.push({
       id: 'produk_' + Date.now() + '_' + Math.random(),
@@ -2039,8 +2161,16 @@
     }).join('');
   }
 
-  // ==================== PACKER INTI ====================
+  // ==================== PACKER INTI (DENGAN CEK KONFLIK) ====================
   function togglePackerInti(packerId) {
+    // Cek apakah packer ini sudah dipilih di custom
+    const isInCustom = oeeFormState.packerCustom.some(p => p.packerId === packerId);
+    
+    if (isInCustom) {
+      showToast('PACKER SUDAH DIPILIH DI CUSTOM!', 'error');
+      return;
+    }
+    
     const idx = oeeFormState.packerInti.indexOf(packerId);
     if (idx === -1) {
       oeeFormState.packerInti.push(packerId);
@@ -2048,6 +2178,7 @@
       oeeFormState.packerInti.splice(idx, 1);
     }
     renderPackerIntiCheckbox();
+    renderPackerCustomList(); // Refresh dropdown custom
     calculateOEE();
   }
 
@@ -2063,24 +2194,32 @@
     
     container.innerHTML = `
       <div class="packer-checkbox-grid">
-        ${sortedPackers.map(p => `
-          <label class="packer-checkbox-item">
-            <input type="checkbox" value="${p.id}" ${oeeFormState.packerInti.includes(p.id) ? 'checked' : ''} onchange="togglePackerInti('${p.id}')"> 
-            <span>${p.nama}</span>
-          </label>
-        `).join('')}
+        ${sortedPackers.map(p => {
+          // Cek apakah packer ini sudah dipilih di custom (jika ya, checkbox disabled)
+          const isDisabled = oeeFormState.packerCustom.some(c => c.packerId === p.id);
+          return `
+            <label class="packer-checkbox-item" style="${isDisabled ? 'opacity: 0.5;' : ''}">
+              <input type="checkbox" 
+                value="${p.id}" 
+                ${oeeFormState.packerInti.includes(p.id) ? 'checked' : ''} 
+                ${isDisabled ? 'disabled' : ''}
+                onchange="togglePackerInti('${p.id}')"> 
+              <span>${p.nama} ${isDisabled ? '(DI CUSTOM)' : ''}</span>
+            </label>
+          `;
+        }).join('')}
       </div>
       <div style="margin-top: 8px; font-size: 11px; color: #6b4c5c;">
-        TERPILIH: ${oeeFormState.packerInti.length} PACKER
+        TERPILIH: ${oeeFormState.packerInti.length} PACKER INTI
       </div>
     `;
   }
 
-  // ==================== PACKER CUSTOM ====================
+  // ==================== PACKER CUSTOM (DENGAN FILTER) ====================
   function addPackerCustom() {
     oeeFormState.packerCustom.push({
       id: 'packer_custom_' + Date.now() + '_' + Math.random(),
-      inisial: '',
+      packerId: '',
       jamStart: '',
       jamEnd: ''
     });
@@ -2096,30 +2235,53 @@
       return;
     }
 
-    container.innerHTML = oeeFormState.packerCustom.map(p => `
-      <div class="packer-custom-row">
-        <div class="form-group">
-          <label>INISIAL PACKER</label>
-          <input type="text" value="${p.inisial}" placeholder="CONTOH: AB" onchange="updatePackerCustom('${p.id}', 'inisial', this.value)">
+    // Filter packer yang sudah dipilih di inti (tidak boleh muncul di dropdown custom)
+    const availablePackers = localData.packer.filter(p => !oeeFormState.packerInti.includes(p.id));
+    
+    const packerOptions = '<option value="">-- PILIH PACKER --</option>' + 
+      availablePackers.map(p => `<option value="${p.id}">${p.nama}</option>`).join('');
+
+    container.innerHTML = oeeFormState.packerCustom.map(p => {
+      const selectedPacker = localData.packer.find(packer => packer.id === p.packerId);
+      const packerName = selectedPacker ? selectedPacker.nama : '';
+      
+      return `
+        <div class="packer-custom-row">
+          <div class="form-group">
+            <label>PACKER</label>
+            <select onchange="updatePackerCustom('${p.id}', 'packerId', this.value)">
+              ${packerOptions.replace(`value="${p.packerId}"`, `value="${p.packerId}" selected`)}
+            </select>
+          </div>
+          <div class="form-group">
+            <label>JAM START</label>
+            <input type="time" value="${p.jamStart}" onchange="updatePackerCustom('${p.id}', 'jamStart', this.value)">
+          </div>
+          <div class="form-group">
+            <label>JAM END</label>
+            <input type="time" value="${p.jamEnd}" onchange="updatePackerCustom('${p.id}', 'jamEnd', this.value)">
+          </div>
+          <div>
+            <button type="button" class="btn btn-danger btn-small w-100" onclick="removePackerCustom('${p.id}')">HAPUS</button>
+          </div>
         </div>
-        <div class="form-group">
-          <label>JAM START</label>
-          <input type="time" value="${p.jamStart}" onchange="updatePackerCustom('${p.id}', 'jamStart', this.value)">
-        </div>
-        <div class="form-group">
-          <label>JAM END</label>
-          <input type="time" value="${p.jamEnd}" onchange="updatePackerCustom('${p.id}', 'jamEnd', this.value)">
-        </div>
-        <div>
-          <button type="button" class="btn btn-danger btn-small w-100" onclick="removePackerCustom('${p.id}')">HAPUS</button>
-        </div>
-      </div>
-    `).join('');
+      `;
+    }).join('');
+    
+    // Update checkbox inti juga (karena ada packer yang mungkin jadi disabled)
+    renderPackerIntiCheckbox();
   }
 
   function updatePackerCustom(id, field, value) {
     const packer = oeeFormState.packerCustom.find(p => p.id === id);
     if (packer) {
+      // Kalau field yang diupdate adalah packerId, cek dulu apakah packer ini sudah ada di inti
+      if (field === 'packerId' && value) {
+        if (oeeFormState.packerInti.includes(value)) {
+          showToast('PACKER SUDAH DIPILIH DI INTI!', 'error');
+          return;
+        }
+      }
       packer[field] = value;
       calculateOEE();
     }
@@ -2128,14 +2290,15 @@
   function removePackerCustom(id) {
     oeeFormState.packerCustom = oeeFormState.packerCustom.filter(p => p.id !== id);
     renderPackerCustomList();
+    renderPackerIntiCheckbox(); // Refresh checkbox inti (enable kembali packer yang dihapus dari custom)
     calculateOEE();
   }
 
-  // ==================== PERBANTUAN ====================
+  // ==================== PERBANTUAN (tetap sama) ====================
   function addPerbantuan() {
     oeeFormState.perbantuan.push({
       id: 'perbantuan_' + Date.now() + '_' + Math.random(),
-      inisial: '',
+      packerId: '',
       jamStart: '',
       jamEnd: ''
     });
@@ -2151,25 +2314,35 @@
       return;
     }
 
-    container.innerHTML = oeeFormState.perbantuan.map(p => `
-      <div class="perbantuan-row">
-        <div class="form-group">
-          <label>INISIAL</label>
-          <input type="text" value="${p.inisial}" placeholder="CONTOH: AB" onchange="updatePerbantuan('${p.id}', 'inisial', this.value)">
+    const packerOptions = '<option value="">-- PILIH PACKER --</option>' + 
+      localData.packer.map(p => `<option value="${p.id}">${p.nama}</option>`).join('');
+
+    container.innerHTML = oeeFormState.perbantuan.map(p => {
+      const selectedPacker = localData.packer.find(packer => packer.id === p.packerId);
+      const packerName = selectedPacker ? selectedPacker.nama : '';
+      
+      return `
+        <div class="perbantuan-row">
+          <div class="form-group">
+            <label>PACKER</label>
+            <select onchange="updatePerbantuan('${p.id}', 'packerId', this.value)">
+              ${packerOptions.replace(`value="${p.packerId}"`, `value="${p.packerId}" selected`)}
+            </select>
+          </div>
+          <div class="form-group">
+            <label>JAM START</label>
+            <input type="time" value="${p.jamStart}" onchange="updatePerbantuan('${p.id}', 'jamStart', this.value)">
+          </div>
+          <div class="form-group">
+            <label>JAM END</label>
+            <input type="time" value="${p.jamEnd}" onchange="updatePerbantuan('${p.id}', 'jamEnd', this.value)">
+          </div>
+          <div>
+            <button type="button" class="btn btn-danger btn-small w-100" onclick="removePerbantuan('${p.id}')">HAPUS</button>
+          </div>
         </div>
-        <div class="form-group">
-          <label>JAM START</label>
-          <input type="time" value="${p.jamStart}" onchange="updatePerbantuan('${p.id}', 'jamStart', this.value)">
-        </div>
-        <div class="form-group">
-          <label>JAM END</label>
-          <input type="time" value="${p.jamEnd}" onchange="updatePerbantuan('${p.id}', 'jamEnd', this.value)">
-        </div>
-        <div>
-          <button type="button" class="btn btn-danger btn-small w-100" onclick="removePerbantuan('${p.id}')">HAPUS</button>
-        </div>
-      </div>
-    `).join('');
+      `;
+    }).join('');
   }
 
   function updatePerbantuan(id, field, value) {
@@ -2186,7 +2359,6 @@
     calculateOEE();
   }
 
-  // ==================== OUTPUT & REJECT ====================
   function renderOutputReject() {
     const container = document.getElementById('output-reject-container');
     container.innerHTML = `
@@ -2212,73 +2384,301 @@
     calculateOEE();
   }
 
-  // ==================== HITUNG TOTAL PACKER MINUTES ====================
-  function calculateTotalPackerMinutes() {
-    let totalMinutes = 0;
+  function calculateDuration(jamStart, jamEnd) {
+    if (!jamStart || !jamEnd) return 0;
     
-    oeeFormState.packerCustom.forEach(p => {
-      if (p.jamStart && p.jamEnd) {
-        const start = p.jamStart.split(':').map(Number);
-        const end = p.jamEnd.split(':').map(Number);
-        if (start.length === 2 && end.length === 2) {
-          const startDate = new Date(2000, 0, 1, start[0], start[1]);
-          const endDate = new Date(2000, 0, 1, end[0], end[1]);
-          const diffMinutes = (endDate - startDate) / (1000 * 60);
-          if (diffMinutes > 0) totalMinutes += diffMinutes;
-        }
-      }
-    });
+    const start = jamStart.split(':').map(Number);
+    const end = jamEnd.split(':').map(Number);
     
-    return totalMinutes;
+    if (start.length === 2 && end.length === 2) {
+      const startDate = new Date(2000, 0, 1, start[0], start[1]);
+      const endDate = new Date(2000, 0, 1, end[0], end[1]);
+      const diffMinutes = (endDate - startDate) / (1000 * 60);
+      return diffMinutes > 0 ? diffMinutes : 0;
+    }
+    return 0;
   }
 
-  function calculatePerbantuanMinutes() {
-    let totalMinutes = 0;
-    oeeFormState.perbantuan.forEach(p => {
-      if (p.jamStart && p.jamEnd) {
-        const start = p.jamStart.split(':').map(Number);
-        const end = p.jamEnd.split(':').map(Number);
-        if (start.length === 2 && end.length === 2) {
-          const startDate = new Date(2000, 0, 1, start[0], start[1]);
-          const endDate = new Date(2000, 0, 1, end[0], end[1]);
-          const diffMinutes = (endDate - startDate) / (1000 * 60);
-          if (diffMinutes > 0) totalMinutes += diffMinutes;
-        }
-      }
-    });
-    return totalMinutes;
-  }
-
-  // ==================== HITUNG TOTAL TARGET ====================
   function calculateTotalTarget() {
-    let totalTargetPerMinute = 0;
+    const totalODT = oeeFormState.downtime.reduce((s, o) => s + ((parseFloat(o.frekuensi)||1) * (parseFloat(o.durasi)||0)), 0);
+    const totalLSM = oeeFormState.lineStopMesin.reduce((s, l) => s + (parseFloat(l.durasi)||0), 0);
+    const totalLSNM = oeeFormState.lineStopNonMesin.reduce((s, l) => s + (parseFloat(l.durasi)||0), 0);
+    const timeForTarget = Math.max(0, oeeFormState.shiftMinutes - totalODT - totalLSM - totalLSNM);
+    
+    if (timeForTarget <= 0) return 0;
+    
+    const productGroups = new Map();
+    
     oeeFormState.produkRows.forEach(prod => {
       if (prod.productId) {
-        const selectedProduct = localData.produk.find(p => p.id === prod.productId);
-        if (selectedProduct) {
-          totalTargetPerMinute += selectedProduct.target;
+        if (!productGroups.has(prod.productId)) {
+          const product = localData.produk.find(p => p.id === prod.productId);
+          if (product) {
+            productGroups.set(prod.productId, {
+              product: product,
+              batches: [],
+              count: 0
+            });
+          }
+        }
+        
+        const group = productGroups.get(prod.productId);
+        if (group) {
+          group.batches.push(prod);
+          group.count++;
         }
       }
     });
     
-    const timeForTarget = oeeFormState.shiftMinutes - 
-      oeeFormState.downtime.reduce((s, o) => s + ((parseFloat(o.frekuensi)||1) * (parseFloat(o.durasi)||0)), 0) -
-      oeeFormState.lineStopMesin.reduce((s, l) => s + (parseFloat(l.durasi)||0), 0) -
-      oeeFormState.lineStopNonMesin.reduce((s, l) => s + (parseFloat(l.durasi)||0), 0);
+    const uniqueProducts = Array.from(productGroups.values());
+    if (uniqueProducts.length === 0) return 0;
+    
+    let weightedTarget = 0;
+    
+    if (uniqueProducts.length === 1) {
+      const singleProduct = uniqueProducts[0].product;
+      weightedTarget = timeForTarget * singleProduct.target;
+    } else {
+      const totalRate = uniqueProducts.reduce((sum, group) => sum + group.product.target, 0);
+      
+      uniqueProducts.forEach(group => {
+        const productRate = group.product.target;
+        const timeAllocation = timeForTarget * (productRate / totalRate);
+        weightedTarget += timeAllocation * productRate;
+      });
+    }
     
     const jumlahPackerInti = oeeFormState.packerInti.length;
-    let targetNormal = jumlahPackerInti * Math.max(0, timeForTarget) * totalTargetPerMinute;
     
-    const packerCustomMinutes = calculateTotalPackerMinutes();
-    let targetPackerCustom = (packerCustomMinutes / 60) * totalTargetPerMinute;
+    let totalCustomMinutes = 0;
+    oeeFormState.packerCustom.forEach(p => {
+      totalCustomMinutes += calculateDuration(p.jamStart, p.jamEnd);
+    });
     
-    const perbantuanMinutes = calculatePerbantuanMinutes();
-    let targetPerbantuan = (perbantuanMinutes / 60) * totalTargetPerMinute * 0.5;
+    let totalPerbantuanMinutes = 0;
+    oeeFormState.perbantuan.forEach(p => {
+      totalPerbantuanMinutes += calculateDuration(p.jamStart, p.jamEnd) * 0.5;
+    });
     
-    return targetNormal + targetPackerCustom + targetPerbantuan;
+    const targetPerPackerPerJam = weightedTarget / timeForTarget;
+    
+    const targetInti = jumlahPackerInti * weightedTarget;
+    const targetCustom = (totalCustomMinutes / 60) * targetPerPackerPerJam;
+    const targetPerbantuan = (totalPerbantuanMinutes / 60) * targetPerPackerPerJam;
+    
+    return targetInti + targetCustom + targetPerbantuan;
   }
 
-  // ==================== ODT ====================
+  function showDetailModal(record) {
+    if (!record) return;
+    
+    const shiftInfo = getShiftTimeRange(record.shift);
+    
+    const packerInti = [];
+    const packerCustom = [];
+    const perbantuan = [];
+    
+    // Parse packers
+    if (record.packers) {
+      if (typeof record.packers === 'string' && record.packers.trim().startsWith('[')) {
+        try {
+          const parsed = JSON.parse(record.packers);
+          if (Array.isArray(parsed)) {
+            parsed.forEach(p => {
+              if (p.inisial) {
+                packerCustom.push({
+                  nama: p.inisial,
+                  jamStart: p.jamStart || shiftInfo.start,
+                  jamEnd: p.jamEnd || shiftInfo.end,
+                  durasi: calculateDuration(p.jamStart, p.jamEnd) || shiftInfo.minutes,
+                  role: 'CUSTOM'
+                });
+              }
+            });
+          }
+        } catch (e) {}
+      } else if (typeof record.packers === 'string') {
+        let packerString = record.packers;
+        if (packerString.includes('|')) {
+          packerString = packerString.split('|')[0].trim();
+        }
+        packerString.split(',').forEach(nama => {
+          const trimmed = nama.trim();
+          if (trimmed) {
+            packerInti.push({
+              nama: trimmed,
+              jamStart: shiftInfo.start,
+              jamEnd: shiftInfo.end,
+              durasi: shiftInfo.minutes,
+              role: 'INTI'
+            });
+          }
+        });
+      }
+    }
+    
+    // Parse perbantuan
+    if (record.perbantuan) {
+      try {
+        const parsed = JSON.parse(record.perbantuan);
+        if (Array.isArray(parsed)) {
+          parsed.forEach(p => {
+            if (p.inisial) {
+              perbantuan.push({
+                nama: p.inisial,
+                jamStart: p.jamStart || '-',
+                jamEnd: p.jamEnd || '-',
+                durasi: calculateDuration(p.jamStart, p.jamEnd),
+                role: 'PERBANTUAN'
+              });
+            }
+          });
+        }
+      } catch (e) {}
+    }
+    
+    const target = parseFloat(record.target_output) || 0;
+    const good = parseFloat(record.good_output) || 0;
+    const reject = parseFloat(record.reject) || 0;
+    const pe = target > 0 ? ((good / target) * 100).toFixed(1) : '0.0';
+    
+    const batches = record.product || '-';
+    
+    const html = `
+      <div class="detail-header">
+        <h2>📋 DETAIL PRODUKSI</h2>
+        <p>${record.date} - ${record.shift} (${shiftInfo.start} - ${shiftInfo.end})</p>
+      </div>
+      
+      <div class="detail-section">
+        <div class="detail-section-title">
+          <span>📦 PRODUK & BATCH</span>
+        </div>
+        <div style="padding: 10px; background: white; border-radius: 8px;">
+          <strong>${batches}</strong>
+        </div>
+      </div>
+      
+      <div class="detail-section">
+        <div class="detail-section-title">
+          <span>📊 HASIL PRODUKSI</span>
+        </div>
+        <div class="production-summary">
+          <div class="summary-item">
+            <div class="summary-label">TARGET</div>
+            <div class="summary-value">${target} DUS</div>
+          </div>
+          <div class="summary-item">
+            <div class="summary-label">GOOD</div>
+            <div class="summary-value">${good} DUS</div>
+          </div>
+          <div class="summary-item">
+            <div class="summary-label">REJECT</div>
+            <div class="summary-value">${reject} DUS</div>
+          </div>
+          <div class="summary-item">
+            <div class="summary-label">PE</div>
+            <div class="summary-value pe-value ${parseFloat(pe) < 100 ? 'pe-low' : ''}">${pe}%</div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="detail-section">
+        <div class="detail-section-title">
+          <span>👥 PACKER INTI (FULL SHIFT)</span>
+        </div>
+        <ul class="packer-list">
+          ${packerInti.length > 0 ? packerInti.map(p => `
+            <li>
+              <div class="packer-info">
+                <div class="packer-inisial">${p.nama.substring(0, 2).toUpperCase()}</div>
+                <div>
+                  <div class="packer-name">${p.nama}</div>
+                  <span class="packer-role inti">INTI</span>
+                </div>
+              </div>
+              <div class="packer-time">
+                <div class="time-range">${p.jamStart} - ${p.jamEnd}</div>
+                <div class="duration">${p.durasi} menit</div>
+              </div>
+            </li>
+          `).join('') : '<li style="text-align: center; color: #64748b;">TIDAK ADA PACKER INTI</li>'}
+        </ul>
+      </div>
+      
+      ${packerCustom.length > 0 ? `
+        <div class="detail-section">
+          <div class="detail-section-title">
+            <span>⭐ PACKER CUSTOM</span>
+          </div>
+          <ul class="packer-list">
+            ${packerCustom.map(p => `
+              <li>
+                <div class="packer-info">
+                  <div class="packer-inisial">${p.nama.substring(0, 2).toUpperCase()}</div>
+                  <div>
+                    <div class="packer-name">${p.nama}</div>
+                    <span class="packer-role custom">CUSTOM</span>
+                  </div>
+                </div>
+                <div class="packer-time">
+                  <div class="time-range">${p.jamStart} - ${p.jamEnd}</div>
+                  <div class="duration">${p.durasi} menit</div>
+                </div>
+              </li>
+            `).join('')}
+          </ul>
+        </div>
+      ` : ''}
+      
+      ${perbantuan.length > 0 ? `
+        <div class="detail-section">
+          <div class="detail-section-title">
+            <span>🔧 PERBANTUAN</span>
+          </div>
+          <ul class="packer-list">
+            ${perbantuan.map(p => `
+              <li>
+                <div class="packer-info">
+                  <div class="packer-inisial">${p.nama.substring(0, 2).toUpperCase()}</div>
+                  <div>
+                    <div class="packer-name">${p.nama}</div>
+                    <span class="packer-role perbantuan">PERBANTUAN</span>
+                  </div>
+                </div>
+                <div class="packer-time">
+                  <div class="time-range">${p.jamStart} - ${p.jamEnd}</div>
+                  <div class="duration">${p.durasi} menit (50% = ${Math.round(p.durasi * 0.5)} menit)</div>
+                </div>
+              </li>
+            `).join('')}
+          </ul>
+        </div>
+      ` : ''}
+      
+      ${record.notes ? `
+        <div class="detail-section">
+          <div class="detail-section-title">
+            <span>📝 CATATAN</span>
+          </div>
+          <div style="padding: 10px; background: white; border-radius: 8px;">
+            ${record.notes}
+          </div>
+        </div>
+      ` : ''}
+    `;
+    
+    document.getElementById('detail-content').innerHTML = html;
+    document.getElementById('detail-backdrop').style.display = 'block';
+    document.getElementById('detail-modal').style.display = 'block';
+  }
+
+  function closeDetailModal() {
+    document.getElementById('detail-backdrop').style.display = 'none';
+    document.getElementById('detail-modal').style.display = 'none';
+  }
+
+  // ==================== ODT, LINE STOP, dll (sama seperti sebelumnya) ====================
   function renderODTList() {
     const listDiv = document.getElementById('odt-list');
     if (localData.downtime.length === 0) {
@@ -2335,7 +2735,6 @@
     calculateOEE();
   }
 
-  // ==================== LINE STOP MESIN ====================
   function addCustomLineStopMesin() {
     const nama = prompt('MASUKKAN NAMA CUSTOM LINE STOP MESIN:', '');
     if (!nama || !nama.trim()) { showToast('NAMA WAJIB DIISI', 'error'); return; }
@@ -2368,7 +2767,7 @@
 
     listDiv.innerHTML = oeeFormState.lineStopMesin.map(lsm => `
       <div class="lsm-row">
-        <div><p style="font-size:13px; font-weight:700; color:#a855f7;">${lsm.nama}</p></div>
+        <div><p>${lsm.nama}</p></div>
         <input type="number" value="${lsm.durasi}" min="0" placeholder="DURASI" onchange="updateLineStopMesin('${lsm.id}', 'durasi', this.value)">
         <input type="text" value="${lsm.action}" placeholder="ACTION" onchange="updateLineStopMesin('${lsm.id}', 'action', this.value)">
         <input type="text" value="${lsm.wr}" placeholder="NO WR" onchange="updateLineStopMesin('${lsm.id}', 'wr', this.value)">
@@ -2389,7 +2788,6 @@
     calculateOEE();
   }
 
-  // ==================== LINE STOP NON-MESIN ====================
   function addCustomLineStopNonMesin() {
     const nama = prompt('MASUKKAN NAMA CUSTOM LINE STOP NON-MESIN:', '');
     if (!nama || !nama.trim()) { showToast('NAMA WAJIB DIISI', 'error'); return; }
@@ -2415,7 +2813,7 @@
     if (oeeFormState.lineStopNonMesin.length === 0) { listDiv.innerHTML = '<div class="empty-state">BELUM ADA DATA</div>'; return; }
     listDiv.innerHTML = oeeFormState.lineStopNonMesin.map(lsnm => `
       <div class="lsnm-row">
-        <div><p style="font-size:13px; font-weight:700; color:#10b981;">${lsnm.nama}</p></div>
+        <div><p>${lsnm.nama}</p></div>
         <input type="number" value="${lsnm.durasi}" min="0" placeholder="DURASI" onchange="updateLineStopNonMesin('${lsnm.id}', 'durasi', this.value)">
         <input type="text" value="${lsnm.action}" placeholder="ACTION" onchange="updateLineStopNonMesin('${lsnm.id}', 'action', this.value)">
         ${lsnm.isCustom ? `<button class="btn btn-danger btn-small" onclick="removeLineStopNonMesin('${lsnm.id}')">HAPUS</button>` : '<div></div>'}
@@ -2435,7 +2833,6 @@
     calculateOEE();
   }
 
-  // ==================== CALCULATE OEE ====================
   function calculateOEE() {
     const totalODT = oeeFormState.downtime.reduce((s, o) => s + ((parseFloat(o.frekuensi)||1) * (parseFloat(o.durasi)||0)), 0);
     const totalLSM = oeeFormState.lineStopMesin.reduce((s, l) => s + (parseFloat(l.durasi)||0), 0);
@@ -2516,7 +2913,6 @@
     };
   }
 
-  // ==================== SUBMIT OEE ====================
   async function submitOEE(event) {
     event.preventDefault();
     
@@ -2562,25 +2958,30 @@
       return packer?.nama || '';
     }).filter(Boolean).join(', ');
 
-    const packerCustomData = oeeFormState.packerCustom.map(p => ({
-      inisial: p.inisial,
-      jamStart: p.jamStart,
-      jamEnd: p.jamEnd
-    }));
+    const packerCustomData = oeeFormState.packerCustom.map(p => {
+      const packer = localData.packer.find(pk => pk.id === p.packerId);
+      return {
+        inisial: packer?.nama || '',
+        jamStart: p.jamStart,
+        jamEnd: p.jamEnd
+      };
+    }).filter(p => p.inisial);
 
-    let allPackers = [];
-    if (packerIntiNames) allPackers.push(packerIntiNames);
-    if (packerCustomData.length > 0) {
-      const customNames = packerCustomData.map(p => p.inisial).filter(Boolean).join(', ');
-      if (customNames) allPackers.push(customNames);
+    const perbantuanData = oeeFormState.perbantuan.map(p => {
+      const packer = localData.packer.find(pk => pk.id === p.packerId);
+      return {
+        inisial: packer?.nama || '',
+        jamStart: p.jamStart,
+        jamEnd: p.jamEnd
+      };
+    }).filter(p => p.inisial);
+
+    let packersField = packerIntiNames;
+    if (packerCustomData.length > 0 && packerIntiNames) {
+      packersField = packerIntiNames + ' | ' + JSON.stringify(packerCustomData);
+    } else if (packerCustomData.length > 0) {
+      packersField = JSON.stringify(packerCustomData);
     }
-    const packerDisplay = allPackers.join(' | ');
-
-    const perbantuanData = oeeFormState.perbantuan.map(p => ({
-      inisial: p.inisial,
-      jamStart: p.jamStart,
-      jamEnd: p.jamEnd
-    }));
 
     const lsmDetails = oeeFormState.lineStopMesin.filter(l => parseFloat(l.durasi) > 0).map(l => ({ nama: l.nama, durasi: l.durasi, action: l.action, wr: l.wr }));
     const lsnmDetails = oeeFormState.lineStopNonMesin.filter(l => parseFloat(l.durasi) > 0).map(l => ({ nama: l.nama, durasi: l.durasi, action: l.action }));
@@ -2590,7 +2991,7 @@
       date,
       shift,
       product: batchList,
-      packers: packerDisplay || JSON.stringify(packerCustomData),
+      packers: packersField || null,
       perbantuan: perbantuanData.length ? JSON.stringify(perbantuanData) : null,
       good_output: oeeFormState.goodOutput,
       reject: oeeFormState.reject,
@@ -2663,7 +3064,6 @@
     calculateOEE();
   }
 
-  // ==================== DASHBOARD ====================
   function initDashboardFilters() {
     const today = new Date();
     const start = new Date(today.getFullYear(), today.getMonth(), 1);
@@ -2755,24 +3155,20 @@
     document.getElementById('score-total-output').textContent = Math.round(totalGood);
   }
 
-  // ==================== FUNGSI SELECT RECORD ====================
   function selectRecord(index) {
     const selectedRecord = filteredOeeRecords[index];
     if (!selectedRecord) return;
     
     selectedRecordIndex = index;
     
-    // SET FILTER FORM sesuai record yang dipilih
     document.getElementById('filter-date-start').value = selectedRecord.date;
     document.getElementById('filter-date-end').value = selectedRecord.date;
     document.getElementById('filter-shift').value = selectedRecord.shift;
     
-    // Filter ulang data berdasarkan tanggal dan shift yang dipilih
     filteredOeeRecords = localData.oee_records.filter(r => {
       return r.date === selectedRecord.date && r.shift === selectedRecord.shift;
     });
     
-    // Render ulang semua komponen
     updateDashboardData();
     renderCharts();
     renderOEEHistory();
@@ -2782,7 +3178,6 @@
     renderLSMDetailTable();
     renderLSNMDetailTable();
     
-    // Scroll ke detail tables
     setTimeout(() => {
       const lsmSection = document.querySelector('#table-lsm-detail');
       if (lsmSection) {
@@ -2793,7 +3188,6 @@
     showToast(`MENAMPILKAN DATA SHIFT: ${selectedRecord.date} - ${selectedRecord.shift}`, 'success');
   }
 
-  // ==================== RENDER OEE HISTORY ====================
   function renderOEEHistory() {
     const tbody = document.getElementById('table-oee-history');
     const recs = filteredOeeRecords.length ? filteredOeeRecords : localData.oee_records;
@@ -2810,12 +3204,22 @@
       const oeeActual = parseFloat(r.oee_actual) || 0;
       
       let packerDisplay = r.packers || '-';
-      try {
-        const packers = JSON.parse(r.packers);
-        if (Array.isArray(packers)) {
-          packerDisplay = packers.map(p => p.inisial).filter(Boolean).join(', ');
+      if (r.packers && typeof r.packers === 'string') {
+        if (r.packers.includes('|')) {
+          packerDisplay = r.packers.split('|')[0].trim();
+        } else if (r.packers.startsWith('[')) {
+          try {
+            const packers = JSON.parse(r.packers);
+            if (Array.isArray(packers)) {
+              packerDisplay = packers.map(p => p.inisial).filter(Boolean).join(', ');
+            }
+          } catch (e) {
+            packerDisplay = r.packers;
+          }
+        } else {
+          packerDisplay = r.packers;
         }
-      } catch (e) {}
+      }
       
       const batchDisplay = r.product || '-';
       const notesDisplay = r.notes || '-';
@@ -2838,7 +3242,6 @@
     }).join('');
   }
 
-  // ==================== RENDER OEE HISTORY ORAL ====================
   function renderOEEHistoryOral() {
     const tbody = document.getElementById('table-oee-oral');
     const recs = filteredOeeRecords.length ? filteredOeeRecords : localData.oee_records;
@@ -2854,8 +3257,6 @@
     }
     
     tbody.innerHTML = oralRecs.slice(0, 20).map((r, idx) => {
-      const originalIndex = recs.findIndex(rec => rec === r);
-      
       const target = Math.round(parseFloat(r.target_output) || 0);
       const good = Math.round(parseFloat(r.good_output) || 0);
       const reject = Math.round(parseFloat(r.reject) || 0);
@@ -2864,20 +3265,29 @@
       const peValue = parseFloat(pe);
       
       let packerDisplay = r.packers || '-';
-      try {
-        const packers = JSON.parse(r.packers);
-        if (Array.isArray(packers)) {
-          packerDisplay = packers.map(p => p.inisial).filter(Boolean).join(', ');
+      if (r.packers && typeof r.packers === 'string') {
+        if (r.packers.includes('|')) {
+          packerDisplay = r.packers.split('|')[0].trim();
+        } else if (r.packers.startsWith('[')) {
+          try {
+            const packers = JSON.parse(r.packers);
+            if (Array.isArray(packers)) {
+              packerDisplay = packers.map(p => p.inisial).filter(Boolean).join(', ');
+            }
+          } catch (e) {
+            packerDisplay = r.packers;
+          }
+        } else {
+          packerDisplay = r.packers;
         }
-      } catch (e) {}
+      }
       
       const batchDisplay = r.product || '-';
       
       const peClass = peValue < 100 ? 'pe-low' : '';
-      const rowClass = originalIndex === selectedRecordIndex ? 'selected-row' : '';
       
       return `
-        <tr class="${rowClass}" onclick="selectRecord(${originalIndex})">
+        <tr onclick='showDetailModal(${JSON.stringify(r).replace(/'/g, "&apos;")})'>
           <td>${r.date || '-'}</td>
           <td>${r.shift || '-'}</td>
           <td>${packerDisplay}</td>
@@ -2891,7 +3301,6 @@
     }).join('');
   }
 
-  // ==================== RENDER OEE HISTORY STERIL ====================
   function renderOEEHistorySteril() {
     const tbody = document.getElementById('table-oee-steril');
     const recs = filteredOeeRecords.length ? filteredOeeRecords : localData.oee_records;
@@ -2907,8 +3316,6 @@
     }
     
     tbody.innerHTML = sterilRecs.slice(0, 20).map((r, idx) => {
-      const originalIndex = recs.findIndex(rec => rec === r);
-      
       const target = Math.round(parseFloat(r.target_output) || 0);
       const good = Math.round(parseFloat(r.good_output) || 0);
       const reject = Math.round(parseFloat(r.reject) || 0);
@@ -2917,20 +3324,29 @@
       const peValue = parseFloat(pe);
       
       let packerDisplay = r.packers || '-';
-      try {
-        const packers = JSON.parse(r.packers);
-        if (Array.isArray(packers)) {
-          packerDisplay = packers.map(p => p.inisial).filter(Boolean).join(', ');
+      if (r.packers && typeof r.packers === 'string') {
+        if (r.packers.includes('|')) {
+          packerDisplay = r.packers.split('|')[0].trim();
+        } else if (r.packers.startsWith('[')) {
+          try {
+            const packers = JSON.parse(r.packers);
+            if (Array.isArray(packers)) {
+              packerDisplay = packers.map(p => p.inisial).filter(Boolean).join(', ');
+            }
+          } catch (e) {
+            packerDisplay = r.packers;
+          }
+        } else {
+          packerDisplay = r.packers;
         }
-      } catch (e) {}
+      }
       
       const batchDisplay = r.product || '-';
       
       const peClass = peValue < 100 ? 'pe-low' : '';
-      const rowClass = originalIndex === selectedRecordIndex ? 'selected-row' : '';
       
       return `
-        <tr class="${rowClass}" onclick="selectRecord(${originalIndex})">
+        <tr onclick='showDetailModal(${JSON.stringify(r).replace(/'/g, "&apos;")})'>
           <td>${r.date || '-'}</td>
           <td>${r.shift || '-'}</td>
           <td>${packerDisplay}</td>
@@ -2944,7 +3360,245 @@
     }).join('');
   }
 
-  // ==================== RENDER HORIZONTAL BARS ====================
+  function searchOeeData() {
+    const date = document.getElementById('edit-date').value;
+    const shift = document.getElementById('edit-shift').value;
+    
+    if (!date || !shift) {
+      showToast('PILIH TANGGAL DAN SHIFT', 'error');
+      return;
+    }
+    
+    const records = localData.oee_records.filter(r => r.date === date && r.shift === shift);
+    const tbody = document.getElementById('edit-data-table');
+    
+    if (records.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="6" class="text-center">TIDAK ADA DATA UNTUK TANGGAL DAN SHIFT INI</td></tr>';
+      return;
+    }
+    
+    tbody.innerHTML = records.map(r => {
+      const oee = parseFloat(r.oee_actual) || 0;
+      const good = parseFloat(r.good_output) || 0;
+      const batchDisplay = r.product || '-';
+      
+      let packerDisplay = r.packers || '-';
+      if (r.packers && typeof r.packers === 'string') {
+        if (r.packers.includes('|')) {
+          packerDisplay = r.packers.split('|')[0].trim();
+        } else if (r.packers.startsWith('[')) {
+          try {
+            const packers = JSON.parse(r.packers);
+            if (Array.isArray(packers)) {
+              packerDisplay = packers.map(p => p.inisial).filter(Boolean).join(', ');
+            }
+          } catch (e) {
+            packerDisplay = r.packers;
+          }
+        } else {
+          packerDisplay = r.packers;
+        }
+      }
+      
+      return `
+        <tr>
+          <td>${r.date} ${r.shift}</td>
+          <td>${batchDisplay}</td>
+          <td>${packerDisplay}</td>
+          <td class="text-right">${good}</td>
+          <td class="text-right">${oee.toFixed(1)}%</td>
+          <td>
+            <button class="btn-edit-small" onclick="editOeeRecord('${r.id}')">EDIT</button>
+            <button class="btn-delete-small" onclick="deleteOeeRecord('${r.id}')">HAPUS</button>
+          </td>
+        </tr>
+      `;
+    }).join('');
+  }
+
+  async function editOeeRecord(id) {
+    const record = localData.oee_records.find(r => r.id === id);
+    if (!record) {
+      showToast('DATA TIDAK DITEMUKAN', 'error');
+      return;
+    }
+    
+    switchTab('input');
+    
+    resetOEEForm();
+    
+    document.getElementById('oee-date').value = record.date;
+    document.getElementById('oee-shift').value = record.shift;
+    document.getElementById('oee-notes').value = record.notes || '';
+    
+    updateShiftMinutes();
+    
+    oeeFormState.goodOutput = parseFloat(record.good_output) || 0;
+    oeeFormState.reject = parseFloat(record.reject) || 0;
+    renderOutputReject();
+    
+    if (record.product) {
+      const batchParts = record.product.split(' | ');
+      oeeFormState.produkRows = batchParts.map((part, index) => {
+        const match = part.match(/\((.*?)\)/);
+        const productName = match ? match[1] : '';
+        const product = localData.produk.find(p => p.nama === productName);
+        
+        return {
+          id: 'produk_' + Date.now() + '_' + index,
+          productId: product?.id || '',
+          batchNumber: part.split(' (')[0] || ''
+        };
+      });
+      renderProdukRows();
+    }
+    
+    if (record.packers) {
+      if (typeof record.packers === 'string' && record.packers.startsWith('[')) {
+        try {
+          const parsed = JSON.parse(record.packers);
+          if (Array.isArray(parsed)) {
+            oeeFormState.packerCustom = parsed.map((p, idx) => {
+              const packer = localData.packer.find(pk => pk.nama === p.inisial);
+              return {
+                id: 'packer_custom_' + Date.now() + '_' + idx,
+                packerId: packer?.id || '',
+                jamStart: p.jamStart || '',
+                jamEnd: p.jamEnd || ''
+              };
+            });
+          }
+        } catch (e) {}
+      } else if (typeof record.packers === 'string') {
+        let packerString = record.packers;
+        if (packerString.includes('|')) {
+          packerString = packerString.split('|')[0].trim();
+        }
+        const names = packerString.split(',').map(n => n.trim()).filter(Boolean);
+        oeeFormState.packerInti = names
+          .map(name => {
+            const packer = localData.packer.find(p => p.nama === name);
+            return packer?.id;
+          })
+          .filter(Boolean);
+      }
+    }
+    
+    if (record.perbantuan) {
+      try {
+        const parsed = JSON.parse(record.perbantuan);
+        if (Array.isArray(parsed)) {
+          oeeFormState.perbantuan = parsed.map((p, idx) => {
+            const packer = localData.packer.find(pk => pk.nama === p.inisial);
+            return {
+              id: 'perbantuan_' + Date.now() + '_' + idx,
+              packerId: packer?.id || '',
+              jamStart: p.jamStart || '',
+              jamEnd: p.jamEnd || ''
+            };
+          });
+        }
+      } catch (e) {}
+    }
+    
+    if (record.line_stop_mesin) {
+      try {
+        const parsed = JSON.parse(record.line_stop_mesin);
+        if (Array.isArray(parsed)) {
+          oeeFormState.lineStopMesin = parsed.map((l, idx) => {
+            const master = localData.line_stop_mesin.find(m => m.nama === l.nama);
+            return {
+              id: master?.id || 'lsm_custom_' + Date.now() + '_' + idx,
+              nama: l.nama,
+              durasi: l.durasi,
+              action: l.action || '',
+              wr: l.wr || '',
+              isCustom: !master
+            };
+          });
+        }
+      } catch (e) {}
+    }
+    
+    if (record.line_stop_non_mesin) {
+      try {
+        const parsed = JSON.parse(record.line_stop_non_mesin);
+        if (Array.isArray(parsed)) {
+          oeeFormState.lineStopNonMesin = parsed.map((l, idx) => {
+            const master = localData.line_stop_non_mesin.find(m => m.nama === l.nama);
+            return {
+              id: master?.id || 'lsnm_custom_' + Date.now() + '_' + idx,
+              nama: l.nama,
+              durasi: l.durasi,
+              action: l.action || '',
+              isCustom: !master
+            };
+          });
+        }
+      } catch (e) {}
+    }
+    
+    if (record.operational_downtime) {
+      try {
+        const parsed = JSON.parse(record.operational_downtime);
+        if (Array.isArray(parsed)) {
+          oeeFormState.downtime = parsed.map(odt => {
+            const master = localData.downtime.find(d => d.nama === odt.nama);
+            return {
+              id: master?.id || 'odt_custom_' + Date.now(),
+              nama: odt.nama,
+              waktu_standard: master?.waktu_standard || 0,
+              frekuensi: odt.frekuensi || 1,
+              durasi: odt.durasiPerKejadian || 0
+            };
+          });
+        }
+      } catch (e) {}
+    }
+    
+    renderPackerIntiCheckbox();
+    renderPackerCustomList();
+    renderPerbantuanList();
+    renderLineStopMesinList();
+    renderLineStopNonMesinList();
+    renderODTList();
+    
+    calculateOEE();
+    
+    document.getElementById('submit-btn').textContent = '🔄 UPDATE';
+    
+    showToast('SIAP EDIT DATA', 'success');
+  }
+
+  async function deleteOeeRecord(id) {
+    if (!confirm('YAKIN INGIN MENGHAPUS DATA INI? Aksi tidak dapat dibatalkan!')) {
+      return;
+    }
+    
+    try {
+      const { error } = await supabaseClient
+        .from('oee_records')
+        .delete()
+        .eq('id', id);
+      
+      if (error) throw error;
+      
+      await addAuditLog('DELETE OEE', `Menghapus data dengan ID: ${id}`);
+      showToast('DATA BERHASIL DIHAPUS', 'success');
+      
+      await loadDataFromSupabase();
+      applyDashboardFilters();
+      updateDashboard();
+      
+      document.getElementById('edit-date').value = '';
+      document.getElementById('edit-shift').value = '';
+      document.getElementById('edit-data-table').innerHTML = '<tr><td colspan="6" class="text-center">MASUKKAN TANGGAL & SHIFT UNTUK MENCARI DATA</td></tr>';
+      
+    } catch (error) {
+      showToast('GAGAL MENGHAPUS DATA', 'error');
+    }
+  }
+
   function renderHorizontalBars() {
     let recs = [];
     if (selectedRecordIndex >= 0 && selectedRecordIndex < filteredOeeRecords.length) {
@@ -2954,7 +3608,6 @@
       recs = recs.slice(0, 50);
     }
     
-    // LSM
     const lsmMap = new Map();
     let totalLSM = 0;
     
@@ -2979,7 +3632,6 @@
     renderBarList('lsm-bar-list', lsmMap, totalLSM, 'lsm');
     document.getElementById('lsm-total').textContent = `TOTAL: ${Math.round(totalLSM)} MIN`;
     
-    // LSNM
     const lsnmMap = new Map();
     let totalLSNM = 0;
     
@@ -3035,7 +3687,6 @@
     }).join('');
   }
 
-  // ==================== RENDER LSM DETAIL ====================
   function renderLSMDetailTable() {
     const tbody = document.getElementById('table-lsm-detail');
     
@@ -3088,7 +3739,6 @@
     `).join('');
   }
 
-  // ==================== RENDER LSNM DETAIL ====================
   function renderLSNMDetailTable() {
     const tbody = document.getElementById('table-lsnm-detail');
     
@@ -3139,7 +3789,6 @@
     `).join('');
   }
 
-  // ==================== MASTER DATA ====================
   function renderMasterDataLists() {
     renderProductList();
     renderPackerList();
@@ -3225,7 +3874,6 @@
     `).join('');
   }
 
-  // ==================== MODAL ====================
   let currentModalAction = null, currentEditId = null;
 
   function openModal(title, fields, onSubmit) {
@@ -3257,7 +3905,6 @@
     closeModal();
   }
 
-  // ==================== MASTER CRUD ====================
   function openAddProductModal() {
     openModal('TAMBAH PRODUK', [
       { name: 'nama', label: 'NAMA PRODUK' },
@@ -3320,7 +3967,6 @@
     });
   }
 
-  // ==================== AUDIT ====================
   async function addAuditLog(activity, detail) {
     await supabaseClient.from('audit_trail').insert([{ activity, detail }]);
     await loadDataFromSupabase();
@@ -3342,7 +3988,6 @@
     `).join('');
   }
 
-  // ==================== DOWNLOAD FUNCTIONS ====================
   function getFilteredDataForDownload() {
     const startDate = document.getElementById('download-date-start').value;
     const endDate = document.getElementById('download-date-end').value;
@@ -3399,12 +4044,10 @@
     showToast('MEMPROSES PDF... MOHON TUNGGU', 'success');
     updateProgress(10);
     
-    // Pindah ke tab dashboard untuk capture
     switchTab('dashboard');
     await new Promise(r => setTimeout(r, 1000));
     updateProgress(30);
     
-    // Capture semua section
     const dashboardEl = document.getElementById('dashboard');
     const sections = dashboardEl.querySelectorAll('.form-section, .chart-container, .horizontal-bar-container');
     
@@ -3441,7 +4084,6 @@
       }
     }
     
-    // Tambah halaman untuk audit trail
     pdf.addPage();
     pdf.setFontSize(16);
     pdf.setTextColor(236, 72, 153);
@@ -3462,7 +4104,6 @@
       pdf.text(new Date(audit.timestamp).toLocaleString('id-ID'), 20, yPos);
       pdf.text(audit.activity || '-', 70, yPos);
       
-      // Wrap detail text
       const detail = audit.detail || '-';
       const splitDetail = pdf.splitTextToSize(detail, 120);
       pdf.text(splitDetail, 120, yPos);
@@ -3470,7 +4111,6 @@
       yPos += 10;
     });
     
-    // Download PDF
     pdf.save(`OEE_DASHBOARD_${new Date().toISOString().split('T')[0]}.pdf`);
     showToast('PDF BERHASIL DIDOWNLOAD', 'success');
     
@@ -3483,10 +4123,8 @@
     
     const filteredData = getFilteredDataForDownload();
     
-    // Siapkan workbook
     const wb = XLSX.utils.book_new();
     
-    // Sheet 1: OEE History
     const oeeData = filteredData.map(r => ({
       Tanggal: r.date,
       Shift: r.shift,
@@ -3507,7 +4145,6 @@
     XLSX.utils.book_append_sheet(wb, oeeSheet, 'OEE HISTORY');
     updateProgress(40);
     
-    // Sheet 2: Line Stop Mesin
     const lsmData = [];
     filteredData.forEach(r => {
       if (r.line_stop_mesin) {
@@ -3531,7 +4168,6 @@
     XLSX.utils.book_append_sheet(wb, lsmSheet, 'LINE STOP MESIN');
     updateProgress(60);
     
-    // Sheet 3: Line Stop Non Mesin
     const lsnmData = [];
     filteredData.forEach(r => {
       if (r.line_stop_non_mesin) {
@@ -3554,7 +4190,6 @@
     XLSX.utils.book_append_sheet(wb, lsnmSheet, 'LINE STOP NON MESIN');
     updateProgress(80);
     
-    // Sheet 4: Audit Trail
     const auditData = localData.audit_trail.map(a => ({
       Waktu: new Date(a.timestamp).toLocaleString('id-ID'),
       Aktivitas: a.activity || '-',
@@ -3564,7 +4199,6 @@
     const auditSheet = XLSX.utils.json_to_sheet(auditData);
     XLSX.utils.book_append_sheet(wb, auditSheet, 'AUDIT TRAIL');
     
-    // Download Excel
     XLSX.writeFile(wb, `OEE_DATA_${new Date().toISOString().split('T')[0]}.xlsx`);
     updateProgress(100);
     
@@ -3572,7 +4206,6 @@
     await addAuditLog('DOWNLOAD EXCEL', `Download Excel data dengan ${filteredData.length} records`);
   }
 
-  // ==================== CHARTS ====================
   function createLineChart(canvasId, labels, data, label, color) {
     const ctx = document.getElementById(canvasId)?.getContext('2d');
     if (!ctx) return;
@@ -3609,7 +4242,6 @@
             offset: 10,
             font: { weight: 'bold', size: 11 },
             formatter: (value) => {
-              // Hanya tampilkan jika value > 0
               return value && value > 0 ? value.toFixed(1) + '%' : '';
             }
           }
@@ -3699,7 +4331,6 @@
     renderOEEDailyChart();
   }
 
-  // ==================== TOAST ====================
   function showToast(msg, type) {
     const toast = document.createElement('div');
     toast.className = `toast ${type}`;
@@ -3708,7 +4339,6 @@
     setTimeout(() => toast.remove(), 3000);
   }
 
-  // ==================== DARK MODE ====================
   function toggleDarkMode() {
     document.body.classList.toggle('dark-mode');
     localStorage.setItem('darkMode', document.body.classList.contains('dark-mode'));
@@ -3732,7 +4362,6 @@
     }
   }
 
-  // ==================== CLOCK ====================
   function updateClock() {
     const now = new Date();
     const timeStr = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}:${String(now.getSeconds()).padStart(2, '0')}`;
@@ -3746,7 +4375,6 @@
     document.getElementById('current-date').textContent = dateStr;
   }
 
-  // ==================== INIT ====================
   initDarkMode();
   updateClock();
   setInterval(updateClock, 1000);
