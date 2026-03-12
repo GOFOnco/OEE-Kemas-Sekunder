@@ -733,7 +733,7 @@
       width: 100%;
       border-collapse: collapse;
       font-size: clamp(10px, 1.8vw, 12px);
-      min-width: 1000px;
+      min-width: 800px;
     }
 
     thead {
@@ -1048,8 +1048,8 @@
       padding: clamp(16px, 4vw, 24px);
       z-index: 9999;
       width: 90%;
-      max-width: 600px;
-      max-height: 90vh;
+      max-width: 700px;
+      max-height: 85vh;
       overflow-y: auto;
     }
 
@@ -1199,6 +1199,84 @@
     .duration {
       font-size: 11px;
       color: #64748b;
+    }
+
+    /* Style untuk line stop & ODT cards */
+    .line-stop-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 12px;
+      margin-top: 10px;
+    }
+
+    .line-stop-card {
+      background: white;
+      border-radius: 10px;
+      padding: 12px;
+      border: 1px solid #e2e8f0;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    }
+
+    .line-stop-card.lsm {
+      border-left: 4px solid #a855f7;
+    }
+
+    .line-stop-card.lsnm {
+      border-left: 4px solid #10b981;
+    }
+
+    .line-stop-card.odt {
+      border-left: 4px solid #3b82f6;
+    }
+
+    .line-stop-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+      padding-bottom: 6px;
+      border-bottom: 1px dashed #e2e8f0;
+    }
+
+    .line-stop-name {
+      font-weight: 700;
+      font-size: 13px;
+      color: var(--text-dark);
+      word-break: break-word;
+    }
+
+    .line-stop-duration {
+      font-weight: 700;
+      font-size: 14px;
+      color: var(--primary-dark);
+      background: var(--primary-light);
+      padding: 2px 8px;
+      border-radius: 20px;
+    }
+
+    .line-stop-details {
+      font-size: 12px;
+      color: #64748b;
+    }
+
+    .line-stop-details p {
+      margin: 4px 0;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .line-stop-details i {
+      font-style: normal;
+      color: var(--primary);
+    }
+
+    .line-stop-wr {
+      background: #f1f5f9;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-family: monospace;
+      font-size: 11px;
     }
 
     .edit-section {
@@ -1442,6 +1520,21 @@
       color: #34d399;
     }
 
+    body.dark-mode .line-stop-card {
+      background: #2d2236;
+      border-color: #403050;
+    }
+
+    body.dark-mode .line-stop-duration {
+      background: #3d2a3a;
+      color: #f9a8d4;
+    }
+
+    body.dark-mode .line-stop-wr {
+      background: #403050;
+      color: #e5e5e5;
+    }
+
     @media (max-width: 768px) {
       .search-filters {
         grid-template-columns: 1fr;
@@ -1543,7 +1636,7 @@
               <tr>
                 <th>TANGGAL</th>
                 <th>SHIFT</th>
-                <th>PACKER</th>
+                <th>PACKER (INTI | CUSTOM/PERBANTUAN)</th>
                 <th>BATCH</th>
                 <th class="text-right">TARGET</th>
                 <th class="text-right">GOOD</th>
@@ -1564,7 +1657,7 @@
               <tr>
                 <th>TANGGAL</th>
                 <th>SHIFT</th>
-                <th>PACKER</th>
+                <th>PACKER (INTI | CUSTOM/PERBANTUAN)</th>
                 <th>BATCH</th>
                 <th class="text-right">TARGET</th>
                 <th class="text-right">GOOD</th>
@@ -1578,7 +1671,7 @@
       </div>
 
       <div class="form-section">
-        <div class="section-title">📋 OEE HISTORY</div>
+        <div class="section-title">📋 OEE HISTORY (KLIK BARIS UNTUK DETAIL LENGKAP)</div>
         <div class="table-wrapper">
           <table>
             <thead>
@@ -1613,45 +1706,6 @@
           <div class="bar-total" id="lsnm-total">TOTAL: 0 MIN</div>
         </div>
         <div id="lsnm-bar-list" class="bar-list"></div>
-      </div>
-
-      <div class="form-section">
-        <div class="section-title">🔧 DETAIL LINE STOP MESIN</div>
-        <div class="table-wrapper">
-          <table>
-            <thead>
-              <tr>
-                <th>TANGGAL</th>
-                <th>SHIFT</th>
-                <th>PACKER</th>
-                <th>LINE STOP</th>
-                <th class="text-right">DURASI</th>
-                <th>ACTION</th>
-                <th>NO WR</th>
-              </tr>
-            </thead>
-            <tbody id="table-lsm-detail"></tbody>
-          </table>
-        </div>
-      </div>
-
-      <div class="form-section">
-        <div class="section-title">🔧 DETAIL LINE STOP NON MESIN</div>
-        <div class="table-wrapper">
-          <table>
-            <thead>
-              <tr>
-                <th>TANGGAL</th>
-                <th>SHIFT</th>
-                <th>PACKER</th>
-                <th>LINE STOP</th>
-                <th class="text-right">DURASI</th>
-                <th>ACTION</th>
-              </tr>
-            </thead>
-            <tbody id="table-lsnm-detail"></tbody>
-          </table>
-        </div>
       </div>
     </div>
 
@@ -2014,8 +2068,6 @@
       setTimeout(() => {
         renderCharts();
         renderHorizontalBars();
-        renderLSMDetailTable();
-        renderLSNMDetailTable();
       }, 100);
     }
     
@@ -2161,9 +2213,7 @@
     }).join('');
   }
 
-  // ==================== PACKER INTI (DENGAN CEK KONFLIK) ====================
   function togglePackerInti(packerId) {
-    // Cek apakah packer ini sudah dipilih di custom
     const isInCustom = oeeFormState.packerCustom.some(p => p.packerId === packerId);
     
     if (isInCustom) {
@@ -2178,7 +2228,7 @@
       oeeFormState.packerInti.splice(idx, 1);
     }
     renderPackerIntiCheckbox();
-    renderPackerCustomList(); // Refresh dropdown custom
+    renderPackerCustomList();
     calculateOEE();
   }
 
@@ -2195,7 +2245,6 @@
     container.innerHTML = `
       <div class="packer-checkbox-grid">
         ${sortedPackers.map(p => {
-          // Cek apakah packer ini sudah dipilih di custom (jika ya, checkbox disabled)
           const isDisabled = oeeFormState.packerCustom.some(c => c.packerId === p.id);
           return `
             <label class="packer-checkbox-item" style="${isDisabled ? 'opacity: 0.5;' : ''}">
@@ -2215,7 +2264,6 @@
     `;
   }
 
-  // ==================== PACKER CUSTOM (DENGAN FILTER) ====================
   function addPackerCustom() {
     oeeFormState.packerCustom.push({
       id: 'packer_custom_' + Date.now() + '_' + Math.random(),
@@ -2235,7 +2283,6 @@
       return;
     }
 
-    // Filter packer yang sudah dipilih di inti (tidak boleh muncul di dropdown custom)
     const availablePackers = localData.packer.filter(p => !oeeFormState.packerInti.includes(p.id));
     
     const packerOptions = '<option value="">-- PILIH PACKER --</option>' + 
@@ -2268,14 +2315,12 @@
       `;
     }).join('');
     
-    // Update checkbox inti juga (karena ada packer yang mungkin jadi disabled)
     renderPackerIntiCheckbox();
   }
 
   function updatePackerCustom(id, field, value) {
     const packer = oeeFormState.packerCustom.find(p => p.id === id);
     if (packer) {
-      // Kalau field yang diupdate adalah packerId, cek dulu apakah packer ini sudah ada di inti
       if (field === 'packerId' && value) {
         if (oeeFormState.packerInti.includes(value)) {
           showToast('PACKER SUDAH DIPILIH DI INTI!', 'error');
@@ -2290,11 +2335,10 @@
   function removePackerCustom(id) {
     oeeFormState.packerCustom = oeeFormState.packerCustom.filter(p => p.id !== id);
     renderPackerCustomList();
-    renderPackerIntiCheckbox(); // Refresh checkbox inti (enable kembali packer yang dihapus dari custom)
+    renderPackerIntiCheckbox();
     calculateOEE();
   }
 
-  // ==================== PERBANTUAN (tetap sama) ====================
   function addPerbantuan() {
     oeeFormState.perbantuan.push({
       id: 'perbantuan_' + Date.now() + '_' + Math.random(),
@@ -2474,33 +2518,45 @@
     
     const shiftInfo = getShiftTimeRange(record.shift);
     
-    const packerInti = [];
-    const packerCustom = [];
-    const perbantuan = [];
+    let packerInti = [];
+    let packerCustom = [];
+    let perbantuan = [];
+    let lsmDetails = [];
+    let lsnmDetails = [];
+    let odtDetails = [];
     
     // Parse packers
     if (record.packers) {
-      if (typeof record.packers === 'string' && record.packers.trim().startsWith('[')) {
+      if (typeof record.packers === 'string' && record.packers.startsWith('[')) {
         try {
           const parsed = JSON.parse(record.packers);
           if (Array.isArray(parsed)) {
-            parsed.forEach(p => {
-              if (p.inisial) {
-                packerCustom.push({
-                  nama: p.inisial,
-                  jamStart: p.jamStart || shiftInfo.start,
-                  jamEnd: p.jamEnd || shiftInfo.end,
-                  durasi: calculateDuration(p.jamStart, p.jamEnd) || shiftInfo.minutes,
-                  role: 'CUSTOM'
-                });
-              }
-            });
+            packerCustom = parsed.map(p => ({
+              nama: p.inisial,
+              jamStart: p.jamStart || shiftInfo.start,
+              jamEnd: p.jamEnd || shiftInfo.end,
+              durasi: calculateDuration(p.jamStart, p.jamEnd) || shiftInfo.minutes,
+              role: 'CUSTOM'
+            }));
           }
         } catch (e) {}
       } else if (typeof record.packers === 'string') {
         let packerString = record.packers;
         if (packerString.includes('|')) {
-          packerString = packerString.split('|')[0].trim();
+          const parts = packerString.split('|');
+          packerString = parts[0].trim();
+          try {
+            const customParsed = JSON.parse(parts[1].trim());
+            if (Array.isArray(customParsed)) {
+              packerCustom = customParsed.map(p => ({
+                nama: p.inisial,
+                jamStart: p.jamStart || shiftInfo.start,
+                jamEnd: p.jamEnd || shiftInfo.end,
+                durasi: calculateDuration(p.jamStart, p.jamEnd) || shiftInfo.minutes,
+                role: 'CUSTOM'
+              }));
+            }
+          } catch (e) {}
         }
         packerString.split(',').forEach(nama => {
           const trimmed = nama.trim();
@@ -2522,17 +2578,43 @@
       try {
         const parsed = JSON.parse(record.perbantuan);
         if (Array.isArray(parsed)) {
-          parsed.forEach(p => {
-            if (p.inisial) {
-              perbantuan.push({
-                nama: p.inisial,
-                jamStart: p.jamStart || '-',
-                jamEnd: p.jamEnd || '-',
-                durasi: calculateDuration(p.jamStart, p.jamEnd),
-                role: 'PERBANTUAN'
-              });
-            }
-          });
+          perbantuan = parsed.map(p => ({
+            nama: p.inisial,
+            jamStart: p.jamStart || '-',
+            jamEnd: p.jamEnd || '-',
+            durasi: calculateDuration(p.jamStart, p.jamEnd),
+            role: 'PERBANTUAN'
+          }));
+        }
+      } catch (e) {}
+    }
+
+    // Parse line stop mesin
+    if (record.line_stop_mesin) {
+      try {
+        const parsed = JSON.parse(record.line_stop_mesin);
+        if (Array.isArray(parsed)) {
+          lsmDetails = parsed.filter(l => parseFloat(l.durasi) > 0);
+        }
+      } catch (e) {}
+    }
+
+    // Parse line stop non mesin
+    if (record.line_stop_non_mesin) {
+      try {
+        const parsed = JSON.parse(record.line_stop_non_mesin);
+        if (Array.isArray(parsed)) {
+          lsnmDetails = parsed.filter(l => parseFloat(l.durasi) > 0);
+        }
+      } catch (e) {}
+    }
+
+    // Parse ODT
+    if (record.operational_downtime) {
+      try {
+        const parsed = JSON.parse(record.operational_downtime);
+        if (Array.isArray(parsed)) {
+          odtDetails = parsed.filter(o => parseFloat(o.totalDurasi) > 0);
         }
       } catch (e) {}
     }
@@ -2566,19 +2648,39 @@
         <div class="production-summary">
           <div class="summary-item">
             <div class="summary-label">TARGET</div>
-            <div class="summary-value">${target} DUS</div>
+            <div class="summary-value">${target.toFixed(1)} DUS</div>
           </div>
           <div class="summary-item">
             <div class="summary-label">GOOD</div>
-            <div class="summary-value">${good} DUS</div>
+            <div class="summary-value">${good.toFixed(1)} DUS</div>
           </div>
           <div class="summary-item">
             <div class="summary-label">REJECT</div>
-            <div class="summary-value">${reject} DUS</div>
+            <div class="summary-value">${reject.toFixed(1)} DUS</div>
           </div>
           <div class="summary-item">
             <div class="summary-label">PE</div>
             <div class="summary-value pe-value ${parseFloat(pe) < 100 ? 'pe-low' : ''}">${pe}%</div>
+          </div>
+        </div>
+        <div style="margin-top: 10px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px;">
+          <div class="summary-item">
+            <div class="summary-label">AVAILABILITY</div>
+            <div class="summary-value">${(record.availability_actual || 0).toFixed(1)}%</div>
+          </div>
+          <div class="summary-item">
+            <div class="summary-label">PERFORMANCE</div>
+            <div class="summary-value">${(record.performance || 0).toFixed(1)}%</div>
+          </div>
+          <div class="summary-item">
+            <div class="summary-label">QUALITY</div>
+            <div class="summary-value">${(record.quality_rate || 0).toFixed(1)}%</div>
+          </div>
+        </div>
+        <div style="margin-top: 10px; text-align: center;">
+          <div class="summary-item" style="background: linear-gradient(135deg, var(--primary-light), white);">
+            <div class="summary-label">OEE ACTUAL</div>
+            <div class="summary-value" style="font-size: 24px;">${(record.oee_actual || 0).toFixed(1)}%</div>
           </div>
         </div>
       </div>
@@ -2655,6 +2757,71 @@
           </ul>
         </div>
       ` : ''}
+
+      ${odtDetails.length > 0 ? `
+        <div class="detail-section">
+          <div class="detail-section-title">
+            <span>⏱️ OPERATIONAL DOWNTIME (ODT)</span>
+          </div>
+          <div class="line-stop-grid">
+            ${odtDetails.map(o => `
+              <div class="line-stop-card odt">
+                <div class="line-stop-card-header">
+                  <span class="line-stop-name">${o.nama}</span>
+                  <span class="line-stop-duration">${o.totalDurasi} min</span>
+                </div>
+                <div class="line-stop-details">
+                  <p><i>🔄</i> FREKUENSI: ${o.frekuensi || 1}x</p>
+                  <p><i>⏱️</i> PER KEJADIAN: ${o.durasiPerKejadian || 0} min</p>
+                </div>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      ` : ''}
+
+      ${lsmDetails.length > 0 ? `
+        <div class="detail-section">
+          <div class="detail-section-title">
+            <span>⚡ LINE STOP MESIN</span>
+          </div>
+          <div class="line-stop-grid">
+            ${lsmDetails.map(l => `
+              <div class="line-stop-card lsm">
+                <div class="line-stop-card-header">
+                  <span class="line-stop-name">${l.nama}</span>
+                  <span class="line-stop-duration">${l.durasi} min</span>
+                </div>
+                <div class="line-stop-details">
+                  <p><i>📋</i> ACTION: ${l.action || '-'}</p>
+                  <p><i>📝</i> NO WR: <span class="line-stop-wr">${l.wr || '-'}</span></p>
+                </div>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      ` : ''}
+
+      ${lsnmDetails.length > 0 ? `
+        <div class="detail-section">
+          <div class="detail-section-title">
+            <span>🔧 LINE STOP NON MESIN</span>
+          </div>
+          <div class="line-stop-grid">
+            ${lsnmDetails.map(l => `
+              <div class="line-stop-card lsnm">
+                <div class="line-stop-card-header">
+                  <span class="line-stop-name">${l.nama}</span>
+                  <span class="line-stop-duration">${l.durasi} min</span>
+                </div>
+                <div class="line-stop-details">
+                  <p><i>📋</i> ACTION: ${l.action || '-'}</p>
+                </div>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      ` : ''}
       
       ${record.notes ? `
         <div class="detail-section">
@@ -2678,7 +2845,6 @@
     document.getElementById('detail-modal').style.display = 'none';
   }
 
-  // ==================== ODT, LINE STOP, dll (sama seperti sebelumnya) ====================
   function renderODTList() {
     const listDiv = document.getElementById('odt-list');
     if (localData.downtime.length === 0) {
@@ -3132,8 +3298,6 @@
     renderOEEHistoryOral();
     renderOEEHistorySteril();
     renderHorizontalBars();
-    renderLSMDetailTable();
-    renderLSNMDetailTable();
   }
 
   function updateDashboardData() {
@@ -3175,17 +3339,56 @@
     renderOEEHistoryOral();
     renderOEEHistorySteril();
     renderHorizontalBars();
-    renderLSMDetailTable();
-    renderLSNMDetailTable();
     
     setTimeout(() => {
-      const lsmSection = document.querySelector('#table-lsm-detail');
-      if (lsmSection) {
-        lsmSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      const historySection = document.querySelector('#table-oee-history');
+      if (historySection) {
+        historySection.scrollIntoView({ behavior: 'smooth', block: 'start' });
       }
     }, 100);
     
     showToast(`MENAMPILKAN DATA SHIFT: ${selectedRecord.date} - ${selectedRecord.shift}`, 'success');
+  }
+
+  function formatPackerDisplay(record) {
+    if (!record.packers) return '-';
+    
+    let intiPackers = [];
+    let customPackers = [];
+    
+    if (typeof record.packers === 'string') {
+      if (record.packers.includes('|')) {
+        const parts = record.packers.split('|');
+        intiPackers = parts[0].split(',').map(n => n.trim()).filter(Boolean);
+        try {
+          const customParsed = JSON.parse(parts[1].trim());
+          if (Array.isArray(customParsed)) {
+            customPackers = customParsed.map(p => p.inisial).filter(Boolean);
+          }
+        } catch (e) {}
+      } else if (record.packers.startsWith('[')) {
+        try {
+          const parsed = JSON.parse(record.packers);
+          if (Array.isArray(parsed)) {
+            customPackers = parsed.map(p => p.inisial).filter(Boolean);
+          }
+        } catch (e) {
+          intiPackers = record.packers.split(',').map(n => n.trim()).filter(Boolean);
+        }
+      } else {
+        intiPackers = record.packers.split(',').map(n => n.trim()).filter(Boolean);
+      }
+    }
+    
+    let display = '';
+    if (intiPackers.length > 0) {
+      display += intiPackers.join(', ');
+    }
+    if (customPackers.length > 0) {
+      if (display) display += ' | ';
+      display += customPackers.join(', ');
+    }
+    return display || '-';
   }
 
   function renderOEEHistory() {
@@ -3203,23 +3406,7 @@
       const qual = parseFloat(r.quality_rate) || 0;
       const oeeActual = parseFloat(r.oee_actual) || 0;
       
-      let packerDisplay = r.packers || '-';
-      if (r.packers && typeof r.packers === 'string') {
-        if (r.packers.includes('|')) {
-          packerDisplay = r.packers.split('|')[0].trim();
-        } else if (r.packers.startsWith('[')) {
-          try {
-            const packers = JSON.parse(r.packers);
-            if (Array.isArray(packers)) {
-              packerDisplay = packers.map(p => p.inisial).filter(Boolean).join(', ');
-            }
-          } catch (e) {
-            packerDisplay = r.packers;
-          }
-        } else {
-          packerDisplay = r.packers;
-        }
-      }
+      const packerDisplay = formatPackerDisplay(r);
       
       const batchDisplay = r.product || '-';
       const notesDisplay = r.notes || '-';
@@ -3227,7 +3414,7 @@
       const rowClass = index === selectedRecordIndex ? 'selected-row' : '';
       
       return `
-        <tr class="${rowClass}" onclick="selectRecord(${index})">
+        <tr class="${rowClass}" onclick='showDetailModal(${JSON.stringify(r).replace(/'/g, "&apos;")})'>
           <td>${r.date || '-'}</td>
           <td>${r.shift || '-'}</td>
           <td>${packerDisplay}</td>
@@ -3264,23 +3451,7 @@
       const pe = target > 0 ? ((good / target) * 100).toFixed(1) : '0.0';
       const peValue = parseFloat(pe);
       
-      let packerDisplay = r.packers || '-';
-      if (r.packers && typeof r.packers === 'string') {
-        if (r.packers.includes('|')) {
-          packerDisplay = r.packers.split('|')[0].trim();
-        } else if (r.packers.startsWith('[')) {
-          try {
-            const packers = JSON.parse(r.packers);
-            if (Array.isArray(packers)) {
-              packerDisplay = packers.map(p => p.inisial).filter(Boolean).join(', ');
-            }
-          } catch (e) {
-            packerDisplay = r.packers;
-          }
-        } else {
-          packerDisplay = r.packers;
-        }
-      }
+      const packerDisplay = formatPackerDisplay(r);
       
       const batchDisplay = r.product || '-';
       
@@ -3323,23 +3494,7 @@
       const pe = target > 0 ? ((good / target) * 100).toFixed(1) : '0.0';
       const peValue = parseFloat(pe);
       
-      let packerDisplay = r.packers || '-';
-      if (r.packers && typeof r.packers === 'string') {
-        if (r.packers.includes('|')) {
-          packerDisplay = r.packers.split('|')[0].trim();
-        } else if (r.packers.startsWith('[')) {
-          try {
-            const packers = JSON.parse(r.packers);
-            if (Array.isArray(packers)) {
-              packerDisplay = packers.map(p => p.inisial).filter(Boolean).join(', ');
-            }
-          } catch (e) {
-            packerDisplay = r.packers;
-          }
-        } else {
-          packerDisplay = r.packers;
-        }
-      }
+      const packerDisplay = formatPackerDisplay(r);
       
       const batchDisplay = r.product || '-';
       
@@ -3382,23 +3537,7 @@
       const good = parseFloat(r.good_output) || 0;
       const batchDisplay = r.product || '-';
       
-      let packerDisplay = r.packers || '-';
-      if (r.packers && typeof r.packers === 'string') {
-        if (r.packers.includes('|')) {
-          packerDisplay = r.packers.split('|')[0].trim();
-        } else if (r.packers.startsWith('[')) {
-          try {
-            const packers = JSON.parse(r.packers);
-            if (Array.isArray(packers)) {
-              packerDisplay = packers.map(p => p.inisial).filter(Boolean).join(', ');
-            }
-          } catch (e) {
-            packerDisplay = r.packers;
-          }
-        } else {
-          packerDisplay = r.packers;
-        }
-      }
+      const packerDisplay = formatPackerDisplay(r);
       
       return `
         <tr>
@@ -3470,17 +3609,39 @@
           }
         } catch (e) {}
       } else if (typeof record.packers === 'string') {
-        let packerString = record.packers;
-        if (packerString.includes('|')) {
-          packerString = packerString.split('|')[0].trim();
+        if (record.packers.includes('|')) {
+          const parts = record.packers.split('|');
+          const intiNames = parts[0].split(',').map(n => n.trim()).filter(Boolean);
+          oeeFormState.packerInti = intiNames
+            .map(name => {
+              const packer = localData.packer.find(p => p.nama === name);
+              return packer?.id;
+            })
+            .filter(Boolean);
+          
+          try {
+            const customParsed = JSON.parse(parts[1].trim());
+            if (Array.isArray(customParsed)) {
+              oeeFormState.packerCustom = customParsed.map((p, idx) => {
+                const packer = localData.packer.find(pk => pk.nama === p.inisial);
+                return {
+                  id: 'packer_custom_' + Date.now() + '_' + idx,
+                  packerId: packer?.id || '',
+                  jamStart: p.jamStart || '',
+                  jamEnd: p.jamEnd || ''
+                };
+              });
+            }
+          } catch (e) {}
+        } else {
+          const names = record.packers.split(',').map(n => n.trim()).filter(Boolean);
+          oeeFormState.packerInti = names
+            .map(name => {
+              const packer = localData.packer.find(p => p.nama === name);
+              return packer?.id;
+            })
+            .filter(Boolean);
         }
-        const names = packerString.split(',').map(n => n.trim()).filter(Boolean);
-        oeeFormState.packerInti = names
-          .map(name => {
-            const packer = localData.packer.find(p => p.nama === name);
-            return packer?.id;
-          })
-          .filter(Boolean);
       }
     }
     
@@ -3685,108 +3846,6 @@
         </div>
       `;
     }).join('');
-  }
-
-  function renderLSMDetailTable() {
-    const tbody = document.getElementById('table-lsm-detail');
-    
-    let recs = [];
-    if (selectedRecordIndex >= 0 && selectedRecordIndex < filteredOeeRecords.length) {
-      recs = [filteredOeeRecords[selectedRecordIndex]];
-    } else {
-      recs = filteredOeeRecords.length ? filteredOeeRecords : localData.oee_records;
-      recs = recs.slice(0, 50);
-    }
-    
-    const rows = [];
-    
-    recs.forEach(record => {
-      if (record.line_stop_mesin) {
-        try {
-          const lsmDetails = JSON.parse(record.line_stop_mesin);
-          if (Array.isArray(lsmDetails)) {
-            lsmDetails.forEach(lsm => {
-              rows.push({
-                date: record.date,
-                shift: record.shift,
-                packers: record.packers,
-                nama: lsm.nama,
-                durasi: lsm.durasi,
-                action: lsm.action || '-',
-                wr: lsm.wr || '-'
-              });
-            });
-          }
-        } catch (e) {}
-      }
-    });
-    
-    if (rows.length === 0) {
-      tbody.innerHTML = '<tr><td colspan="7" class="text-center">BELUM ADA DATA LINE STOP MESIN</td></tr>';
-      return;
-    }
-    
-    tbody.innerHTML = rows.map(row => `
-      <tr>
-        <td>${row.date}</td>
-        <td>${row.shift}</td>
-        <td>${row.packers || '-'}</td>
-        <td>${row.nama}</td>
-        <td class="text-right">${row.durasi}</td>
-        <td>${row.action}</td>
-        <td>${row.wr}</td>
-      </tr>
-    `).join('');
-  }
-
-  function renderLSNMDetailTable() {
-    const tbody = document.getElementById('table-lsnm-detail');
-    
-    let recs = [];
-    if (selectedRecordIndex >= 0 && selectedRecordIndex < filteredOeeRecords.length) {
-      recs = [filteredOeeRecords[selectedRecordIndex]];
-    } else {
-      recs = filteredOeeRecords.length ? filteredOeeRecords : localData.oee_records;
-      recs = recs.slice(0, 50);
-    }
-    
-    const rows = [];
-    
-    recs.forEach(record => {
-      if (record.line_stop_non_mesin) {
-        try {
-          const lsnmDetails = JSON.parse(record.line_stop_non_mesin);
-          if (Array.isArray(lsnmDetails)) {
-            lsnmDetails.forEach(lsnm => {
-              rows.push({
-                date: record.date,
-                shift: record.shift,
-                packers: record.packers,
-                nama: lsnm.nama,
-                durasi: lsnm.durasi,
-                action: lsnm.action || '-'
-              });
-            });
-          }
-        } catch (e) {}
-      }
-    });
-    
-    if (rows.length === 0) {
-      tbody.innerHTML = '<tr><td colspan="6" class="text-center">BELUM ADA DATA LINE STOP NON MESIN</td></tr>';
-      return;
-    }
-    
-    tbody.innerHTML = rows.map(row => `
-      <tr>
-        <td>${row.date}</td>
-        <td>${row.shift}</td>
-        <td>${row.packers || '-'}</td>
-        <td>${row.nama}</td>
-        <td class="text-right">${row.durasi}</td>
-        <td>${row.action}</td>
-      </tr>
-    `).join('');
   }
 
   function renderMasterDataLists() {
@@ -4128,7 +4187,7 @@
     const oeeData = filteredData.map(r => ({
       Tanggal: r.date,
       Shift: r.shift,
-      Packer: typeof r.packers === 'string' ? r.packers : JSON.stringify(r.packers),
+      Packer: formatPackerDisplay(r),
       Batch: r.product,
       'Target Output': r.target_output || 0,
       'Good Output': r.good_output || 0,
