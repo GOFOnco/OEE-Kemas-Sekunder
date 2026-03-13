@@ -786,6 +786,26 @@
       font-weight: 800 !important;
     }
 
+    .oee-low {
+      color: #ef4444 !important;
+      font-weight: 800 !important;
+    }
+
+    .a-low {
+      color: #ef4444 !important;
+      font-weight: 800 !important;
+    }
+
+    .p-low {
+      color: #ef4444 !important;
+      font-weight: 800 !important;
+    }
+
+    .q-low {
+      color: #ef4444 !important;
+      font-weight: 800 !important;
+    }
+
     .text-right {
       text-align: right;
     }
@@ -1993,6 +2013,11 @@
   let isMasterDataUnlocked = false;
   let isSubmitting = false;
 
+  // Target values for A, P, Q
+  const TARGET_A = 95;
+  const TARGET_P = 95;
+  const TARGET_Q = 98;
+
   let localData = {
     produk: [],
     packer: [],
@@ -2666,21 +2691,21 @@
         <div style="margin-top: 10px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px;">
           <div class="summary-item">
             <div class="summary-label">AVAILABILITY</div>
-            <div class="summary-value">${(record.availability_actual || 0).toFixed(1)}%</div>
+            <div class="summary-value" style="${(record.availability_actual || 0) < TARGET_A ? 'color: #ef4444 !important;' : ''}">${(record.availability_actual || 0).toFixed(1)}%</div>
           </div>
           <div class="summary-item">
             <div class="summary-label">PERFORMANCE</div>
-            <div class="summary-value">${(record.performance || 0).toFixed(1)}%</div>
+            <div class="summary-value" style="${(record.performance || 0) < TARGET_P ? 'color: #ef4444 !important;' : ''}">${(record.performance || 0).toFixed(1)}%</div>
           </div>
           <div class="summary-item">
             <div class="summary-label">QUALITY</div>
-            <div class="summary-value">${(record.quality_rate || 0).toFixed(1)}%</div>
+            <div class="summary-value" style="${(record.quality_rate || 0) < TARGET_Q ? 'color: #ef4444 !important;' : ''}">${(record.quality_rate || 0).toFixed(1)}%</div>
           </div>
         </div>
         <div style="margin-top: 10px; text-align: center;">
           <div class="summary-item" style="background: linear-gradient(135deg, var(--primary-light), white);">
             <div class="summary-label">OEE ACTUAL</div>
-            <div class="summary-value" style="font-size: 24px;">${(record.oee_actual || 0).toFixed(1)}%</div>
+            <div class="summary-value" style="font-size: 24px; ${parseFloat(record.oee_actual) < 88 ? 'color: #ef4444 !important;' : ''}">${(record.oee_actual || 0).toFixed(1)}%</div>
           </div>
         </div>
       </div>
@@ -3413,16 +3438,22 @@
       
       const rowClass = index === selectedRecordIndex ? 'selected-row' : '';
       
+      // Apply red color based on targets
+      const aClass = avail < TARGET_A ? 'a-low' : '';
+      const pClass = perf < TARGET_P ? 'p-low' : '';
+      const qClass = qual < TARGET_Q ? 'q-low' : '';
+      const oeeClass = oeeActual < 88 ? 'oee-low' : '';
+      
       return `
         <tr class="${rowClass}" onclick='showDetailModal(${JSON.stringify(r).replace(/'/g, "&apos;")})'>
           <td>${r.date || '-'}</td>
           <td>${r.shift || '-'}</td>
           <td>${packerDisplay}</td>
           <td>${batchDisplay}</td>
-          <td class="text-right">${avail.toFixed(1)}%</td>
-          <td class="text-right">${perf.toFixed(1)}%</td>
-          <td class="text-right">${qual.toFixed(1)}%</td>
-          <td class="text-right"><strong>${oeeActual.toFixed(1)}%</strong></td>
+          <td class="text-right ${aClass}">${avail.toFixed(1)}%</td>
+          <td class="text-right ${pClass}">${perf.toFixed(1)}%</td>
+          <td class="text-right ${qClass}">${qual.toFixed(1)}%</td>
+          <td class="text-right ${oeeClass}"><strong>${oeeActual.toFixed(1)}%</strong></td>
           <td>${notesDisplay}</td>
         </tr>
       `;
